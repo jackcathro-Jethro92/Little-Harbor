@@ -1,4 +1,5 @@
 // ---------- stats: health, stamina, skill levels and XP ----------
+const STEP_MS={walk:300,sail:150},GLIDE={walk:.19,sail:.35}; // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
 const MAXHP=50,MAXSTA=100,STAM={walk:.08,sail:.08,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
 const maxHp=()=>MAXHP+4*lvl('combat'),maxSta=()=>MAXSTA;

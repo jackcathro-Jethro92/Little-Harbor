@@ -1,7 +1,7 @@
 // ---------- one frame: tiles, trees, buildings, entities sorted by y, light, fishing line ----------
 function draw(){
   const t=performance.now();
-  P.rx+=(P.x-P.rx)*.35;P.ry+=(P.y-P.ry)*.35;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
+  const gl=sail?GLIDE.sail:GLIDE.walk;P.rx+=(P.x-P.rx)*gl;P.ry+=(P.y-P.ry)*gl;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
   let cx=Math.max(0,Math.min(MW*T-VW,P.rx*T+8-VW/2)),cy=Math.max(0,Math.min(MH*T-VH,P.ry*T+8-VH/2));
   cx|=0;cy|=0;
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0);ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
