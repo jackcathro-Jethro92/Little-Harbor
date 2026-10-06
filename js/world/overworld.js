@@ -64,5 +64,10 @@ for(let i=0;i<M.length;i++)if(M[i]===35||M[i]===36)M[i]=1; // the mountain range
 // the two stone patches at the ends of the old mountain range (north of the woodcutters, south of the settlement) are gone too, including the boulder pass
 rect(24,116,60,150,(x,y)=>{if([35,36].includes(at(x,y)))setT(x,y,1)});rect(94,202,130,230,(x,y)=>{if([35,36].includes(at(x,y)))setT(x,y,1)});   // south gate, by the woodcutters
 carvePath([[12,34],[12,31],[9,29]]);setT(12,35,44);                                                      // north gate, on the way to the Temple to the Mountains
+// forest road: from the Darkwood south gate north to the Mountain Town gate, walled in by thick forest on both sides (the road stays open)
+const FR=[[36,147],[36,140],[33,125],[31,112],[30,107]];
+carvePath(FR);
+rect(14,108,60,148,(x,y)=>{const d=Math.min(...FR.map((a,k)=>k?segD(x,y,FR[k-1],a):99));
+  if(d>=3&&d<=9&&hs(x*7,y*11)%100<92&&[1,14,15,16,17,19,20,24,25,26,27,28,29,30,31].includes(at(x,y)))setT(x,y,4)});
 BL.slice(NB0).forEach(b=>{for(let j=0;j<2;j++)for(let i=0;i<b.w;i++)setT(b.x+i,b.y+j,5)});
 const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',31,96],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',9,27],["Sailors' Grave Rocks",90,86],['Island 1',206,81],['Island 2',190,136],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Island 6',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,31],['Temple to the Sky',244,135],['Temple Tower',201,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',12,37]];
