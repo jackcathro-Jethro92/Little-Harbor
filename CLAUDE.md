@@ -4,7 +4,8 @@ Read `DESIGN.md` first. It describes everything already built, the data tables, 
 
 ## Project
 - Mobile-first pixel-art browser game. Primary device: **iPhone 14 in Safari** (about 390 x 844). Must also work with keyboard on desktop.
-- Right now the whole game is one file, `index.html` (about 112 KB, plain JavaScript on a 2D canvas, no libraries). Hosted as static files (GitHub Pages), so no build step is required. Prefer plain ES modules loaded from `index.html` over a bundler.
+- The game is plain JavaScript on a 2D canvas, no libraries. `index.html` holds the page markup and loads `css/style.css` and the files under `js/` (see "Code layout" in DESIGN.md). Hosted as static files (GitHub Pages), so no build step is required. Prefer plain ES modules loaded from `index.html` over a bundler.
+- The `js/` files are classic scripts that share one global scope and run in the order listed in `index.html`. Keep that order when adding files, and add every new file there (the smoke test checks this).
 - The owner works mainly from an iPhone and tests by opening the hosted link in Safari. Keep the page fast and the controls thumb-friendly.
 
 ## First job
