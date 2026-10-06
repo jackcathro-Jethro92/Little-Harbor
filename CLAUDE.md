@@ -23,6 +23,13 @@ Split `index.html` into modules **without changing behaviour**: data tables (ite
 - Minimum checks for each change: page loads with no `pageerror`, the player can move, the world is connected (sea reaches every island, key routes are walkable), the bag/shop/crafting screens open, and old saves still load.
 - Draw a frame at many map positions to catch rendering errors (`draw()` is global).
 
+## Talking to the owner
+- The owner is not a programmer and has no coding experience. Explain everything in plain, everyday words.
+- Avoid jargon. If a technical word is needed (branch, pull request, merge), explain it briefly the first time.
+- Describe changes by what the player will see or do, not by code. Keep it short: the owner reads on a phone.
+- When something needs the owner to act (a setting on GitHub, merging a pull request), give simple step-by-step instructions.
+- If a request is unclear, ask a short question instead of guessing.
+
 ## Style
 - Pixel-art look, FireRed-style menus, Stardew-style skills. Fonts: Pixelify Sans with a monospace fallback.
 - Plain, friendly in-game text. Short messages on a phone-sized screen.
