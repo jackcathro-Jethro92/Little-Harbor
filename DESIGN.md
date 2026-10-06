@@ -181,6 +181,25 @@ Potions scale with Alchemy level; food with Cooking level. Swiftness doubles mov
 ## Combat (early)
 Only one enemy exists: the **spirit** on the graveyard isle southwest of the village pier (about 12 HP, hits for 6 every ~2 s when adjacent, chases within 7 tiles). Swing by facing it and pressing Use with a sword equipped (5 stamina). Respawns after ~25 s or on sleeping. Enemies and the Darkwood are meant to gain creatures later.
 
+## Code layout
+`index.html` has the page markup and loads `css/style.css` plus these scripts, in this order. They are classic scripts sharing one global scope (so `P`, `S`, `draw()` and so on stay global for tests and the console). Load order matters: world generation runs while the files load, and keyboard handlers fire in the order they were added.
+
+| File | What is in it |
+| --- | --- |
+| `js/core.js` | `$`, canvas, map size constants, directions, look palettes |
+| `js/data/items.js`, `gathering.js`, `recipes.js`, `skills.js`, `crops.js` | Data tables: items, wood/ore/flax/herbs, recipes, skills, garden crops |
+| `js/save.js` | Save version, `fresh()`, `migrate()`, loading and `save()` |
+| `js/systems/inventory.js` | Bag helpers and the `TEST_GRANTS` / `TEST_KITS` switches |
+| `js/systems/stats.js` | Stamina costs, levels, XP, `spend()` |
+| `js/ui/hud.js` | Message line, toast, HP/STA bars |
+| `js/world/village.js`, `overworld.js`, `interiors.js` | World generation: village island, mainland and islands, home interior and the Darkwood (also the `wv` save migration and regrowing tiles from the save) |
+| `js/systems/player.js` | Player and boat position, movement |
+| `js/render/sprites.js`, `tiles.js`, `buildings.js`, `entities.js`, `draw.js`, `icons.js` | Character sprites, tiles and trees, buildings, chickens/spirit/stations, the frame (`draw()`), bag icons |
+| `js/systems/gathering.js`, `home.js`, `stations.js`, `consumables.js`, `fishing.js`, `combat.js`, `darkwood.js`, `actions.js` | Game systems; `actions.js` has the Use button (`act()`) and sleeping |
+| `js/ui/menu.js`, `crafting.js`, `shops.js`, `map.js`, `look.js`, `bag.js`, `skills.js` | Screens (`map.js` also has `TEST_SHOW_FULL_MAP` and the exploration fog) |
+| `js/input.js` | D-pad and keyboard |
+| `js/main.js` | Starts the draw loop and timers, restores the explored map, shows the first screen |
+
 ## Save data
 - `localStorage` key `little-harbor-v1`, JSON of `S`. `SAVE_V=3` with additive fields merged from defaults (`fresh()`); older saves are migrated and backed up to `little-harbor-v1-backup-v<N>`. `S.wv=2` marks coordinates that were shifted into the big map.
 - Important fields: look, day, gold, hp, sta, xp{}, bag{}, eq{}, cut{}, placed[], gardens[], claim, home, coat, buff, granted[], fog (string of 4800 0/1 flags for 4x4-tile chunks).

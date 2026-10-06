@@ -1,0 +1,41 @@
+// ---------- recipes (data table: add a row to add a recipe) ----------
+const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
+ {out:'rope',n:1,needs:{fiber:3},station:'bench',xp:4},
+ {out:'softwood_plank',n:2,needs:{softwood:1},station:'bench',xp:3},
+ {out:'medium_plank',n:2,needs:{medium_wood:1},station:'bench',xp:4},
+ {out:'hardwood_plank',n:2,needs:{hardwood:1},station:'bench',xp:6},
+ {out:'iron_bar',n:1,needs:{bronze_ore:1,copper_ore:1,tin_ore:1},station:'forge',xp:20},
+ // food: 'fire' = the camp's campfire; 'cooking' = cooking station (which also does fire recipes)
+ {out:'grilled_sardine',n:1,needs:{sardine:1},station:'fire',xp:3,skill:'cooking'},
+ {out:'grilled_mackerel',n:1,needs:{mackerel:1},station:'fire',xp:5,skill:'cooking'},
+ {out:'grilled_bream',n:1,needs:{bream:1},station:'fire',xp:8,skill:'cooking'},
+ {out:'grilled_tuna',n:1,needs:{tuna:1},station:'fire',xp:18,skill:'cooking'},
+ {out:'fish_stew',n:1,needs:{sardine:2,mackerel:1},station:'cooking',xp:12,skill:'cooking'},
+ {out:'seafood_feast',n:1,needs:{bream:1,tuna:1},station:'cooking',xp:30,skill:'cooking'},
+ {out:'koi_sashimi',n:1,needs:{koi:1},station:'cooking',xp:60,skill:'cooking'},
+ {out:'roast_carrots',n:1,needs:{carrot:2},station:'fire',xp:4,skill:'cooking'},
+ {out:'baked_potato',n:1,needs:{potato:1},station:'fire',xp:4,skill:'cooking'},
+ {out:'roast_parsnip',n:1,needs:{parsnip:1},station:'fire',xp:4,skill:'cooking'},
+ {out:'braised_cabbage',n:1,needs:{cabbage:1},station:'fire',xp:4,skill:'cooking'},
+ {out:'grilled_broccoli',n:1,needs:{broccoli:1},station:'fire',xp:5,skill:'cooking'},
+ {out:'grilled_chicken',n:1,needs:{chicken:1},station:'fire',xp:7,skill:'cooking'},
+ {out:'pork_chops',n:1,needs:{pork:1},station:'fire',xp:8,skill:'cooking'},
+ {out:'beef_steak',n:1,needs:{beef:1},station:'fire',xp:10,skill:'cooking'},
+ {out:'veggie_stew',n:1,needs:{carrot:1,potato:1,parsnip:1,cabbage:1},station:'cooking',xp:9,skill:'cooking'},
+ {out:'chicken_soup',n:1,needs:{chicken:1,carrot:1,potato:1},station:'cooking',xp:13,skill:'cooking'},
+ {out:'pork_roast',n:1,needs:{pork:1,potato:1,parsnip:1},station:'cooking',xp:15,skill:'cooking'},
+ {out:'beef_stew',n:1,needs:{beef:1,potato:1,carrot:1,broccoli:1},station:'cooking',xp:18,skill:'cooking'},
+ {out:'beef_stirfry',n:1,needs:{beef:1,broccoli:1,cabbage:1},station:'cooking',xp:16,skill:'cooking'},
+ {out:'cottage_kit',n:1,needs:{softwood_plank:10,rope:4},station:'bench',xp:30},
+ {out:'house_kit',n:1,needs:{medium_plank:12,hardwood_plank:4,rope:6,iron_bar:2},station:'bench',xp:60},
+ // ships: built at the shipwright station; 'gold' is a fee, 'unique' means you can only build each once
+ {out:'sloop',n:1,needs:{medium_plank:12,hardwood_plank:6,rope:8,iron_bar:4},gold:2000,unique:1,station:'shipwright',xp:80},
+ {out:'trawler',n:1,needs:{medium_plank:24,hardwood_plank:16,rope:16,iron_bar:10},gold:8000,unique:1,station:'shipwright',xp:200},
+ // alchemy: herbs and mushrooms into potions
+ {out:'healing_potion',n:1,needs:{basil:2,holly:1},station:'alchemy',xp:10,skill:'alchemy'},
+ {out:'greater_healing',n:1,needs:{basil:3,holly:2,blue_cap:1},station:'alchemy',xp:24,skill:'alchemy'},
+ {out:'stamina_tonic',n:1,needs:{forest_sprig:2,moss:1},station:'alchemy',xp:10,skill:'alchemy'},
+ {out:'greater_stamina',n:1,needs:{forest_sprig:3,moss:2,red_cap:1},station:'alchemy',xp:24,skill:'alchemy'},
+ {out:'swiftness_potion',n:1,needs:{forest_sprig:2,blue_cap:1,basil:1},station:'alchemy',xp:16,skill:'alchemy'},
+ {out:'poison_vial',n:1,needs:{death_cap:2,moss:1},station:'alchemy',xp:14,skill:'alchemy'}
+];
