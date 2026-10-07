@@ -1,6 +1,6 @@
 // ---------- map screen and exploration fog ----------
 function reveal(){if(zoneOf(P.x,P.y))return;const r=9;for(let y=P.y-r;y<=P.y+r;y+=2)for(let x=P.x-r;x<=P.x+r;x+=2){if(x<0||y<0||x>=MW||y>=MH||(x-P.x)**2+(y-P.y)**2>r*r)continue;FOG[(y>>2)*FW+(x>>2)]=1}}
-const TC={0:'#2f6fc4',1:'#78a34c',2:'#ead9a0',3:'#a9763f',4:'#3b6e2e',5:'#8a5a3a',6:'#c8934e',7:'#9a9b93',8:'#7a5230',9:'#5aaeb0',10:'#8d5c36',11:'#8a5a2e',12:'#8d8f87',13:'#7a7a86',14:'#7a5230',15:'#c97a3a',16:'#cfe3ef',17:'#c9a227',18:'#8d8f87',19:'#6fae4c',20:'#8aa05a',32:'#6e7078',48:'#a08c78',49:'#5e4f45',50:'#b09b82',35:'#8a8b94',36:'#55555d'};
+const TC={0:'#2f6fc4',1:'#78a34c',2:'#ead9a0',3:'#a9763f',4:'#3b6e2e',5:'#8a5a3a',6:'#c8934e',7:'#9a9b93',8:'#7a5230',9:'#5aaeb0',10:'#8d5c36',11:'#8a5a2e',12:'#8d8f87',13:'#7a7a86',14:'#7a5230',15:'#c97a3a',16:'#cfe3ef',17:'#c9a227',18:'#8d8f87',19:'#6fae4c',20:'#8aa05a',32:'#6e7078',54:'#6e7078',55:'#6e7078',48:'#a08c78',49:'#5e4f45',50:'#b09b82',35:'#8a8b94',36:'#55555d'};
 // TESTING: show the whole map regardless of exploration (set to false to bring the fog back; your explored areas are kept either way)
 const TEST_SHOW_FULL_MAP=true;
 function showMap(){const c=$('mc'),x=c.getContext('2d');c.width=MW*2;c.height=MH*2;x.fillStyle='#141b26';x.fillRect(0,0,c.width,c.height);

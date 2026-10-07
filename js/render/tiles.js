@@ -9,6 +9,13 @@ function tile(tx,ty,sx,sy,t){
       if(mm===22&&ty===IR.y0&&tx%3===0){R(sx+2,sy+4,12,9,'#3d2a14');R(sx+3,sy+5,10,7,'#9ad3f0');R(sx+7,sy+5,2,7,'#3d2a14')}
       if(mm===23){R(sx+2,sy+1,12,15,'#3d2a14');R(sx+3,sy+2,10,14,'#6b4423');R(sx+10,sy+9,2,2,'#f2c14e')}}
     return}
+  if(mm===54||mm===55){ // jagged rock: angular grey peaks with a lit left face, a dark right face and cracks; 54 stands in the sea, 55 on the shore
+    if(mm===54){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8')}else{R(sx,sy,T,T,'#6e6a62');if(n%4===0)R(sx+n%12+2,sy+n%10+3,2,1,'#58544d')}
+    const s=hs(tx*3,ty*5),p1=2+s%5,p2=9+(s>>3)%5,a=14+(s>>6)%6,b=10+(s>>9)%5,sl=2+s%2,O='#26272b';
+    for(let x=0;x<T;x++){const h=Math.max(Math.round(a-Math.abs(x-p1)*sl),Math.round(b-Math.abs(x-p2)*2),3),top=sy+T-h,pk=(x===p1||x===p2),lit=x<(h===Math.round(a-Math.abs(x-p1)*sl)?p1:p2);
+      R(sx+x,top-1,1,1,O);R(sx+x,top,1,h,lit?'#9a9ca0':'#686a70');if(!pk)R(sx+x,top,1,2,lit?'#bcbec2':'#82848a');else R(sx+x,top,1,3,'#d0d2d6');
+      if((x+s)%5===0)R(sx+x,top+3+(s>>x)%5,1,3,O)}
+    R(sx,sy+T-2,T,2,'#00000045');if(mm===54)R(sx+1,sy+T-1,T-2,1,'#d8ecff');return}
   if(mm===52){R(sx,sy,T,T,'#e3cf94');if(n%5===0)R(sx+n%11+2,sy+n%9+3,2,1,'#c9b277');if(n%7===0)R(sx+n%9+3,sy+n%11+2,1,1,'#f2e4b4');return}
   if(mm===53){R(sx,sy,T,T,'#6e7068');R(sx,sy+7,T,1,'#4a4c46');R(sx,sy+15,T,1,'#4a4c46');const C=['#d9534f','#3b82c4','#f2c14e','#4caf72','#9c5bb5'];[1,6,11].forEach((px,j)=>{const w=(((t/300)|0)+n+j)%6===0?1:0;R(sx+px,sy+1+w,4,4,'#2a1b0e');R(sx+px+1,sy+2+w,2,2,'#e8c8a0');R(sx+px,sy+5+w,4,2,C[(n+j*3)%5]);R(sx+px,sy+9+w,4,4,'#2a1b0e');R(sx+px+1,sy+10+w,2,2,'#e8c8a0');R(sx+px,sy+13+w,4,2,C[(n+j*2+1)%5])});return}
   if(mm===32){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');R(sx+1,sy+11,14,3,'#d8ecff');R(sx+3,sy+4,10,9,'#2e2e36');R(sx+4,sy+3,8,9,'#8d8f87');R(sx+5,sy+3,4,2,'#b0b2b8');R(sx+6,sy+9,5,2,'#6e7068');return}

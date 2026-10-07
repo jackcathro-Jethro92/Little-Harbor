@@ -26,10 +26,12 @@ function act(){
   {const an=animalAt(x,y);if(an&&!sail)return ANIMALS[an.k].use?ANIMALS[an.k].use(an):say(ANIMALS[an.k].say)}
   if(!sail){
     if(B.x===x&&B.y===y){P.x=x;P.y=y;sail=true;say('Aboard! Face open water and tap Use to cast.');ui();return}
-    if(at(x,y)===0)say('You need the boat to fish. It is at the end of the pier.');
+    if(at(x,y)===55)say('Jagged rocks block the way.');
+    else if(at(x,y)===0)say('You need the boat to fish. It is at the end of the pier.');
     return;
   }
   const t=at(x,y);
+  if(t===54||t===55)return say('Jagged rocks. There is no landing here.');
   if(WK.includes(t)){if(!npcAt(x,y)&&!placedAt(x,y)){P.x=x;P.y=y;sail=false;say('Back on land.');ui()}return}
   if(t===0&&x>=0&&y>=0&&x<MW&&y<MH){
     if(S.sta<STAM.cast)return say('Too tired to fish. Sleep on the boat to rest.');
