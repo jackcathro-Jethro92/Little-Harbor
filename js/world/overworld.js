@@ -64,8 +64,8 @@ for(let i=0;i<M.length;i++)if(M[i]===35||M[i]===36)M[i]=1; // the mountain range
 // the two stone patches at the ends of the old mountain range (north of the woodcutters, south of the settlement) are gone too, including the boulder pass
 rect(24,116,60,150,(x,y)=>{if([35,36].includes(at(x,y)))setT(x,y,1)});rect(94,202,130,230,(x,y)=>{if([35,36].includes(at(x,y)))setT(x,y,1)});   // south gate, by the woodcutters
 carvePath([[12,34],[12,31],[9,29]]);                                                         // (the Darkwood's north gate used to be here, by the Temple to the Mountains)
-// forest barrier: one road (from the Darkwood south gate north to the Mountain Town gate) cuts through solid forest that fills the whole width of the land, coast to coast, so there is no way round
-const FR=[[36,147],[36,140],[33,125],[31,112],[30,107]];
+// forest barrier: solid forest fills the whole width of the land, coast to coast, with no road through it: the two Darkwood gates (south by the woodcutters, north below the Mountain Town) are the way through
+const FR=[[30,107],[31,111]]; // only a short stretch of road below the Mountain Town gate, leading to the Darkwood's north gate; the rest is closed forest
 carvePath(FR);
 rect(0,108,95,148,(x,y)=>{const d=Math.min(...FR.map((a,k)=>k?segD(x,y,FR[k-1],a):99));
   if(d>=3&&[1,2,14,15,16,17,19,20,24,25,26,27,28,29,30,31].includes(at(x,y)))setT(x,y,4)});

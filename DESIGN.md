@@ -46,7 +46,7 @@ These are hidden rectangles of the main grid. They look like water from outside 
 ### Mainland features
 - Walled Settlement (x 84-115, y 200-234): 8 houses, west gate (road to the woodcutters and the Darkwood), east gate (3-wide path to the docks), closed south wall. Docks: two-wide pier with an end platform around (154,217).
 - Mountain Town (x 19-43, y 87-106): walls, 5 houses, gate at the south. No people yet.
-- Forest barrier: solid forest (choppable trees, y 108-148) fills the whole width of the mainland from the west edge to the east coast, with no way round. A dirt road runs through it from the Darkwood south gate (36,149) north to the Mountain Town gate (30,106).
+- Forest barrier: solid forest (choppable trees, y 108-148) fills the whole width of the mainland from the west edge to the east coast. There is no road through it on foot: the Darkwood's two gates (south at (36,149), north at (33,109)) stand for the way through. Only a short dirt stretch below the Mountain Town gate leads to the north gate.
 - Mountain stone was deliberately removed everywhere on request. Sea rocks (Sailors' Grave Rocks) remain.
 - Temples (to the Mountains, of Fire, of the Sea, to the Sky) and the Temple Tower are scenery placeholders.
 
