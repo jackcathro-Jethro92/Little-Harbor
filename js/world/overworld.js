@@ -51,7 +51,7 @@ clr(197,196,205,203);BL.push({x:200,y:198,w:2,tower:1});                        
 
 const carvePath=pts=>{for(let k=1;k<pts.length;k++){const a=pts[k-1],b=pts[k],n=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]));for(let q=0;q<=n;q++){const x=Math.round(a[0]+(b[0]-a[0])*q/n),y=Math.round(a[1]+(b[1]-a[1])*q/n);rect(x-1,y-1,x+1,y+1,(xx,yy)=>{if(![0,5,12,45].includes(at(xx,yy)))setT(xx,yy,6)})}}};
 const RP=[[83,217],[74,205],[64,192],[54,180],[46,168],[40,158],[36,154],[36,150]];
-carvePath(RP);setT(36,149,44);
+carvePath(RP);setT(36,149,44);setT(35,149,51);setT(37,149,51);
 let dkx=117;while(at(dkx,217)!==0&&dkx<MW-2)dkx++;                                   // first open water on the gate row
 carvePath([[116,217],[dkx-2,217]]);                                                  // path from the east gate to the docks
 rect(dkx-2,217,dkx+8,218,(x,y)=>setT(x,y,3));rect(dkx+5,215,dkx+8,220,(x,y)=>setT(x,y,3)); // the pier and its end platform
@@ -78,7 +78,7 @@ const wEdge=y=>(15+5*Math.sin(y*.1+1)+3*Math.sin(y*.3))*Math.min(1,Math.max(0,1-
 rect(0,128,25,228,(x,y)=>{const e=wEdge(y)+(hs(x*3,y*5)%100-50)/50;if(x>=e||!FOREST.includes(at(x,y)))return;
   if(RP.some((a,k)=>k&&segD(x,y,RP[k-1],a)<4))return;
   if(e-x<2.5&&hs(x*13,y*7)%100<40)return;setT(x,y,4)});
-rect(32,110,34,110,(x,y)=>setT(x,y,6));setT(33,109,44);                               // the Darkwood's north gate, at the end of the road from the Mountain Town
+rect(32,110,34,110,(x,y)=>setT(x,y,6));setT(33,109,44);setT(32,109,51);setT(34,109,51);                               // the Darkwood's north gate, at the end of the road from the Mountain Town
 BL.slice(NB0).forEach(b=>{for(let j=0;j<2;j++)for(let i=0;i<b.w;i++)setT(b.x+i,b.y+j,5)});
 // the mountain country north of the forest: no grass, trees or herbs, only bare rock in terraces that step up toward the north.
 // 48 rock floor, 49 cliff face (blocks the way), 50 rock steps (a way up). TLV holds each terrace tile's height (0 = not terrace).

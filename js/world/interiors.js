@@ -17,7 +17,7 @@ const clearing=(cx,cy,r)=>rect(cx-r,cy-r,cx+r,cy+r,(x,y)=>{if(inner(x,y)&&(x-cx)
 trail([[123,38],[123,34],[128,31],[128,26],[121,24],[115,20],[118,15],[123,12]],1,42);
 trail([[123,12],[129,10],[134,7],[136,5]],1,42);
 trail([[123,34],[112,34],[110,30]],0,42);trail([[128,26],[138,26],[140,22]],0,42);trail([[115,20],[108,18],[106,13]],0,42);trail([[134,8],[140,11]],0,42);
-setT(123,39,43);setT(136,4,43);
+setT(123,39,43);setT(122,39,51);setT(124,39,51);setT(136,4,43);setT(135,4,51);setT(137,4,51); // exit arches: a three-wide torii at each end
 {const gr=[],hb=[];rect(FZ.x0,FZ.y0,FZ.x1,FZ.y1,(x,y)=>{if(at(x,y)!==40)return;const n=hs(x*13,y*7)%100;
   if(Math.hypot(x-123,y-10)<=6.5){if(n<10)hb.push([x,y]);return}
   if(n<45)gr.push([x,y]);else if(n<62&&nearT(x,y,1,v=>v===41))hb.push([x,y])});
