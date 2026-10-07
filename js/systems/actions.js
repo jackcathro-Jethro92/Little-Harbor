@@ -6,7 +6,7 @@ function act(){
   const[x,y]=front(),n=npcAt(x,y);
   if(G.alive&&G.x===x&&G.y===y)return swing();
   if(at(x,y)===23&&inRoom(P.x,P.y))return exitHome();
-  {const t2=at(x,y);if(!sail){if(t2===44)return enterForest(y<130);if(t2===43&&inFZ(P.x,P.y))return exitForest(y<20);if(t2===46)return pickup(x,y)}}
+  {const t2=at(x,y);if(!sail){if(t2===44||(t2===51&&!inFZ(P.x,P.y)))return enterForest(y<130);if((t2===43||t2===51)&&inFZ(P.x,P.y))return exitForest(y<20);if(t2===46)return pickup(x,y)}}
   if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome();
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);

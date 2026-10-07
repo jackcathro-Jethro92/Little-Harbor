@@ -23,6 +23,7 @@ function tile(tx,ty,sx,sy,t){
   }
   if(M[i]===2){R(sx,sy,T,T,'#ead9a0');if(n<35)R(sx+n%13,sy+(n*3)%13,2,1,'#cdb77a');return}
   if(M[i]===3){R(sx,sy,T,T,'#a9763f');R(sx,sy+5,T,1,'#7d5530');R(sx,sy+11,T,1,'#7d5530');R(sx+3,sy,1,5,'#8a5d33');R(sx+11,sy+6,1,5,'#8a5d33');return}
+  if(mm===43||mm===44||mm===51){const rt=at(tx+1,ty),lt=at(tx-1,ty);torii(sx,sy,mm===51?(rt===43||rt===44?0:2):1,zt===2,mm===43,n,t);return}
   const G=zt===2?['#2c4a2e','#27432a','#223b25']:['#7fa84f','#74a048','#678f3f'],v=Math.sin(tx*.8)+Math.sin(ty*.9)+Math.sin((tx+ty)*.45),gi=v>1.1?0:v<-1.1?2:1,m=M[i];
   const fr=(pred,col,d)=>[[0,-1],[0,1],[-1,0],[1,0]].forEach(([a,b],k)=>{if(!pred(at(tx+a,ty+b)))return;
     for(let j=0;j<4;j++){const r=hs(tx*7+j,ty*5+k)%4,e=d+(r>>1),l=4+r;
@@ -53,8 +54,6 @@ function tile(tx,ty,sx,sy,t){
   if(m===20){R(sx+3,sy+11,1,3,'#8aa05a');R(sx+7,sy+10,1,4,'#8aa05a');R(sx+11,sy+11,1,3,'#8aa05a')}
   if(m===41){R(sx,sy,T,T,'#14291a');blob(sx+8,sy+9,8,'#1e3d27','#2b5736','#122a1b','#0a170f');R(sx+(n%3)*5,sy+3,4,3,'#2f6a42');R(sx+3+n%7,sy+9,3,2,'#122a1b')}
   if(m===42){R(sx,sy,T,T,'#46372a');R(sx+n%10,sy+(n*3)%12,4,2,'#3a2d22');R(sx+(n*7)%11,sy+(n*5)%13,3,1,'#5a4838')}
-  if(m===43){R(sx,sy,T,T,'#14291a');R(sx+3,sy+1,10,15,'#0a170f');R(sx+4,sy+3,8,13,'#9acb7a');R(sx+5,sy+5,6,11,'#d6f0b0');R(sx+1,sy,3,16,'#3a2a1a');R(sx+12,sy,3,16,'#3a2a1a');R(sx+1,sy,14,3,'#3a2a1a')}
-  if(m===44){R(sx,sy,5,T,'#1b3a24');R(sx+11,sy,5,T,'#1b3a24');R(sx,sy,T,4,'#1b3a24');R(sx+4,sy+3,8,13,'#050c08');R(sx+6,sy+9,1,1,'#f2e55c');R(sx+9,sy+9,1,1,'#f2e55c');R(sx+1,sy+2,2,3,'#2f6a42');R(sx+12,sy+3,2,3,'#2f6a42')}
   if(m===45){R(sx+4,sy+16-16,8,16,'#6b4423');R(sx+3,sy,10,3,'#3d2a14');R(sx+7,sy+5,2,3,'#f2c14e');R(sx+5,sy+10,1,5,'#573a21')}
   if(m===46){R(sx+3,sy+12,10,2,'#00000030');R(sx+4,sy+6,8,7,'#2e1f10');R(sx+5,sy+7,6,5,'#a8743f');R(sx+7,sy+5,2,3,'#d8b878');R(sx+10+((t/200|0)%2),sy+3+((t/300|0)%2),1,1,'#fff6c9');R(sx+3,sy+5,1,1,'#fff6c9')}
   if(m===47){for(let k=0;k<6;k++){R(sx+1+k*2,sy+3+(n+k)%4,1,11,k%2?'#1f5a2a':'#2f7a3a');R(sx+1+k*2,sy+3+(n+k)%4,1,2,'#4fa04a')}}
@@ -68,6 +67,25 @@ function tile(tx,ty,sx,sy,t){
   if(m===11){R(sx+2,sy+12,12,3,'#00000030');R(sx+3,sy+2,10,13,'#2e1f10');R(sx+4,sy+3,8,11,'#8a5a2e');R(sx+4,sy+3,8,2,'#a8743f');R(sx+4,sy+7,8,1,'#4a3018');R(sx+4,sy+11,8,1,'#4a3018')}
   if(m===7){R(sx+3,sy+13,10,2,'#00000030');R(sx+5,sy+12,6,3,'#8b8d85');R(sx+6,sy+7,4,5,'#a5a69d');R(sx+4,sy+4,8,3,'#8b8d85');R(sx+5,sy+1,6,3,'#a5a69d');R(sx+7,sy+8,2,2,'#f2d27a')}
 }
+// the Darkwood gates: a red torii three tiles across (left post 51, middle 43/44, right post 51), mossy so it belongs to the forest
+function torii(sx,sy,part,inside,exit,n,t){
+  const K='#1c1414',RD='#d8341f',HI='#f0583a',SH='#8f2214',MO='#2f6a42',ML='#4f9a5a',mid=part===1;
+  R(sx,sy,T,T,inside?'#14291a':'#c8934e');                                                   // ground: dark forest floor inside, dirt road outside
+  if(inside){if(n%2)R(sx+2+n%9,sy+13,3,1,'#1e3d27');R(sx+9+n%5,sy+11,2,1,'#223b25')}else{R(sx+n%11,sy+(n*5)%12+2,4,3,'#b8823f');R(sx+(n*7)%11,sy+13,2,1,'#e0b378')}
+  if(mid){                                                                                     // the way through: a dark gap with eyes outside, a bright glimpse of daylight from inside
+    R(sx,sy+9,T,7,exit?'#9acb7a':'#050c08');if(exit){R(sx+3,sy+10,10,6,'#d6f0b0')}
+    else{R(sx+5,sy+12,1,1,'#f2e55c');R(sx+10,sy+12,1,1,'#f2e55c')}
+    R(sx,sy+9,T,1,SH)}
+  else{const px=part===0?5:6;R(sx+px-1,sy+5,7,11,'#00000026');R(sx+px,sy+5,5,11,RD);R(sx+px,sy+5,1,11,HI);R(sx+px+4,sy+5,1,11,SH);   // post
+    R(sx+px-1,sy+13,7,3,K);R(sx+px-1,sy+13,7,1,'#3a2d2d')}                                    // black foot
+  const a=part===0?3:0,b=part===2?13:16;                                                        // lower crossbar (nuki), pokes out past the posts
+  R(sx+a,sy+7,b-a,2,RD);R(sx+a,sy+7,b-a,1,HI);R(sx+a,sy+9,b-a,1,SH);
+  R(sx,sy+3,T,2,RD);R(sx,sy+3,T,1,HI);R(sx,sy+5,T,1,SH);                                      // upper beam (kasagi): red band under a black cap
+  R(sx,sy+1,T,2,K);if(part===0)R(sx,sy,3,2,K);if(part===2)R(sx+13,sy,3,2,K);                    // cap curls up at both ends
+  if(mid){R(sx+5,sy+5,6,2,K);R(sx+6,sy+5,4,1,'#f2c14e')}                                        // name plaque
+  if(!mid){R(sx+6,sy+13,2,2,MO);R(sx+7,sy+12,3,1,ML);R(sx+9,sy+14,2,1,ML);R(sx+(part?11:5),sy+9,1,3,MO)}   // moss at the foot and a vine on the post
+  R(sx+(part===2?2:11),sy+4,2,1,MO);R(sx+(part===2?2:11),sy+5,1,3,ML);R(sx+(part===2?1:12),sy+1,2,1,ML)   // leaves draped over the beam
+  if(inside)R(sx,sy+3,T,1,'#c43020')}                                                           // (slightly dimmer in the dark wood)
 // mountain terraces: warm tan low down, cooler grey-blue higher up (colours follow the mountain reference picture)
 const ROCKPAL=[{f:['#a08c78','#b09b82','#8c7a67'],c:['#c0a47e','#9a7f62','#6b5543','#3f3129']},{f:['#9a8c7e','#aa9c8a','#857868'],c:['#b6a58b','#8d7a66','#5e4f45','#392e2c']},{f:['#9a9aa0','#b4b6c0','#808391'],c:['#aeb0c0','#7f8398','#4f5478','#2c3158']}];
 const rockPal=i=>ROCKPAL[TLV[i]<=4?0:TLV[i]<=8?1:2];
