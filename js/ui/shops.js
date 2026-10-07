@@ -23,7 +23,7 @@ function openStore(k){
     else{b.textContent=it.price.toLocaleString()+'g';b.disabled=rod?!(i===own+1&&S.gold>=it.price):S.gold<it.price;
       b.onclick=()=>{S.gold-=it.price;add(id);S.eq[kind]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
-  if(rod)LIST('weapon').concat(LIST('tool')).forEach(id=>{const it=ITEMS[id],r=document.createElement('div');r.className='it';
+  if(rod)LIST('weapon').concat(LIST('tool')).filter(id=>!ITEMS[id].smith).forEach(id=>{const it=ITEMS[id],r=document.createElement('div');r.className='it';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';
     const b=document.createElement('button');
     if(count(id)){b.textContent='Owned';b.disabled=true}
@@ -37,3 +37,15 @@ function openStore(k){
   $('store').classList.add('open');
 }
 $('sclose').onclick=()=>$('store').classList.remove('open');
+// ---------- Garrick's Forge: the blacksmith in the Walled Settlement (stock is in js/data/shops.js) ----------
+function openSmith(mode){
+  const el=$('items'),buy=mode==='buy';el.innerHTML='';$('st').textContent="Garrick's Forge · "+S.gold.toLocaleString()+'g';
+  const row=(t,d,label,dis,fn)=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+t+'</b>'+(d?'<br>'+d:'')+'</div>';if(label){const b=document.createElement('button');b.textContent=label;b.disabled=dis;b.onclick=fn;r.appendChild(b)}el.appendChild(r)};
+  row(buy?'Buying':'Selling',buy?'Metal, blades and tools.':'Garrick buys metal and timber at half price.',buy?'Sell':'Buy',false,()=>openSmith(buy?'sell':'buy'));
+  SMITH.forEach(([title,list])=>{
+    if(buy){row(title);list.forEach(([id,price])=>{const it=ITEMS[id],single=it.kind==='weapon'||it.kind==='tool',owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
+      row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say('Garrick: A fine choice.');openSmith('buy')})})}
+    else if(title==='Materials'){let n=0;list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price/2);
+      row(it.n+' x'+count(id),'Sells for '+pr+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id])delete S.bag[id];ui();save();say('Garrick: Sold '+it.n.toLowerCase()+' for '+pr+'g.');openSmith('sell')})});
+      if(!n)row('Nothing to sell','Bring ore, iron bars, planks or rope.','',true,()=>{})}});
+  $('store').classList.add('open')}
