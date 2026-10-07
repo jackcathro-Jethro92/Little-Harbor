@@ -1,6 +1,9 @@
 // ---------- the Mountain Town fills up: more houses, Lucie's jeweller, the Fighters Guild and the Gladiators' Arena ----------
 // Runs after interiors.js (zones GZ and AZ are defined there). The town is walled x 15-39, y 59-78 with its gate at (26,78).
 // Door stand tile of a house is (x+1, y+2); of the 5-wide guild and arena halls it is (x+2, y+2).
+// ---------- the north gate: a gap in the north wall and a wide dirt path up to the Temple to the Mountains ----------
+rect(25,59,27,59,(x,y)=>setT(x,y,6));setT(24,59,45);setT(28,59,45);                 // three-wide gateway between two gate posts (like the Walled Settlement's gates)
+carvePath([[26,58],[26,54],[20,48],[14,42],[12,36]]);                              // joins the path that already runs from the temple down to (12,34); it crosses the terraces and cliffs as a dirt ramp
 rect(16,66,38,67,(x,y)=>{if(at(x,y)===48)setT(x,y,6)}); // a cross street
 const MT_HOUSES=[[22,62,'red'],[35,62,'thatch'],[18,74,'red']];
 MT_HOUSES.forEach(([x,y,roof])=>{BL.push({x,y,w:3,roof});rect(x,y,x+2,y+1,(xx,yy)=>setT(xx,yy,5))});
@@ -24,6 +27,7 @@ MT_NAMES.forEach((n,i)=>{const[hx,hy]=MT_HOMES[i],x=hx+1,y=hy+2;
 const mkLook=(n,x,y,f,o)=>NPC.push({n,x,y,hx:x,hy:y,f,fixed:1,pack:false,bio:{age:null,job:null,backstory:null,likes:[],quests:[]},...o});
 mkLook('Lucie',29,71,'d',{skin:0,hair:4,shirt:2,jk:3,hat:'none',jon:true,store:'jeweller',bio:{age:null,job:'Goldsmith',backstory:null,likes:[],quests:[]},say:['Gold, gems and a little magic.']});
 mkLook('Warden Orrin',25,77,'u',{skin:3,hair:0,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['Welcome to the Mountain Town. Keep your blade sheathed in the streets.','The arena is for fighting. The streets are not.']});
+mkLook('Warden Brann',24,60,'r',{skin:2,hair:1,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['The north gate. The path up the mountain leads to the Temple to the Mountains.','Good boots for the climb, friend.']});
 mkLook('Miner Gudrun',22,67,'r',{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:3,jon:false,fixed:0,say:['Copper again today. Always copper.','Bring me bronze and I will talk your ear off.']});
 mkLook('Old Stig',33,67,'l',{skin:2,hair:5,shirt:3,jk:4,hat:'straw',jon:false,fixed:0,say:['Eighty winters and I still climb these steps.','Back in my day the arena sand was real blood.']});
 // inside the Fighters Guild
