@@ -27,16 +27,20 @@ function tile(tx,ty,sx,sy,t){
   const fr=(pred,col,d)=>[[0,-1],[0,1],[-1,0],[1,0]].forEach(([a,b],k)=>{if(!pred(at(tx+a,ty+b)))return;
     for(let j=0;j<4;j++){const r=hs(tx*7+j,ty*5+k)%4,e=d+(r>>1),l=4+r;
       if(k<2)R(sx+j*4,k?sy+T-e:sy,l,e,col);else R(k===2?sx:sx+T-e,sy+j*4,e,l,col)}});
+  if(m===6&&tx<100&&ty<fTop(tx)-1){R(sx,sy,T,T,n%3?'#b08f6c':'#b99a78');if(n<50)R(sx+n%11,sy+(n*5)%12,4,3,'#9e7e5d');if(n>75)R(sx+n%12,sy+(n*3)%13,2,1,'#cdb08c');if(n%17===0)R(sx+n%10+2,sy+9,2,2,'#7b7d86');return}
   if(m===6){R(sx,sy,T,T,n%3?'#c8934e':'#d19c5c');if(n<50)R(sx+n%11,sy+(n*5)%12,4,3,'#b8823f');if(n>75)R(sx+n%12,sy+(n*3)%13,2,1,'#e0b378');if(n%17===0)R(sx+n%10+2,sy+9,2,2,'#9d9a90');
     fr(q=>[1,4,7,8,10,11].includes(q),G[gi],3);
     if((tx===32+OX&&ty%2)||(tx===31+OX&&!(ty%2))){R(sx+2,sy+2,12,9,'#6e5a3c');R(sx+3,sy+3,10,7,'#a3a49c');R(sx+4,sy+3,8,3,'#c9cac1');R(sx+3,sy+9,10,1,'#8a8b83')}return}
   if(m===9){R(sx,sy,T,T,'#5aaeb0');R(sx+2+n%9,sy+3+n%8,5,1,'#9bd9d3');R(sx+8,sy+10+n%3,4,1,'#7cc4c0');if(n%4===0)R(sx+5,sy+6,4,2,'#e8863a');fr(q=>q!==9,'#3f403b',4);fr(q=>q!==9,'#9a9b92',3);return}
+  if(m>=48&&m<=50){rockTile(tx,ty,sx,sy,m,n);return}
   if(m===10){R(sx,sy,T,T,'#8d5c36');for(const ry of[2,9]){R(sx,sy+ry+3,T,2,'#6e4526');for(let k=0;k<3;k++){const x=sx+1+k*5,c=hs(tx*3+k,ty+ry)%4;R(x,sy+ry,4,3,'#4fa03e');R(x+1,sy+ry-1,2,1,'#78c257');if(c===0)R(x+1,sy+ry+3,2,1,'#e0762f')}}return}
-  R(sx,sy,T,T,G[gi]);
+  const rk=TLV[i]>0&&(m===5||(m>=14&&m<=18));
+  if(rk)rockFloor(tx,ty,sx,sy);else{R(sx,sy,T,T,G[gi]);
   for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}
   if(n<34){const bx=sx+2+n%10,by=sy+3+(n*3)%9;R(bx,by,1,3,'#4d7a33');R(bx+2,by-1,1,4,'#5c8c3a');R(bx+4,by,1,3,'#4d7a33')}
   if(n>=45&&n<52&&m===1)blob(sx+8,sy+9,5,'#5b8f3a','#78ad4e','#43702e','#2f4f22');
   if(n>88&&m===1){const c=['#f2e55c','#f4f4f0','#f0a0c0'][n%3];R(sx+3+n%8,sy+4+n%7,2,2,c);R(sx+8+n%4,sy+9+n%4,2,2,c);R(sx+6,sy+11,1,1,c)}
+  }
   if(m===8){R(sx,sy+7,T,2,'#3a2713');R(sx,sy+8,T,2,'#8a6238');R(sx,sy+12,T,2,'#3a2713');R(sx,sy+13,T,1,'#8a6238');R(sx+1,sy+4,3,12,'#3a2713');R(sx+2,sy+4,1,11,'#7a5230');R(sx+12,sy+4,3,12,'#3a2713');R(sx+13,sy+4,1,11,'#7a5230')}
   if(m>=24&&m<=30){R(sx+2,sy+13,12,2,'#00000026');
     if(m===24){R(sx+3,sy+9,10,5,'#2e5a2a');R(sx+4,sy+8,8,2,'#5d9a48');R(sx+5,sy+10,2,2,'#86c06a');R(sx+9,sy+11,2,2,'#86c06a')}
@@ -64,6 +68,18 @@ function tile(tx,ty,sx,sy,t){
   if(m===11){R(sx+2,sy+12,12,3,'#00000030');R(sx+3,sy+2,10,13,'#2e1f10');R(sx+4,sy+3,8,11,'#8a5a2e');R(sx+4,sy+3,8,2,'#a8743f');R(sx+4,sy+7,8,1,'#4a3018');R(sx+4,sy+11,8,1,'#4a3018')}
   if(m===7){R(sx+3,sy+13,10,2,'#00000030');R(sx+5,sy+12,6,3,'#8b8d85');R(sx+6,sy+7,4,5,'#a5a69d');R(sx+4,sy+4,8,3,'#8b8d85');R(sx+5,sy+1,6,3,'#a5a69d');R(sx+7,sy+8,2,2,'#f2d27a')}
 }
+// mountain terraces: warm tan low down, cooler grey-blue higher up (colours follow the mountain reference picture)
+const ROCKPAL=[{f:['#a08c78','#b09b82','#8c7a67'],c:['#c0a47e','#9a7f62','#6b5543','#3f3129']},{f:['#9a8c7e','#aa9c8a','#857868'],c:['#b6a58b','#8d7a66','#5e4f45','#392e2c']},{f:['#9a9aa0','#b4b6c0','#808391'],c:['#aeb0c0','#7f8398','#4f5478','#2c3158']}];
+const rockPal=i=>ROCKPAL[TLV[i]<=4?0:TLV[i]<=8?1:2];
+function rockFloor(tx,ty,sx,sy){const n=hs(tx*5,ty*3)%100,f=rockPal(ty*MW+tx).f;R(sx,sy,T,T,f[0]);if(at(tx,ty-1)===49)R(sx,sy,T,3,'#3b4278aa');
+  R(sx+n%9,sy+(n*3)%9,6,3,f[1]);R(sx+(n*7)%10,sy+(n*5)%11+2,5,2,f[2]);if(n%3===0)R(sx+(n*11)%12,sy+(n*13)%12,4,2,f[1]);
+  if(n%13===0)R(sx+n%11+1,sy+(n*3)%11+2,3,2,'#7b7d86')}
+function rockTile(tx,ty,sx,sy,m,n){const i=ty*MW+tx,P=rockPal(i);
+  if(m===48){rockFloor(tx,ty,sx,sy);return}
+  if(m===50){rockFloor(tx,ty,sx,sy);for(let k=0;k<3;k++){R(sx+1,sy+2+k*5,14,2,P.f[1]);R(sx+1,sy+4+k*5,14,1,P.f[2])}return}
+  const c=P.c;R(sx,sy,T,T,c[1]);R(sx,sy,T,3,c[0]);
+  for(let k=0;k<3;k++){const y=sy+5+k*3;R(sx,y,T,1,c[2]);R(sx+((tx*5+k*7)%11),y+1,5,1,c[0])}
+  R(sx+(n%4)*4,sy+3,2,5,c[0]);R(sx,sy+12,T,1,c[2]);R(sx,sy+13,T,3,c[3])}
 function blob(cx,cy,r,c0,c1,c2,ol){for(let p=0;p<2;p++){const rr=p?r:r+1;for(let d=-rr;d<=rr;d++){const w=Math.round(Math.sqrt(rr*rr-d*d+.25));R(cx-w,cy+d,2*w+1,1,p?(d<-r*.35?c1:d>r*.3?c2:c0):ol)}}}
 function tree(tx,ty,sx,sy){
   const n=hs(tx,ty)%100,sh=SHAKE[ty*MW+tx];if(sh&&performance.now()-sh<220)sx+=((performance.now()/40|0)%2?1:-1);R(sx-1,sy+11,18,5,'#00000026');

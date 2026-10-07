@@ -80,4 +80,25 @@ rect(0,128,25,228,(x,y)=>{const e=wEdge(y)+(hs(x*3,y*5)%100-50)/50;if(x>=e||!FOR
   if(e-x<2.5&&hs(x*13,y*7)%100<40)return;setT(x,y,4)});
 rect(32,110,34,110,(x,y)=>setT(x,y,6));setT(33,109,44);                               // the Darkwood's north gate, at the end of the road from the Mountain Town
 BL.slice(NB0).forEach(b=>{for(let j=0;j<2;j++)for(let i=0;i<b.w;i++)setT(b.x+i,b.y+j,5)});
+// the mountain country north of the forest: no grass, trees or herbs, only bare rock in terraces that step up toward the north.
+// 48 rock floor, 49 cliff face (blocks the way), 50 rock steps (a way up). TLV holds each terrace tile's height (0 = not terrace).
+const TLV=new Uint8Array(MW*MH);
+{const inR=(x,y,r)=>x>=r[0]&&y>=r[1]&&x<=r[2]&&y<=r[3];
+ const PT=[11,55,43,82],PI=[14,58,40,79],PW=[2,21,17,32],PWI=[4,23,15,30]; // flat platforms under the Mountain Town and the Temple to the Mountains (and the parts inside them where no cliffs are allowed)
+ const rw=(x,y)=>Math.max(0,Math.round((fTop(x)-y)/8+.7*Math.sin(x*.08+y*.04)+.5*Math.sin(y*.06-x*.04+2)));
+ const lt=rw(27,68),lw=rw(9,26),lv=(x,y)=>inR(x,y,PT)?lt:inR(x,y,PW)?lw:rw(x,y);
+ const GREEN=[1,4,14,19,20,24,25,26,27,28,29,30,31],ROCK=[5,15,16,17,18],XS=[[0,-1],[0,1],[-1,0],[1,0]];
+ for(let y=0;y<MH;y++)for(let x=0;x<100;x++){if(y>=fTop(x)||inV(x,y)||x>coastX(y)+5)continue;const i=y*MW+x;
+   if(GREEN.includes(M[i])){M[i]=48;TLV[i]=Math.min(250,lv(x,y)+1)}else if(ROCK.includes(M[i]))TLV[i]=Math.min(250,lv(x,y)+1)}
+ const cl=[];
+ for(let y=0;y<MH;y++)for(let x=0;x<100;x++){const i=y*MW+x;if(M[i]!==48||inR(x,y,PI)||inR(x,y,PWI))continue;
+   if(XS.some(([a,b])=>{const j=i+b*MW+a;return TLV[j]&&TLV[j]<TLV[i]}))cl.push(i)}
+ cl.forEach(i=>{M[i]=hs(i,3)%100<8?50:49});
+ // join every walkable patch with a few rock steps so no terrace is cut off: add steps wherever a cliff touches two separate patches
+ const R0=[0,0,99,125],lab=new Int32Array(MW*MH).fill(-1),par=[],find=a=>{while(par[a]!==a)a=par[a]=par[par[a]];return a};
+ for(let y=R0[1];y<=R0[3];y++)for(let x=R0[0];x<=R0[2];x++){const i=y*MW+x;if(!WK.includes(M[i])||lab[i]>=0)continue;
+   const id=par.length;par.push(id);lab[i]=id;const q=[i];while(q.length){const c=q.pop(),cx=c%MW,cy=c/MW|0;
+     XS.forEach(([a,b])=>{const nx=cx+a,ny=cy+b;if(nx<R0[0]||ny<R0[1]||nx>R0[2]||ny>R0[3])return;const j=ny*MW+nx;if(lab[j]<0&&WK.includes(M[j])){lab[j]=id;q.push(j)}})}}
+ cl.filter(i=>M[i]===49).sort((a,b)=>hs(a,7)-hs(b,7)).forEach(i=>{const ls=new Set();XS.forEach(([a,b])=>{const j=i+b*MW+a;if(lab[j]>=0)ls.add(find(lab[j]))});
+   if(ls.size>1){const l=[...ls];M[i]=50;l.forEach(v=>par[find(v)]=find(l[0]))}})}
 const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',27,68],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',9,27],["Sailors' Grave Rocks",90,86],['Island 1',206,81],['Island 2',190,136],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Island 6',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,31],['Temple to the Sky',244,135],['Temple Tower',201,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',33,111]];
