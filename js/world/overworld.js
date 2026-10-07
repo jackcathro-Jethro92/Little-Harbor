@@ -67,8 +67,17 @@ carvePath([[12,34],[12,31],[9,29]]);                                            
 // forest barrier: solid forest fills the whole width of the land, coast to coast, with no road through it: the two Darkwood gates (south by the woodcutters, north below the Mountain Town) are the way through
 const FR=[[30,107],[31,111]]; // only a short stretch of road below the Mountain Town gate, leading to the Darkwood's north gate; the rest is closed forest
 carvePath(FR);
-rect(0,108,95,148,(x,y)=>{const d=Math.min(...FR.map((a,k)=>k?segD(x,y,FR[k-1],a):99));
-  if(d>=3&&[1,2,14,15,16,17,19,20,24,25,26,27,28,29,30,31].includes(at(x,y)))setT(x,y,4)});
+const FOREST=[1,2,14,15,16,17,19,20,24,25,26,27,28,29,30,31];
+// the barrier's north and south edges undulate (gently, one tile at a time at most, so there is never a gap), and the outer two rows are a little thinned like a real forest edge
+const fTop=x=>Math.max(x>=12&&x<=50?108:100,113+Math.round(4*Math.sin(x*.17+.5)+2.5*Math.sin(x*.06+2))),fBot=x=>Math.min(148,143-Math.round(4*Math.sin(x*.14+1)+2.5*Math.sin(x*.05)));
+rect(0,100,95,148,(x,y)=>{const d=Math.min(...FR.map((a,k)=>k?segD(x,y,FR[k-1],a):99)),t=fTop(x),bt=fBot(x);
+  if(d<3||y<t||y>bt||!FOREST.includes(at(x,y)))return;
+  if((y<t+2||y>bt-2)&&hs(x*13,y*7)%100<30)return;setT(x,y,4)});
+// the forest runs on south down the west side of the map, wide at first, thinning out and tapering away toward the Walled Settlement's latitude
+const wEdge=y=>(15+5*Math.sin(y*.1+1)+3*Math.sin(y*.3))*Math.min(1,Math.max(0,1-(y-148)/80));
+rect(0,128,25,228,(x,y)=>{const e=wEdge(y)+(hs(x*3,y*5)%100-50)/50;if(x>=e||!FOREST.includes(at(x,y)))return;
+  if(RP.some((a,k)=>k&&segD(x,y,RP[k-1],a)<4))return;
+  if(e-x<2.5&&hs(x*13,y*7)%100<40)return;setT(x,y,4)});
 rect(32,110,34,110,(x,y)=>setT(x,y,6));setT(33,109,44);                               // the Darkwood's north gate, just outside the Mountain Town entrance
 BL.slice(NB0).forEach(b=>{for(let j=0;j<2;j++)for(let i=0;i<b.w;i++)setT(b.x+i,b.y+j,5)});
 const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',31,96],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',9,27],["Sailors' Grave Rocks",90,86],['Island 1',206,81],['Island 2',190,136],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Island 6',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,31],['Temple to the Sky',244,135],['Temple Tower',201,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',33,111]];
