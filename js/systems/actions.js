@@ -17,6 +17,7 @@ function act(){
     if(n.shop){menu("Odo's General Store",['Buy food','Sell','Cancel'],o=>{if(o==='Buy food')openGeneral('buy');else if(o==='Sell')openGeneral('sell')});return}
     n.i=((n.i||0)+1)%n.say.length;n.f={u:'d',d:'u',l:'r',r:'l'}[P.f];say(n.n+': '+n.say[n.i]);return;
   }
+  {const an=animalAt(x,y);if(an&&!sail)return say(ANIMALS[an.k].say)}
   if(!sail){
     if(B.x===x&&B.y===y){P.x=x;P.y=y;sail=true;say('Aboard! Face open water and tap Use to cast.');ui();return}
     if(at(x,y)===0)say('You need the boat to fish. It is at the end of the pier.');

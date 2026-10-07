@@ -39,6 +39,7 @@ function draw(){
     if($('msg').textContent!==m)say(m)}
   const E=NPC.filter(n=>zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{R(n.x*T-cx+2,n.y*T-cy+13,12,3,'#00000033');CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3,{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0})}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
+  AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
   S.placed.forEach(p=>E.push({y:p.y,f:()=>obj(p,cx,cy,t)}));
   if(G.alive)E.push({y:G.y,f:()=>ghost(cx,cy,t)});
   E.push({y:P.ry+.1,f:()=>{
