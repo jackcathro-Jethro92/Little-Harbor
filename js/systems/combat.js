@@ -1,8 +1,9 @@
 // ---------- combat (the spirit on Spirit Isle), getting hurt and fainting ----------
+const hitDamage=()=>Math.round(eq('weapon').damage*(1+.08*lvl('combat')+fx('dmg')));
 function swing(){
   if(!eq('weapon'))return say('You have no weapon! Buy a sword from Bram.');
   if(S.sta<STAM.swing)return say('Too tired to swing. Sleep on the boat to rest.');
-  spend(STAM.swing);const d=Math.round(eq('weapon').damage*(1+.08*lvl('combat')));G.hp-=d;G.hitAt=performance.now();say('You hit the spirit for '+d+'!');gainXp('combat',2);
+  spend(STAM.swing);const d=hitDamage();G.hp-=d;G.hitAt=performance.now();say('You hit the spirit for '+d+'!');gainXp('combat',2);
   if(S.coat>0){S.coat--;G.pois=performance.now()+6000;say('You hit the spirit for '+d+'! It is poisoned.');ui()}
   if(G.hp<=0)ghostDie();save()}
 function ghostDie(){G.alive=false;G.resp=40;G.pois=0;say('The spirit fades away... for now.');gainXp('combat',20)}
@@ -17,4 +18,4 @@ function ghostTick(){
     if(ISL.has(i)&&WK.includes(M[i])&&!(P.x===nx&&P.y===ny)){G.x=nx;G.y=ny;break}}}
 function faint(){cancel();const loss=Math.floor(S.gold*.1);S.gold-=loss;S.hp=Math.ceil(maxHp()/2);S.sta=Math.ceil(maxSta()/2);
   P.x=P.rx=B.x;P.y=P.ry=B.y;sail=true;say('You blacked out... and woke up on your boat. Lost '+loss+' gold.');ui();save()}
-function hurt(n,src){S.hp=Math.max(0,S.hp-n);flashHit();say(src+' hits you for '+n+'!');ui();save();if(S.hp<=0)faint()}
+function hurt(n,src){n=Math.max(1,Math.round(n*(1-fx('ward'))));S.hp=Math.max(0,S.hp-n);flashHit();say(src+' hits you for '+n+'!');ui();save();if(S.hp<=0)AR.on?arenaLose():faint()}

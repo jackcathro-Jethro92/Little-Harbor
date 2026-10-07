@@ -15,7 +15,7 @@ NPC.push(
  {n:'Perrin',x:93,y:190,hx:93,hy:190,f:'d',skin:3,hair:2,shirt:5,jk:4,hat:'cap',hc:3,pack:false,jon:true,bio:{age:null,job:'Egg farmer',backstory:null,likes:[],quests:[]},say:['Fresh eggs every morning, if the hens feel like it.','The settlement folk buy most of what I grow.']});
 // ---------- animals ----------
 // k kind, hx/hy home, rx/ry how far it roams, solid animals block the way (pets do not)
-const ANIMALS={cow:{solid:1,say:'Moo!'},pig:{solid:1,say:'Oink oink!'},sheep:{solid:1,say:'Baa!'},dog:{say:'Woof! It wags its tail.'},cat:{say:'Meow.'}};
+const ANIMALS={dummy:{solid:1,say:'A straw practice dummy.',use:()=>hitDummy()},cow:{solid:1,say:'Moo!'},pig:{solid:1,say:'Oink oink!'},sheep:{solid:1,say:'Baa!'},dog:{say:'Woof! It wags its tail.'},cat:{say:'Meow.'}};
 const AN=[];
 const addAn=(k,x,y,rx,ry,c)=>AN.push({k,x,y,hx:x,hy:y,rx,ry,c,f:0});
 [[123,211],[126,211],[129,211]].forEach(([x,y])=>addAn('cow',x,y,2,1));

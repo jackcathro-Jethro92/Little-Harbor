@@ -9,7 +9,7 @@ function draw(){
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0)+1;ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
     if(at(tx,ty)===4)tree(tx,ty,tx*T-cx,ty*T-cy);
   const cp=campOf();if(cp&&Math.hypot(P.rx-cp.x,P.ry-cp.y)<10){g.strokeStyle='rgba(255,255,255,.4)';g.setLineDash([3,3]);g.beginPath();g.arc(cp.x*T+8-cx,cp.y*T+8-cy,CAMP_R*T,0,7);g.stroke();g.setLineDash([])}
-  BL.forEach(b=>{if(zoneOf(b.x,b.y)===zoneOf(P.x,P.y))(b.col||b.tower?tmp:bld)(b,b.x*T-cx,b.y*T-cy,t)});
+  BL.forEach(b=>{if(zoneOf(b.x,b.y)===zoneOf(P.x,P.y))(b.hall?hall:b.col||b.tower?tmp:bld)(b,b.x*T-cx,b.y*T-cy,t)});
   if(S.claim){const c0=S.claim,X=c0.x*T-cx,Y=c0.y*T-cy,W=c0.w*T,H=c0.h*T,rc='#d8b878';
     R(X,Y+2,W,1,rc);R(X,Y+H-3,W,1,rc);R(X+2,Y,1,H,rc);R(X+W-3,Y,1,H,rc);
     for(let i=0;i<=c0.w;i+=2)for(const yy of[Y,Y+H-6])R(X+Math.min(i*T,W-4),yy,3,6,'#7a5230');
@@ -39,6 +39,7 @@ function draw(){
     if($('msg').textContent!==m)say(m)}
   const E=NPC.filter(n=>zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{R(n.x*T-cx+2,n.y*T-cy+13,12,3,'#00000033');CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3,{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0})}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
+  if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
   S.placed.forEach(p=>E.push({y:p.y,f:()=>obj(p,cx,cy,t)}));
   if(G.alive)E.push({y:G.y,f:()=>ghost(cx,cy,t)});

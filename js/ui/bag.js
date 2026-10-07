@@ -1,6 +1,6 @@
 // ---------- bag screen ----------
 const POCKETS=[{k:'fish',t:'INGREDIENTS',c:'#d8683c'},{k:'food',t:'CONSUMABLES',c:'#d8a43c'},{k:'mat',t:'MATERIALS',c:'#a8742f'},{k:'gear',t:'GEAR',c:'#4f9a5a'},{k:'equip',t:'EQUIPPED',c:'#4a74c0'}];
-const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife']];
+const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet']];
 const ownedForSlot=sl=>Object.keys(S.bag).some(id=>count(id)&&ITEMS[id]&&slotOf(id)===sl);
 let bp=0,bc=0,bpop=null;
 const describe=id=>{const i=ITEMS[id];return i.kind==='rod'?(i.wait<1?'Bites '+Math.round((1-i.wait)*100)+'% sooner.':'A plain starter rod.'):i.kind==='boat'?(i.price?'Better odds of rare fish.':'Your trusty starter boat.'):i.desc};
@@ -9,7 +9,7 @@ function rowsOf(p){
   if(k==='food')return [...LIST('food'),...LIST('potion')].filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].kind==='food'?foodDesc(id)+' Sells for '+ITEMS[id].value+'g.':potionDesc(id)}));
   if(k==='mat')return LIST('material').filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].desc}));
   if(k==='fish')return [...fishIds,...LIST('ingredient'),...LIST('forage')].filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].kind==='fish'?'Worth '+ITEMS[id].value+' gold. Sell it to Odo, or cook it.':ITEMS[id].kind==='forage'?ITEMS[id].desc+' Sells for '+ITEMS[id].value+'g. You can plant it in a garden.':ITEMS[id].desc+' Cook it, or plant it in a garden.'}));
-  if(k==='gear')return ['rod','weapon','tool','station','prefab','claim','garden'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
+  if(k==='gear')return ['rod','weapon','tool','jewel','station','prefab','claim','garden'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
   return SLOTS.filter(([sl])=>S.eq[sl]||ownedForSlot(sl)).map(([sl,n])=>({slot:sl,id:S.eq[sl],label:n,right:S.eq[sl]?ITEMS[S.eq[sl]].n+(sl==='weapon'&&S.coat?' (poison x'+S.coat+')':''):'---',desc:S.eq[sl]?describe(S.eq[sl]):'Nothing equipped.'}));
 }
 function drawBag(){
