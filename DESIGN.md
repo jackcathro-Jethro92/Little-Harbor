@@ -17,7 +17,7 @@ A top-down pixel-art fishing and exploration game for phones (primarily iPhone 1
 | --- | --- | --- |
 | Village | 156 | 113 |
 | Mainland | 50 | 185 |
-| Mountain Town | 31 | 96 |
+| Mountain Town | 27 | 68 |
 | Walled Settlement | 100 | 210 |
 | Settlement Docks | 154 | 215 |
 | Woodcutters' Shacks | 33 | 153 |
@@ -41,12 +41,12 @@ A top-down pixel-art fishing and exploration game for phones (primarily iPhone 1
 ### Separate maps (zones)
 These are hidden rectangles of the main grid. They look like water from outside and the area beyond their edge is drawn black from inside. Entities and buildings are only drawn when the player is in the same zone (`zoneOf`).
 - **Home interior**: x 300-311, y 226-235. Entered through the player house's door tile; exit by facing the interior door.
-- **The Darkwood**: x 100-147, y 4-39. Dark forest with a light radius around the player. South gate arrives at (123,38), north gate at (136,5). Overworld gates: south at (36,149) by the woodcutters, north at (33,109), just outside the Mountain Town entrance (you step out at (33,110)). Contents: winding trail, 4 dead ends with treasure bundles, 2 more bundles on the trail, tall grass (7% chance of a herb, 3% chance of a 4 damage hornet sting per step), woodcutter's cottage with Hale, forager Wren, many mushrooms and herbs.
+- **The Darkwood**: x 100-147, y 4-39. Dark forest with a light radius around the player. South gate arrives at (123,38), north gate at (136,5). Overworld gates: south at (36,149) by the woodcutters, north at (33,109), at the end of the road from the Mountain Town (you step out at (33,110)). Contents: winding trail, 4 dead ends with treasure bundles, 2 more bundles on the trail, tall grass (7% chance of a herb, 3% chance of a 4 damage hornet sting per step), woodcutter's cottage with Hale, forager Wren, many mushrooms and herbs.
 
 ### Mainland features
 - Walled Settlement (x 84-115, y 200-234): 8 houses, west gate (road to the woodcutters and the Darkwood), east gate (3-wide path to the docks), closed south wall. Docks: two-wide pier with an end platform around (154,217).
-- Mountain Town (x 19-43, y 87-106): walls, 5 houses, gate at the south. No people yet.
-- Forest barrier: solid forest (choppable trees) fills the whole width of the mainland from the west edge to the east coast, around y 100-148. Its north and south edges undulate and are slightly thinned like a real forest edge. The forest also runs south down the west side of the map (about 15 tiles wide, tapering away by y 228, kept clear of the woodcutters and the road). There is no road through it on foot: the Darkwood's two gates (south at (36,149), north at (33,109)) stand for the way through. Only a short dirt stretch below the Mountain Town gate leads to the north gate.
+- Mountain Town (x 15-39, y 59-78): walls, 5 houses, gate at the south. No people yet.
+- Forest barrier: solid forest (choppable trees) fills the whole width of the mainland from the west edge to the east coast, around y 100-148. Its north and south edges undulate and are slightly thinned like a real forest edge. The forest also runs south down the west side of the map (about 15 tiles wide, tapering away by y 228, kept clear of the woodcutters and the road). There is no road through it on foot: the Darkwood's two gates (south at (36,149), north at (33,109)) stand for the way through. A dirt road runs from the Mountain Town gate south to the north gate.
 - Mountain stone was deliberately removed everywhere on request. Sea rocks (Sailors' Grave Rocks) remain.
 - Temples (to the Mountains, of Fire, of the Sea, to the Sky) and the Temple Tower are scenery placeholders.
 
