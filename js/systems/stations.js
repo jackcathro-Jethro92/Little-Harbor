@@ -12,7 +12,7 @@ function placeWhy(id,x,y){
   if(t===5)return 'A building is in the way.';
   if(t===19)return 'A flax bush is there. Cut it first.';
   if(t===3)return "You can't build on the pier.";
-  if(![1,2,6,18,20,21].includes(t))return "You can't place that there.";
+  if(![1,2,6,18,20,21,48].includes(t))return "You can't place that there.";
   if(npcAt(x,y))return 'Someone is standing there.';
   if(placedAt(x,y))return 'Something is already there.';
   if((B.x===x&&B.y===y)||(G.alive&&G.x===x&&G.y===y))return "You can't place that there.";

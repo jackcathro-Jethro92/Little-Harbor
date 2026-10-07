@@ -29,4 +29,4 @@ BL.push({x:120,y:7,w:3,roof:'thatch'});for(let j=0;j<2;j++)for(let i=0;i<3;i++)s
 setT(121,9,40);setT(107,12,40);
 NPC.push({n:'Hale',x:121,y:9,hx:121,hy:9,f:'d',skin:2,hair:1,shirt:2,jk:3,hat:'cap',fixed:1,say:['Keep to the trail. The Darkwood swallows folk who wander off it.','Thirty winters I have cut timber here. Something is stirring in the deep woods.','Mind the mushrooms. Some will cure you and some will kill you.']},
   {n:'Wren',x:107,y:12,hx:107,hy:12,f:'r',skin:0,hair:4,shirt:3,jk:4,hat:'none',fixed:1,say:['I forage here for the alchemists. Dead ends hide the best finds.','Tall grass hides hornets. Do not say I did not warn you.']});
-Object.keys(S.cut).forEach(i=>{if([15,16,17].includes(S.cut[i].m)&&cleared(i%MW,(i/MW)|0)){delete S.cut[i];return}M[i]=STUB(S.cut[i].m)});
+Object.keys(S.cut).forEach(i=>{if(([15,16,17].includes(S.cut[i].m)&&cleared(i%MW,(i/MW)|0))||[48,49,50].includes(M[i])){delete S.cut[i];return}M[i]=STUB(S.cut[i].m)});

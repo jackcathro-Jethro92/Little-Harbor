@@ -17,7 +17,7 @@ const dirt=(x,y)=>{const t=at(x,y);if(t===1||t===2)M[y*MW+x]=6};
 for(let x=31;x<=40;x++)dirt(x,34);
 for(let y=15;y<=35;y++){dirt(31,y);dirt(32,y)}
 [[30,24],[33,24],[30,32],[33,32]].forEach(([x,y])=>{if(at(x,y)===1)M[y*MW+x]=7});
-const WK=[1,2,3,6,10,18,19,20,21,24,25,26,27,28,29,30,31,40,42,47],put=(x,y,t)=>{if(at(x,y)===1||at(x,y)===2||at(x,y)===6)M[y*MW+x]=t};
+const WK=[1,2,3,6,10,18,19,20,21,24,25,26,27,28,29,30,31,40,42,47,48,50],put=(x,y,t)=>{if(at(x,y)===1||at(x,y)===2||at(x,y)===6)M[y*MW+x]=t};
 for(let x=24;x<=26;x++)for(let y=23;y<=24;y++)put(x,y,9);
 for(let x=43;x<=46;x++){for(let y=24;y<=26;y++)put(x,y,10);put(x,23,8)}
 for(let y=24;y<=26;y++)put(47,y,8);
