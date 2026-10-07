@@ -36,12 +36,12 @@ A top-down pixel-art fishing and exploration game for phones (primarily iPhone 1
 | Temple Tower | 201 | 196 |
 | Spirit Isle | 146 | 135 |
 | Darkwood south gate | 36 | 146 |
-| Darkwood north gate | 33 | 111 |
+| Darkwood north gate | 31 | 110 |
 
 ### Separate maps (zones)
 These are hidden rectangles of the main grid. They look like water from outside and the area beyond their edge is drawn black from inside. Entities and buildings are only drawn when the player is in the same zone (`zoneOf`).
 - **Home interior**: x 300-311, y 226-235. Entered through the player house's door tile; exit by facing the interior door.
-- **The Darkwood**: x 100-147, y 4-39. Dark forest with a light radius around the player. South gate arrives at (123,38), north gate at (136,5). Both ends are a red torii gate three tiles wide (a post on each side, `43`/`44` in the middle; pressing Use facing any of the three goes through). Overworld gates: south at (36,149) by the woodcutters, north at (33,109), at the end of the road from the Mountain Town (you step out at (33,110)). Contents: winding trail, 4 dead ends with treasure bundles, 2 more bundles on the trail, tall grass (7% chance of a herb, 3% chance of a 4 damage hornet sting per step), woodcutter's cottage with Hale, forager Wren, many mushrooms and herbs.
+- **The Darkwood**: x 100-147, y 4-39. Dark forest with a light radius around the player. South gate arrives at (123,38), north gate at (136,5). Both ends are a red torii gate three tiles wide (a post on each side, `43`/`44` in the middle; pressing Use facing any of the three goes through). Overworld gates: south at (36,149) by the woodcutters, north at (31,110), at the end of the road from the Mountain Town (you step out at (31,109)). Dark thick trees (41) close in around each outside gate so it looks set into the forest. Contents: winding trail, 4 dead ends with treasure bundles, 2 more bundles on the trail, tall grass (7% chance of a herb, 3% chance of a 4 damage hornet sting per step), woodcutter's cottage with Hale, forager Wren, many mushrooms and herbs.
 
 ### Mainland features
 - Walled Settlement (x 84-115, y 200-234): 8 houses, west gate (road to the woodcutters and the Darkwood), east gate (3-wide path to the docks), closed south wall. Docks: two-wide pier with an end platform around (154,217).
