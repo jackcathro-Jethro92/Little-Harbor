@@ -44,8 +44,8 @@ These are hidden rectangles of the main grid. They look like water from outside 
 - **The Darkwood**: x 100-147, y 4-39. Dark forest with a light radius around the player. South gate arrives at (123,38), north gate at (136,5). Both ends are a red torii gate three tiles wide (a post on each side, `43`/`44` in the middle; pressing Use facing any of the three goes through). Overworld gates: south at (36,149) by the woodcutters, north at (31,110), at the end of the road from the Mountain Town (you step out at (31,109)). Dark thick trees (41) close in around each outside gate so it looks set into the forest. Contents: winding trail, 4 dead ends with treasure bundles, 2 more bundles on the trail, tall grass (7% chance of a herb, 3% chance of a 4 damage hornet sting per step), woodcutter's cottage with Hale, forager Wren, many mushrooms and herbs.
 
 ### Mainland features
-- Walled Settlement (x 84-115, y 200-234): 8 houses, west gate (road to the woodcutters and the Darkwood), east gate (3-wide path to the docks), closed south wall. Docks: two-wide pier with an end platform around (154,217).
-- Mountain Town (x 15-39, y 59-78): walls, 5 houses, gate at the south. No people yet.
+- Walled Settlement (x 84-115, y 200-234): 15 houses plus Garrick's forge (the blacksmith, door at (104,231)), 18 people (a gate guard, Garrick, his apprentice Tilda and one resident per house, who wander near their doors; built in `js/world/settlement.js`), barrels and lanterns, west gate (road to the woodcutters and the Darkwood), east gate (3-wide path to the docks), closed south wall. Docks: two-wide pier with an end platform around (154,217).
+- Mountain Town (x 15-39, y 59-78): walls, 5 houses, gate at the south. No people yet (next: same treatment as the Walled Settlement).
 - Forest barrier: solid forest (choppable trees) fills the whole width of the mainland from the west edge to the east coast, around y 100-148. Its north and south edges undulate and are slightly thinned like a real forest edge. The forest also runs south down the west side of the map (about 15 tiles wide, tapering away by y 228, kept clear of the woodcutters and the road). There is no road through it on foot: the Darkwood's two gates (south at (36,149), north at (33,109)) stand for the way through. A dirt road runs from the Mountain Town gate south to the north gate.
 - **Mountain country** (the mainland north of the forest, including the Mountain Town and the Temple to the Mountains): no grass, trees or herbs. It is bare rock in terraces that step up toward the north (`overworld.js`, block after the buildings are placed). Each terrace tile has a height in `TLV`; wherever one tile is higher than its neighbour it becomes a cliff face (49, blocks the way), and rock steps (50) are added so every terrace can be reached. Colours go from warm tan low down to cool grey-blue high up, following the reference picture. Islands (such as the Pirate Island) are not affected.
 - Mountain stone elsewhere was deliberately removed on request. Sea rocks (Sailors' Grave Rocks) remain.
@@ -75,7 +75,7 @@ XP thresholds (total XP for levels 1-10): 100, 380, 770, 1300, 2150, 3300, 4800,
 | Alchemy | potions | potions 4% stronger and longer (poison vials +1 hit per 3 levels) |
 
 ## Items, bag, equipment
-- All items live in one data table (`ITEMS`): add a row to add an item. Kinds: boat, claim, fish, food, forage, garden, ingredient, material, potion, prefab, rod, station, tool, weapon (79 items).
+- All items live in one data table (`ITEMS`): add a row to add an item. Kinds: boat, claim, fish, food, forage, garden, ingredient, material, potion, prefab, rod, station, tool, weapon (84 items).
 - Bag pockets (FireRed style, left/right to switch): Ingredients (fish, vegetables, meat, foraged herbs and mushrooms), Consumables (food and potions; Eat, Drink or Apply), Materials, Gear (rods, weapons, tools, stations, house kits, claims, garden kits; Equip or Place), Equipped (slots: rod, weapon, pickaxe, axe, knife).
 - Boats are not in the bag: they are switched at Captain Rue's boatyard. Rods and boats are bought in order; boats can be bought or built in any order.
 - Test sword is granted once (see testing flags).
@@ -83,6 +83,7 @@ XP thresholds (total XP for levels 1-10): 100, 380, 770, 1300, 2150, 3300, 4800,
 ### Shops
 - **Bram's Tackle & Tools** (village): rods, sword 300, pickaxe 200, woodcutter's axe 200, knife 60, camp kit 150, workbench 100, forge 400, cooking station 250, alchemy station 300, garden kit 120, home claim 500.
 - **Odo's General Store** (village): buys and sells ingredients (carrot 5, cabbage 6, broccoli 7, parsnip 6, potato 4, chicken 14, pork 16, beef 20); buys fish, ingredients (half price), cooked meals and foraged herbs.
+- **Garrick's Forge** (blacksmith, Walled Settlement; stock is the `SMITH` table in `js/data/shops.js`): Buy or Sell. Sells materials (copper ore 30, tin ore 30, bronze ore 50, iron bar 160, rope 25, softwood/medium/hardwood planks 15/30/55), weapons (bronze sword 450 damage 7, iron sword 1,100 damage 10, warrior's greatsword 3,000 damage 15), tools (iron pickaxe and iron woodcutter's axe, 600 each, one swing fewer per node via `power` 2) and objects (workbench, forge, camp kit). Buys materials at half price. Items with `smith:1` are hidden from Bram's shop.
 - **Captain Rue's Boatyard**: switch boats; sells sloop 100,000, trawler 250,000, and the shipwright station (1,500).
 
 ## Fishing
@@ -189,12 +190,12 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 | File | What is in it |
 | --- | --- |
 | `js/core.js` | `$`, canvas, map size constants, directions, look palettes |
-| `js/data/items.js`, `gathering.js`, `recipes.js`, `skills.js`, `crops.js` | Data tables: items, wood/ore/flax/herbs, recipes, skills, garden crops |
+| `js/data/items.js`, `gathering.js`, `recipes.js`, `skills.js`, `crops.js`, `shops.js` | Data tables: items, wood/ore/flax/herbs, recipes, skills, garden crops, blacksmith stock |
 | `js/save.js` | Save version, `fresh()`, `migrate()`, loading and `save()` |
 | `js/systems/inventory.js` | Bag helpers and the `TEST_GRANTS` / `TEST_KITS` switches |
 | `js/systems/stats.js` | Stamina costs, levels, XP, `spend()` |
 | `js/ui/hud.js` | Message line, toast, HP/STA bars |
-| `js/world/village.js`, `overworld.js`, `interiors.js` | World generation: village island, mainland and islands, home interior and the Darkwood (also the `wv` save migration and regrowing tiles from the save) |
+| `js/world/village.js`, `overworld.js`, `settlement.js`, `interiors.js` | World generation: village island, mainland and islands, the Walled Settlement's extra houses and people, home interior and the Darkwood (also the `wv` save migration and regrowing tiles from the save) |
 | `js/systems/player.js` | Player and boat position, movement |
 | `js/render/sprites.js`, `tiles.js`, `buildings.js`, `entities.js`, `draw.js`, `icons.js` | Character sprites, tiles and trees, buildings, chickens/spirit/stations, the frame (`draw()`), bag icons |
 | `js/systems/gathering.js`, `home.js`, `stations.js`, `consumables.js`, `fishing.js`, `combat.js`, `darkwood.js`, `actions.js` | Game systems; `actions.js` has the Use button (`act()`) and sleeping |
@@ -213,7 +214,7 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 ## Not built yet (planned, roughly in this order)
 1. Creatures: Darkwood tall grass encounters and island monsters, using weapons, stamina, potions and poison.
 2. Storms (stamina drain, forced camping), then pirates (pirate island, ship combat).
-3. People and shops in the Walled Settlement and Mountain Town; woodcutter's cottage interior; temple interiors; the Temple Tower and its mysterious strangers.
+3. People and shops in the Mountain Town (the Walled Settlement now has them); woodcutter's cottage interior; temple interiors; the Temple Tower and its mysterious strangers.
 4. Story: festival opening, the seagull's letter, quests (characters already have empty `bio` slots in `NPC`).
 5. Beverages and illness remedies; fishing difficulty rework; more fish zones; ship building variants; audio; cleaner onboarding; remove testing switches.
 

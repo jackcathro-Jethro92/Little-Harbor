@@ -46,6 +46,11 @@ def check(b, url):
     assert water > 0.99, "sea should be one connected body"
     bad = ev("(()=>{let n=0;for(let y=0;y<MH;y+=20)for(let x=0;x<MW;x+=20){P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){n++}}return n})()")
     assert bad == 0, "draw() should not throw anywhere"
+    # the Walled Settlement: every house door can be reached from its gate, and Garrick's forge opens
+    town = ev("(()=>{const ok=new Set(WK),seen=new Set([202*MW+100]),q=[[100,202]];let h=0;while(h<q.length){const[x,y]=q[h++];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,i=ny*MW+nx;if(seen.has(i)||!ok.has(at(nx,ny)))continue;seen.add(i);q.push([nx,ny])}}const bs=BL.filter(b=>b.x>=84&&b.x<=115&&b.y>=200&&b.y<=234);return{houses:bs.length,stuck:bs.filter(b=>!seen.has((b.y+2)*MW+b.x+1)).length,people:NPC.filter(n=>n.x>=84&&n.x<=115&&n.y>=200&&n.y<=234).length}})()")
+    assert town["houses"] >= 15 and town["stuck"] == 0 and town["people"] >= 15, town
+    ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').innerText)"), "smith shop"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     assert not errs, errs
     pg.close()
     # an old v1 save still loads, is migrated, and is backed up

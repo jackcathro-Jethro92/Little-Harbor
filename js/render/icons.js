@@ -43,5 +43,5 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
     else if(id==='forge'){r(2,4,12,10,'#2e2e36');r(3,5,10,8,'#8d8f87');r(5,8,6,5,'#2e1f10');r(6,10,4,3,'#e8632e')}
     else{r(2,6,12,4,'#2e1f10');r(3,7,10,2,'#a8743f');r(3,10,2,4,'#6b4423');r(11,10,2,4,'#6b4423')}}
   else if(id==='knife'){for(let t=0;t<6;t++)r(3+t,12-t,2,2,'#7a5230');for(let t=0;t<5;t++)r(8+t,7-t,2,2,'#c9d2da')}
-  else if(id==='sword'){for(let t=0;t<9;t++)r(5+t,9-t,2,2,'#c9d2da');r(3,10,5,2,'#6b4423');r(2,12,3,3,'#6b4423')}
-  else{for(let t=0;t<11;t++)r(2+t,13-t,1,1,'#7a5230');if(id==='pickaxe'){r(8,1,6,2,'#8d8f87');r(12,2,2,5,'#8d8f87')}else{r(8,2,6,5,'#8d8f87');r(8,2,6,1,'#c9cac1')}}}
+  else if(K==='weapon'){const c=ITEMS[id].blade||'#c9d2da',w=ITEMS[id].wide?3:2;for(let t=0;t<9;t++)r(5+t,9-t,w,w,c);r(3,10,5,2,'#6b4423');r(2,12,3,3,'#6b4423')}
+  else{for(let t=0;t<11;t++)r(2+t,13-t,1,1,'#7a5230');const mc=ITEMS[id].metal||'#8d8f87';if(/pickaxe/.test(id)){r(8,1,6,2,mc);r(12,2,2,5,mc)}else{r(8,2,6,5,mc);r(8,2,6,1,'#c9cac1')}}}

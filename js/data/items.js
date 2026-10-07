@@ -76,6 +76,11 @@ const ITEMS={
  swiftness_potion:{n:'Swiftness potion',kind:'potion',speed:90,desc:'Move and sail twice as fast for a while.'},
  poison_vial:{n:'Poison vial',kind:'potion',coat:10,desc:'Coats your weapon. Hits poison enemies, weakening and slowing them.'},
  alchemy_station:{n:'Alchemy station',kind:'station',price:300,place:'alchemy',desc:'Brew potions and remedies. Place within 5 tiles of camp or home.'},
+ bronze_sword:{n:'Bronze sword',kind:'weapon',price:450,damage:7,smith:1,blade:'#d9a441',desc:'A bronze blade. Damage 7.'},
+ iron_sword:{n:'Iron sword',kind:'weapon',price:1100,damage:10,smith:1,blade:'#dfe6ec',desc:'A keen iron blade. Damage 10.'},
+ greatsword:{n:"Warrior's greatsword",kind:'weapon',price:3000,damage:15,smith:1,blade:'#9ec6e8',wide:1,desc:'A heavy two-handed blade. Damage 15.'},
+ iron_pickaxe:{n:'Iron pickaxe',kind:'tool',price:600,use:'mine',power:2,smith:1,metal:'#c9d2da',desc:'Digs out ore with one swing fewer.'},
+ iron_axe:{n:"Iron woodcutter's axe",kind:'tool',price:600,use:'chop',power:2,smith:1,metal:'#c9d2da',desc:'Fells trees with one swing fewer.'},
  rowboat:{n:'Rowboat',kind:'boat',price:0},
  sloop:{n:'Sloop',kind:'boat',price:100000,desc:'A sturdy sailing boat with better odds of rare fish.'},
  trawler:{n:'Trawler',kind:'boat',price:250000,desc:'A big working boat. The best odds of rare fish.'}
