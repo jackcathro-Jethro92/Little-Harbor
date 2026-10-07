@@ -62,6 +62,12 @@ def check(b, url):
     ev("P.x=P.rx=B.x;P.y=P.ry=B.y;S.arena=0;S.eq.weapon=null;draw()")
     ev("openTrader('jeweller','buy')"); assert ev("/Ring of Vigor/.test($('items').innerText)"), "jeweller shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    # tailor and barber: the look screen charges only for what you change, and every hair style draws
+    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
+    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
+    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
+    ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
+    ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
     ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').innerText)"), "smith shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     assert not errs, errs

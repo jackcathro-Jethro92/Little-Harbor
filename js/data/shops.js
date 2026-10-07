@@ -16,3 +16,5 @@ const SHOPS={
  smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Metal, blades and tools.',sellTag:'Garrick buys metal and timber at half price.',none:'Bring ore, iron bars, planks or rope.',thanks:'A fine choice.',list:SMITH,sell:['Materials']},
  jeweller:{name:"Lucie's Gold & Gems",who:'Lucie',buyTag:'Enchanted rings and amulets. Wear one ring and one amulet.',sellTag:'Lucie buys jewellery back at half price.',none:'Lucie only buys rings and amulets.',thanks:'May it serve you well.',list:JEWELLER,sell:['Rings','Amulets']}
 };
+// Tailor and barber in the Walled Settlement: gold per look field changed (the look screen is in js/ui/look.js).
+const LOOK_PRICES={tailor:{shirt:50,jk:80,hc:40,hat:50,jon:30,pack:30},barber:{hair:40,hstyle:60}};
