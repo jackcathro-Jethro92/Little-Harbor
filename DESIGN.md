@@ -3,7 +3,7 @@
 A top-down pixel-art fishing and exploration game for phones (primarily iPhone 14, Safari). Inspired by Stardew Valley (skills, crafting, villagers) and early Pokemon (menus, bag screen, forest route design). Everything below describes what is **already built** unless it is under *Not built yet*.
 
 ## How to play (controls)
-- **D-pad** moves (hold to repeat); keyboard: arrows or WASD. Walking takes a step every 0.3 s while held; the boat sails twice as fast (a step every 0.15 s). Both are set by `STEP_MS` in `js/systems/stats.js`. **Use** button (Space/Enter) interacts with the tile you face.
+- **D-pad** moves (hold to repeat); keyboard: arrows or WASD. Walking takes a step every 0.07 s while a direction is held; the boat sails twice as fast (a step every 0.035 s). Both are set by `STEP_MS` in `js/systems/stats.js`, and the phone D-pad and the keyboard share one held-direction timer in `js/input.js`, so they move at exactly the same speed (the PC no longer depends on the computer's own key-repeat rate). **Use** button (Space/Enter) interacts with the tile you face.
 - Buttons: **Sleep** (only on the boat or at home), **Bag** (B), **Skills** (K), **Map** (M).
 - Facing water from the boat and pressing Use casts a line; when the bite alert appears, press Use again within about a second.
 
