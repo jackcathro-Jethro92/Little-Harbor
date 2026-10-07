@@ -7,6 +7,6 @@ function gather(x,y,tt){
   const idx=y*MW+x,d=tree?WOOD[wood(x,y)]:flax?FLAX:fg?Object.assign({hits:1,min:1,max:2},FORAGE[tt]):ORE[tt],need=Math.max(1,d.hits-Math.floor(lvl(sk)/3)-((eq(slot).power||1)-1));
   spend(cost);HITS[idx]=(HITS[idx]||0)+1;SHAKE[idx]=performance.now();
   if(HITS[idx]<need)return say(tree?'Chop!':'Clink!');
-  delete HITS[idx];let n=d.min+((Math.random()*(d.max-d.min+1))|0);if(Math.random()<.04*lvl(sk))n++;
+  delete HITS[idx];let n=d.min+((Math.random()*(d.max-d.min+1))|0);if(Math.random()<.04*lvl(sk)+fx('yield'))n++;
   add(d.item,n);S.cut[idx]={m:tt,d:S.day};M[idx]=STUB(tt);
   say('You gathered '+ITEMS[d.item].n+' x'+n+'.');gainXp(sk,d.xp);save()}

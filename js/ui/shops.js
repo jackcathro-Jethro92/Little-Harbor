@@ -37,15 +37,17 @@ function openStore(k){
   $('store').classList.add('open');
 }
 $('sclose').onclick=()=>$('store').classList.remove('open');
-// ---------- Garrick's Forge: the blacksmith in the Walled Settlement (stock is in js/data/shops.js) ----------
-function openSmith(mode){
-  const el=$('items'),buy=mode==='buy';el.innerHTML='';$('st').textContent="Garrick's Forge · "+S.gold.toLocaleString()+'g';
+// ---------- traders with a stock table (SHOPS in js/data/shops.js): Garrick's Forge, Lucie's Gold & Gems ----------
+const openSmith=m=>openTrader('smith',m);
+function openTrader(key,mode){
+  const sh=SHOPS[key],el=$('items'),buy=mode==='buy';el.innerHTML='';$('st').textContent=sh.name+' · '+S.gold.toLocaleString()+'g';
   const row=(t,d,label,dis,fn)=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+t+'</b>'+(d?'<br>'+d:'')+'</div>';if(label){const b=document.createElement('button');b.textContent=label;b.disabled=dis;b.onclick=fn;r.appendChild(b)}el.appendChild(r)};
-  row(buy?'Buying':'Selling',buy?'Metal, blades and tools.':'Garrick buys metal and timber at half price.',buy?'Sell':'Buy',false,()=>openSmith(buy?'sell':'buy'));
-  SMITH.forEach(([title,list])=>{
-    if(buy){row(title);list.forEach(([id,price])=>{const it=ITEMS[id],single=it.kind==='weapon'||it.kind==='tool',owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
-      row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say('Garrick: A fine choice.');openSmith('buy')})})}
-    else if(title==='Materials'){let n=0;list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price/2);
-      row(it.n+' x'+count(id),'Sells for '+pr+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id])delete S.bag[id];ui();save();say('Garrick: Sold '+it.n.toLowerCase()+' for '+pr+'g.');openSmith('sell')})});
-      if(!n)row('Nothing to sell','Bring ore, iron bars, planks or rope.','',true,()=>{})}});
+  row(buy?'Buying':'Selling',buy?sh.buyTag:sh.sellTag,buy?'Sell':'Buy',false,()=>openTrader(key,buy?'sell':'buy'));
+  let n=0;
+  sh.list.forEach(([title,list])=>{
+    if(buy){row(title);list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
+      row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')})})}
+    else if(sh.sell.includes(title))list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price/2);
+      row(it.n+' x'+count(id),'Sells for '+pr.toLocaleString()+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id]){delete S.bag[id];if(S.eq[slotOf(id)]===id)S.eq[slotOf(id)]=null}ui();save();say(sh.who+': Sold '+it.n.toLowerCase()+' for '+pr.toLocaleString()+'g.');openTrader(key,'sell')})})});
+  if(!buy&&!n)row('Nothing to sell',sh.none,'',true,()=>{});
   $('store').classList.add('open')}

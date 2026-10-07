@@ -1,6 +1,6 @@
 // ---------- drawing ----------
 function tile(tx,ty,sx,sy,t){
-  const n=hs(tx,ty)%100,i=ty*MW+tx,mm=M[i],here=inRoom(P.x,P.y),zt=zoneOf(tx,ty),zp=zoneOf(P.x,P.y);
+  const n=hs(tx,ty)%100,i=ty*MW+tx,mm=M[i],here=zoneOf(P.x,P.y)%2===1||zoneOf(P.x,P.y)===4,zt=zoneOf(tx,ty),zp=zoneOf(P.x,P.y);
   if(zt!==zp){R(sx,sy,T,T,zp?'#000':'#2f6fc4');if(!zp&&((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');return}
   if(mm>=21&&mm<=23){
     if(!here){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');return}
@@ -9,7 +9,8 @@ function tile(tx,ty,sx,sy,t){
       if(mm===22&&ty===IR.y0&&tx%3===0){R(sx+2,sy+4,12,9,'#3d2a14');R(sx+3,sy+5,10,7,'#9ad3f0');R(sx+7,sy+5,2,7,'#3d2a14')}
       if(mm===23){R(sx+2,sy+1,12,15,'#3d2a14');R(sx+3,sy+2,10,14,'#6b4423');R(sx+10,sy+9,2,2,'#f2c14e')}}
     return}
-  if(here&&!inRoom(tx,ty)){R(sx,sy,T,T,'#000');return}
+  if(mm===52){R(sx,sy,T,T,'#e3cf94');if(n%5===0)R(sx+n%11+2,sy+n%9+3,2,1,'#c9b277');if(n%7===0)R(sx+n%9+3,sy+n%11+2,1,1,'#f2e4b4');return}
+  if(mm===53){R(sx,sy,T,T,'#6e7068');R(sx,sy+7,T,1,'#4a4c46');R(sx,sy+15,T,1,'#4a4c46');const C=['#d9534f','#3b82c4','#f2c14e','#4caf72','#9c5bb5'];[1,6,11].forEach((px,j)=>{const w=(((t/300)|0)+n+j)%6===0?1:0;R(sx+px,sy+1+w,4,4,'#2a1b0e');R(sx+px+1,sy+2+w,2,2,'#e8c8a0');R(sx+px,sy+5+w,4,2,C[(n+j*3)%5]);R(sx+px,sy+9+w,4,4,'#2a1b0e');R(sx+px+1,sy+10+w,2,2,'#e8c8a0');R(sx+px,sy+13+w,4,2,C[(n+j*2+1)%5])});return}
   if(mm===32){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');R(sx+1,sy+11,14,3,'#d8ecff');R(sx+3,sy+4,10,9,'#2e2e36');R(sx+4,sy+3,8,9,'#8d8f87');R(sx+5,sy+3,4,2,'#b0b2b8');R(sx+6,sy+9,5,2,'#6e7068');return}
   if(M[i]===0){
     R(sx,sy,T,T,'#2f6fc4');

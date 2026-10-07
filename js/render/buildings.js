@@ -13,7 +13,7 @@ function bld(b,x,y,t){
   R(dx-1,y+17,12,15,O);R(dx,y+18,10,13,'#efe3bd');R(dx+4,y+18,1,13,'#6e4b2c');R(dx,y+23,10,1,'#6e4b2c');R(dx,y+27,10,1,'#6e4b2c');
   [x+4,x+W-12].forEach(wx=>{R(wx,y+18,8,8,O);R(wx+1,y+19,6,6,'#efe3bd');R(wx+3,y+19,1,6,'#6e4b2c');R(wx+1,y+22,6,1,'#6e4b2c')});
   R(x+1,y+16,2,14,'#3d2a14');R(x+W-3,y+16,2,14,'#3d2a14');
-  if(b.sign){const nc={fish:'#3b6fb5',rod:'#7a4fa0',boat:'#2f8f7a',smith:'#b8481f'}[b.sign];R(dx,y+20,10,7,nc);R(dx+3,y+21,1,6,O);R(dx+6,y+21,1,6,O);R(dx,y+26,10,1,O)}
+  if(b.sign){const nc={fish:'#3b6fb5',rod:'#7a4fa0',boat:'#2f8f7a',smith:'#b8481f',gold:'#c8a02a',tailor:'#a04a8a',barber:'#c8402a'}[b.sign];R(dx,y+20,10,7,nc);R(dx+3,y+21,1,6,O);R(dx+6,y+21,1,6,O);R(dx,y+26,10,1,O)}
   R(x-4,y+1,W+8,14,O);R(x-3,y+2,W+6,12,c1);R(x+3,y-1,W-6,3,O);R(x+4,y,W-8,3,c1);
   if(k==='thatch'){for(let i=0;i<W+4;i+=3){const n=hs(b.x+i,b.y)%5;R(x-2+i,y+4+n*2,3,2,c2);R(x-1+i,y+3+(n*3)%9,1,1,c4)}R(x-3,y+11,W+6,3,c2);
     R(x+4,y-4,W-8,1,'#5a3f1e');for(let i=0;i<W-8;i+=6)R(x+4+i,y-5,1,3,'#5a3f1e')}
@@ -23,10 +23,29 @@ function bld(b,x,y,t){
   if(b.sign){const sx=x+((W-20)/2|0);R(sx,y+15,20,5,O);R(sx+1,y+16,18,3,'#fff6c9');
     if(b.sign==='fish'){R(sx+5,y+16,6,3,'#3b82c4');R(sx+11,y+17,2,1,'#3b82c4')}
     else if(b.sign==='rod'){R(sx+3,y+18,14,1,'#6b4423');R(sx+16,y+16,1,3,'#6b4423')}
+    else if(b.sign==='tailor'){R(sx+4,y+17,12,1,'#b8b8c0');R(sx+6,y+16,2,3,'#a04a8a');R(sx+12,y+16,2,3,'#a04a8a');R(sx+8,y+18,4,1,'#f2c14e')}
+    else if(b.sign==='barber'){for(let q=0;q<5;q++){R(sx+7+q*2,y+16,1,3,q%2?'#3b82c4':'#d83828')}R(sx+5,y+19,10,1,'#f2f2ec')}
+    else if(b.sign==='gold'){R(sx+6,y+17,8,2,'#d9a441');R(sx+8,y+19,4,1,'#d9a441');R(sx+9,y+16,2,2,'#d83828');R(sx+15,y+16,2,1,'#fff')}
     else if(b.sign==='smith'){R(sx+5,y+16,10,2,'#3a3a44');R(sx+8,y+18,4,1,'#3a3a44');R(sx+6,y+19,8,1,'#3a3a44');R(sx+15,y+16,2,1,'#e8632e')}
     else{R(sx+4,y+18,12,1,'#7a4a26');R(sx+9,y+16,1,3,'#6b4423')}}
   else if(dc===0){R(x+W+2,y+22,7,9,O);R(x+W+3,y+23,5,7,'#8a5a2e');R(x+W+3,y+26,5,1,'#4a3018')}
   else if(dc===1){R(x-7,y+16,7,1,'#4a3018');for(let q=0;q<3;q++)R(x-7+q*2,y+17,2,3,'#e0762f')}
   else if(dc===2){R(x+W-11,y+17,9,9,O);R(x+W-10,y+18,7,7,'#d9b45f');R(x+W-9,y+19,5,5,'#e8cc7a');R(x+W-7,y+18,1,7,'#a8863a')}
   else{R(x+W+2,y+23,8,8,O);R(x+W+3,y+24,6,6,'#a8743f');R(x+W+3,y+27,6,1,O)}
+}
+// the Fighters Guild and the Gladiators' Arena: wide stone halls (b.hall 'guild' or 'arena')
+function hall(b,x,y,t){const W=b.w*T,O='#2a1b0e',g1='#9a9b93',g2='#b3b4ab',g3='#6e7068',arena=b.hall==='arena',dx=x+((W/2-5)|0),fl=((t/160)|0)%3;
+  R(x-2,y+29,W+6,6,'#00000030');R(x,y+8,W,24,O);R(x+1,y+9,W-2,22,g1);
+  for(let j=0;j<22;j+=4){R(x+1,y+9+j,W-2,1,g3);for(let i=((j/4|0)%2)*5;i<W-2;i+=10)R(x+1+i,y+9+j,1,4,g3)}
+  R(x+1,y+9,W-2,2,g2);R(x,y+29,W,3,O);R(x+1,y+29,W-2,2,g2);
+  R(dx-3,y+14,16,18,O);R(dx-2,y+15,14,17,arena?'#1a1612':'#3d2a14');R(dx-2,y+15,14,3,O);
+  if(arena){for(let i=0;i<4;i++)R(dx-1+i*4,y+16,1,15,'#6e7068');R(dx-2,y+22,14,1,'#6e7068');R(dx-2,y+27,14,1,'#6e7068')}else{R(dx+4,y+16,1,15,'#6b4423');R(dx-2,y+22,14,1,'#8a5a2e')}
+  R(x-3,y+1,W+6,9,O);R(x-2,y+2,W+4,7,arena?'#c8b88a':'#a63f30');R(x-2,y+2,W+4,1,arena?'#e8dcb0':'#d4684d');
+  if(arena)for(let i=0;i<W+4;i+=8){R(x-3+i,y-2,6,4,O);R(x-2+i,y-1,4,3,'#c8b88a')}
+  else for(let i=0;i<W+4;i+=6)R(x-2+i,y+4,1,4,'#7c2c22');
+  const bc=arena?['#c83a2a','#f2c14e']:['#2f5fa8','#e8e8e0'];
+  [x+4,x+W-10].forEach(bx=>{R(bx-1,y+11,8,15,O);R(bx,y+11,6,13,bc[0]);R(bx+2,y+14,2,6,bc[1]);R(bx,y+24,2,2,bc[0]);R(bx+4,y+24,2,2,bc[0])});
+  const cx=x+((W/2)|0);
+  if(arena){R(cx-6,y+3,12,5,O);R(cx-5,y+4,10,3,'#f2c14e');R(cx-1,y+4,2,3,'#c83a2a');R(cx-1,y-6-(fl%2),2,5,'#d83828');R(cx-5,y-5-(fl%2),4,3,'#d83828')}
+  else{for(let k=-1;k<=1;k+=2){for(let q=0;q<6;q++)R(cx+k*(q-3)-1,y+2+q,2,1,'#dfe6ec');R(cx+k*3-1,y+8,3,1,'#c8a040')}R(cx-1,y+2,2,7,'#dfe6ec')}
 }

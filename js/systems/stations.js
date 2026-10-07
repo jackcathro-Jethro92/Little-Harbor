@@ -12,6 +12,7 @@ function placeWhy(id,x,y){
   if(t===5)return 'A building is in the way.';
   if(t===19)return 'A flax bush is there. Cut it first.';
   if(t===3)return "You can't build on the pier.";
+  if(zoneOf(x,y)>=3)return "You can't place that here.";
   if(![1,2,6,18,20,21,48].includes(t))return "You can't place that there.";
   if(npcAt(x,y))return 'Someone is standing there.';
   if(placedAt(x,y))return 'Something is already there.';
@@ -23,7 +24,7 @@ function placeWhy(id,x,y){
   if(nearHome||nearCamp)return '';
   return c||S.home?'Too far from camp or home. Stations go within '+CAMP_R+' tiles.':'Stations need a camp (or a home) nearby. Set up a camp kit first.'}
 const inClaim=(x,y)=>S.claim&&x>=S.claim.x&&x<S.claim.x+S.claim.w&&y>=S.claim.y&&y<S.claim.y+S.claim.h;
-const okGround=(x,y,l)=>l.includes(at(x,y))&&!placedAt(x,y)&&!(B.x===x&&B.y===y)&&!inRoom(x,y);
+const okGround=(x,y,l)=>l.includes(at(x,y))&&!placedAt(x,y)&&!(B.x===x&&B.y===y)&&!inRoom(x,y)&&zoneOf(x,y)<3;
 function plan(id){const it=ITEMS[id],[fx,fy]=front(),t=[];
   if(it.kind==='claim'){const x0=fx-3,y0=fy-2;
     for(let y=y0;y<y0+5;y++)for(let x=x0;x<x0+7;x++)t.push([x,y,okGround(x,y,[1,2,4,14,15,16,17,18,19,20])?'':'Part of that land is blocked (water, buildings, paths or fences).']);

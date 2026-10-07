@@ -1,6 +1,6 @@
 // ---------- start: draw loop, timers, restore explored map, first screen ----------
 (function loop(){draw();requestAnimationFrame(loop)})();
-setInterval(ghostTick,600);setInterval(()=>{if(S.buff)ui();const t=performance.now();if(G.alive&&G.pois>t){G.hp-=2;G.hitAt=t;if(G.hp<=0)ghostDie()}},1000);setInterval(save,5000);
+setInterval(ghostTick,600);setInterval(arenaTick,600);setInterval(()=>{if(S.buff)ui();const t=performance.now();if(G.alive&&G.pois>t){G.hp-=2;G.hitAt=t;if(G.hp<=0)ghostDie()}},1000);setInterval(save,5000);
 setInterval(()=>NPC.forEach(n=>{if(n.fixed||Math.random()<.6)return;
   const d=Object.values(D)[Math.random()*4|0],x=n.x+d[0],y=n.y+d[1];
   if(Math.abs(x-n.hx)>3||Math.abs(y-n.hy)>2||(P.x===x&&P.y===y)||!walkable(x,y))return;
