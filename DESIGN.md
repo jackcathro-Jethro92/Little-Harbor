@@ -21,7 +21,7 @@ A top-down pixel-art fishing and exploration game for phones (primarily iPhone 1
 | Walled Settlement | 100 | 210 |
 | Settlement Docks | 154 | 215 |
 | Woodcutters' Shacks | 33 | 153 |
-| Temple to the Mountains | 9 | 27 |
+| Temple to the Mountains | 6 | 18 |
 | Sailors' Grave Rocks | 90 | 86 |
 | Island 1 | 206 | 81 |
 | Island 2 | 190 | 136 |
@@ -53,7 +53,8 @@ These are hidden rectangles of the main grid. They look like water from outside 
 - **Mountain country** (the mainland north of the forest, including the Mountain Town and the Temple to the Mountains): no grass, trees or herbs. It is bare rock in terraces that step up toward the north (`overworld.js`, block after the buildings are placed). Each terrace tile has a height in `TLV`; wherever one tile is higher than its neighbour it becomes a cliff face (49, blocks the way), and rock steps (50) are added so every terrace can be reached. Colours go from warm tan low down to cool grey-blue high up, following the reference picture. Islands (such as the Pirate Island) are not affected.
 - **Stone barrier** (`js/world/barrier.js`): jagged rocks seal the mainland's whole north-west coast from y 0 to 150 so the mountain country (Mountain Town, Temple to the Mountains) can only be reached through the Darkwood. Tile 54 is jagged rock standing in the sea (a ragged band 1 to 4 tiles wide, so boats cannot get near the shore); tile 55 is jagged rock on the shore, covering the beach strip within 5 tiles of the sea where the forest begins (so nobody can land to the south and walk north along the sand). Both block boats and walking. The smoke test checks that no sea landing or beach walk reaches the mountain country.
 - Mountain stone elsewhere was deliberately removed on request. Sea rocks (Sailors' Grave Rocks) remain.
-- Temples (to the Mountains, of Fire, of the Sea, to the Sky) and the Temple Tower are scenery placeholders. Approved art for them is in `art/temples/` and described in `TEMPLES.md`. Build order: first each temple's island, then the temple itself. No story or quests yet.
+- **Temple to the Mountains (Earth temple), built** (`js/world/earthtemple.js`, art in `js/render/temples.js`, design in `art/temples/mayan_temple`): a paved plaza (x 0-14, y 25-31) with a low stone altar and two side shrines, a winding two-wide dirt path in from the south, a stepped pyramid (three tiers, y 16-24) with a three-wide central stairway (x 5-7), and on the summit the temple (x 4-8, y 13-14) with three doorways, a lattice crest, a red-dotted frieze and two serpent heads at the top of the stairs. Face any of the three doorways from the landing (y 15) to enter the **sanctum** (zone 5, x 250-263, y 224-235): stepped ceiling, glyph blocks, a painted codex mural (skeleton, jaguar and bird figures), two jaguar statues with jade eyes, a stone altar and torches. No story items yet: the altar is empty.
+- Other temples (of Fire, of the Sea, to the Sky) and the Temple Tower are still scenery placeholders. Approved art for them is in `art/temples/` and described in `TEMPLES.md`. Build order: first each temple's island, then the temple itself. No story or quests yet.
 
 ## Player and stats
 - Health max 50 (+4 per Combat level). Stamina max 100. FireRed-style HP and STA bars; HP bar goes green, yellow, red.
@@ -205,9 +206,9 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 | `js/systems/inventory.js` | Bag helpers and the `TEST_GRANTS` / `TEST_KITS` switches |
 | `js/systems/stats.js` | Stamina costs, levels, XP, `spend()` |
 | `js/ui/hud.js` | Message line, toast, HP/STA bars |
-| `js/world/village.js`, `overworld.js`, `settlement.js`, `interiors.js` | World generation: village island, mainland and islands, the Walled Settlement's extra houses and people, home interior and the Darkwood (also the `wv` save migration and regrowing tiles from the save) |
+| `js/world/village.js`, `overworld.js`, `settlement.js`, `earthtemple.js`, `interiors.js` | World generation: village island, mainland and islands, the Walled Settlement's extra houses and people, home interior and the Darkwood (also the `wv` save migration and regrowing tiles from the save) |
 | `js/systems/player.js` | Player and boat position, movement |
-| `js/render/sprites.js`, `tiles.js`, `buildings.js`, `entities.js`, `draw.js`, `icons.js` | Character sprites, tiles and trees, buildings, chickens/spirit/stations, the frame (`draw()`), bag icons |
+| `js/render/sprites.js`, `tiles.js`, `buildings.js`, `temples.js`, `entities.js`, `draw.js`, `icons.js` | Character sprites, tiles and trees, buildings, chickens/spirit/stations, the frame (`draw()`), bag icons |
 | `js/systems/gathering.js`, `home.js`, `stations.js`, `consumables.js`, `fishing.js`, `combat.js`, `darkwood.js`, `actions.js` | Game systems; `actions.js` has the Use button (`act()`) and sleeping |
 | `js/ui/menu.js`, `crafting.js`, `shops.js`, `map.js`, `look.js` (also the tailor and barber), `bag.js`, `skills.js` | Screens (`map.js` also has `TEST_SHOW_FULL_MAP` and the exploration fog) |
 | `js/input.js` | D-pad and keyboard |
@@ -229,4 +230,4 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 5. Beverages and illness remedies; fishing difficulty rework; more fish zones; ship building variants; audio; cleaner onboarding; remove testing switches.
 
 ## Tile type reference
-0 water, 1 grass, 2 sand, 3 plank, 4 tree, 5 building, 6 dirt, 7 lantern, 8 fence, 9 pond, 10 crop plot, 11 barrel, 12 stone wall, 13 gravestone, 14 stump, 15 copper outcrop, 16 tin outcrop, 17 bronze outcrop, 18 rubble, 19 flax, 20 cut flax, 21-23 home interior floor/wall/door, 24 moss, 25 holly, 26 basil, 27 forest sprig, 28 red cap, 29 death cap, 30 blue cap, 31 picked patch, 32 sea rock, 35 mountain (none left), 36 boulder, 40 forest floor, 41 thick tree, 42 forest trail, 43 forest exit arch (middle of the inside torii), 44 forest gate (middle of the outside torii), 45 settlement gate post, 51 torii post (not walkable), 46 treasure bundle, 47 tall grass, 48 rock floor, 49 cliff face (blocked), 50 rock steps, 52 arena sand (walkable), 53 arena stands with crowd (blocked), 54 jagged rock in the sea (blocked), 55 jagged rock on the shore (blocked). Walkable set: `WK`.
+0 water, 1 grass, 2 sand, 3 plank, 4 tree, 5 building, 6 dirt, 7 lantern, 8 fence, 9 pond, 10 crop plot, 11 barrel, 12 stone wall, 13 gravestone, 14 stump, 15 copper outcrop, 16 tin outcrop, 17 bronze outcrop, 18 rubble, 19 flax, 20 cut flax, 21-23 home interior floor/wall/door, 24 moss, 25 holly, 26 basil, 27 forest sprig, 28 red cap, 29 death cap, 30 blue cap, 31 picked patch, 32 sea rock, 35 mountain (none left), 36 boulder, 40 forest floor, 41 thick tree, 42 forest trail, 43 forest exit arch (middle of the inside torii), 44 forest gate (middle of the outside torii), 45 settlement gate post, 51 torii post (not walkable), 46 treasure bundle, 47 tall grass, 48 rock floor, 49 cliff face (blocked), 50 rock steps, 52 arena sand (walkable), 53 arena stands with crowd (blocked), 54 jagged rock in the sea (blocked), 55 jagged rock on the shore (blocked), 56 pyramid stone (blocked), 57 pyramid stairs (walkable), 58 plaza paving (walkable), 59 sanctum floor (walkable), 60 sanctum wall/ceiling (blocked), 61 sanctum mural (blocked), 62 stone altar (blocked), 63 jaguar statue (blocked). Walkable set: `WK`.

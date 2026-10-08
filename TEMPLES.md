@@ -14,7 +14,7 @@ The temples match the map landmarks in DESIGN.md: Temple of the Sea, Temple to t
 - The vault is a cave under the lake: dark water, stepping stones to a platform between two red columns, and a pedestal.
 - Look: Minoan Knossos palace. Red columns with black capitals that are wider at the top, red plaster walls with white bands, a cream frieze of wavy red hills and blue dolphins, a band of blue-centred discs, pale limestone, and gypsum floors.
 
-## Mayan Temple Design (Earth temple) - `mayan_temple/`
+## Mayan Temple Design (Earth temple) - `mayan_temple/` (BUILT: see DESIGN.md and `js/world/earthtemple.js`)
 - Ancient Mayan ruins (Palenque, Tulum) in dusty mountains with no grass or trees. The palette comes from a dusty-mountain pixel-art reference: taupe ground, brown rock, grey boulders, blue sky, and a few small green tufts.
 - Route: mountain path in, a plaza with a low altar platform, two side shrines, a stepped pyramid with one central stairway, and a temple on top. The temple front has three doorways and a lattice roof crest, with serpent heads at the top of the stairs.
 - The sanctum has a stepped stone ceiling. The back wall has carved glyph blocks above a painted codex-style mural: a red border, black glyphs, dot-and-bar numbers, and skeletal, jaguar and bird-headed figures. Jaguar statues with jade eyes flank an altar.
