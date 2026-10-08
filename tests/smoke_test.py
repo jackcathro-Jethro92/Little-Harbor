@@ -76,6 +76,9 @@ def check(b, url):
     # the Mountain Town's north gate: the gateway is open and a path leads from it up to the Temple to the Mountains using only land north of the wall
     gate = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],s=new Set([58*MW+26]),q=[[26,58]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(ny>58||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}return{open:[25,26,27].every(x=>ok.has(at(x,59))),temple:s.has(29*MW+9)}})()")
     assert gate == {"open": True, "temple": True}, gate
+    # the Earth temple: the north gate path leads up the stairs to the landing, the doorways lead into the sanctum and back out
+    et = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],s=new Set([58*MW+26]),q=[[26,58]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(ny>58||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}const r={landing:[5,6,7].every(x=>s.has(15*MW+x)),plaza:s.has(28*MW+3)||s.has(28*MW+7)};for(const x of[5,6,7]){P.x=P.rx=x;P.y=P.ry=15;P.f='u';act();r['in'+x]=zoneOf(P.x,P.y)===5;P.f='d';act();r['out'+x]=zoneOf(P.x,P.y)===0&&P.y===15}return r})()")
+    assert all(et.values()), et
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
