@@ -108,3 +108,23 @@ function skyTile(m,sx,sy,tx,ty,n,t){const O='#3a3430';grassBg(tx,ty,sx,sy,n);
     else{R(sx,sy+3,13,1,'#8a8a82');R(sx+1,sy+7,5,1,'#4a4a44');R(sx+5,sy+7,1,4,'#4a4a44');R(sx+2,sy+11,5,1,'#4a4a44');R(sx+2,sy+9,1,2,'#4a4a44');R(sx+8,sy+9,4,1,'#4a4a44');R(sx+10,sy+9,1,4,'#4a4a44')}}}
 // the dolmen gateway at the foot of the avenue: its two uprights are stone tiles (78); this draws the lintel resting on top of them ('skygate', 5 tiles wide; walkers pass under it)
 function skyGate(b,x,y,t){const W=b.w*T,O='#3a3430';R(x-2,y-10,W+4,10,O);R(x-1,y-9,W+2,8,'#b8b8ae');R(x-1,y-9,W+2,2,'#d0d0c6');R(x-1,y-3,W+2,2,'#8a8a82');for(let i=6;i<W-6;i+=13)R(x+i,y-8,5,1,'#b8b858')}
+// ---------- the Fire temple's volcano island (see art/temples/fire_temple) ----------
+// Tiles: 82 basalt ground, 83 black sand, 84 flowing lava (blocks; steams where it meets the sea), 85 basalt slab (the stepping-stone path), 86 volcanic peak with glowing cracks,
+// 87 the crater's lava lake with rising smoke. REEF (js/world/fireisland.js) is the set of sea tiles tinted turquoise round the island.
+function fireTile(m,sx,sy,tx,ty,n,t){const O='#141418';
+  const basalt=()=>{R(sx,sy,T,T,'#34343c');R(sx+n%11,sy+(n*3)%12,4,2,'#2a2a32');if(n%5===0)R(sx+(n*7)%12,sy+(n*5)%11,3,2,'#4a4a54');if(n%29===0)R(sx+n%12+2,sy+(n*3)%11+2,1,2,'#c8501c')};
+  const lavaAt=(a,b)=>{const v=at(a,b);return v===84||v===87};
+  if(m===82)basalt();
+  else if(m===83){R(sx,sy,T,T,'#1e1e26');R(sx+n%12,sy+(n*3)%13,3,1,'#2c2c36');R(sx+(n*5)%13,sy+(n*7)%12,2,1,'#16161c');if(n%9===0)R(sx+(n*3)%12+1,sy+n%11+2,1,1,'#4a4a56')}
+  else if(m===84||m===87){const lake=m===87;R(sx,sy,T,T,lake?'#f07a1c':'#e8641c');
+    for(let k=0;k<3;k++){const w=((t/(lake?160:110)+n*3+k*7+(lake?0:ty*2))|0)%16;R(sx+w,sy+2+k*5,5,1,'#ffd070');R(sx+(w+8)%16,sy+4+k*5,3,1,'#c8401a')}
+    [[0,-1],[0,1],[-1,0],[1,0]].forEach(([a,b],k)=>{if(lavaAt(tx+a,ty+b))return;const c=at(tx+a,ty+b)===0?'#a82a10':'#3a1810';
+      if(k<2)R(sx,k?sy+T-2:sy,T,2,c);else R(k===2?sx:sx+T-2,sy,2,T,c)});
+    if(!lake&&[[0,-1],[0,1],[-1,0],[1,0]].some(([a,b])=>at(tx+a,ty+b)===0)){for(let k=0;k<2;k++){const p=((t/70+n+k*40)%36)|0;R(sx+3+k*7+(p>>4),sy-p/2|0,5,3,'rgba(235,235,245,.55)')}}
+    if(lake){for(let k=0;k<3;k++){const p=((t/55+n*5+k*23)%48)|0;R(sx+2+k*4+(p>>3),sy+4-p,6,5,'rgba(110,105,115,.5)')}}}
+  else if(m===85){basalt();const o=(ty%2)*4;R(sx+1,sy+1,14,14,O);R(sx+2,sy+2,12,12,'#6a6a72');R(sx+2,sy+2,12,2,'#8a8a92');R(sx+2,sy+12,12,2,'#4a4a52');R(sx+6+o,sy+5,1,5,'#52525a');if(n%3===0)R(sx+4,sy+8,3,1,'#52525a')}
+  else if(m===86){basalt();const s=hs(tx*3,ty*5),p1=2+s%5,p2=9+(s>>3)%5,a=15+(s>>6)%6,b=10+(s>>9)%5,sl=2+s%2;
+    for(let x=0;x<T;x++){const h1=Math.round(a-Math.abs(x-p1)*sl),h2=Math.round(b-Math.abs(x-p2)*2),h=Math.max(h1,h2,3),top=sy+T-h,lit=x<(h1>=h2?p1:p2);
+      R(sx+x,top-1,1,1,O);R(sx+x,top,1,h,lit?'#4a4650':'#26242c');R(sx+x,top,1,2,lit?'#6a6470':'#3a3640');
+      if((x+s)%4===0){const c=top+3+(s>>x)%5;R(sx+x,c,1,4,'#e8641c');R(sx+x,c+1,1,2,'#ffb050')}}
+    R(sx,sy+T-2,T,2,'#00000045')}}
