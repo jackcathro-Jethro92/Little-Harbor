@@ -127,4 +127,49 @@ function fireTile(m,sx,sy,tx,ty,n,t){const O='#141418';
     for(let x=0;x<T;x++){const h1=Math.round(a-Math.abs(x-p1)*sl),h2=Math.round(b-Math.abs(x-p2)*2),h=Math.max(h1,h2,3),top=sy+T-h,lit=x<(h1>=h2?p1:p2);
       R(sx+x,top-1,1,1,O);R(sx+x,top,1,h,lit?'#4a4650':'#26242c');R(sx+x,top,1,2,lit?'#6a6470':'#3a3640');
       if((x+s)%4===0){const c=top+3+(s>>x)%5;R(sx+x,c,1,4,'#e8641c');R(sx+x,c+1,1,2,'#ffb050')}}
-    R(sx,sy+T-2,T,2,'#00000045')}}
+    R(sx,sy+T-2,T,2,'#00000045')}
+  else fireTile2(m,sx,sy,tx,ty,n,t)}
+// the Fire temple's palace (Forbidden-City style, smaller than the other temples) and its hall: 88 hall floor (red lacquer), 89 hall wall (ceiling, gold plaque and swirl frieze, lattice windows),
+// 90 red column banded in gold, 91 golden dais steps, 92 altar with the sacred flame, 93 teal bronze incense burner, 94 white marble floor, 95 balustrade, 96 marble steps, 97 marble bridge over the lava moat,
+// 98 bronze brazier, 99 round fire basin
+function fireTile2(m,sx,sy,tx,ty,n,t){const O='#141418',fl=((t/130)|0)%3,GOLD='#e8b030',RED='#b8322a',inH=zoneOf(tx,ty)===8;
+  const lacquer=()=>{R(sx,sy,T,T,'#5a2420');R(sx,sy+7,T,1,'#3e1614');R(sx,sy+15,T,1,'#3e1614');R(sx+(ty%2?5:12),sy,1,8,'#3e1614');if(n%4===0)R(sx+n%10+2,sy+4,5,1,'#7a3a30');if(ty%4===0)R(sx,sy+3,T,1,'#c8962a')};
+  const marble=()=>{R(sx,sy,T,T,'#e8e4da');R(sx,sy+7,T,1,'#cfcabc');R(sx+(ty%2?4:11),sy,1,T,'#cfcabc');if(n%7===0)R(sx+n%10+2,sy+n%9+3,4,1,'#dcd6c8')};
+  const dark=()=>{R(sx,sy,T,T,'#34343c');R(sx+n%11,sy+(n*3)%12,4,2,'#2a2a32')};
+  if(m===88)lacquer();
+  else if(m===89){const r=ty-PH.y0,side=tx===PH.x0||tx===PH.x1||ty===PH.y1;
+    if(side){R(sx,sy,T,T,'#8a2420');R(sx,sy+2,T,1,GOLD);R(sx,sy+13,T,1,GOLD);if((tx===PH.x0||tx===PH.x1)&&ty>=PH.y0+4&&ty<=PH.y0+5){R(sx+2,sy+1,12,14,'#c8962a');R(sx+3,sy+2,10,12,'#efe6d0');for(let q=0;q<10;q+=3){R(sx+3+q,sy+2,1,12,'#9a8a70');R(sx+3,sy+2+q,10,1,'#9a8a70')}}}
+    else if(r===0){R(sx,sy,T,T,'#3a1814');R(sx,sy+10,T,1,'#7a3a2a');for(let q=0;q<T;q+=4)R(sx+q,sy+11,2,5,'#5a2820');R(sx,sy+15,T,1,GOLD)}
+    else if(r===1){R(sx,sy,T,T,'#a82a24');R(sx,sy,T,1,GOLD);if(tx===PH.dx-1||tx===PH.dx){R(sx,sy+3,T,10,GOLD);R(sx,sy+3,T,1,'#fff0b0');R(sx+3,sy+5,10,6,'#1f3a8a');for(let q=0;q<3;q++)R(sx+4+q*3,sy+7,2,2,GOLD)}else{R(sx+1,sy+3,3,10,GOLD);R(sx+12,sy+3,3,10,GOLD)}}
+    else{R(sx,sy,T,T,'#7a1f1c');R(sx,sy,T,2,GOLD);R(sx,sy+T-2,T,2,GOLD);R(sx+2,sy+5,5,1,GOLD);R(sx+6,sy+5,1,5,GOLD);R(sx+2,sy+9,5,1,GOLD);R(sx+9,sy+7,5,1,GOLD);R(sx+9,sy+7,1,5,GOLD);R(sx+9,sy+11,5,1,GOLD)}}
+  else if(m===90){lacquer();R(sx+4,sy+2,8,13,RED);R(sx+4,sy+2,2,13,'#d84a3a');R(sx+10,sy+2,2,13,'#8a2420');R(sx+4,sy+4,8,2,GOLD);R(sx+4,sy+10,8,2,GOLD);R(sx+3,sy,10,3,'#c8962a');R(sx+3,sy+14,10,2,'#c8962a')}
+  else if(m===91){lacquer();R(sx,sy,T,T,'#6a3a10');for(let k=0;k<3;k++){R(sx,sy+k*5,T,4,GOLD);R(sx,sy+k*5,T,1,'#fff0b0');R(sx,sy+k*5+3,T,1,'#c8901a')}}
+  else if(m===92){lacquer();R(sx,sy+8,T,8,'#c8901a');R(sx+1,sy+8,T-2,2,GOLD);R(sx+3,sy+6,10,4,'#8a5a1a');R(sx+5,sy-1+(fl%2),6,8,'#e8641c');R(sx+6,sy+1,4,5,'#ffb050');R(sx+7,sy+2,2,3,'#fff0b0');R(sx,sy-3,T,10,'rgba(255,150,50,.18)')}
+  else if(m===93){lacquer();R(sx+4,sy+7,8,8,'#16605e');R(sx+3,sy+5,10,3,'#2aa0a0');R(sx+5,sy+2,6,4,'#2aa0a0');R(sx+7,sy,2,3,'#16605e');R(sx+4,sy+8,2,6,'#3ac0c0');const p=((t/60+n)%24)|0;R(sx+7+(p>>3),sy-p/2|0,2,3,'rgba(220,220,230,.5)')}
+  else if(m===94)marble();
+  else if(m===95){marble();R(sx,sy+3,T,3,'#fffdf8');R(sx,sy+3,T,1,'#ffffff');R(sx,sy+5,T,1,'#cfcabc');for(let q=1;q<T;q+=5){R(sx+q,sy+6,2,8,'#efeae0');R(sx+q,sy+6,1,8,'#fff')}R(sx,sy+14,T,2,'#bdb7a8')}
+  else if(m===96){marble();for(let j=2;j<T;j+=4){R(sx,sy+j,T,1,'#cfcabc');R(sx,sy+j+1,T,1,'#fffdf8')}}
+  else if(m===97){R(sx,sy,T,T,'#e8641c');R(sx+1,sy,T-2,T,'#f0ece2');R(sx+1,sy,1,T,'#cfcabc');R(sx+T-2,sy,1,T,'#cfcabc');R(sx,sy,3,T,'#fffdf8');R(sx+T-3,sy,3,T,'#fffdf8');R(sx+3,sy+7,T-6,1,'#dcd6c8')}
+  else if(m===98){if(ty>=36)dark();else marble();R(sx+4,sy+11,8,4,'#6e4a1a');R(sx+3,sy+8,10,4,'#a8782a');R(sx+2,sy+6,12,3,'#c8962a');R(sx+5,sy+1+(fl%2),6,6,'#e8641c');R(sx+6,sy+2,4,4,'#ffb050');R(sx+7,sy+3,2,2,'#fff0b0');R(sx+1,sy-1,14,10,'rgba(255,150,50,.2)')}
+  else if(m===100)dark();
+  else if(m===99){marble();R(sx+1,sy+2,14,12,'#8a6a3a');R(sx+2,sy+3,12,10,'#c8962a');R(sx+3,sy+4,10,8,'#e8641c');const w=((t/120+n)|0)%8;R(sx+3+w,sy+6,4,1,'#ffd070');R(sx+4,sy+9,5,1,'#ffb050');R(sx+3,sy+4,10,8,'rgba(255,170,60,.18)')}}
+// buildings: the great gate ('firegate', 11 tiles wide: red wall, three arched gateways, a two-tier golden roof), the fire hall's front ('firehall', 7 wide), and the pirates' tents ('tent', 3 wide)
+function fireGate(b,x,y,t){const W=b.w*T,O='#141010',GOLD='#e8b030',G2='#c8901a';R(x-4,y+44,W+8,6,'#00000030');
+  R(x,y+6,W,42,'#b8322a');R(x,y+6,W,2,'#d84a3a');R(x,y+40,W,8,'#e8e4da');R(x,y+40,W,1,'#fffdf8');
+  [[28,24],[76,40],[128,24]].forEach(([ax,aw])=>{R(x+ax,y+16,aw,32,O);R(x+ax,y+16,3,3,'#b8322a');R(x+ax+aw-3,y+16,3,3,'#b8322a');R(x+ax+2,y+14,aw-4,3,O)});
+  R(x+W/2-18,y+8,36,6,GOLD);R(x+W/2-16,y+9,32,4,'#1f3a8a');for(let i=0;i<6;i++)R(x+W/2-14+i*5,y+10,3,2,GOLD);
+  R(x-10,y-4,W+20,12,G2);R(x-9,y-3,W+18,10,GOLD);for(let i=0;i<W+18;i+=4)R(x-9+i,y-3,1,10,G2);R(x-10,y+6,W+20,2,'#2a9a8a');R(x-10,y-4,W+20,1,'#fff0b0');
+  R(x+14,y-20,W-28,16,'#b8322a');for(let i=0;i<W-30;i+=8){R(x+16+i,y-18,4,10,GOLD);R(x+17+i,y-17,2,8,'#7a1f1c')}
+  R(x+6,y-32,W-12,14,G2);R(x+7,y-31,W-14,12,GOLD);for(let i=0;i<W-14;i+=4)R(x+7+i,y-31,1,12,G2);R(x+6,y-21,W-12,2,'#2a9a8a');R(x+6,y-32,W-12,1,'#fff0b0');R(x+W/2-3,y-38,6,8,GOLD)}
+function fireHall(b,x,y,t){const W=b.w*T,O='#141010',GOLD='#e8b030',G2='#c8901a';R(x-2,y+29,W+4,6,'#00000030');
+  R(x,y+4,W,28,'#b8322a');R(x,y+4,W,2,'#d84a3a');R(x,y+30,W,2,'#e8e4da');
+  for(let i=0;i<7;i++){const cx=x+i*16;if(i===3)continue;R(cx+3,y+8,10,22,'#8a2420');R(cx+4,y+9,8,20,GOLD);R(cx+5,y+10,6,18,'#a82a24');R(cx+7,y+10,2,18,GOLD)}
+  R(x+W/2-8,y+10,16,22,O);R(x+W/2-8,y+10,16,2,'#2a2630');
+  R(x-8,y-8,W+16,14,G2);R(x-7,y-7,W+14,12,GOLD);for(let i=0;i<W+14;i+=4)R(x-7+i,y-7,1,12,G2);R(x-8,y+4,W+16,2,'#2a9a8a');R(x-8,y-8,W+16,1,'#fff0b0');
+  R(x+8,y-22,W-16,14,'#b8322a');for(let i=0;i<W-18;i+=8){R(x+10+i,y-20,4,10,GOLD)}
+  R(x+2,y-32,W-4,12,G2);R(x+3,y-31,W-6,10,GOLD);for(let i=0;i<W-6;i+=4)R(x+3+i,y-31,1,10,G2);R(x+2,y-22,W-4,2,'#2a9a8a');R(x+W/2-2,y-38,4,8,GOLD)}
+function tent(b,x,y,t){const W=b.w*T,c=b.tent,O='#2a1b0e';R(x-2,y+27,W+4,5,'#00000030');
+  for(let r=0;r<26;r++){const hw=Math.round(4+r*.78),mx=x+W/2;R(mx-hw,y+4+r,hw*2,1,O);R(mx-hw+1,y+4+r,hw*2-2,1,c)}
+  for(let r=0;r<26;r+=5){const hw=Math.round(4+r*.78);R(x+W/2-hw+1,y+4+r,hw*2-2,2,'#efe6d0')}
+  R(x+W/2-1,y+3,2,26,'#00000020');R(x+W/2-5,y+16,10,14,O);R(x+W/2-4,y+17,8,13,'#1a1008');R(x+W/2,y+17,1,13,'#3a2a18');
+  R(x+W/2-1,y-4,1,9,'#6e4a1a');R(x+W/2,y-4,6,4,'#d8302a');R(x+W/2,y-3,5,1,'#f0b040')}
