@@ -1,6 +1,6 @@
 // ---------- drawing ----------
 function tile(tx,ty,sx,sy,t){
-  const n=hs(tx,ty)%100,i=ty*MW+tx,mm=M[i],here=zoneOf(P.x,P.y)%2===1||zoneOf(P.x,P.y)===4,zt=zoneOf(tx,ty),zp=zoneOf(P.x,P.y);
+  const n=hs(tx,ty)%100,i=ty*MW+tx,mm=M[i],here=zoneOf(P.x,P.y)>=3||zoneOf(P.x,P.y)===1,zt=zoneOf(tx,ty),zp=zoneOf(P.x,P.y);
   if(zt!==zp){R(sx,sy,T,T,zp?'#000':'#2f6fc4');if(!zp&&((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');return}
   if(mm>=21&&mm<=23){
     if(!here){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');return}
@@ -10,6 +10,7 @@ function tile(tx,ty,sx,sy,t){
       if(mm===23){R(sx+2,sy+1,12,15,'#3d2a14');R(sx+3,sy+2,10,14,'#6b4423');R(sx+10,sy+9,2,2,'#f2c14e')}}
     return}
   if(mm>=56&&mm<=63){templeTile(mm,sx,sy,tx,ty,n,t);return}
+  if(mm>=64&&mm<=77){seaTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm===54||mm===55){ // jagged rock: angular grey peaks with a lit left face, a dark right face and cracks; 54 stands in the sea, 55 on the shore
     if(mm===54){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8')}else{R(sx,sy,T,T,'#6e6a62');if(n%4===0)R(sx+n%12+2,sy+n%10+3,2,1,'#58544d')}
     const s=hs(tx*3,ty*5),p1=2+s%5,p2=9+(s>>3)%5,a=14+(s>>6)%6,b=10+(s>>9)%5,sl=2+s%2,O='#26272b';
@@ -103,7 +104,9 @@ function rockFloor(tx,ty,sx,sy){const n=hs(tx*5,ty*3)%100,f=rockPal(ty*MW+tx).f;
   if(n%13===0)R(sx+n%11+1,sy+(n*3)%11+2,3,2,'#7b7d86')}
 function rockTile(tx,ty,sx,sy,m,n){const i=ty*MW+tx,P=rockPal(i);
   if(m===48){rockFloor(tx,ty,sx,sy);return}
-  if(m===50){rockFloor(tx,ty,sx,sy);for(let k=0;k<3;k++){R(sx+1,sy+2+k*5,14,2,P.f[1]);R(sx+1,sy+4+k*5,14,1,P.f[2])}return}
+  if(m===50){rockFloor(tx,ty,sx,sy);const ud=[at(tx,ty-1),at(tx,ty+1)].some(v=>v===49||v===50),lr=[at(tx-1,ty),at(tx+1,ty)].some(v=>v===49||v===50);
+    if(ud&&!lr){for(let k=0;k<3;k++){R(sx+2+k*5,sy+1,2,14,P.f[1]);R(sx+4+k*5,sy+1,1,14,P.f[2])}}   // stairs in a vertical cliff run climb sideways: vertical step lines
+    else for(let k=0;k<3;k++){R(sx+1,sy+2+k*5,14,2,P.f[1]);R(sx+1,sy+4+k*5,14,1,P.f[2])}return}
   const c=P.c;R(sx,sy,T,T,c[1]);R(sx,sy,T,3,c[0]);
   for(let k=0;k<3;k++){const y=sy+5+k*3;R(sx,y,T,1,c[2]);R(sx+((tx*5+k*7)%11),y+1,5,1,c[0])}
   R(sx+(n%4)*4,sy+3,2,5,c[0]);R(sx,sy+12,T,1,c[2]);R(sx,sy+13,T,3,c[3])}
