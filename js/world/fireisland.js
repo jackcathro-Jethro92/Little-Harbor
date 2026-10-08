@@ -2,7 +2,7 @@
 // Runs after skytemple.js. The island is rebuilt here, about 42 x 36 tiles round (71,28). Jagged volcanic peaks (tile 86) fill the north around a crater lava lake (87);
 // rivers of lava (84) run down from it, two of them flanking a big flat basalt plateau at the volcano's southern base (x 60-82, y 25-41) where the temple will sit, and
 // flow on into the sea. A black-sand beach (83) is the landing in the south and a three-wide path of basalt slabs (85) leads from it up to the plateau. The sea round the island is
-// tinted turquoise (REEF). There are no houses: four pirate tents stand on the island's east shore, beyond the east lava river, with the gravestones. Tiles 82 basalt ground.
+// tinted turquoise (REEF). There are no houses. The pirate camp on the east shore, beyond the east lava river, is built by js/world/pirates.js. Tiles 82 basalt ground.
 const REEF=new Set();
 {const cx=71,cy=28,rx=21,ry=18,D4=[[1,0],[-1,0],[0,1],[0,-1]];
  const inb=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH;
@@ -24,8 +24,7 @@ const REEF=new Set();
  river([[68,14],[64,12],[60,12],[55,12],[51,11]],1);river([[75,14],[79,12],[83,12],[88,12],[92,11]],1);   // two more running out to the north-west and north-east
  river([[71,12],[71,10],[71,8]],1);                                                         // and one straight north
  rect(70,39,72,44,(x,y)=>setT(x,y,85));rect(65,45,77,46,(x,y)=>{if(land.has(y*MW+x)&&at(x,y)!==84)setT(x,y,83)});   // the slab path up from the landing, and the landing beach
-  [[86,20,'#b8452a'],[86,26,'#3a6aa8'],[86,32,'#c8a040'],[89,23,'#3a6aa8']].forEach(([x,y,col])=>{BL.push({x,y,w:3,tent:col});rect(x,y,x+2,y+1,(xx,yy)=>setT(xx,yy,100))});      // the pirates live in tents on the east shore (no houses)
- [[90,24],[90,30],[89,36],[88,17]].forEach(([x,y])=>{if(at(x,y)===82||at(x,y)===83)setT(x,y,13)});
+ [[90,24],[90,30],[89,36]].forEach(([x,y])=>{if(at(x,y)===82||at(x,y)===83){BL.push({x,y,w:1,decor:'grave'});setT(x,y,100)}});   // three gravestones on the east shore (always there)
  // the sea round the island is turquoise reef
  for(let y=Y0;y<=Y1;y++)for(let x=X0;x<=X1;x++){if(!inb(x,y)||at(x,y)!==0)continue;let near=false;for(let j=-3;j<=3&&!near;j++)for(let i=-3;i<=3;i++){const v=at(x+i,y+j);if(v!==0&&inb(x+i,y+j)){near=true;break}}if(near)REEF.add(y*MW+x)}
  Object.keys(S.cut).forEach(i=>{const x=i%MW,y=(i/MW)|0;if(x>=X0&&x<=X1&&y>=Y0&&y<=Y1)delete S.cut[i]})}

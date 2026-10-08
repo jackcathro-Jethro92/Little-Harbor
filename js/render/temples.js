@@ -152,6 +152,7 @@ function fireTile2(m,sx,sy,tx,ty,n,t){const O='#141418',fl=((t/130)|0)%3,GOLD='#
   else if(m===97){R(sx,sy,T,T,'#e8641c');R(sx+1,sy,T-2,T,'#f0ece2');R(sx+1,sy,1,T,'#cfcabc');R(sx+T-2,sy,1,T,'#cfcabc');R(sx,sy,3,T,'#fffdf8');R(sx+T-3,sy,3,T,'#fffdf8');R(sx+3,sy+7,T-6,1,'#dcd6c8')}
   else if(m===98){if(ty>=36)dark();else marble();R(sx+4,sy+11,8,4,'#6e4a1a');R(sx+3,sy+8,10,4,'#a8782a');R(sx+2,sy+6,12,3,'#c8962a');R(sx+5,sy+1+(fl%2),6,6,'#e8641c');R(sx+6,sy+2,4,4,'#ffb050');R(sx+7,sy+3,2,2,'#fff0b0');R(sx+1,sy-1,14,10,'rgba(255,150,50,.2)')}
   else if(m===100)dark();
+  else if(m===101){R(sx,sy,T,T,'#2f6fc4');if(((t/450|0)+n)%5<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');R(sx,sy,T,T,'rgba(70,215,200,.32)')}
   else if(m===99){marble();R(sx+1,sy+2,14,12,'#8a6a3a');R(sx+2,sy+3,12,10,'#c8962a');R(sx+3,sy+4,10,8,'#e8641c');const w=((t/120+n)|0)%8;R(sx+3+w,sy+6,4,1,'#ffd070');R(sx+4,sy+9,5,1,'#ffb050');R(sx+3,sy+4,10,8,'rgba(255,170,60,.18)')}}
 // buildings: the great gate ('firegate', 11 tiles wide: red wall, three arched gateways, a two-tier golden roof), the fire hall's front ('firehall', 7 wide), and the pirates' tents ('tent', 3 wide)
 function fireGate(b,x,y,t){const W=b.w*T,O='#141010',GOLD='#e8b030',G2='#c8901a';R(x-4,y+44,W+8,6,'#00000030');
