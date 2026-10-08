@@ -94,3 +94,17 @@ function seaTemple(b,x,y,t){const W=b.w*T,O='#2a2a2a';R(x-2,y+29,W+4,6,'#0000003
   R(x,y+2,W,6,'#b8322a');for(let i=1;i<W-4;i+=8){R(x+i,y+3,4,4,'#efe6d0');R(x+i+1,y+4,2,2,'#2f6fc4')}
   R(x+28,y+10,24,22,'#141018');R(x+29,y+10,22,2,'#2a2630');R(x+26,y+30,28,2,'#d8cfb8');
   [4,16,58,70].forEach(cx=>{R(cx+x-1,y+9,10,4,O);R(cx+x,y+13,8,19,'#b8322a');R(cx+x,y+13,2,19,'#d84a3a');R(cx+x+6,y+13,2,19,'#8a2420')})}
+// ---------- Temple to the Sky (standing stones, see art/temples/sky_stonehenge_temple) ----------
+// Tiles (all drawn on grass): 78 standing stone (a tall pale stone with moss, rising above its tile), 79 lintel slab (a low flat slab, used between the circle's stones and over trilithons),
+// 80 and 81 the left and right halves of the carved temple stone (triple spirals).
+function grassBg(tx,ty,sx,sy,n){const G=['#7fa84f','#74a048','#678f3f'],v=Math.sin(tx*.8)+Math.sin(ty*.9)+Math.sin((tx+ty)*.45),gi=v>1.1?0:v<-1.1?2:1;R(sx,sy,T,T,G[gi]);
+  for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}}
+function skyTile(m,sx,sy,tx,ty,n,t){const O='#3a3430';grassBg(tx,ty,sx,sy,n);
+  if(m===78){R(sx+3,sy+12,12,3,'#00000030');R(sx+4,sy-11,8,25,O);R(sx+5,sy-10,6,23,'#a8a8a0');R(sx+5,sy-10,2,23,'#bcbcb2');R(sx+9,sy-10,2,23,'#8a8a82');
+    R(sx+6+n%3,sy-7+n%6,2,1,'#b8b858');R(sx+8,sy-1+n%5,2,1,'#a8b050');R(sx+6,sy+5+n%4,2,1,'#b8b858');if(n%3===0)R(sx+5,sy+8,1,3,'#8a8a82')}
+  else if(m===79){R(sx,sy+10,T,3,'#00000030');R(sx-1,sy+2,T+2,10,O);R(sx,sy+3,T,8,'#b8b8ae');R(sx,sy+3,T,2,'#d0d0c6');R(sx,sy+9,T,2,'#8a8a82');if(n%4===0)R(sx+n%10+2,sy+5,3,1,'#b8b858');if(n%5===0)R(sx+4+n%6,sy+3,1,6,'#8a8a82')}
+  else if(m===80||m===81){const L=m===80;R(sx+(L?0:0),sy+2,T,14,'rgba(0,0,0,0)');R(sx+(L?1:0),sy+1,T-1,15,O);R(sx+(L?2:0),sy+2,T-2,13,'#9a9a92');R(sx+(L?2:0),sy+2,T-2,4,'#c0c0b6');R(sx+(L?2:0),sy+13,T-2,2,'#7a7a72');
+    if(L){R(sx+2,sy+3,12,1,'#8a8a82');R(sx+3,sy+7,6,1,'#4a4a44');R(sx+8,sy+7,1,4,'#4a4a44');R(sx+4,sy+11,5,1,'#4a4a44');R(sx+4,sy+9,1,2,'#4a4a44');R(sx+10,sy+9,4,1,'#4a4a44');R(sx+12,sy+9,1,4,'#4a4a44')}
+    else{R(sx,sy+3,13,1,'#8a8a82');R(sx+1,sy+7,5,1,'#4a4a44');R(sx+5,sy+7,1,4,'#4a4a44');R(sx+2,sy+11,5,1,'#4a4a44');R(sx+2,sy+9,1,2,'#4a4a44');R(sx+8,sy+9,4,1,'#4a4a44');R(sx+10,sy+9,1,4,'#4a4a44')}}}
+// the dolmen gateway at the foot of the avenue: its two uprights are stone tiles (78); this draws the lintel resting on top of them ('skygate', 5 tiles wide; walkers pass under it)
+function skyGate(b,x,y,t){const W=b.w*T,O='#3a3430';R(x-2,y-10,W+4,10,O);R(x-1,y-9,W+2,8,'#b8b8ae');R(x-1,y-9,W+2,2,'#d0d0c6');R(x-1,y-3,W+2,2,'#8a8a82');for(let i=6;i<W-6;i+=13)R(x+i,y-8,5,1,'#b8b858')}
