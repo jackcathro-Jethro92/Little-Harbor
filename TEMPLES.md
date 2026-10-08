@@ -24,7 +24,7 @@ The temples match the map landmarks in DESIGN.md: Temple of the Sea, Temple to t
 - Route: cliff path up, a stone gateway (two uprights and a capstone), an avenue of standing stones, an outer circle of 16 stones with lintels, five inner stone arches in a horseshoe, and a carved temple stone in the centre with triple spirals and knotwork.
 - Use the undamaged pictures only. The `damaged` pictures belong to the story and are not used yet.
 
-## Fire Temple - `fire_temple/`
+## Fire Temple - `fire_temple/` (BUILT: island in `js/world/fireisland.js`, temple in `js/world/firetemple.js`; made a little smaller than the other temples, and the pirates live in tents, not houses)
 - A palace on a volcano island, based on the Forbidden City in Beijing, with a Fire Nation feel. Do not copy any show-specific emblems or characters.
 - Route: black sand landing with turquoise reef, a basalt stepping-stone path between lava rivers, then a great red gate with three arched gateways under a two-tier golden roof, crossed by a white marble bridge over a lava moat.
 - Inside the gate: a white marble courtyard with three tiers of terraces and balustrades, bronze braziers, a round fire basin and lava channels. The main hall has red columns, gold panels and a golden double roof.

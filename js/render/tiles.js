@@ -12,6 +12,7 @@ function tile(tx,ty,sx,sy,t){
   if(mm>=56&&mm<=63){templeTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=64&&mm<=77){seaTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=78&&mm<=81){skyTile(mm,sx,sy,tx,ty,n,t);return}
+  if(mm>=82&&mm<=101){fireTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm===54||mm===55){ // jagged rock: angular grey peaks with a lit left face, a dark right face and cracks; 54 stands in the sea, 55 on the shore
     if(mm===54){R(sx,sy,T,T,'#2f6fc4');if(((Math.floor(t/450)+n)%5)<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8')}else{R(sx,sy,T,T,'#6e6a62');if(n%4===0)R(sx+n%12+2,sy+n%10+3,2,1,'#58544d')}
     const s=hs(tx*3,ty*5),p1=2+s%5,p2=9+(s>>3)%5,a=14+(s>>6)%6,b=10+(s>>9)%5,sl=2+s%2,O='#26272b';
@@ -26,6 +27,7 @@ function tile(tx,ty,sx,sy,t){
     R(sx,sy,T,T,'#2f6fc4');
     const ph=(Math.floor(t/450)+n)%5;
     if(ph<2)R(sx+2+n%9,sy+4+(n>>1)%8,5,1,'#5f9fe8');
+    if(REEF.has(i)){R(sx,sy,T,T,'rgba(70,215,200,.32)');if(n%3===0)R(sx+n%10+1,sy+(n*3)%11+2,5,3,'rgba(150,240,225,.35)')}
     if(ph===3)R(sx+8+n%5,sy+2+n%11,3,1,'#4a86d8');
     [[0,-1],[0,1],[-1,0],[1,0]].forEach(([a,b],k)=>{if(at(tx+a,ty+b)!==0&&tx+a>=0&&ty+b>=0){
       if(k===0)R(sx,sy,T,2,'#d8ecff');if(k===1)R(sx,sy+T-2,T,2,'#d8ecff');
