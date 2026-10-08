@@ -8,12 +8,15 @@ for(let y=IR.y0;y<=IR.y1;y++)for(let x=IR.x0;x<=IR.x1;x++)M[y*MW+x]=(x===IR.x0||
 M[IR.y1*MW+IR.dx]=23;
 if(S.home)for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(S.home.y+j)*MW+S.home.x+i]=5;
 // ---------- the Darkwood: a separate forest map. Gates at both ends, a winding trail, dead ends with treasure, tall grass ----------
-const FZ={x0:100,y0:4,x1:147,y1:39},inFZ=(x,y)=>x>=FZ.x0&&x<=FZ.x1&&y>=FZ.y0&&y<=FZ.y1,zoneOf=(x,y)=>inRoom(x,y)?1:inFZ(x,y)?2:inGZ(x,y)?3:inAZ(x,y)?4:inSZ(x,y)?5:0;
+const FZ={x0:100,y0:4,x1:147,y1:39},inFZ=(x,y)=>x>=FZ.x0&&x<=FZ.x1&&y>=FZ.y0&&y<=FZ.y1,zoneOf=(x,y)=>inRoom(x,y)?1:inFZ(x,y)?2:inGZ(x,y)?3:inAZ(x,y)?4:inSZ(x,y)?5:inHZ(x,y)?6:inVZ(x,y)?7:0;
 // zone 3: the Fighters Guild hall, zone 4: the Gladiators' Arena (hidden rooms in the south-east sea, like the home interior)
 const GZ={x0:270,y0:226,x1:281,y1:235,dx:275},inGZ=(x,y)=>x>=GZ.x0&&x<=GZ.x1&&y>=GZ.y0&&y<=GZ.y1;
 const AZ={x0:270,y0:208,x1:283,y1:221,dx:277},inAZ=(x,y)=>x>=AZ.x0&&x<=AZ.x1&&y>=AZ.y0&&y<=AZ.y1;
 // zone 5: the Earth temple's sanctum
 const SZ={x0:250,y0:224,x1:263,y1:235,dx:257},inSZ=(x,y)=>x>=SZ.x0&&x<=SZ.x1&&y>=SZ.y0&&y<=SZ.y1;
+// zones 6 and 7: the Temple of the Sea's hall and the vault under the lake
+const HZ={x0:230,y0:224,x1:243,y1:235,dx:237},inHZ=(x,y)=>x>=HZ.x0&&x<=HZ.x1&&y>=HZ.y0&&y<=HZ.y1;
+const VZ={x0:210,y0:224,x1:223,y1:235,dx:217},inVZ=(x,y)=>x>=VZ.x0&&x<=VZ.x1&&y>=VZ.y0&&y<=VZ.y1;
 rect(FZ.x0,FZ.y0,FZ.x1,FZ.y1,(x,y)=>setT(x,y,41));
 const inner=(x,y)=>x>FZ.x0&&x<FZ.x1&&y>FZ.y0&&y<FZ.y1;
 const trail=(pts,w,t)=>{for(let k=1;k<pts.length;k++){const a=pts[k-1],b=pts[k],n=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]));let lx=a[0],ly=a[1];for(let q=0;q<=n;q++){const x=Math.round(a[0]+(b[0]-a[0])*q/n),y=Math.round(a[1]+(b[1]-a[1])*q/n);rect(x-w,y-w,x+w,y+w,(xx,yy)=>{if(inner(xx,yy))setT(xx,yy,t)});if(lx!==x&&ly!==y&&inner(x,ly))setT(x,ly,t);lx=x;ly=y}}};

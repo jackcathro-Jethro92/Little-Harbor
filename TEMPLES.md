@@ -8,8 +8,8 @@ The temples match the map landmarks in DESIGN.md: Temple of the Sea, Temple to t
 
 **No story or quests yet.** Keys, locked or damaged states, hidden chambers that matter to the plot and anything similar have been taken out of these notes. Some pictures still show keys, altars with items, damaged stones or an empty cradle: treat those as scenery only and do not build them as game features. The story comes last and the owner is still writing it.
 
-## Knossos Temple (Sea / Water temple) - `knossos_temple/`
-- The temple stands at the centre of a crater lake, reached by a stone boardwalk.
+## Knossos Temple (Sea / Water temple) - `knossos_temple/` (BUILT: see DESIGN.md and `js/world/seatemple.js`)
+- The temple stands at the centre of a crater lake, reached by a stone boardwalk. (Island built in `js/world/seaisland.js`.)
 - Route: crater rim gate, then the boardwalk (red lamp posts), the gatehouse, a courtyard with a dolphin fountain pool and water channels, the temple hall (statue of the sea god, stairs going down), then the vault below the lake.
 - The vault is a cave under the lake: dark water, stepping stones to a platform between two red columns, and a pedestal.
 - Look: Minoan Knossos palace. Red columns with black capitals that are wider at the top, red plaster walls with white bands, a cream frieze of wavy red hills and blue dolphins, a band of blue-centred discs, pale limestone, and gypsum floors.
