@@ -19,7 +19,7 @@ The temples match the map landmarks in DESIGN.md: Temple of the Sea, Temple to t
 - Route: mountain path in, a plaza with a low altar platform, two side shrines, a stepped pyramid with one central stairway, and a temple on top. The temple front has three doorways and a lattice roof crest, with serpent heads at the top of the stairs.
 - The sanctum has a stepped stone ceiling. The back wall has carved glyph blocks above a painted codex-style mural: a red border, black glyphs, dot-and-bar numbers, and skeletal, jaguar and bird-headed figures. Jaguar statues with jade eyes flank an altar.
 
-## Sky Stonehenge Temple (Sky / Air temple) - `sky_stonehenge_temple/`
+## Sky Stonehenge Temple (Sky / Air temple) - `sky_stonehenge_temple/` (island built in `js/world/skyisland.js`; the temple itself is not built yet)
 - Celtic and Druid stone circles (Stonehenge, Druid's Temple) on a high flat plateau above the clouds.
 - Route: cliff path up, a stone gateway (two uprights and a capstone), an avenue of standing stones, an outer circle of 16 stones with lintels, five inner stone arches in a horseshoe, and a carved temple stone in the centre with triple spirals and knotwork.
 - Use the undamaged pictures only. The `damaged` pictures belong to the story and are not used yet.
