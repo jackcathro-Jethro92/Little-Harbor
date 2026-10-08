@@ -103,7 +103,9 @@ function rockFloor(tx,ty,sx,sy){const n=hs(tx*5,ty*3)%100,f=rockPal(ty*MW+tx).f;
   if(n%13===0)R(sx+n%11+1,sy+(n*3)%11+2,3,2,'#7b7d86')}
 function rockTile(tx,ty,sx,sy,m,n){const i=ty*MW+tx,P=rockPal(i);
   if(m===48){rockFloor(tx,ty,sx,sy);return}
-  if(m===50){rockFloor(tx,ty,sx,sy);for(let k=0;k<3;k++){R(sx+1,sy+2+k*5,14,2,P.f[1]);R(sx+1,sy+4+k*5,14,1,P.f[2])}return}
+  if(m===50){rockFloor(tx,ty,sx,sy);const ud=[at(tx,ty-1),at(tx,ty+1)].some(v=>v===49||v===50),lr=[at(tx-1,ty),at(tx+1,ty)].some(v=>v===49||v===50);
+    if(ud&&!lr){for(let k=0;k<3;k++){R(sx+2+k*5,sy+1,2,14,P.f[1]);R(sx+4+k*5,sy+1,1,14,P.f[2])}}   // stairs in a vertical cliff run climb sideways: vertical step lines
+    else for(let k=0;k<3;k++){R(sx+1,sy+2+k*5,14,2,P.f[1]);R(sx+1,sy+4+k*5,14,1,P.f[2])}return}
   const c=P.c;R(sx,sy,T,T,c[1]);R(sx,sy,T,3,c[0]);
   for(let k=0;k<3;k++){const y=sy+5+k*3;R(sx,y,T,1,c[2]);R(sx+((tx*5+k*7)%11),y+1,5,1,c[0])}
   R(sx+(n%4)*4,sy+3,2,5,c[0]);R(sx,sy+12,T,1,c[2]);R(sx,sy+13,T,3,c[3])}
