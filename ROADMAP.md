@@ -52,7 +52,7 @@ The world is much further along than when this roadmap was first written. Everyt
 
 | Note | Status |
 | --- | --- |
-| N1 Movement | **In progress.** Done: tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Still to approve on the phone: how the walking animation and the camera feel. |
+| N1 Movement | **Done for the first playthrough** (Jack approved, 11 Oct): tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Walking animation and camera can be adjusted after the playthrough. |
 | N2 Sea square | Not started, and bigger now: the hidden rooms added since (guild, arena, Earth sanctum, Sea hall and vault, Fire hall) sit in the south-east corner of the sea and need moving off the map too |
 | N3 Cottage | Not started |
 | N4 Stairs | On hold until the shading revamp |
