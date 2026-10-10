@@ -2,7 +2,7 @@
 // Built on the clearing from towerisland.js, round the north-south axis x = 212. The dock and path arrive from the north, so the wooden gate (x 210-214, y 195) is in the
 // north wall. The courtyard (x 204-220, y 196-208) is raked gravel with a line of stepping stones from the gate to the pagoda and stone lanterns. A ring of covered
 // walkways (tile 106, blocks) closes it in. The pagoda (x 209-215, y 200-204, drawn by towerPagoda in js/render/temples.js) stands in the middle; walk round it by either side
-// to its door on the south face (212,204), which leads into the shrine room (zone 10, x 156-166, y 226-235). Tiles: 106 walkway wall, 107 gate post, 108 tatami (walkable),
+// to its door on the south face (212,204), which leads into the shrine room (zone 10, x 156-166, y 250-259). Tiles: 106 walkway wall, 107 gate post, 108 tatami (walkable),
 // 109 shrine room wall, 110 pillar, 111 golden shrine, 112 lacquer platform, 113 offering table, 114 plain stand, 115 hanging gold lantern, 116 the pagoda's footprint (gravel under the building; all blocked unless noted).
 // No story items: the four stands are bare. The lower chamber under the pagoda is not built (it comes with the story).
 {const AX=212,land=(x,y)=>at(x,y)!==0,set=(x0,y0,x1,y1,t)=>rect(x0,y0,x1,y1,(x,y)=>{if(land(x,y))setT(x,y,t)});

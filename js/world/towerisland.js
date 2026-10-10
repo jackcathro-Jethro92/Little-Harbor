@@ -1,5 +1,5 @@
 // ---------- the Temple Tower's island (the old little islet at 202,200): a small pine-forest island with a stone dock in the north, a lantern path south and a clearing for the temple ----------
-// Runs after pirates.js. The island is rebuilt here, about 38 x 34 tiles (centre 212,196), well clear of the hidden rooms in the sea below y 224. A stone dock (tile 105, three wide,
+// Runs after pirates.js. The island is rebuilt here, about 38 x 34 tiles (centre 212,196), well clear of the hidden rooms, which now sit below the sea in rows 246 and down. A stone dock (tile 105, three wide,
 // walkable over the water) runs south from the open sea into the north beach, and a gravel path with stepping stones (tiles 103/104) continues straight south through dark pine forest
 // (tile 102, blocks) between stone lanterns (tile 7) set every four tiles on both sides, to a flat clearing in the south (x 203-221, y 195-208) where the temple complex will be built
 // (js/world/towertemple.js, a later step; its gate will face north, towards the dock). No houses, no story items.

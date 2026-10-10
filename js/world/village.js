@@ -2,7 +2,7 @@
 const M=new Uint8Array(MW*MH); // 0 water 1 grass 2 sand 3 plank 4 tree 5 building 6 dirt 7 lantern
 const hs=(x,y)=>(Math.imul(x+7,73856093)^Math.imul(y+13,19349663))>>>0;
 const at=(x,y)=>x<0||y<0||x>=MW||y>=MH?0:M[y*MW+x];
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){
+for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){
   const dx=(x-32)/20,dy=(y-22)/14,d=dx*dx+dy*dy+.08*Math.sin(x*1.7+y*1.3);
   M[y*MW+x]=d<1?(d>.78?2:1):0;
 }
@@ -25,7 +25,7 @@ for(let x=17;x<=19;x++){for(let y=24;y<=26;y++)put(x,y,10);put(x,23,8)}
 for(let y=24;y<=26;y++)put(16,y,8);
 [[30,35],[34,35],[29,33],[41,34]].forEach(([x,y])=>put(x,y,11));
 const CH=[[26,16],[38,22],[29,25],[22,22],[44,29],[33,30]].map(([x,y])=>({x,y,hx:x,hy:y,f:0}));
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){
+for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){
   if(M[y*MW+x]===1&&hs(x,y)%100<(x>=17&&x<=47&&y>=11&&y<=35?5:26))M[y*MW+x]=4;
 }
 // ---------- spirit isle (combat test) ----------
@@ -38,11 +38,11 @@ const G={x:22,y:44,hx:22,hy:44,hp:12,max:12,alive:true,cd:0,hitAt:0,resp:0,f:'d'
 for(let y=10;y<=34;y++)for(let x=12;x<=19;x++){const i=y*MW+x;if((M[i]===1||M[i]===2)&&hs(x*5,y*3)%100<14)M[i]=15+hs(x,y*7)%3}
 ISL.forEach(i=>{const x=i%MW,y=(i/MW)|0;if(M[i]===1&&hs(x*5,y*3)%100<14)M[i]=15+hs(x,y*7)%3});
 // ---------- flax (19) ----------
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(M[i]===1&&hs(x*11,y*13)%100<12)M[i]=19}
+for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(M[i]===1&&hs(x*11,y*13)%100<12)M[i]=19}
 [[34,32],[35,33],[36,31],[37,31],[30,30],[29,33],[34,29]].forEach(([x,y])=>{if(M[y*MW+x]===1)M[y*MW+x]=19});
 // ---------- herbs and mushrooms ----------
 {const near=(x,y,r,f)=>{for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++)if(f(at(x+i,y+j)))return true;return false},put2=[];
- for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(M[y*MW+x]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
+ for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(M[y*MW+x]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
    if(near(x,y,1,v=>v===4)){if(n<16)t=[28,28,29,30][hs(x,y*5)%4];else if(n<26)t=25}
    else if(near(x,y,1,v=>[9,13,15,16,17].includes(v))){if(n<40)t=24}
    else if(near(x,y,2,v=>v===5||v===8||v===10)){if(n<9)t=26}

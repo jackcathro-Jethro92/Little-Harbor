@@ -41,7 +41,7 @@ def check(b, url):
     for js, sel in (("openStore('rod')", "#store"), ("openGeneral('buy')", "#store"), ("openCraft('bench')", "#craft")):
         ev(js); assert ev("s=>document.querySelector(s).classList.contains('open')", sel), js + " should open"
         ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
-    assert ev("[MW,MH]") == [320, 240]
+    assert ev("[MW,WH,MH]") == [320, 240, 300]
     water = ev("(()=>{const seen=new Uint8Array(MW*MH),q=[[B.x,B.y]];seen[B.y*MW+B.x]=1;let h=0;while(h<q.length){const[x,y]=q[h++];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b;if(nx<0||ny<0||nx>=MW||ny>=MH)continue;const i=ny*MW+nx;if(seen[i]||at(nx,ny)!==0)continue;seen[i]=1;q.push([nx,ny])}}let w=0;for(let i=0;i<M.length;i++)if(M[i]===0)w++;return q.length/w})()")
     assert water > 0.99, "sea should be one connected body"
     bad = ev("(()=>{let n=0;for(let y=0;y<MH;y+=20)for(let x=0;x<MW;x+=20){P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){n++}}return n})()")
@@ -106,7 +106,7 @@ def check(b, url):
     isl = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],walk=j=>WK.includes(M[j]),lvl=i=>({2:0,4:1,7:2,10:3})[TLV[i]];let st=null;for(let x=257;x<272&&st===null;x++)if(walk(36*MW+x)&&lvl(36*MW+x)===0)st=36*MW+x;const reach=ok=>{const s=new Set([st]),q=[st];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(s.has(j)||!ok(j))continue;s.add(j);q.push(j)}}return s};const all=reach(walk),no=reach(j=>walk(j)&&M[j]!==50);const tot=[0,0,0,0],got=[0,0,0,0],high=[0,0,0,0];for(let y=10;y<64;y++)for(let x=250;x<316;x++){const i=y*MW+x,l=lvl(i);if(l===undefined||!walk(i))continue;tot[l]++;if(all.has(i))got[l]++;if(no.has(i))high[l]++}return{allReachable:tot.every((n,l)=>n>20&&got[l]===n),sealedByCliffs:high[1]+high[2]+high[3]===0,lake:M[36*MW+277]===0}})()")
     assert isl == {"allReachable": True, "sealedByCliffs": True, "lake": True}, isl
     # the Temple of the Sea: rim gate, boardwalk and courtyard are walkable from the rim; the hall door leads in, the stairs lead down to the vault, and both ways back out work
-    sea = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],s=new Set([44*MW+283]),q=[[283,44]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}const r={boardwalk:s.has(38*MW+283),court:s.has(33*MW+283),notPool:!s.has(34*MW+283)};P.x=P.rx=283;P.y=P.ry=32;P.f='u';act();r.hall=zoneOf(P.x,P.y)===6;P.x=P.rx=237;P.y=P.ry=31+200;P.f='u';act();r.vault=zoneOf(P.x,P.y)===7;P.f='d';act();r.up=zoneOf(P.x,P.y)===6;P.x=P.rx=237;P.y=P.ry=234;P.f='d';act();r.out=zoneOf(P.x,P.y)===0;return r})()")
+    sea = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],s=new Set([44*MW+283]),q=[[283,44]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}const r={boardwalk:s.has(38*MW+283),court:s.has(33*MW+283),notPool:!s.has(34*MW+283)};P.x=P.rx=283;P.y=P.ry=32;P.f='u';act();r.hall=zoneOf(P.x,P.y)===6;P.x=P.rx=237;P.y=P.ry=31+224;P.f='u';act();r.vault=zoneOf(P.x,P.y)===7;P.f='d';act();r.up=zoneOf(P.x,P.y)===6;P.x=P.rx=237;P.y=P.ry=258;P.f='d';act();r.out=zoneOf(P.x,P.y)===0;return r})()")
     assert all(sea.values()), sea
     # the Temple to the Sky's island: from the south-west beach the zigzag route climbs through four terraces to the plateau, and without the five stairways nothing above the lowland is reachable;
     # lanterns are 5 or 6 tiles apart; the lowland forest has trees but the hill and plateau have none
@@ -114,7 +114,7 @@ def check(b, url):
     assert all(sky.values()), sky
     # the Temple of Fire's volcano island and temple: from the black-sand landing the slab path leads over the marble bridge, through the gate's middle gateway and up through the courtyard to the fire hall's door,
     # which leads in and back out; lava, peaks, the gate's side arches and the basin block; there are tents but no houses on the island
-    fire = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],walk=j=>WK.includes(M[j]),st=46*MW+71,s=new Set([st]),q=[st];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(s.has(j)||!walk(j))continue;s.add(j);q.push(j)}}let lava=0,peaks=0,crater=0;for(let y=0;y<60;y++)for(let x=40;x<105;x++){const m=M[y*MW+x];if(m===84)lava++;if(m===86)peaks++;if(m===87)crater++}const r={bridge:s.has(37*MW+71),gate:!walk(35*MW+71)&&!walk(35*MW+67)&&!walk(35*MW+75),court:!walk(32*MW+71),moatBlocks:!walk(37*MW+66)&&!walk(38*MW+76),lava:lava>200,peaks:peaks>100,crater:crater>5,reef:REEF.size>300,emptyCamp:!BL.some(b=>b.tent||b.ship)&&!NPC.some(n=>n.pirate)&&BL.some(b=>b.decor==='coldfire')&&!flag('pirates_here'),noHouses:!BL.some(b=>b.roof&&b.x>=50&&b.x<=95&&b.y>=8&&b.y<=48)};P.x=P.rx=71;P.y=P.ry=37;P.f='u';act();r.gateIn=zoneOf(P.x,P.y)===9;P.x=P.rx=177;P.y=P.ry=229;P.f='u';act();r.hall=zoneOf(P.x,P.y)===8&&P.x===196&&P.y===234;P.f='d';act();r.hallBack=zoneOf(P.x,P.y)===9&&P.x===177&&P.y===229;P.x=P.rx=177;P.y=P.ry=234;P.f='d';act();r.gateBack=zoneOf(P.x,P.y)===0&&P.y===37;return r})()")
+    fire = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],walk=j=>WK.includes(M[j]),st=46*MW+71,s=new Set([st]),q=[st];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(s.has(j)||!walk(j))continue;s.add(j);q.push(j)}}let lava=0,peaks=0,crater=0;for(let y=0;y<60;y++)for(let x=40;x<105;x++){const m=M[y*MW+x];if(m===84)lava++;if(m===86)peaks++;if(m===87)crater++}const r={bridge:s.has(37*MW+71),gate:!walk(35*MW+71)&&!walk(35*MW+67)&&!walk(35*MW+75),court:!walk(32*MW+71),moatBlocks:!walk(37*MW+66)&&!walk(38*MW+76),lava:lava>200,peaks:peaks>100,crater:crater>5,reef:REEF.size>300,emptyCamp:!BL.some(b=>b.tent||b.ship)&&!NPC.some(n=>n.pirate)&&BL.some(b=>b.decor==='coldfire')&&!flag('pirates_here'),noHouses:!BL.some(b=>b.roof&&b.x>=50&&b.x<=95&&b.y>=8&&b.y<=48)};P.x=P.rx=71;P.y=P.ry=37;P.f='u';act();r.gateIn=zoneOf(P.x,P.y)===9;P.x=P.rx=177;P.y=P.ry=PG.y0+1;P.f='u';act();r.hall=zoneOf(P.x,P.y)===8&&P.x===196&&P.y===PH.y1-1;P.f='d';act();r.hallBack=zoneOf(P.x,P.y)===9&&P.x===177&&P.y===PG.y0+1;P.x=P.rx=177;P.y=P.ry=PG.y1-1;P.f='d';act();r.gateBack=zoneOf(P.x,P.y)===0&&P.y===37;return r})()")
     assert all(fire.values()), fire
     # the pirates arrive overnight once a quest has called them: nothing before, then ten pirates, three ships, tents and a lit fire; undoing it leaves the empty camp; the flag is saved
     ev("setFlag('pirates_called',1);sail=true;sleep()")
@@ -131,7 +131,7 @@ def check(b, url):
     # the Temple Tower: from the dock the gate, courtyard and both sides of the pagoda are walkable, the pagoda blocks, its south door leads into the shrine room and the shrine room door leads back out
     tt = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],ok=new Set(WK);let by=0;for(let y=224;y>150;y--)if(at(212,y)===105)by=y;const s=new Set([by*MW+212]),q=[by*MW+212];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(!s.has(j)&&ok.has(M[j])){s.add(j);q.push(j)}}}"
             "const r={gate:s.has(195*MW+212),courtyard:s.has(196*MW+204)&&s.has(208*MW+220),west:s.has(202*MW+206),east:s.has(202*MW+218),door:s.has(205*MW+212),pagodaBlocks:!s.has(202*MW+212)&&!s.has(204*MW+212),wallBlocks:!s.has(195*MW+205),gate2:BL.some(b=>b.towergate)&&BL.some(b=>b.pagoda)};"
-            "sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act();r.in=zoneOf(P.x,P.y)===10;r.floor=at(P.x,P.y)===108;r.stands=[...Array(11*10)].filter((_,k)=>at(156+k%11,226+(k/11|0))===114).length===4;P.f='d';act();r.out=zoneOf(P.x,P.y)===0&&P.x===212&&P.y===205;return r})()")
+            "sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act();r.in=zoneOf(P.x,P.y)===10;r.floor=at(P.x,P.y)===108;r.stands=[...Array(11*10)].filter((_,k)=>at(TS.x0+k%11,TS.y0+(k/11|0))===114).length===4;P.f='d';act();r.out=zoneOf(P.x,P.y)===0&&P.x===212&&P.y===205;return r})()")
     assert all(tt.values()), tt
     ev("for(const[x,y,f]of[[212,192,'d'],[212,199,'d'],[206,203,'d'],[212,207,'u']]){sail=false;P.x=P.rx=x;P.y=P.ry=y;P.f=f;draw()};sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act();draw();P.f='d';act();draw()")
     # the damaged Sky temple: off it matches the normal temple; on it has the split stone with stairs, smoke and toppled stones, the temple stays reachable from the avenue, and off puts everything back
@@ -154,10 +154,17 @@ def check(b, url):
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     assert not errs, errs
     pg.close()
+    # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places
+    old = dict(SAVE); old["placed"] = [{"id": "bench", "x": 303, "y": 230}]; old["cut"] = {str(20 * 320 + 120): {"m": 46, "d": 1}}
+    pg, errs = load(b, url, old)
+    mig = pg.evaluate("({wv:S.wv,placed:S.placed.map(o=>[o.x,o.y]),cutNew:!!S.cut[(20+FY)*MW+120],cutOld:!!S.cut[20*MW+120],zonesBelow:[IR,GZ,AZ,SZ,HZ,VZ,PH,PG,TS,FZ].every(z=>z.y0>=WH+6),seaClean:(()=>{for(let y=0;y<WH;y++)for(let x=0;x<MW;x++)if(zoneOf(x,y))return false;return true})(),edge:(()=>{sail=true;P.x=P.rx=B.x=150;P.y=P.ry=B.y=WH-1;move('d');return P.y===WH-1})(),forest:(()=>{sail=false;P.x=P.rx=31;P.y=P.ry=111;P.f='u';act();return zoneOf(P.x,P.y)===2&&P.y===FZ.y0+1&&at(P.x,P.y)!==0})()})")
+    assert mig == {"wv": 3, "placed": [[303, 254]], "cutNew": True, "cutOld": False, "zonesBelow": True, "seaClean": True, "edge": True, "forest": True}, mig
+    assert not errs, errs
+    pg.close()
     # an old v1 save still loads, is migrated, and is backed up
     pg, errs = load(b, url, OLD_SAVE)
     s = pg.evaluate("({v:S.v,wv:S.wv,day:S.day,sardine:S.bag.sardine,rod:S.eq.rod,backup:!!localStorage.getItem('little-harbor-v1-backup-v1')})")
-    assert s == {"v": 3, "wv": 2, "day": 3, "sardine": 4 + 4, "rod": "bamboo_rod", "backup": True}, s  # +4 sardines from the TEST_KITS roundB grant
+    assert s == {"v": 3, "wv": 3, "day": 3, "sardine": 4 + 4, "rod": "bamboo_rod", "backup": True}, s  # +4 sardines from the TEST_KITS roundB grant
     assert not errs, errs
     pg.close()
 
