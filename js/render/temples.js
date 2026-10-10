@@ -174,3 +174,12 @@ function tent(b,x,y,t){const W=b.w*T,c=b.tent,O='#2a1b0e';R(x-2,y+27,W+4,5,'#000
   for(let r=0;r<26;r+=5){const hw=Math.round(4+r*.78);R(x+W/2-hw+1,y+4+r,hw*2-2,2,'#efe6d0')}
   R(x+W/2-1,y+3,2,26,'#00000020');R(x+W/2-5,y+16,10,14,O);R(x+W/2-4,y+17,8,13,'#1a1008');R(x+W/2,y+17,1,13,'#3a2a18');
   R(x+W/2-1,y-4,1,9,'#6e4a1a');R(x+W/2,y-4,6,4,'#d8302a');R(x+W/2,y-3,5,1,'#f0b040')}
+// ---------- the Temple Tower's island (see art/temples/temple_tower) ----------
+// Tiles: 102 pine tree (drawn on grass, rises above its tile, blocks), 103 raked gravel (walkable), 104 gravel with a flat stepping stone (walkable).
+function towerTile(m,sx,sy,tx,ty,n,t){const O='#1c2a22';
+  if(m===102){grassBg(tx,ty,sx,sy,n);R(sx+2,sy+11,12,3,'#00000030');R(sx+7,sy+9,2,6,'#5a3a24');
+    R(sx+2,sy+6,12,5,O);R(sx+3,sy+7,10,3,'#24533a');R(sx+4,sy+1,8,6,O);R(sx+5,sy+2,6,4,'#2b6444');R(sx+6,sy-5,4,7,O);R(sx+7,sy-4,2,5,'#2f7050');
+    R(sx+3,sy+7,3,1,'#3a8060');R(sx+5,sy+2,2,1,'#3a8060')}
+  else{R(sx,sy,T,T,'#d4cbb6');for(let k=0;k<5;k++){const r=hs(tx*5+k,ty*3)%100;R(sx+r%14,sy+(r*3)%14,2,1,k%2?'#b8ae98':'#e6dfcf')}
+    R(sx,sy+3,T,1,'#c6bda8');R(sx,sy+9,T,1,'#c6bda8');R(sx,sy+14,T,1,'#c6bda8');
+    if(m===104){R(sx+3,sy+3,10,9,'#8d8f87');R(sx+4,sy+3,8,2,'#a9aba2');R(sx+3,sy+10,10,2,'#6e7068')}}}
