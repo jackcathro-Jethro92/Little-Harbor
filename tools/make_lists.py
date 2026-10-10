@@ -19,11 +19,12 @@ LABEL = {"jack": "Jack's", "original": "original", "placeholder": "placeholder"}
 JS = """(()=>{const area=n=>{const z=zoneOf(n.x,n.y);if(z===2)return 'The Darkwood';if(z===3)return 'Fighters Guild hall (Mountain Town)';if(z===4)return "Gladiators' Arena (Mountain Town)";
  let best=null,bd=1e9;LAND.forEach(l=>{const d=Math.hypot(l[1]-n.x,l[2]-n.y);if(d<bd){bd=d;best=l[0]}});return best};
  return NPC.map(n=>({n:n.n,area:n.pirate?'Pirate camp (Volcano Island)':area({x:n.hx!==undefined?n.hx:n.x,y:n.hy!==undefined?n.hy:n.y}),job:(n.bio&&n.bio.job)||null,store:n.store||null,pirate:!!n.pirate,say:n.say||[]}))})()"""
+JS_DLG = "Object.entries(DLG).flatMap(([id,d])=>Object.entries(d.nodes).map(([k,n])=>({id:id+'.'+k,who:n.who||'',text:n.text||'',choices:(n.choices||[]).map(c=>c.t)})))"
 ROLES = {"Odo": "General store keeper", "Murl": "Boat seller (boatyard)", "Hale": "Woodcutter (Darkwood)", "Wren": "Forager (Darkwood)", "Tilda": "Blacksmith's apprentice", "Aldric": "Fighters Guild member", "Hild": "Fighters Guild member", "Old Stig": "Old miner"}
 PREFIX = [("Warden", "Mountain Town warden"), ("Miner", "Miner"), ("Sergeant", "Guild sergeant"), ("Gate Guard", "Gate guard"), ("Gambler", "Arena gambler"), ("Arena Master", "Arena master"), ("Guildmaster", "Fighters Guild master")]
 JOBS = {"smith": "Blacksmith", "rod": "Fishing and boat shop", "general": "General store", "jeweller": "Goldsmith (enchanted jewellery)", "guild": "Fighters Guild master"}
 
-def build(base, with_pirates):
+def build(base, with_pirates, dlgtab=()):
     """base: the people in the normal game; with_pirates: the people once the pirates have arrived (both from JS). Returns (NAMES.md text, DIALOGUE.md text)."""
     people = base + [n for n in with_pirates if n["pirate"]]
     names = ["# Little Harbor: named characters (for Jack to review)\n",
@@ -52,7 +53,18 @@ def build(base, with_pirates):
         for m in re.finditer(r"'((?:Odo|Rue|Wynn|Fenwick|Brenna|Dorn|Garrick|Lucie|Bram): [^']{3,}?)'", open(f, encoding="utf-8").read()):
             s = m.group(1)
             dlg.append("- *%s* (`%s`): %s" % (LABEL[status(s)], os.path.relpath(f, ROOT).replace(os.sep, "/"), s))
+    if dlgtab:
+        dlgs = ["", "## Dialogues in the DLG table (the story's text, by id)\n"]
+        for d in dlgtab:
+            for t in [d["text"]] + d.get("choices", []):
+                if t:
+                    st = status(t); tot[st] += 1
+                    dlgs.append("- *%s* `%s` %s: %s" % (LABEL[st], d["id"], d["who"] or "-", t))
+        dlg_lines = dlgs
+    else:
+        dlg_lines = []
     spoken = {s.replace("\\'", "'") for n in people for s in n["say"]}
+    dlg += dlg_lines
     unused = sorted(l for l in JACK if l not in spoken and not any(l in open(f, encoding="utf-8").read() for f in glob.glob(os.path.join(ROOT, "js", "**", "*.js"), recursive=True)))
     if unused:
         dlg += ["", "## Lines in JACKS_LINES.txt that are not in the game (yet)\n"] + ["- " + l for l in unused]
@@ -61,9 +73,9 @@ def build(base, with_pirates):
 def collect(b, url):
     import smoke_test as t
     pg, _ = t.load(b, url, t.SAVE)
-    base = pg.evaluate(JS); pg.evaluate("applyPirates(true)")
+    base = pg.evaluate(JS); dlgtab = pg.evaluate(JS_DLG); pg.evaluate("applyPirates(true)")
     withp = pg.evaluate(JS); pg.close()
-    return base, withp
+    return base, withp, dlgtab
 
 if __name__ == "__main__":
     sys.path.insert(0, os.path.join(ROOT, "tests"))
@@ -73,8 +85,8 @@ if __name__ == "__main__":
     t.all_scripts_listed(); url = t.serve()
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=exe, args=["--no-sandbox"]) if exe else p.chromium.launch()
-        base, withp = collect(b, url)
-    names, dlg = build(base, withp)
+        base, withp, dlgtab = collect(b, url)
+    names, dlg = build(base, withp, dlgtab)
     open(os.path.join(ROOT, "NAMES.md"), "w", encoding="utf-8").write(names)
     open(os.path.join(ROOT, "DIALOGUE.md"), "w", encoding="utf-8").write(dlg)
     print("NAMES.md and DIALOGUE.md written")
