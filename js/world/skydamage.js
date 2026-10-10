@@ -6,7 +6,7 @@
 // Only tiles inside the circle's box (x 218-254, y 96-128) change, and the first look of the box is kept in SKY_ORIG so `applySky(false)` restores it exactly. No people, no story items.
 const SKY_BOX={x0:218,y0:96,x1:254,y1:128},SKY_ORIG=[];
 for(let y=SKY_BOX.y0;y<=SKY_BOX.y1;y++)for(let x=SKY_BOX.x0;x<=SKY_BOX.x1;x++)SKY_ORIG.push(M[y*MW+x]);
-function applySky(on){
+function applySky(on){if(typeof groundDirty==="function")groundDirty();
   const AX=236,CY=108;let k=0;
   for(let y=SKY_BOX.y0;y<=SKY_BOX.y1;y++)for(let x=SKY_BOX.x0;x<=SKY_BOX.x1;x++)M[y*MW+x]=SKY_ORIG[k++];
   BL.splice(0,BL.length,...BL.filter(b=>!b.skydmg));

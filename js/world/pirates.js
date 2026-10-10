@@ -4,7 +4,7 @@
 // offshore (x 93-95, y 16-35) and ten pirates (js/data/pirates.js). Everything the camp adds is marked `pirate` so it can be removed again. No shop and no services.
 const PIRATE_TENTS=[[84,16,'#b8452a'],[88,16,'#3a6aa8'],[84,19,'#c8a040'],[88,19,'#b8452a'],[84,22,'#3a6aa8'],[88,22,'#c8a040']];   // two columns with a lane between, on the dry ground east of the lava
 const PIRATE_SHIPS=[[93,16],[93,24],[93,32]];
-function applyPirates(on){
+function applyPirates(on){if(typeof groundDirty==="function")groundDirty();
   const ground=(x,y)=>[82,83,100].includes(at(x,y)),clearPlace=(x,y,w,h)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)if(!ground(x+i,y+j))return false;return true};
   // take away whatever an earlier call put here
   BL.filter(b=>b.pirate).forEach(b=>{const w=b.ship?3:b.w,h=b.ship?4:b.decor?1:2;for(let j=0;j<h;j++)for(let i=0;i<w;i++)setT(b.x+i,b.y+j,b.ship?0:82)});

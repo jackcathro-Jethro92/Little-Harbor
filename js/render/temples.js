@@ -97,7 +97,7 @@ function seaTemple(b,x,y,t){const W=b.w*T,O='#2a2a2a';R(x-2,y+29,W+4,6,'#0000003
 // ---------- Temple to the Sky (standing stones, see art/temples/sky_stonehenge_temple) ----------
 // Tiles (all drawn on grass): 78 standing stone (a tall pale stone with moss, rising above its tile), 79 lintel slab (a low flat slab, used between the circle's stones and over trilithons),
 // 80 and 81 the left and right halves of the carved temple stone (triple spirals).
-function grassBg(tx,ty,sx,sy,n){const G=['#7fa84f','#74a048','#678f3f'],v=Math.sin(tx*.8)+Math.sin(ty*.9)+Math.sin((tx+ty)*.45),gi=v>1.1?0:v<-1.1?2:1;R(sx,sy,T,T,G[gi]);
+function grassBg(tx,ty,sx,sy,n){grassTile(tx,ty,sx,sy);return;const G=['#7fa84f','#74a048','#678f3f'],v=Math.sin(tx*.8)+Math.sin(ty*.9)+Math.sin((tx+ty)*.45),gi=v>1.1?0:v<-1.1?2:1;R(sx,sy,T,T,G[gi]);
   for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}}
 function skyTile(m,sx,sy,tx,ty,n,t){const O='#3a3430';grassBg(tx,ty,sx,sy,n);
   if(m===78){R(sx+3,sy+12,12,3,'#00000030');R(sx+4,sy-11,8,25,O);R(sx+5,sy-10,6,23,'#a8a8a0');R(sx+5,sy-10,2,23,'#bcbcb2');R(sx+9,sy-10,2,23,'#8a8a82');
