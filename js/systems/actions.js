@@ -12,7 +12,7 @@ function act(){
   if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome();
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
-  const tt=at(x,y);if(!sail&&(tt===4||tt===19||(tt>=15&&tt<=17)||(tt>=24&&tt<=30)))return gather(x,y,tt);
+  const tt=at(x,y);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}
     if(n.store==='tailor'||n.store==='barber'){const t=n.store==='tailor';menu(t?"Seamstress Wynn's Tailor":"Barber Fenwick's",[t?'Try on clothes':'Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook(n.store)});return}

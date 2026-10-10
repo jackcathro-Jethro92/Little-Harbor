@@ -49,4 +49,5 @@ NPC.push({n:'Hale',x:121,y:9,hx:121,hy:9,f:'d',skin:2,hair:1,shirt:2,jk:3,hat:'c
 }
 const FB=[[109,29],[140,21],[106,11],[140,10],[119,16],[130,28]].map(([x,y])=>[x,y+FY]);FB.forEach(([x,y])=>setT(x,y,46)); // treasure bundles
 const FLOOT=[{i:[['healing_potion',1]],g:30},{i:[['stamina_tonic',1],['blue_cap',2]]},{i:[['greater_healing',1]]},{i:[['iron_bar',1],['rope',2]]},{i:[['death_cap',1]],g:80},{i:[['swiftness_potion',1],['forest_sprig',2]]}];
-Object.keys(S.cut).forEach(i=>{if(([15,16,17].includes(S.cut[i].m)&&cleared(i%MW,(i/MW)|0))||[48,49,50].includes(M[i])){delete S.cut[i];return}M[i]=STUB(S.cut[i].m)});
+Object.keys(S.cut).forEach(i=>{if((ORE[S.cut[i].m]&&!ORE_AT.has(+i))||[48,49,50].includes(M[i])){delete S.cut[i];return}   // ore records from before the move to the mountains are dropped
+  M[i]=STUB(S.cut[i].m)});

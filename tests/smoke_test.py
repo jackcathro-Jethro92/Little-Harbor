@@ -163,6 +163,23 @@ def check(b, url):
     assert ev("[S.gold,S.bag.healing_potion]") == [940, 1], "buying a healing potion costs 60"
     ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').innerText)"), "she buys potions back"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    # ore: only in the mountain country (x<100, y<100), few of them, gold and silver rare, every outcrop reachable on foot from the Mountain Town's north gate; gold is mined, regrows slowly and is sold (not bought) at Garrick's
+    ore = ev("(()=>{const c={},out=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(ORE[t]){c[t]=(c[t]||0)+1;if(x>=100||y>=100)out.push([x,y])}}"
+             "const W=new Set(WK),s=new Set([57*MW+26]),q=[[26,57]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=(y+b)*MW+x+a;if(!s.has(i)&&W.has(at(x+a,y+b))&&y+b<100){s.add(i);q.push([x+a,y+b])}}}"
+             "const lost=[...ORE_AT].filter(i=>![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>s.has(i+b*MW+a))).length;"
+             "return {c,out:out.length,lost,total:Object.values(c).reduce((a,b)=>a+b,0)}})()")
+    assert ore["out"] == 0 and ore["lost"] == 0 and 30 <= ore["total"] <= 45, ore
+    assert ore["c"].get("123", 0) == 3 and 3 <= ore["c"].get("124", 0) <= 5 and ore["c"]["15"] > ore["c"]["17"] > ore["c"]["123"], ore
+    g = ev("[...ORE_AT].map(i=>[i%MW,(i/MW)|0]).find(([x,y])=>at(x,y)===123)")
+    ev(f"S.eq.pickaxe='iron_pickaxe';S.bag.iron_pickaxe=1;S.sta=100;sail=false;P.x=P.rx={g[0]};P.y=P.ry={g[1]+1};P.f='u';S.bag.gold_ore=0;for(let i=0;i<8&&at({g[0]},{g[1]})===123;i++){{S.sta=100;act()}}")
+    assert ev(f"[S.bag.gold_ore>=1,at({g[0]},{g[1]})===18,S.cut[{g[1]}*MW+{g[0]}].m]") == [True, True, 123], "gold can be mined"
+    assert ev("REGROW(123)>REGROW(124)&&REGROW(124)>REGROW(15)"), "rarer ore regrows slower"
+    ev("openTrader('smith','buy')"); assert ev("!/Gold ore/.test($('items').innerText)"), "Garrick must not sell gold"
+    ev("S.bag.gold_ore=2;openTrader('smith','sell')"); assert ev("/Gold ore x2/.test($('items').innerText)"), "Garrick buys gold"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    pgo, erro = load(b, url, dict(SAVE, cut={str(104 * 320 + 142): {"m": 17, "d": 1}}))   # an old ore record at a spot that no longer has ore (it was on the village island)
+    assert pgo.evaluate("!S.cut[104*MW+142]&&at(142,104)!==18"), "old ore records elsewhere are dropped"
+    pgo.close()
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
