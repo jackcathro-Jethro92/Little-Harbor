@@ -137,7 +137,7 @@ function fireTile2(m,sx,sy,tx,ty,n,t){const O='#141418',fl=((t/130)|0)%3,GOLD='#
   const marble=()=>{R(sx,sy,T,T,'#e8e4da');R(sx,sy+7,T,1,'#cfcabc');R(sx+(ty%2?4:11),sy,1,T,'#cfcabc');if(n%7===0)R(sx+n%10+2,sy+n%9+3,4,1,'#dcd6c8')};
   const dark=()=>{R(sx,sy,T,T,'#34343c');R(sx+n%11,sy+(n*3)%12,4,2,'#2a2a32')};
   if(m===88)lacquer();
-  else if(m===89){const r=ty-PH.y0,side=tx===PH.x0||tx===PH.x1||ty===PH.y1;
+  else if(m===89){const r=ty-PH.y0,side=zoneOf(tx,ty)===9||tx===PH.x0||tx===PH.x1||ty===PH.y1;
     if(side){R(sx,sy,T,T,'#8a2420');R(sx,sy+2,T,1,GOLD);R(sx,sy+13,T,1,GOLD);if((tx===PH.x0||tx===PH.x1)&&ty>=PH.y0+4&&ty<=PH.y0+5){R(sx+2,sy+1,12,14,'#c8962a');R(sx+3,sy+2,10,12,'#efe6d0');for(let q=0;q<10;q+=3){R(sx+3+q,sy+2,1,12,'#9a8a70');R(sx+3,sy+2+q,10,1,'#9a8a70')}}}
     else if(r===0){R(sx,sy,T,T,'#3a1814');R(sx,sy+10,T,1,'#7a3a2a');for(let q=0;q<T;q+=4)R(sx+q,sy+11,2,5,'#5a2820');R(sx,sy+15,T,1,GOLD)}
     else if(r===1){R(sx,sy,T,T,'#a82a24');R(sx,sy,T,1,GOLD);if(tx===PH.dx-1||tx===PH.dx){R(sx,sy+3,T,10,GOLD);R(sx,sy+3,T,1,'#fff0b0');R(sx+3,sy+5,10,6,'#1f3a8a');for(let q=0;q<3;q++)R(sx+4+q*3,sy+7,2,2,GOLD)}else{R(sx+1,sy+3,3,10,GOLD);R(sx+12,sy+3,3,10,GOLD)}}
