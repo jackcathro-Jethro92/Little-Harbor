@@ -4,10 +4,7 @@ function tile(tx,ty,sx,sy,t){
   if(zt!==zp){if(zp)R(sx,sy,T,T,'#000');else waterTile(tx,ty,sx,sy,t,true);return}
   if(mm>=21&&mm<=23){
     if(!here){waterTile(tx,ty,sx,sy,t,true);return}
-    if(mm===21){R(sx,sy,T,T,'#c49a62');R(sx,sy+3,T,1,'#a97f4a');R(sx,sy+8,T,1,'#a97f4a');R(sx,sy+13,T,1,'#a97f4a');R(sx+(ty%2?4:11),sy,1,T,'#a97f4a');if(n%9===0)R(sx+n%10+2,sy+n%12+1,3,1,'#d6b27a')}
-    else{R(sx,sy,T,T,'#7a5a38');R(sx,sy,T,3,'#a8743f');R(sx,sy+T-3,T,3,'#573a21');
-      if(mm===22&&ty===IR.y0&&tx%3===0){R(sx+2,sy+4,12,9,'#3d2a14');R(sx+3,sy+5,10,7,'#9ad3f0');R(sx+7,sy+5,2,7,'#3d2a14')}
-      if(mm===23){R(sx+2,sy+1,12,15,'#3d2a14');R(sx+3,sy+2,10,14,'#6b4423');R(sx+10,sy+9,2,2,'#f2c14e')}}
+    homeArt(mm,tx,ty,sx,sy,n);
     return}
   if(mm>=56&&mm<=63){templeTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=64&&mm<=77){seaTile(mm,sx,sy,tx,ty,n,t);return}
@@ -43,9 +40,7 @@ function tile(tx,ty,sx,sy,t){
   if(m>=48&&m<=50){rockTile(tx,ty,sx,sy,m,n);return}
   if(m==10){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   const rk=TLV[i]>0&&(m===5||(m>=14&&m<=18));
-  if(rk)rockFloor(tx,ty,sx,sy);else{if(zt===2){R(sx,sy,T,T,G[gi]);
-  for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}
-  if(n<34){const bx=sx+2+n%10,by=sy+3+(n*3)%9;R(bx,by,1,3,'#4d7a33');R(bx+2,by-1,1,4,'#5c8c3a');R(bx+4,by,1,3,'#4d7a33')}}else grassTile(tx,ty,sx,sy);
+  if(rk)rockFloor(tx,ty,sx,sy);else{if(zt===2)forestFloor(tx,ty,sx,sy);else grassTile(tx,ty,sx,sy);
   if(n>=45&&n<52&&m===1)bushArt(sx,sy);
   if(n>88&&m===1&&zt===2){const c=['#f2e55c','#f4f4f0','#f0a0c0'][n%3];R(sx+3+n%8,sy+4+n%7,2,2,c);R(sx+8+n%4,sy+9+n%4,2,2,c);R(sx+6,sy+11,1,1,c)}
   }
@@ -54,8 +49,8 @@ function tile(tx,ty,sx,sy,t){
   if(m===31)plantArt(m,n,sx,sy);
   if(m===19)plantArt(m,n,sx,sy);
   if(m===20)plantArt(m,n,sx,sy);
-  if(m===41){R(sx,sy,T,T,'#14291a');blob(sx+8,sy+9,8,'#1e3d27','#2b5736','#122a1b','#0a170f');R(sx+(n%3)*5,sy+3,4,3,'#2f6a42');R(sx+3+n%7,sy+9,3,2,'#122a1b')}
-  if(m===42){R(sx,sy,T,T,'#46372a');R(sx+n%10,sy+(n*3)%12,4,2,'#3a2d22');R(sx+(n*7)%11,sy+(n*5)%13,3,1,'#5a4838')}
+  if(m===41)thickTree(tx,ty,sx,sy,n);
+  if(m===42)forestTrail(tx,ty,sx,sy,n);
   if(m===45){R(sx+4,sy+16-16,8,16,'#6b4423');R(sx+3,sy,10,3,'#3d2a14');R(sx+7,sy+5,2,3,'#f2c14e');R(sx+5,sy+10,1,5,'#573a21')}
   if(m===46)objectArt(m,tx,ty,sx,sy,n,t);
   if(m===47)plantArt(m,n,sx,sy);
