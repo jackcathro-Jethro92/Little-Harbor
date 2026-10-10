@@ -73,6 +73,29 @@ def check(b, url):
     kb = held(lambda: pg.keyboard.down("ArrowRight"), lambda: pg.keyboard.up("ArrowRight"))
     dp = held(lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))"), lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerup',{bubbles:true}))"))
     assert abs(kb - dp) <= 2 and 8 <= kb <= 20, (kb, dp)
+    # movement feel: a quick tap on a new direction only turns you; a tap on the way you face moves exactly one tile; holding walks; a second key takes over and, when let go, the first carries on; letting go of all stops
+    ev("sail=false;P.x=P.rx=60;P.y=P.ry=190;P.f='d';for(let y=186;y<=194;y++)for(let x=56;x<=64;x++)if(!walkable(x,y)){}")
+    ok_ground = ev("(()=>{let c=0;for(let y=186;y<=194;y++)for(let x=56;x<=64;x++)if(walkable(x,y))c++;return c})()")
+    if ok_ground >= 60:
+        pos = lambda: ev("[P.x,P.y,P.f]")
+        ev("P.x=P.rx=60;P.y=P.ry=190;P.f='d'")
+        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(50); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
+        assert pos() == [60, 190, 'r'], ("tap on a new direction should only turn", pos())
+        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(60); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
+        assert pos() == [61, 190, 'r'], ("tap on the facing direction should move one tile", pos())
+        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(600); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
+        assert pos()[0] >= 64 or not ev("walkable(P.x+1,P.y)"), ("holding should keep walking", pos())
+        ev("P.x=P.rx=58;P.y=P.ry=190;P.f='r'")
+        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(300)
+        pg.keyboard.down("ArrowDown"); pg.wait_for_timeout(500)
+        x1, y1, f1 = pos(); assert f1 == 'd' and y1 > 190, ("second key should take over", pos())
+        pg.keyboard.up("ArrowDown"); pg.wait_for_timeout(400)
+        x2, y2, f2 = pos(); assert f2 == 'r' and x2 > x1, ("first key should carry on when the second is let go", pos(), x1)
+        pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(300)
+        p3 = pos(); pg.wait_for_timeout(400); assert pos() == p3, "letting go of every key must stop"
+        ev("sail=false;P.x=P.rx=60;P.y=P.ry=190;P.f='u'")
+        ev("$('left').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))"); pg.wait_for_timeout(50); ev("$('left').dispatchEvent(new PointerEvent('pointerup',{bubbles:true}))"); pg.wait_for_timeout(100)
+        assert pos() == [60, 190, 'l'], ("D-pad tap on a new direction should only turn", pos())
     # the Mountain Town's north gate: the gateway is open and a path leads from it up to the Temple to the Mountains using only land north of the wall
     gate = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],s=new Set([58*MW+26]),q=[[26,58]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(ny>58||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}return{open:[25,26,27].every(x=>ok.has(at(x,59))),temple:s.has(29*MW+9)}})()")
     assert gate == {"open": True, "temple": True}, gate
