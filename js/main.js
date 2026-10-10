@@ -11,4 +11,4 @@ setInterval(()=>CH.forEach(c=>{if(Math.random()<.5)return;const d=Object.values(
   if(Math.abs(x-c.hx)>2||Math.abs(y-c.hy)>2||!walkable(x,y)||(P.x===x&&P.y===y))return;c.x=x;c.y=y;if(d[0])c.f=d[0]<0?1:0}),700);
 if(typeof S.fog==='string'&&S.fog.length===4800)for(let i=0;i<4800;i++)FOG[i]=S.fog[i]==='1'?1:0;
 reveal();ui();
-if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'.');
+if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'. Version '+BUILD+'.');

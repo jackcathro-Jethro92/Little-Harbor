@@ -221,6 +221,9 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 | `js/input.js` | D-pad and keyboard |
 | `js/main.js` | Starts the draw loop and timers, restores the explored map, shows the first screen |
 
+## Versions and caching
+Every push to `main` that passes the tests is published to GitHub Pages. The publish step stamps the commit's short id on every script and style link (`?v=abc1234`) and on `BUILD`, so phones and browsers load the new files and not old saved copies. The welcome message on loading a save ends with `Version abc1234.` (it says `Version dev.` when the game is run from a downloaded copy), so you can tell which version you are playing.
+
 ## Save data
 - `localStorage` key `little-harbor-v1`, JSON of `S`. `SAVE_V=3` with additive fields merged from defaults (`fresh()`); older saves are migrated and backed up to `little-harbor-v1-backup-v<N>`. `S.wv=2` marks coordinates that were shifted into the big map.
 - Important fields: look, day, gold, hp, sta, xp{}, bag{}, eq{}, cut{}, placed[], gardens[], claim, home, coat, buff, arena, flags{} (story switches, see js/systems/flags.js), granted[], fog (string of 4800 0/1 flags for 4x4-tile chunks).
