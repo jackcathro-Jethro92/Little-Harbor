@@ -227,6 +227,10 @@ def check(b, url):
     shp = pgs.evaluate("({schooner:S.bag.schooner===1,noTrawler:S.bag.trawler===undefined,eq:S.eq.boat==='schooner',tier:tier('boat')===2,recipes:['schooner','brig'].every(id=>RECIPES.some(r=>r.out===id&&r.station==='shipwright')),crew:ITEMS.brig.crew[0]===3&&ITEMS.rowboat.crew[1]===1})")
     assert all(shp.values()) and not errs2, (shp, errs2)
     pgs.close()
+    # testing prices: while BOAT_TEST is on, all three bought boats cost 100 gold at Murl's boatyard
+    ev("S.gold=1000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;openStore('boat')")
+    assert ev("['sloop','schooner','brig'].every(id=>ITEMS[id].price===100)||!BOAT_TEST"), "boats cost 100 while testing"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
