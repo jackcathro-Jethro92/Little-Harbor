@@ -39,7 +39,7 @@ walled(84,200,115,234,100,[[87,203,'red'],[94,203,'thatch'],[103,203,'slate'],[1
 setT(100,234,12);setT(101,234,12);rect(85,217,114,218,(x,y)=>setT(x,y,6)); // closed south wall, one main street
 [[84,216],[84,217],[84,218],[115,216],[115,217],[115,218]].forEach(([x,y])=>setT(x,y,6));[[84,215],[84,219],[115,215],[115,219]].forEach(([x,y])=>setT(x,y,45)); // west and east gates
 
-clr(26,150,41,158);[[27,152],[30,156],[39,158]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch'}));         // Woodcutters' shacks
+clr(26,150,41,158);[[27,152],[30,156],[34,158]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch'}));         // Woodcutters' shacks
 rect(26,150,41,158,(x,y)=>{if(at(x,y)===1&&hs(x,y*3)%100<10)setT(x,y,14)});
 clr(67,24,76,30);BL.push({x:69,y:26,w:5,col:'#c8402a',orb:'#f2a22e'});clr(62,31,80,36);[[64,31,'red'],[75,31,'red'],[68,34,'slate']].forEach(([x,y,roof])=>BL.push({x,y,w:3,roof}));
 [[66,30],[72,30],[78,34],[63,36]].forEach(([x,y])=>setT(x,y,13));                                              // Pirate Island, Temple of Fire

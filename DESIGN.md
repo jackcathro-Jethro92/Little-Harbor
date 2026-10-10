@@ -234,6 +234,9 @@ Every push to `main` that passes the tests is published to GitHub Pages. The pub
 - Important fields: look, day, gold, hp, sta, xp{}, bag{}, eq{}, cut{}, placed[], gardens[], claim, home, coat, buff, arena, flags{} (story switches, see js/systems/flags.js), granted[], fog (string of 4800 0/1 flags for 4x4-tile chunks).
 - **Never break existing saves.** Add fields with defaults, migrate old coordinates.
 
+## Lists for Jack (made by a script)
+- `NAMES.md` lists every named character, where they live and their job; `DIALOGUE.md` lists every spoken line and marks it **original** (word for word in the first game file Jack uploaded) or **placeholder** (written while building, to be replaced by Jack's own words). Both are made by `python3 tools/make_lists.py`; run it again after adding people or lines. Nobody is renamed and no line is changed because of these lists.
+
 ## Testing switches (remove before release)
 - `TEST_GRANTS` grants a sword once. `TEST_KITS` roundA..roundG grant gold, materials, kits and lowered health/stamina once per save. `TEST_SHOW_FULL_MAP` makes the Map screen show everything (explored data is unaffected).
 

@@ -54,13 +54,13 @@ The world is much further along than when this roadmap was first written. Everyt
 
 | Note | Status |
 | --- | --- |
-| N1 Movement | **Done for the first playthrough** (Jack approved, 11 Oct): tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Walking animation and camera can be adjusted after the playthrough. |
+| N1 Movement | **Done for the first playthrough** (Jack approved, 10 Oct): tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Walking animation and camera can be adjusted after the playthrough. |
 | N2 Sea square | **Done.** Every hidden room (home, Darkwood, guild, arena, all temple halls, the Tower shrine room) now sits in rows 246-299, below the sea you can reach (the map grew from 240 to 300 rows; boats stop at row 239). No outlined square at sea. Old saves are migrated (`S.wv` 3). |
-| N3 Cottage | Not started |
+| N3 Cottage | **Done** (10 Oct): moved to (34,158); the road runs unbroken. |
 | N4 Stairs | On hold until the shading revamp |
 | N5 Shop sub-menus | Not started (also covers Garrick and Lucie) |
-| N6 Names list | Not started. There are now far more named people to list. |
-| N7 Dialogue | Keep existing lines. See "Open items" below about the lines added since. |
+| N6 Names list | **Done** (10 Oct): see `NAMES.md` for Jack to review. Nobody has been renamed. |
+| N7 Dialogue human-written | **Marked** (10 Oct): `DIALOGUE.md` lists every line as original or placeholder. Nothing was changed. |
 | N8 to N13 | Not started |
 
 ### Story switches (what exists today)
