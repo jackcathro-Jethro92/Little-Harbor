@@ -320,6 +320,19 @@ def check(b, url):
     ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');n.i=0;P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(700)
     assert ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');return dlgActive()&&$('dlg-who').textContent==='Gate Guard Bors'&&n.say.includes($('dlg-txt').textContent)&&$('dlg-pt').style.display==='block'})()") , "villager chat uses the box"
     ev("dlgAdvance();dlgAdvance()")
+    # triggers (2.3): an area row says a line, sets a flag and pays gold once; a talk row, a morning row and a "beaten" row work; a condition holds a row back; a moved person stays moved
+    ev("DLG.t_trg={start:'a',nodes:{a:{who:'Murl',text:'Trigger line.'}}};TRIGGERS.push({id:'t_area',when:{area:[10,10,12,12]},do:[{say:'t_trg'},{set:'t_area_done'},{gold:7},{give:{sardine:2}}]},{id:'t_talk',when:{talk:'Bram'},if:{flag:'t_need'},do:[{set:'t_talked'}]},{id:'t_day',when:{day:1},do:[{set:'t_morning'},{move:['Odo',37,22]}]},{id:'t_beat',when:{beaten:'t_group'},do:[{quest:['t_q',2]}]})")
+    ev("S.gold=0;P.x=P.rx=9;P.y=P.ry=11;P.f='r';fireTriggers('step');P.x=P.rx=10;fireTriggers('step')"); pg.wait_for_timeout(500)
+    assert ev("dlgActive()&&$('dlg-txt').textContent==='Trigger line.'&&!flag('t_area_done')"), "the line comes first, the rest waits for the box to close"
+    ev("dlgAdvance()"); assert ev("flag('t_area_done')&&S.gold===7&&S.bag.sardine>=2&&wasSeen('trg:t_area')"), "the actions run once the box closes"
+    ev("P.x=P.rx=9;fireTriggers('step');P.x=P.rx=10;fireTriggers('step')"); assert ev("!dlgActive()&&S.gold===7"), "an area row fires once only"
+    ev("(()=>{const n=NPC.find(q=>q.n==='Bram');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); assert ev("!flag('t_talked')"), "a held-back row does not fire"
+    ev("setFlag('t_need');(()=>{const n=NPC.find(q=>q.n==='Bram');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); assert ev("flag('t_talked')"), "talking fires the talk row"
+    ev("fireTriggers('day')"); assert ev("flag('t_morning')&&(()=>{const o=NPC.find(q=>q.n==='Odo');return o.x===37&&o.y===22})()"), "a morning row fires and moves a person"
+    ev("enemyBeaten('t_group')"); assert ev("S.story.q==='t_q'&&S.story.step===2"), "a beaten group fires its row"
+    ev("save()"); pg.reload(); pg.wait_for_timeout(500); pg.evaluate("TRIGGERS.push({id:'t_area',when:{area:[10,10,12,12]},do:[{gold:7}]})")
+    assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
+    ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
