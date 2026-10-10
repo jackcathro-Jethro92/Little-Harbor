@@ -130,3 +130,10 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #intro-hint.blink{animation:intro-blink 1.2s steps(2) infinite}
 @keyframes intro-blink{50%{opacity:.2}}
 @media (prefers-reduced-motion:reduce){#intro-hint.blink{animation:none}}
+/* the home menu shown over the opening scene, near the bottom, while the ship sails away */
+#title.over{background:transparent;justify-content:flex-end;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6vh);z-index:31;animation:over-in .8s ease-out}
+#title.over h1,#title.over .tmt,#title.over .tmh,#title.over #title-note{color:#fff;text-shadow:0 2px 0 #1f2d3a}
+#title.over h1:empty{display:none}
+@keyframes over-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#title.over{animation:none}}
+#intro-credit{position:absolute;left:16px;right:16px;top:0;opacity:0;text-align:center;color:#fff3dc;font-size:12px;letter-spacing:.5px;text-shadow:0 1px 0 #3a2e22,0 0 6px rgba(90,60,30,.35);pointer-events:none}

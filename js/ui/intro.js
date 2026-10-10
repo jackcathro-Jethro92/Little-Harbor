@@ -1,11 +1,12 @@
 // ---------- the opening cinematic (roadmap N10 / 2.12): plays when the game opens, before the title menu, once per visit ----------
 // It looks up into a blue sky with white clouds and two sea birds, tilts down to the horizon while the driftwood title (with seaweed hanging off it)
-// rises up out of the sea, and a sailing ship, seen from behind, sails forward away from us towards the horizon.
-// Tap (or press any key) once to skip to the end, and again to go on to the title menu.
+// rises up out of the sea with a small credit line under it, and a sailing ship, seen from behind, sails forward away from us towards the horizon.
+// As the ship sails into the distance the home menu (Continue, New game, Load game) appears over the scene; the scene keeps playing behind it.
+// Tap (or press any key) to skip straight to the menu. The menu itself is the title menu in js/ui/titlemenu.js, which calls playIntro.close() when the game starts.
 // Everything is drawn in code at a low resolution and scaled up, in the game's own pixel style. It has its own canvas, so the game is not touched.
 const INTRO_SEEN='lh-intro';
 const playIntro=(()=>{
-  const LEN=15.5; // seconds until "Tap to start"
+  const LEN=12.5; // seconds until the home menu appears
   const BASE=270; // pixels across the shorter side of the screen (more = finer detail)
   const BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
   const SKY=['#2756a6','#2e62b3','#376fbf','#447dc8','#5689cd','#6c96cf','#87a4cd','#a5b3c8','#c6bfbd','#e6c8ad','#f7d09d','#fdddab']; // blue overhead, warming to peach and gold at the horizon (sunrise)
@@ -15,7 +16,7 @@ const playIntro=(()=>{
   const rng=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
   const hash=(x,y)=>{const v=Math.sin(x*12.9898+y*78.233)*43758.5453;return v-Math.floor(v)};
   const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c};
-  let el,cv,g,hintEl,W,H,K,HZ,TILT,D,S0,sky,sea,clouds,waves,glints,gulls,ships,island,title,foam=[],emit=0,last=0,t0=0,raf=0,phase='play',onDone=null,onKey=null,onResize=null;
+  let el,cv,g,hintEl,creditEl,W,H,K,HZ,TILT,D,S0,sky,sea,clouds,waves,glints,gulls,ships,island,title,foam=[],emit=0,last=0,t0=0,raf=0,phase='play',onDone=null,onKey=null,onResize=null;
 
   // a vertical gradient with ordered (checkerboard-like) dithering between the colour bands, like old console skies
   function dithered(w,h,cols,shape){const c=mk(w,h),x=c.getContext('2d'),im=x.createImageData(w,h),P=cols.map(rgb),n=P.length-1;
@@ -154,7 +155,7 @@ const playIntro=(()=>{
     for(let X=X0;X<=X1;X++)for(let Y=Y1;Y>=Y0;Y--){if(m(X,Y)&&!m(X,Y+1)&&!m(X,Y+2)){if(hash(X,Y*3)>.74&&X-lastX>2){weed.push({x:X-X0+P,y:Y-Y0+P+1,len:Math.round((5+hash(Y,X)*14)*k),ph:hash(X*7,Y)*6,w:hash(X,Y*7)<.55?2:1,top:0});lastX=X}break}}
     lastX=-9;
     for(let X=X0;X<=X1;X++)for(let Y=Y0;Y<=Y1;Y++){if(m(X,Y)&&!m(X,Y-1)){if(hash(X*3,Y)>.93&&X-lastX>6){weed.push({x:X-X0+P,y:Y-Y0+P-1,len:Math.round((6+hash(Y,X*5)*9)*k),ph:hash(X,Y*11)*6,w:2,top:1});lastX=X}break}}
-    return{img:o,mask:S,tw,x0:X0,y0:Y0,x1:X1,y1:Y1,P,weed}}
+    return{img:o,mask:S,tw,x0:X0,y0:Y0,x1:X1,y1:Y1,P,weed,weedMax:weed.reduce((a,w)=>w.top?a:Math.max(a,w.y+w.len-oh),0)}}
   // where a pixel sits relative to a (slightly bent) stick: distance from its centre line, how far along it is, and which side
   function segQ(st,X,Y){const vx=st.bx-st.ax,vy=st.by-st.ay,l2=vx*vx+vy*vy||1;let u=((X-st.ax)*vx+(Y-st.ay)*vy)/l2;u=u<0?0:u>1?1:u;
     const l=Math.sqrt(l2),nx=-vy/l,ny=vx/l,b=st.bend*Math.sin(Math.PI*u),cx=st.ax+vx*u+nx*b,cy=st.ay+vy*u+ny*b,ex=X-cx,ey=Y-cy;
@@ -181,11 +182,11 @@ const playIntro=(()=>{
     ships=[makeShip(0),makeShip(1)];island=makeIsland();title=makeTitle()}
 
   // the ship heads straight out to sea: it starts close behind us and shrinks as it gets further away, drifting slightly towards the middle
-  const SHIP_T=4.6,shipAt=t=>{const z=.85*Math.exp((t-SHIP_T)*.12);return{z,X:W*.1}};
+  const SHIP_T=4.6,shipAt=t=>{const z=.85*Math.exp((t-SHIP_T)*.12+.1*Math.pow(Math.max(0,t-10),1.3));return{z,X:W*.1}};
 
   function frame(now){raf=requestAnimationFrame(frame);
     const t=Math.max(0,(now-t0)/1000),dt=Math.min(.05,Math.max(0,t-last));last=t;
-    if(phase==='play'&&t>=LEN){phase='end';hint('Tap to start',true)}
+    if(phase==='play'&&t>=LEN)showMenu();
     if(phase==='play'&&t>3&&hintEl.textContent==='Tap to skip')hintEl.style.opacity=0;
     const cam=Math.round(TILT*ease((t-3.2)/5.3)),hz=HZ+TILT-cam,SHT=H-HZ;
     g.drawImage(sky,0,-cam);
@@ -203,7 +204,7 @@ const playIntro=(()=>{
       const img=gulls[f][big];if(y>-30&&x<W+30)g.drawImage(img,Math.round(x),Math.round(y))});
     // the title rises up out of the sea; nothing below the horizon line is drawn, so it looks like it comes up from behind it
     if(title&&t>7.6){const r=outE((t-7.6)/3.2),img=title.img,tx=Math.round((W-img.width)/2),top=HZ-Math.round(H*.16)-img.height,ty=Math.round(hz+2+(top-HZ-2)*r);
-      g.save();g.beginPath();g.rect(0,0,W,hz);g.clip();g.drawImage(img,tx,ty);drawWeed(tx,ty,t);
+      g.save();g.beginPath();g.rect(0,0,W,hz);g.clip();g.drawImage(img,tx,ty);drawWeed(tx,ty,t);if(t>10.6){creditEl.style.top=((ty+img.height+title.weedMax+3*K)*cv.clientHeight/H)+'px';creditEl.style.opacity=Math.min(1,(t-10.6)/.8)}
       g.restore()}
     // the sea: rolling wave crests (bigger close up, tiny far away), white caps on the near ones, and twinkling light
     if(hz<H){g.drawImage(sea,0,hz);
@@ -216,7 +217,7 @@ const playIntro=(()=>{
       for(const w of glints){const y=hz+w.k;if(y>=H)continue;if(Math.sin(t*w.sp+w.ph)<.55)continue;g.fillStyle=w.k<SHT*.3?'#e8d2b8':'#fff3dc';g.fillRect(Math.round(w.x),y,w.len,1)}}
     // the ship sails straight away from us towards the horizon, rolling gently, leaving a V-shaped white wake
     if(t>SHIP_T){const{z,X}=shipAt(t),s=S0/z,ys=hz+D/z+Math.sin(t*2.1)*.9*Math.min(s,1.6),xs=W/2+X/z;
-      if(phase==='play'||t<LEN+3){emit+=dt*110;while(emit>=1){emit--;const q=Math.random(),side=Math.random()<.5?-1:1;
+      if(t<LEN+9){emit+=dt*110;while(emit>=1){emit--;const q=Math.random(),side=Math.random()<.5?-1:1;
         foam.push(q<.45?{X:X+(Math.random()-.5)*16*S0,z:z*(1-Math.random()*.02),b:t,dx:(Math.random()-.5)*6*S0,life:2.2}
                 :{X:X+side*(17+Math.random()*4)*S0,z:z*(1-Math.random()*.03),b:t,dx:side*(4+Math.random()*7)*S0,life:3})}}
       if(z<80){const img=ships[Math.floor(t*3)%2],w=Math.max(1,Math.round(SW*s)),h=Math.max(1,Math.round(WL*s));
@@ -227,21 +228,24 @@ const playIntro=(()=>{
     // letterbox bars while it plays; they slide away when it is ready to start
     const lb=Math.round(H*.075*(1-outE((t-LEN)/.7)));if(lb>0){g.fillStyle='#0b1018';g.fillRect(0,0,W,lb);g.fillRect(0,H-lb,W,lb)}}
 
+  function showMenu(){if(phase!=='play')return;phase='menu';hintEl.style.opacity=0;const cb=onDone;onDone=null;cb&&cb()}
   function hint(text,blink){hintEl.textContent=text;hintEl.classList.toggle('blink',!!blink);hintEl.style.opacity=1}
   function tap(e){if(e&&e.type==='keydown'){e.preventDefault();e.stopImmediatePropagation()}
-    if(phase==='play'){t0=performance.now()-LEN*1000;last=LEN;foam=[];phase='end';hint('Tap to start',true)}
-    else if(phase==='end'){phase='out';finish()}}
-  function finish(){const cb=onDone;onDone=null;cb&&cb();el.classList.add('out');el.classList.remove('open');
+    if(phase==='play'){t0=performance.now()-LEN*1000;last=LEN;foam=[];showMenu()}}
+  function finish(){if(!el||phase==='out')return;phase='out';el.classList.add('out');el.classList.remove('open');
     removeEventListener('keydown',onKey,true);removeEventListener('resize',onResize);
-    setTimeout(()=>{cancelAnimationFrame(raf);el.remove()},650)}
+    const e=el;setTimeout(()=>{cancelAnimationFrame(raf);e.remove()},650)}
 
-  return function playIntro(done){onDone=done;phase='play';foam=[];
+  const play=function playIntro(done){onDone=done;phase='play';foam=[];
     try{sessionStorage.setItem(INTRO_SEEN,'1')}catch(e){}
     el=document.createElement('div');el.id='intro';el.className='open';el.setAttribute('role','button');el.setAttribute('aria-label','Opening scene. Tap to skip.');
-    el.innerHTML='<canvas id="intro-c"></canvas><div id="intro-hint">Tap to skip</div>';document.body.appendChild(el);
-    cv=el.firstChild;g=cv.getContext('2d');hintEl=$('intro-hint');setup();
+    el.innerHTML='<canvas id="intro-c"></canvas><div id="intro-hint">Tap to skip</div><div id="intro-credit">Created by Jack Cathro with the use of Claude AI</div>';document.body.appendChild(el);
+    cv=el.firstChild;g=cv.getContext('2d');hintEl=$('intro-hint');creditEl=$('intro-credit');setup();
     el.addEventListener('pointerdown',e=>{e.preventDefault();tap(e)});
-    onKey=e=>tap(e);addEventListener('keydown',onKey,true);
+    onKey=e=>{if(phase==='play')tap(e)};addEventListener('keydown',onKey,true);
     onResize=()=>setup();addEventListener('resize',onResize);
-    t0=performance.now();last=0;raf=requestAnimationFrame(frame)}
+    t0=performance.now();last=0;raf=requestAnimationFrame(frame)};
+  play.close=finish; // fades the scene out (when the game starts)
+  play.running=()=>!!el&&phase!=='out';
+  return play;
 })();
