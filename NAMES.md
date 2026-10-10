@@ -6,7 +6,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | --- | --- | --- |
 | Odo | Village | General store keeper |
 | Bram | Village | Fishing and boat shop |
-| Murl | Village | Boat seller |
+| Murl | Village | Boat seller (boatyard) |
 | Mara | Village | Villager |
 | Pip | Village | Villager |
 | Old Tess | Village | Villager |
@@ -42,6 +42,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Garrick | Walled Settlement | Blacksmith |
 | Tilda | Walled Settlement | Blacksmith's apprentice |
 | Gate Guard Bors | Walled Settlement | Gate guard |
+| Astrid | Walled Settlement | Apothecary |
 | Seamstress Wynn | Walled Settlement | Tailor |
 | Barber Fenwick | Walled Settlement | Barber |
 | Farmer Hobb | Walled Settlement | Dairy farmer |
@@ -55,7 +56,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Rolf | Mountain Town | Villager |
 | Sigrun | Mountain Town | Villager |
 | Tormund | Mountain Town | Villager |
-| Astrid | Mountain Town | Villager |
+| Solveig | Mountain Town | Villager |
 | Leif | Mountain Town | Villager |
 | Lucie | Mountain Town | Goldsmith |
 | Warden Orrin | Mountain Town | Mountain Town warden |

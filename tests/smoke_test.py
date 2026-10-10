@@ -154,6 +154,15 @@ def check(b, url):
     lnames, ldlg = make_lists.build(lbase, lpir)
     assert lnames == open(os.path.join(ROOT, "NAMES.md"), encoding="utf-8").read(), "NAMES.md is out of date: run  python3 tools/make_lists.py  and commit the result"
     assert ldlg == open(os.path.join(ROOT, "DIALOGUE.md"), encoding="utf-8").read(), "DIALOGUE.md is out of date: run  python3 tools/make_lists.py  and commit the result"
+    # Astrid the apothecary (Walled Settlement) sells potions and poisons; the boatyard owner is Murl; Mountain Town's old Astrid is now Solveig; no two people share a name
+    ap = ev("(()=>{const a=NPC.find(n=>n.n==='Astrid'),sh=BL.find(b=>b.sign==='apothecary'),names=NPC.map(n=>n.n);return {one:NPC.filter(n=>n.n==='Astrid').length===1,inTown:!!a&&a.x>=84&&a.x<=115&&a.y>=200&&a.y<=234,shop:!!sh&&sh.x+1===a.x&&sh.y+2===a.y,door:WK.includes(at(a.x,a.y+1)),walls:[0,1].every(j=>[0,1,2].every(i=>at(sh.x+i,sh.y+j)===5)),murl:!!NPC.find(n=>n.n==='Murl'&&n.store==='boat')&&!NPC.some(n=>n.n==='Captain Rue'),solveig:names.includes('Solveig'),unique:new Set(names.filter(n=>!/fan|Warden|Guard/.test(n))).size===names.filter(n=>!/fan|Warden|Guard/.test(n)).length}})()")
+    assert all(ap.values()), ap
+    ev("S.gold=1000;S.bag.healing_potion=0;P.x=P.rx=91;P.y=P.ry=218;P.f='u';act();document.querySelectorAll('#menu button,#menu .opt').forEach(()=>{});openTrader('apothecary','buy')")
+    assert ev("/Healing potion/.test($('items').innerText)&&/Poison vial/.test($('items').innerText)&&/Swiftness/.test($('items').innerText)"), "apothecary stock"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>/^Healing potion/.test(r.innerText)).querySelector('button').click()")
+    assert ev("[S.gold,S.bag.healing_potion]") == [940, 1], "buying a healing potion costs 60"
+    ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').innerText)"), "she buys potions back"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

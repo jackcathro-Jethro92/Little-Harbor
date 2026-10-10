@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 93 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 94 placeholder.**
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.
@@ -40,10 +40,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Rowdy fan (Gladiators' Arena (Mountain Town))
 - *placeholder:* Blood and glory!
 
-### Astrid (Mountain Town)
-- *placeholder:* I weave wool from the mountain goats.
-- *placeholder:* There is gold in these hills, they say.
-
 ### Bergit (Mountain Town)
 - *placeholder:* The mountain air keeps you young.
 - *placeholder:* Have you seen the guild fighters train? Loud lot.
@@ -78,6 +74,10 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Sigrun (Mountain Town)
 - *placeholder:* My husband fights in the arena. I faint every time.
 - *placeholder:* Warm soup if you are cold, traveler.
+
+### Solveig (Mountain Town)
+- *placeholder:* I weave wool from the mountain goats.
+- *placeholder:* There is gold in these hills, they say.
 
 ### Tormund (Mountain Town)
 - *placeholder:* Winters are long up here.
@@ -193,6 +193,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* I would like a sword someday. Just to hang on the wall.
 - *placeholder:* Bring Garrick some iron. He will be grateful.
 
+### Astrid (Walled Settlement)
+- *placeholder:* Potions to heal, poisons to harm. Mind which is which.
+
 ### Barber Fenwick (Walled Settlement)
 - *placeholder:* A trim, a shave, a new you.
 
@@ -292,4 +295,3 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* (`js/ui/look.js`): Fenwick: Lovely. Very dashing.
 - *original* (`js/ui/shops.js`): Odo: Here you go.
 - *original* (`js/ui/shops.js`): Odo: Sold 
-- *original* (`js/ui/shops.js`): Rue: Now sailing the 

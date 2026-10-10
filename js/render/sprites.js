@@ -60,5 +60,5 @@ const vw=f=>({u:'b',d:'f',l:'l',r:'r'})[f];
 const HSTYLES=['short','long','spiky','bun','ponytail','bald'];
 const lo=l=>({style:l.hstyle||(l.id?HSTYLES[l.id.charCodeAt(l.id.length-1)%5]:undefined),jacket:l.jon!==false,pack:l.pack!==false,hat:l.hat===undefined?'cap':l.hat,
   colors:{skin:OPT.skin[l.skin],hair:OPT.hair[l.hair],shirt:OPT.shirt[l.shirt],jacket:OPT.jacket[l.jk===undefined?1:l.jk],hat:OPT.hat[l.hc||0]}});
-const NL={Odo:{hat:'straw',pack:false,jk:2},Mara:{hat:'none',pack:false,jon:false},Pip:{hat:'cap',jon:false,hc:1},'Old Tess':{hat:'straw',pack:false,jk:3,hc:4},Bram:{hat:'cap',pack:false,jk:4,hc:2},'Captain Rue':{hat:'cap',pack:false,jk:5,hc:0}};
+const NL={Odo:{hat:'straw',pack:false,jk:2},Mara:{hat:'none',pack:false,jon:false},Pip:{hat:'cap',jon:false,hc:1},'Old Tess':{hat:'straw',pack:false,jk:3,hc:4},Bram:{hat:'cap',pack:false,jk:4,hc:2},Murl:{hat:'cap',pack:false,jk:5,hc:0}};
 const R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x|0,y|0,w,h)};
