@@ -76,7 +76,7 @@ A save field `S.flags` holds simple yes/no story switches (`flag()`, `setFlag()`
 ### Before the roadmap officially starts: finish the temples (decided 10 October)
 
 Do these first, one pull request each, then begin the roadmap at N1:
-1. **Fire temple fixes.** Done so far: the great gate's black doorway is now a **real door** (face it and press Use; a short gatehouse room opens, with a door at the far end leading out to the courtyard). More Fire issues to fix as Jack finds them.
+1. **Fire temple fixes.** Done so far: the great gate's black doorway is now a **real door** (face it and press Use; a short gatehouse room opens, and its far door leads straight into the fire hall; the hall's door leads back to the gatehouse). More Fire issues to fix as Jack finds them.
 2. **The Temple Tower's island** (a small island in the south, around (201,196)), then **the Temple Tower** (art in `art/temples/temple_tower`: gravel approach, wooden gate, courtyard, five-storey pagoda, shrine room, hidden chamber below). No story items.
 3. **The damaged Sky temple** (art already in `art/temples/sky_stonehenge_temple`: toppled stones, fallen lintels, scorch marks, a split temple stone and stairs underneath), built as a version that a story switch can turn on, as step 2.6 will need.
 
