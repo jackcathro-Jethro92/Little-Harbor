@@ -33,5 +33,5 @@ const SKY_STAIRS=[[222,151],[242,145],[222,139],[242,133],[236,127]]; // centre 
  const routeNear=(x,y,r)=>pts.some(([a,b])=>Math.abs(a-x)<=r&&Math.abs(b-y)<=r);
  const hillNear=(x,y,r)=>{for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++)if(lvAt(x+i,y+j)>0)return true;return false};
  LV.forEach((lv,i)=>{if(M[i]!==1)return;const x=i%MW,y=(i/MW)|0,n=hs(x*11,y*13)%100,r=rr(x,y);
-   if(lv===0&&r<.9&&!hillNear(x,y,2)&&!routeNear(x,y,4)&&n<24)M[i]=4;else if(n<3)M[i]=19;else if(n<5)M[i]=[26,27,25][n%3]});
+   if(lv===0&&r<.9&&!hillNear(x,y,2)&&!routeNear(x,y,4)&&n<24)M[i]=4;else if(n<3)M[i]=19;else if(n<5)M[i]=[26,25][n%2]});
  Object.keys(S.cut).forEach(i=>{const x=i%MW,y=(i/MW)|0;if(x>=X0&&x<=X1&&y>=Y0&&y<=Y1)delete S.cut[i]})}   // old cut-tree records must not put trees back on the new ground

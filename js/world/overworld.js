@@ -26,9 +26,9 @@ for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;i
 for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1&&M[i]!==2)continue;
   }   // (ore outcrops are no longer scattered about: js/world/ores.js places them in the mountains)
 {const hp=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
-  if(nearT(x,y,1,v=>v===4)){if(n<16)t=[28,28,29,30][hs(x,y*5)%4];else if(n<26)t=25}
+  if(nearT(x,y,1,v=>v===4)){if(n>=16&&n<26)t=25}   // (mushrooms and forest sprigs now grow only in the Darkwood)
   else if(nearT(x,y,1,v=>[15,16,17,32,35].includes(v))){if(n<40)t=24}
-  else if(n<5)t=27;else if(n<9)t=26;
+  else if(n>=5&&n<9)t=26;
   if(t)hp.push([i,t])}hp.forEach(([i,t])=>M[i]=t)}
 // landmarks
 const NB0=BL.length,clr=(x0,y0,x1,y1)=>rect(x0,y0,x1,y1,(x,y)=>{const t=at(x,y);if(t&&t!==35&&t!==36&&t!==32)setT(x,y,1)});

@@ -43,10 +43,9 @@ for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(M[i]===1&&hs(x*11,y
 // ---------- herbs and mushrooms ----------
 {const near=(x,y,r,f)=>{for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++)if(f(at(x+i,y+j)))return true;return false},put2=[];
  for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(M[y*MW+x]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
-   if(near(x,y,1,v=>v===4)){if(n<16)t=[28,28,29,30][hs(x,y*5)%4];else if(n<26)t=25}
+   if(near(x,y,1,v=>v===4)){if(n>=16&&n<26)t=25}
    else if(near(x,y,1,v=>[9,13,15,16,17].includes(v))){if(n<40)t=24}
    else if(near(x,y,2,v=>v===5||v===8||v===10)){if(n<9)t=26}
-   else if(n<10)t=27;
    if(t)put2.push([y*MW+x,t])}
  put2.forEach(([i,t])=>M[i]=t)}
 // ---------- residents (20) ----------
