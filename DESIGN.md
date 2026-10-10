@@ -219,6 +219,7 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 | `js/systems/inventory.js` | Bag helpers and the `TEST_GRANTS` / `TEST_KITS` switches |
 | `js/systems/stats.js` | Stamina costs, levels, XP, `spend()` |
 | `js/ui/hud.js` | Message line, toast, HP/STA bars |
+| `js/render/people.js` | Graphics step 1.4: people (the existing `CharacterSprite` shaded once and cached in `PCACHE`, with a soft shadow under the feet), the three boats (bow toward the way you sail, a small wake when moving), farm animals and pets, chickens and the spirit. |
 | `js/render/houses.js` | Graphics step 1.3: houses and shops (stone foundation, timber walls, plaster band, door and step, shoji windows with flower boxes, thatch, slate or red roofs, signs, chimney smoke), one cached picture per building (`SPRC`, keys starting `h`); the guild and arena halls, temples and placeholder buildings keep their own drawing in `buildings.js` and `temples.js`. |
 | `js/render/plants.js` | Graphics step 1.2: trees (three woods, pink blossom, apple), bushes, herbs, mushrooms, flax, tall grass and picked patches, drawn once into small pictures (`SPRC`) and copied each frame (trees about twice as fast as before). |
 | `js/render/ground.js` | Graphics step 1.1: grass, sand, dirt path, sea floor and pier drawn once into small offscreen pictures (`GCACHE`) and copied each frame; only sparkles and foam move. `groundDirty()` empties the cache (call it when land or water tiles change while playing). |

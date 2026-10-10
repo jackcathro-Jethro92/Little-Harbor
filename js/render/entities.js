@@ -1,11 +1,6 @@
 // ---------- chickens, the spirit, placed stations ----------
-function chick(c,cx,cy,t){const x=c.x*T-cx+3,y=c.y*T-cy+6+((t/260+c.x)%6<.6?1:0),O='#3a2713',q=(a,b,w,h,col)=>R(c.f?x+10-a-w:x+a,y+b,w,h,col);
-  q(0,8,9,2,'#00000030');q(0,2,8,6,O);q(1,3,6,4,'#f6f6f0');q(0,2,2,3,'#d8d8cf');q(5,0,5,5,O);q(6,1,3,3,'#f6f6f0');q(7,0,1,1,'#d94b3a');q(9,2,2,1,'#e0a030');q(8,2,1,1,O);q(3,8,1,1,'#e0a030');q(5,8,1,1,'#e0a030')}
-function ghost(cx,cy,t){
-  const x=G.x*T-cx,y=G.y*T-cy-2+Math.round(Math.sin(t/300)*2),w=t-G.hitAt<250&&((t/60|0)%2),B2=w?'#ffffff':(G.pois>t)?'rgba(180,238,160,.95)':'rgba(225,238,255,.92)',O='rgba(55,65,110,.95)';
-  R(x+3,y+16,10,2,'rgba(0,0,0,.2)');R(x+4,y,8,2,O);R(x+2,y+1,12,13,O);R(x+3,y+2,10,12,B2);R(x+5,y+1,6,1,B2);
-  R(x+3,y+12,3,3,B2);R(x+10,y+12,3,3,B2);R(x+6,y+13,4,2,O);R(x+5,y+5,2,3,'#1a1a2a');R(x+9,y+5,2,3,'#1a1a2a');R(x+7,y+10,2,2,'#1a1a2a');
-  if(G.hp<G.max){R(x+1,y-5,14,4,'#383838');R(x+2,y-4,12*G.hp/G.max,2,'#58d058')}}
+function chick(c,cx,cy,t){chickArt(c,cx,cy,t)}   // the art is in js/render/people.js
+function ghost(cx,cy,t){ghostArt(cx,cy,t)}
 function obj(p,cx,cy,t){const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,O='#2e1f10';R(x+1,y+13,14,3,'#00000030');
   if(p.id==='camp_kit'){R(x+3,y+1,2,2,O);R(x+1,y+3,6,2,O);R(x,y+5,8,3,O);R(x+3,y+2,1,1,'#e8d09a');R(x+2,y+4,4,1,'#d8b878');R(x+1,y+6,6,2,'#d8b878');R(x+3,y+6,2,2,'#3d2a14');
     R(x+7,y+10,8,5,'#6e7068');R(x+8,y+11,6,3,O);R(x+8,y+12,6,1,'#7a5230');R(x+10,y+7+(fl%2),2,4,'#f2a22e');R(x+9,y+9,4,3,'#e8632e');R(x+10,y+9,2,2,'#ffe27a')}
@@ -15,17 +10,9 @@ function obj(p,cx,cy,t){const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,O='#2e1f10'
   else if(p.id==='standard_bench'){R(x+1,y+5,14,5,O);R(x+2,y+6,12,3,'#a8743f');R(x+2,y+6,12,1,'#c9965a');R(x+2,y+10,2,5,'#6b4423');R(x+12,y+10,2,5,'#6b4423');R(x+4,y+3,6,2,'#c9d2da');R(x+10,y+4,4,1,'#d8b878')}
   else{R(x+1,y+4,14,11,O);R(x+2,y+5,12,9,'#8d8f87');R(x+2,y+5,12,2,'#a9aaa3');R(x+4,y+8,8,5,O);R(x+5,y+10,6,3,fl?'#e8632e':'#f2a22e');R(x+11,y,3,5,'#6e7068')}}
 // ---------- farm animals and pets (sprites face right; a.f=1 mirrors them) ----------
-function critter(a,cx,cy,t){const x=a.x*T-cx,y=a.y*T-cy,O='#2a1b0e',W=16,bob=((t/300+a.x*3)%7<.5)?1:0,q=(p,b,w,h,c)=>R(a.f?x+W-p-w:x+p,y+b+bob,w,h,c);
-  R(x+1,y+13,14,3,'#00000030');
-  if(a.k==='cow'){q(2,10,2,4,O);q(5,10,2,4,O);q(9,10,2,4,O);q(12,10,2,4,O);q(0,4,1,5,O);q(1,3,12,8,O);q(2,4,10,6,'#f4f4ee');q(3,4,3,3,'#3a3a3a');q(8,6,3,3,'#3a3a3a');
-    q(11,2,5,7,O);q(12,3,3,5,'#f4f4ee');q(13,7,3,2,'#e8a8a0');q(11,1,1,2,'#e8d8a0');q(14,5,1,1,O)}
-  else if(a.k==='pig'){q(3,10,2,3,O);q(9,10,2,3,O);q(1,5,1,2,O);q(2,4,10,7,O);q(3,5,8,5,'#f0a0a8');q(11,4,5,7,O);q(12,5,3,5,'#f0a0a8');q(14,7,2,3,'#e07a86');q(11,2,3,3,'#e07a86');q(13,5,1,1,O)}
-  else if(a.k==='dummy'){R(x+1,y+13,14,3,'#00000030');q(7,5,2,10,O);q(3,3,10,3,O);q(4,4,8,1,'#d8b878');q(5,6,6,5,O);q(6,6,4,4,'#d8b878');q(6,0,4,4,O);q(7,1,2,2,'#d8b878');q(5,13,6,2,O)}
-  else if(a.k==='sheep'){q(4,10,1,4,O);q(10,10,1,4,O);q(1,3,12,8,O);q(2,4,10,6,'#f2f2ec');q(4,2,6,2,'#f2f2ec');q(12,5,4,6,O);q(13,6,2,4,'#4a4a4a');q(14,7,1,1,'#fff')}
-  else if(a.k==='dog'){const c=a.c;q(3,9,2,4,O);q(8,9,2,4,O);q(2,4,9,6,O);q(3,5,7,4,c);q(9,2,5,6,O);q(10,3,3,4,c);q(9,2,2,3,'#4a2e18');q(13,4,1,1,O);q(0,3+(((t/180)|0)%2),3,1,O);q(11,6,3,2,'#e8d8c0')}
-  else{const c=a.c,tw=((t/260)|0)%2;q(3,10,2,3,O);q(7,10,2,3,O);q(2,6,8,5,O);q(3,7,6,3,c);q(9,3,5,6,O);q(10,4,3,4,c);q(9,2,1,2,O);q(13,2,1,2,O);q(11,5,1,1,'#3a8a3a');q(0,3+tw,2,1,O);q(0,4,1,6,O);q(1,5,1,3,c)}}
+function critter(a,cx,cy,t){critterArt(a,cx,cy,t)}
 // an arena opponent: drawn like a townsperson, with a health bar (AR is in js/systems/arena.js)
-function arenaFoe(cx,cy,t){const x=AR.x*T-cx,y=AR.y*T-cy,w=t-AR.hitAt<250&&((t/60|0)%2);R(x+2,y+13,12,3,'#00000033');
+function arenaFoe(cx,cy,t){const x=AR.x*T-cx,y=AR.y*T-cy,w=t-AR.hitAt<250&&((t/60|0)%2);
   CharacterSprite.draw(g,x,y-3,{...lo(AR.look),view:vw(AR.f),frame:AR.on&&((t/200|0)%2)?1:0});
   if(w)R(x,y-3,16,18,'rgba(255,255,255,.55)');
   R(x+1,y-9,14,4,'#383838');R(x+2,y-8,Math.max(0,12*AR.hp/AR.max),2,AR.pois>t?'#9ae06a':'#d84a3a')}
