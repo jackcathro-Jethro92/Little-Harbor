@@ -45,6 +45,7 @@ function openTrader(key,mode){
   row(buy?'Buying':'Selling',buy?sh.buyTag:sh.sellTag,buy?'Sell':'Buy',false,()=>openTrader(key,buy?'sell':'buy'));
   let n=0;
   sh.list.forEach(([title,list])=>{
+    if(buy&&(sh.noBuy||[]).includes(title))return;
     if(buy){row(title);list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
       row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')})})}
     else if(sh.sell.includes(title))list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price/2);

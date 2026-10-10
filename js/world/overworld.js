@@ -24,7 +24,7 @@ for(let k=0;k<17;k++){const cx=74+hs(k,1)%33,cy=61+hs(k,2)%50,r=1+hs(k,3)%2;rect
 // trees, flax, ore and herbs on the new land
 for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*3,y*5)%100;M[i]=n<13?4:n<18?19:1}
 for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1&&M[i]!==2)continue;
-  if((hs(x*5,y*3)%100<20&&nearT(x,y,2,v=>v===35))||(M[i]===1&&hs(x*5,y*3)%100<2))M[i]=15+hs(x,y*7)%3}
+  }   // (ore outcrops are no longer scattered about: js/world/ores.js places them in the mountains)
 {const hp=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
   if(nearT(x,y,1,v=>v===4)){if(n<16)t=[28,28,29,30][hs(x,y*5)%4];else if(n<26)t=25}
   else if(nearT(x,y,1,v=>[15,16,17,32,35].includes(v))){if(n<40)t=24}

@@ -10,6 +10,8 @@ const ITEMS={
  hardwood:{n:'Hardwood log',kind:'material',desc:'Dense and tough. Hard to chop, built to last.'},
  copper_ore:{n:'Copper ore',kind:'material',desc:'Reddish ore. Smelts with bronze and tin.'},
  tin_ore:{n:'Tin ore',kind:'material',desc:'Soft silvery ore. Smelts with bronze and copper.'},
+ gold_ore:{n:'Gold ore',kind:'material',desc:'Heavy and rare. Gleams in the rock.'},
+ silver_ore:{n:'Silver ore',kind:'material',desc:'Pale and rare. Found high in the mountains.'},
  bronze_ore:{n:'Bronze ore',kind:'material',desc:'Golden-brown ore, hard to mine.'},
  iron_bar:{n:'Iron bar',kind:'material',desc:'Forged from bronze, copper and tin at a forge.'},
  fiber:{n:'Flax fiber',kind:'material',desc:'Stringy fiber cut from flax. Twist it into rope.'},
