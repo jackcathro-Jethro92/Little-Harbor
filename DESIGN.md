@@ -233,9 +233,12 @@ Only one enemy exists: the **spirit** on the graveyard isle southwest of the vil
 | `js/systems/player.js` | Player and boat position, movement |
 | `js/render/sprites.js`, `tiles.js`, `buildings.js`, `temples.js`, `entities.js`, `draw.js`, `icons.js` | Character sprites, tiles and trees, buildings, chickens/spirit/stations, the frame (`draw()`), bag icons |
 | `js/systems/gathering.js`, `home.js`, `stations.js`, `consumables.js`, `fishing.js`, `combat.js`, `darkwood.js`, `actions.js` | Game systems; `actions.js` has the Use button (`act()`) and sleeping |
+| `js/ui/dialogue.js` | Dialogue box (step 2.2): `DLG` table of conversations (lines with `who`, `t`, optional `ch` choices, `set` flag, `go`), `runDialogue(id,end)`, `dlgSay(who,text)` for one-off lines, `portraitFor`/`drawPortrait` (16 portraits cut from the shaded people sprites; `PORTRAITS` list). Space/Enter/Use advances, Up/Down picks a choice; the player cannot walk while it is open. NPC chat uses it. |
 | `js/ui/menu.js`, `crafting.js`, `shops.js`, `map.js`, `look.js` (also the tailor and barber), `bag.js`, `skills.js` | Screens (`map.js` also has `TEST_SHOW_FULL_MAP` and the exploration fog) |
 | `js/input.js` | D-pad and keyboard |
 | `js/main.js` | Starts the draw loop and timers, restores the explored map, shows the first screen |
+
+Shop sub-menus (N5): `shopTabs(el,key)` in `js/ui/shops.js` shows one tab per item type (`SHOPCAT`); each stock row carries a `cat`/`tag`, and the chosen tab is remembered per shop.
 
 ## Versions and caching
 Every push to `main` that passes the tests is published to GitHub Pages. The publish step stamps the commit's short id on every script and style link (`?v=abc1234`) and on `BUILD`, so phones and browsers load the new files and not old saved copies. The welcome message on loading a save ends with `Version abc1234.` (it says `Version dev.` when the game is run from a downloaded copy), so you can tell which version you are playing.

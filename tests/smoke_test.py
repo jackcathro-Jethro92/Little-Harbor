@@ -61,7 +61,7 @@ def check(b, url):
     ev("S.eq.weapon='sword';P.x=P.rx=36;P.y=P.ry=74;P.f='u';act();arenaStart(0);S.sta=100;AR.cd=99;for(let i=0;i<10&&AR.on;i++){P.x=P.rx=AR.x;P.y=P.ry=AR.y+1;P.f='u';act()}")
     assert ev("!AR.on&&S.arena===1"), "first arena bout should be winnable"
     ev("P.x=P.rx=B.x;P.y=P.ry=B.y;S.arena=0;S.eq.weapon=null;draw()")
-    ev("openTrader('jeweller','buy')"); assert ev("/Ring of Vigor/.test($('items').innerText)"), "jeweller shop"
+    ev("openTrader('jeweller','buy')"); assert ev("/Ring of Vigor/.test($('items').textContent)"), "jeweller shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # the stone barrier: no walkable shore north of the forest can be reached from the sea or the south coast, but the town, temple and Darkwood gate stay connected
     seal = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],sea=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&at(x,y)===0,flood=st=>{const s=new Set(st.map(([x,y])=>y*MW+x)),q=st.slice();for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=MH||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}return s},mtn=flood([[26,77]]),seeds=[];for(let y=0;y<MH;y++)for(let x=0;x<=110;x++)if(ok.has(at(x,y))&&!mtn.has(y*MW+x)&&D4.some(([a,b])=>sea(x+a,y+b)))seeds.push([x,y]);const out=flood(seeds);let landing=0,leak=0;mtn.forEach(i=>{const x=i%MW,y=(i/MW)|0;if(D4.some(([a,b])=>sea(x+a,y+b)))landing++;if(out.has(i))leak++});return{landing,leak,temple:mtn.has(29*MW+9),gate:mtn.has(109*MW+31)}})()")
@@ -151,18 +151,18 @@ def check(b, url):
     assert all(cot.values()), cot
     # NAMES.md and DIALOGUE.md must match the game: if a character or a line was added (or JACKS_LINES.txt changed) without running  python3 tools/make_lists.py  this fails
     sys.path.insert(0, os.path.join(ROOT, "tools")); import make_lists
-    pgl, _ = load(b, url, SAVE); lbase = pgl.evaluate(make_lists.JS); pgl.evaluate("applyPirates(true)"); lpir = pgl.evaluate(make_lists.JS); pgl.close()
-    lnames, ldlg = make_lists.build(lbase, lpir)
+    pgl, _ = load(b, url, SAVE); lbase = pgl.evaluate(make_lists.JS); ldlg_tab = pgl.evaluate(make_lists.JS_DLG); pgl.evaluate("applyPirates(true)"); lpir = pgl.evaluate(make_lists.JS); pgl.close()
+    lnames, ldlg = make_lists.build(lbase, lpir, ldlg_tab)
     assert lnames == open(os.path.join(ROOT, "NAMES.md"), encoding="utf-8").read(), "NAMES.md is out of date: run  python3 tools/make_lists.py  and commit the result"
     assert ldlg == open(os.path.join(ROOT, "DIALOGUE.md"), encoding="utf-8").read(), "DIALOGUE.md is out of date: run  python3 tools/make_lists.py  and commit the result"
     # Astrid the apothecary (Walled Settlement) sells potions and poisons; the boatyard owner is Murl; Mountain Town's old Astrid is now Solveig; no two people share a name
     ap = ev("(()=>{const a=NPC.find(n=>n.n==='Astrid'),sh=BL.find(b=>b.sign==='apothecary'),names=NPC.map(n=>n.n);return {one:NPC.filter(n=>n.n==='Astrid').length===1,inTown:!!a&&a.x>=84&&a.x<=115&&a.y>=200&&a.y<=234,shop:!!sh&&sh.x+1===a.x&&sh.y+2===a.y,door:WK.includes(at(a.x,a.y+1)),walls:[0,1].every(j=>[0,1,2].every(i=>at(sh.x+i,sh.y+j)===5)),murl:!!NPC.find(n=>n.n==='Murl'&&n.store==='boat')&&!NPC.some(n=>n.n==='Captain Rue'),solveig:names.includes('Solveig'),unique:new Set(names.filter(n=>!/fan|Warden|Guard/.test(n))).size===names.filter(n=>!/fan|Warden|Guard/.test(n)).length}})()")
     assert all(ap.values()), ap
     ev("S.gold=1000;S.bag.healing_potion=0;P.x=P.rx=91;P.y=P.ry=218;P.f='u';act();document.querySelectorAll('#menu button,#menu .opt').forEach(()=>{});openTrader('apothecary','buy')")
-    assert ev("/Healing potion/.test($('items').innerText)&&/Poison vial/.test($('items').innerText)&&/Swiftness/.test($('items').innerText)"), "apothecary stock"
-    ev("[...document.querySelectorAll('#items .it')].find(r=>/^Healing potion/.test(r.innerText)).querySelector('button').click()")
+    assert ev("/Healing potion/.test($('items').textContent)&&/Poison vial/.test($('items').textContent)&&/Swiftness/.test($('items').textContent)"), "apothecary stock"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>/^Healing potion/.test(r.textContent)).querySelector('button').click()")
     assert ev("[S.gold,S.bag.healing_potion]") == [940, 1], "buying a healing potion costs 60"
-    ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').innerText)"), "she buys potions back"
+    ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').textContent)"), "she buys potions back"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # ore: only in the mountain country (x<100, y<100), few of them, gold and silver rare, every outcrop reachable on foot from the Mountain Town's north gate; gold is mined, regrows slowly and is sold (not bought) at Garrick's
     ore = ev("(()=>{const c={},out=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(ORE[t]){c[t]=(c[t]||0)+1;if(x>=100||y>=100)out.push([x,y])}}"
@@ -175,8 +175,8 @@ def check(b, url):
     ev(f"S.eq.pickaxe='iron_pickaxe';S.bag.iron_pickaxe=1;S.sta=100;sail=false;P.x=P.rx={g[0]};P.y=P.ry={g[1]+1};P.f='u';S.bag.gold_ore=0;for(let i=0;i<8&&at({g[0]},{g[1]})===123;i++){{S.sta=100;act()}}")
     assert ev(f"[S.bag.gold_ore>=1,at({g[0]},{g[1]})===18,S.cut[{g[1]}*MW+{g[0]}].m]") == [True, True, 123], "gold can be mined"
     assert ev("REGROW(123)>REGROW(124)&&REGROW(124)>REGROW(15)"), "rarer ore regrows slower"
-    ev("openTrader('smith','buy')"); assert ev("!/Gold ore/.test($('items').innerText)"), "Garrick must not sell gold"
-    ev("S.bag.gold_ore=2;openTrader('smith','sell')"); assert ev("/Gold ore x2/.test($('items').innerText)"), "Garrick buys gold"
+    ev("openTrader('smith','buy')"); assert ev("!/Gold ore/.test($('items').textContent)"), "Garrick must not sell gold"
+    ev("S.bag.gold_ore=2;openTrader('smith','sell')"); assert ev("/Gold ore x2/.test($('items').textContent)"), "Garrick buys gold"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     pgo, erro = load(b, url, dict(SAVE, cut={str(104 * 320 + 142): {"m": 17, "d": 1}}))   # an old ore record at a spot that no longer has ore (it was on the village island)
     assert pgo.evaluate("!S.cut[104*MW+142]&&at(142,104)!==18"), "old ore records elsewhere are dropped"
@@ -293,13 +293,38 @@ def check(b, url):
     assert pm.evaluate("!S.seen&&!!localStorage.getItem('little-harbor-v1-backup-new-game')"), "new game starts fresh and keeps the old game as a backup"
     assert not perr, perr
     pm.close()
+    # N5 shop sub-menus: every shop splits into categories with tabs, one category shows at a time and the choice is remembered
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=9999")
+    tabs = lambda: ev("[...document.querySelectorAll('#items .tabs button')].map(b=>b.textContent)")
+    shown = lambda: ev("[...document.querySelectorAll('#items .it[data-cat]')].filter(r=>r.style.display!=='none').map(r=>r.dataset.cat).filter((v,i,a)=>a.indexOf(v)===i)")
+    ev("openStore('rod')"); assert tabs() == ["Rods", "Weapons", "Tools", "Home"] and shown() == ["Rods"], (tabs(), shown())
+    ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
+    ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
+    ev("openStore('boat')"); assert tabs() == ["Boats", "Yard"], tabs()
+    ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Objects"], tabs()
+    ev("openTrader('jeweller','buy')"); assert tabs() == ["Rings", "Amulets"], tabs()
+    ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons"], tabs()
+    ev("S.bag.sardine=3;S.bag.carrot=2;openGeneral('sell')"); assert tabs()[0] == "Fish" and "Ingredients" in tabs(), tabs()
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    # the dialogue box (2.2): a table of nodes by id with choices that set flags, a portrait for the speakers who have one, advancing by tap, Use or Space, villagers' chat in the box with their words unchanged
+    ev("DLG.t_test={start:'a',nodes:{a:{who:'Murl',text:'First line.',next:'b'},b:{who:'You',text:'Pick one.',choices:[{t:'Yes',set:'t_yes',go:'c'},{t:'No'}]},c:{who:'Murl',text:'Done.'}}};window.__end=0;runDialogue('t_test',()=>{window.__end=1})")
+    pg.wait_for_timeout(700)
+    assert ev("dlgActive()&&$('dlg-who').textContent==='Murl'&&$('dlg-txt').textContent==='First line.'&&$('dlg-pt').style.display==='block'&&$('dlg').classList.contains('has-pt')"), "box shows speaker, text and Murl's portrait"
+    kx = ev("P.x"); pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(150); pg.keyboard.up("ArrowRight"); assert ev("P.x") == kx, "no walking while the box is open"
+    pg.keyboard.press("Space"); pg.wait_for_timeout(700); assert ev("$('dlg-txt').textContent==='Pick one.'&&document.querySelectorAll('#dlg-ch button').length===2"), "Space goes on to the choice"
+    ev("document.querySelectorAll('#dlg-ch button')[0].click()"); pg.wait_for_timeout(500); assert ev("flag('t_yes')&&$('dlg-txt').textContent==='Done.'"), "a choice sets its flag and goes on"
+    ev("act()"); pg.wait_for_timeout(100); ev("act()"); assert ev("!dlgActive()&&window.__end===1"), "the end callback runs when it finishes"
+    ev("dlgSay('Mara','Hello.')"); pg.wait_for_timeout(500); assert ev("$('dlg-pt').style.display==='none'&&dlgActive()"), "no portrait for a character without one"; ev("dlgAdvance();dlgAdvance()")
+    ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');n.i=0;P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(700)
+    assert ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');return dlgActive()&&$('dlg-who').textContent==='Gate Guard Bors'&&n.say.includes($('dlg-txt').textContent)&&$('dlg-pt').style.display==='block'})()") , "villager chat uses the box"
+    ev("dlgAdvance();dlgAdvance()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
     ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
     ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
-    ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').innerText)"), "smith shop"
+    ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').textContent)"), "smith shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     assert not errs, errs
     pg.close()

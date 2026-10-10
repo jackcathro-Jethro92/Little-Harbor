@@ -44,7 +44,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.1b Title menu and save files | **Done** (10 Oct): title screen, ☰ menu, save to a file, save code, three slots, safe loading, new game with backup (see DESIGN.md controls) |
 | 2.1 Story state | **Done** (10 Oct): `S.flags` for the switches and `S.story` `{q, step, seen}` for progress, saved and kept across sleep and reload |
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
-| 2.2 to 2.5, 2.7 to 2.12 | Not started |
+| 2.2 Dialogue box | **Done** (10 Oct): box at the bottom with a portrait slot, typed text, choices, flags and an end step (`DLG` table, `runDialogue`, `dlgSay`); portraits for 16 characters (`art/graphics/dialogue_and_shops.png`) |
+| 2.3 to 2.5, 2.7 to 2.12 | Not started |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
@@ -58,10 +59,11 @@ The world is much further along than when this roadmap was first written. Everyt
 | N2 Sea square | **Done.** Every hidden room (home, Darkwood, guild, arena, all temple halls, the Tower shrine room) now sits in rows 246-299, below the sea you can reach (the map grew from 240 to 300 rows; boats stop at row 239). No outlined square at sea. Old saves are migrated (`S.wv` 3). |
 | N3 Cottage | **Done** (10 Oct): moved to (34,158); the road runs unbroken. |
 | N4 Stairs | On hold until the shading revamp |
-| N5 Shop sub-menus | Not started (also covers Garrick and Lucie) |
+| N5 Shop sub-menus | **Done** (10 Oct): tabs in Bram, Murl, Garrick, Lucie, Astrid and Odo's sell screen |
 | N6 Names list | **Done** (10 Oct): see `NAMES.md` for Jack to review. Nobody has been renamed. |
 | N7 Dialogue human-written | **Marked** (10 Oct): `DIALOGUE.md` lists every line as original or placeholder. Nothing was changed. |
-| N8, N9, N10, N12, N13 | Not started |
+| N9 Portraits | **Partly** (10 Oct): the portrait slot and 16 portraits exist; more are added with the story |
+| N8, N10, N12, N13 | Not started |
 | N11 Ships | **Looks done, and walkable** (10 Oct): deck, quarters with a bed and storage room with crates on the sloop, schooner and brig (see DESIGN.md "Aboard the ships"). Looks (10 Oct): rowboat, sloop, schooner and brig drawn from the reference chart (`art/graphics/ships_new.png`), the trawler became the schooner (saves migrated) and the brig is new (Murl's boatyard, 600,000; shipwright recipe). The crew rule (who can sail which ship) is not built yet: step 6.1 and 6.2. |
 
 ### Story switches (what exists today)

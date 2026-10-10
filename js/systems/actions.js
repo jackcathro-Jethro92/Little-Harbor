@@ -1,5 +1,6 @@
 // ---------- actions: the Use button and sleeping ----------
 function act(){
+  if(dlgActive())return dlgAdvance();
   if(placing)return placeItem(placing);
   if(fs===1)return say('Too early. Wait for the bite.');
   if(fs===2)return hook();
@@ -23,7 +24,7 @@ function act(){
     if(n.store==='smith'){menu("Garrick's Forge",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openSmith('buy');else if(o==='Sell')openSmith('sell')});return}
     if(n.store){openStore(n.store);return}
     if(n.shop){menu("Odo's General Store",['Buy food','Sell','Cancel'],o=>{if(o==='Buy food')openGeneral('buy');else if(o==='Sell')openGeneral('sell')});return}
-    n.i=((n.i||0)+1)%n.say.length;n.f={u:'d',d:'u',l:'r',r:'l'}[P.f];say(n.n+': '+n.say[n.i]);return;
+    n.i=((n.i||0)+1)%n.say.length;n.f={u:'d',d:'u',l:'r',r:'l'}[P.f];dlgSay(n.n,n.say[n.i]);return;
   }
   {const an=animalAt(x,y);if(an&&!sail)return ANIMALS[an.k].use?ANIMALS[an.k].use(an):say(ANIMALS[an.k].say)}
   if(!sail){
