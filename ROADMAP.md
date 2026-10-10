@@ -6,21 +6,72 @@ This is the order the game gets built in. It is written for Claude Code and for 
 
 **The big idea.** The world and mechanics come first, and the story's *words* come last. The story's *machinery*, the parts of the game a story needs in order to work, comes early, in Phase 2, so the world is built to fit the story and is never rebuilt around it later. The story is told through a data table: you add a quest by adding rows, not new code.
 
-Read `CLAUDE.md` (rules), `DESIGN.md` (what exists today) and `art/temples/TEMPLES.md` (approved temple art) alongside this file.
+Read `CLAUDE.md` (rules), `DESIGN.md` (what exists today) and `TEMPLES.md` (approved temple art and how each temple was built) alongside this file.
 
 ---
 
-## Where we are now (October 2026)
+## Where we are now (updated 10 October 2026)
 
-Built and working:
-- **World:** a 320 x 240 tile world with fog of war, the village island, the mainland, the Darkwood forest zone and the home interior.
-- **Systems:** sailing, simple fishing, 10 skills, 79 items, 35 recipes, crafting stations, home and garden, one enemy (the spirit), the FireRed-style bag, and three shops.
+The world is much further along than when this roadmap was first written. Everything below is merged and playable (pull requests up to #18).
 
-Designed but not in the game yet:
-- **Five temples:** layouts are in `art/temples/`.
+**Built and working:**
+- **World:** a 320 x 240 tile world with fog of war and the sea connected all the way round, including:
+  - the village island and the mainland;
+  - the **Walled Settlement**: 15 houses, 18 people, the blacksmith (Garrick), the tailor (Wynn) and the barber (Fenwick), three farms with livestock, and two dogs and a cat;
+  - the **Mountain Town**: 8 houses, the goldsmith (Lucie), the **Fighters Guild** and the **Gladiators' Arena** (both enterable), and a north gate with a path up to the Earth temple;
+  - the **Darkwood** forest zone and the home interior;
+  - a **stone barrier** of jagged rocks along the north-west coast, so the mountain country can only be reached through the Darkwood.
+- **Four of the five temples** (world only, no story): the **Earth temple** (plaza, pyramid, sanctum), the **Sea temple** (terraced crater island, boardwalk, courtyard, hall, vault), the **Sky temple** (zigzag hillside island, lantern-lined path, stone circle; the *intact* version only) and the **Fire temple** (volcano island, lava moat, gate, courtyard, fire hall; a little smaller than the others).
+- **Pirate Island groundwork:** the island starts empty, and a story switch brings ten pirates, six tents and three ships overnight (see "Story switches" below).
+- **Systems:** sailing, simple fishing, 10 skills, 93 items (including enchanted jewellery with buffs), 35 recipes, crafting stations, home and garden, one real-time enemy (the spirit), arena bouts, guild training, hair styles, the FireRed-style bag, and five traders (Bram, Odo, Rue, Garrick, Lucie) plus the tailor and barber screens.
+- **Tests and hosting:** GitHub Pages is live and every pull request runs the smoke tests in Chromium and WebKit. The game is already split into modules under `js/` (see `DESIGN.md`).
+
+**Designed but not in the game yet:**
+- **The Temple Tower** (art in `art/temples/temple_tower`): the last temple, and its island.
 - **The interior designer:** a separate tool at https://claude.ai/artifact/3ABF4QvjFtSdhJYrJc1UEc that exports rooms as JSON. It has 198 props and 19 starter rooms: shops, tavern, inn and so on.
-- **A graphics-upgrade mockup:** `art/graphics/graphics_upgrade_mockup.js`, with before and after pictures.
-- **The ten-quest story outline:** in this file, Phase 4 onwards.
+- **A graphics-upgrade mockup:** `art/graphics/graphics_upgrade_mockup.js`, with before and after pictures. The files are in `little-harbor-handoff.zip` and still need unpacking into the repo before Phase 1.
+- **The ten-quest story outline:** in this file, Phase 4 onwards. **No quest, dialogue system, battle screen or story state exists yet.**
+
+### Progress at a glance
+
+| Step | Status |
+| --- | --- |
+| 0.1 Repository and hosting | **Done** |
+| 0.2 Module split | **Done** (it was done early, not after the playtest) |
+| 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
+| Phase 1 graphics upgrade | Not started |
+| 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
+| 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version and the other variants are not built |
+| 2.2 to 2.5, 2.7 to 2.12 | Not started |
+| Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
+| Phase 4 first playable slice | Not started |
+| Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
+| 6.3 Taverns | Not started (the Walled Settlement and Mountain Town have people and shops but no interiors) |
+
+### Your notes (N1 to N13) at a glance
+
+| Note | Status |
+| --- | --- |
+| N1 Movement | **Not started, and still the most important.** Only the speed of the D-pad and the keyboard was matched (pull request #12). The feel is untouched. |
+| N2 Sea square | Not started, and bigger now: the hidden rooms added since (guild, arena, Earth sanctum, Sea hall and vault, Fire hall) sit in the south-east corner of the sea and need moving off the map too |
+| N3 Cottage | Not started |
+| N4 Stairs | On hold until the shading revamp |
+| N5 Shop sub-menus | Not started (also covers Garrick and Lucie) |
+| N6 Names list | Not started. There are now far more named people to list. |
+| N7 Dialogue | Keep existing lines. See "Open items" below about the lines added since. |
+| N8 to N13 | Not started |
+
+### Story switches (what exists today)
+
+A save field `S.flags` holds simple yes/no story switches (`flag()`, `setFlag()` in `js/systems/flags.js`), plus a table of overnight changes (`ARRIVALS`). The first use is the pirates: a quest sets `pirates_called`, and at the next sleep the game sets `pirates_here` and the camp fills (ten pirates, six tents, three ships). Testing link: add `?flags=pirates_here` (or `pirates_called`, then sleep) to the game's address. When step 2.1 is built, these flags move into `S.story.flags`, with a migration so nothing is lost.
+
+### Open items (things to settle)
+
+1. **Hidden rooms and N2:** the list of hidden rooms that need moving is now the Darkwood, the home interior and the six rooms above. N2's fix should cover all of them at once.
+2. **Dialogue added since the roadmap (N7):** the townsfolk, farmers, guild, arena and pirate lines I wrote are filler, not story. Decision needed: treat them as placeholders for Jack to replace, or keep them.
+3. **Sky temple variants:** only the intact version is built. The destroyed version (art already exists) is needed for Quest 6.
+4. **Pirates and Quest 1:** the pirates move in after the first quest is completed, and the island only gets its name "Pirate Island" then. Quest 9 later clears them out for good. Both fit the existing switch.
+5. **The Temple Tower:** not built. It is not in the draft path, but Quests 4, 5 and 8 need it.
 
 ---
 
