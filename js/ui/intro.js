@@ -199,8 +199,6 @@ const playIntro=(()=>{
     // the title rises up out of the sea; nothing below the horizon line is drawn, so it looks like it comes up from behind it
     if(title&&t>7.6){const r=outE((t-7.6)/3.2),img=title.img,tx=Math.round((W-img.width)/2),top=HZ-Math.round(H*.09)-img.height,ty=Math.round(hz+2+(top-HZ-2)*r);
       g.save();g.beginPath();g.rect(0,0,W,hz);g.clip();g.drawImage(img,tx,ty);drawWeed(tx,ty,t);
-      const s=(t-11.4)*110;if(s>-10&&s<img.width+img.height){g.fillStyle='rgba(255,255,240,.55)';
-        for(let Y=title.y0;Y<=title.y1;Y++)for(let X=title.x0;X<=title.x1;X++){const d=X-title.x0+(Y-title.y0)-s;if(d>=0&&d<5&&title.mask[Y*title.tw+X])g.fillRect(tx+X-title.x0+title.P,ty+Y-title.y0+title.P,1,1)}}
       g.restore()}
     // the sea: rolling wave crests (bigger close up, tiny far away), white caps on the near ones, and twinkling light
     if(hz<H){g.drawImage(sea,0,hz);
