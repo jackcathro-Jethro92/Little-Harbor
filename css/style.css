@@ -122,3 +122,11 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #qs-list h4{margin:12px 0 4px;font-size:15px;letter-spacing:1px}#qs-list h4:first-child{margin-top:0}
 #qs-list .q{padding:8px 0;border-bottom:2px dotted #b98e55}#qs-list .q b{display:block;font-size:17px}#qs-list .q span{display:block;font-size:14px;line-height:1.4;margin-top:3px}
 #qs-list .done b::before{content:'\2713 ';color:#58a63b}
+/* the opening cinematic (js/ui/intro.js) */
+#intro{position:fixed;inset:0;z-index:30;background:#0b1018;cursor:pointer;transition:opacity .6s;touch-action:none}
+#intro.out{opacity:0;pointer-events:none}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+#intro-hint{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 9vh);text-align:center;color:#fff;font-size:17px;letter-spacing:1px;text-shadow:0 2px 0 #1f2d3a;transition:opacity .5s;pointer-events:none}
+#intro-hint.blink{animation:intro-blink 1.2s steps(2) infinite}
+@keyframes intro-blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){#intro-hint.blink{animation:none}}

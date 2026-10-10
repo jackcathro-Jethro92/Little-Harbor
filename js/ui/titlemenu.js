@@ -65,5 +65,5 @@ function enterGame(){if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'
 // the menu button and the Escape key
 $('menubtn').addEventListener('click',()=>{if(document.querySelector('.open'))return;tmOpen('pause')});
 addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(tmEl().classList.contains('open')){if(tmMode==='pause')tmResume();return}if(document.querySelector('.open'))return;tmOpen('pause')});
-// start of the game: show the title menu once per visit (a reload after loading or starting a new game goes straight in)
-function showTitleOrStart(){let started=false;try{started=!!sessionStorage.getItem(STARTED)}catch(e){}if(started)enterGame();else tmOpen('title')}
+// start of the game: the opening cinematic (js/ui/intro.js) and then the title menu, once per visit (a reload after loading or starting a new game goes straight in)
+function showTitleOrStart(){let started=false,seen=false;try{started=!!sessionStorage.getItem(STARTED);seen=!!sessionStorage.getItem(INTRO_SEEN)}catch(e){}if(started)enterGame();else if(seen)tmOpen('title');else playIntro(()=>tmOpen('title'))}
