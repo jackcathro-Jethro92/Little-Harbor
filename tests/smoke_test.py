@@ -196,8 +196,11 @@ def check(b, url):
     gc = ev("(()=>{sail=false;P.x=P.rx=156;P.y=P.ry=113;draw();const a=GCACHE.size;groundDirty();const z=GCACHE.size;draw();const b=GCACHE.size;applyPirates(true);const c=GCACHE.size;draw();applyPirates(false);return {filled:a>100,emptied:z===0,refilled:b>100,pirateClears:c===0}})()")
     assert all(gc.values()), gc
     # graphics 1.2: trees and plants come from the sprite cache (the same picture is reused), shaking a tree still moves it, every herb, mushroom, flax and tall-grass tile draws
-    sp = ev("(()=>{sail=false;P.x=P.rx=36;P.y=P.ry=140;draw();const a=SPRC.size;for(const m of[19,20,24,25,26,27,28,29,30,31,47]){const i=(P.y-1)*MW+P.x,keep=M[i];M[i]=m;draw();M[i]=keep}draw();return {cached:a>=3&&a<=60,plants:SPRC.size>a}})()")
+    sp = ev("(()=>{sail=false;P.x=P.rx=36;P.y=P.ry=140;draw();const a=SPRC.size;for(const m of[19,20,24,25,26,27,28,29,30,31,47]){const i=(P.y-1)*MW+P.x,keep=M[i];M[i]=m;draw();M[i]=keep}draw();return {cached:a>=3&&a<=400,plants:SPRC.size>a}})()")
     assert all(sp.values()), sp
+    # graphics 1.3: every house and shop (all roofs and signs) comes from a cached picture and draws without errors
+    hb = ev("(()=>{sail=false;let n=0;const kinds=new Set();for(const b of BL){if(b.hall||b.tent||b.col||b.tower||b.decor||b.ship||b.mayan||b.knossos||b.skygate||b.firegate||b.firehall||b.towergate||b.pagoda||b.skysmoke||b.w!==3||!b.roof)continue;kinds.add(b.roof+'|'+(b.sign||''));P.x=P.rx=b.x+1;P.y=P.ry=b.y+4;draw();n++}return {n,kinds:kinds.size,cached:[...SPRC.keys()].filter(k=>k[0]==='h').length>=10}})()")
+    assert hb["n"] >= 40 and hb["kinds"] >= 10 and hb["cached"], hb
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
