@@ -12,6 +12,7 @@ BL.push({x:28,y:72,w:5,hall:'guild'});rect(28,72,32,73,(x,y)=>setT(x,y,5));     
 BL.push({x:34,y:72,w:5,hall:'arena'});rect(34,72,38,73,(x,y)=>setT(x,y,5));                                                // Gladiators' Arena
 [[25,65],[27,65],[25,68],[27,68],[27,75],[29,75],[33,75],[35,75]].forEach(([x,y])=>{if([6,48].includes(at(x,y)))setT(x,y,7)}); // lanterns
 // halls you can walk into: face the middle of the hall's lower row from its door stand tile
+const THROUGH=[]; // doors inside a hall that lead somewhere other than back where you came in: {x,y (the door tile), out:[x,y] where you step out}
 const ENTR=[{x:30,y:73,to:'guild',out:[30,74]},{x:36,y:73,to:'arena',out:[36,74]}];
 // ---------- the Fighters Guild hall (zone 3): a wooden floor and a door in the bottom wall ----------
 rect(GZ.x0,GZ.y0,GZ.x1,GZ.y1,(x,y)=>setT(x,y,(x===GZ.x0||x===GZ.x1||y===GZ.y0||y===GZ.y1)?22:21));setT(GZ.dx,GZ.y1,23);

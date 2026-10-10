@@ -65,13 +65,20 @@ The world is much further along than when this roadmap was first written. Everyt
 
 A save field `S.flags` holds simple yes/no story switches (`flag()`, `setFlag()` in `js/systems/flags.js`), plus a table of overnight changes (`ARRIVALS`). The first use is the pirates: a quest sets `pirates_called`, and at the next sleep the game sets `pirates_here` and the camp fills (ten pirates, six tents, three ships). Testing link: add `?flags=pirates_here` (or `pirates_called`, then sleep) to the game's address. When step 2.1 is built, these flags move into `S.story.flags`, with a migration so nothing is lost.
 
-### Open items (things to settle)
+### Decisions on the open items (Jack, 10 October 2026)
 
-1. **Hidden rooms and N2:** the list of hidden rooms that need moving is now the Darkwood, the home interior and the six rooms above. N2's fix should cover all of them at once.
-2. **Dialogue added since the roadmap (N7):** the townsfolk, farmers, guild, arena and pirate lines I wrote are filler, not story. Decision needed: treat them as placeholders for Jack to replace, or keep them.
-3. **Sky temple variants:** only the intact version is built. The destroyed version (art already exists) is needed for Quest 6.
-4. **Pirates and Quest 1:** the pirates move in after the first quest is completed, and the island only gets its name "Pirate Island" then. Quest 9 later clears them out for good. Both fit the existing switch.
-5. **The Temple Tower:** not built. It is not in the draft path, but Quests 4, 5 and 8 need it.
+1. **Hidden rooms and N2:** **move every hidden room off the map** into its own separate space that boats and the map never see (the Darkwood, the home, the guild, the arena, the Earth sanctum, the Sea hall and vault, the Fire gatehouse and fire hall, and every room added later). Doors, gates and old saves must keep working. This is the fix for N2.
+2. **Filler dialogue (N7):** **mark every line I added as a placeholder** (townsfolk, farmers, guild, arena, pirates, the blacksmith, tailor and barber) and list them for Jack. He writes the real lines after the playtests. His original village lines stay word for word.
+3. **Sky temple damaged version:** build it **before the roadmap officially starts**, as a version that can be switched on when Quest 6 needs it (see "Before the roadmap starts" below).
+4. **Pirates:** they move onto the island after Quest 1, but **pirate ships block the island until the story opens it** (step 3.5). The camp is only visited after Quest 9, when the pirates leave.
+5. **Temple Tower:** **finish it and its island before the roadmap starts.**
+
+### Before the roadmap officially starts: finish the temples (decided 10 October)
+
+Do these first, one pull request each, then begin the roadmap at N1:
+1. **Fire temple fixes.** Done so far: the great gate's black doorway is now a **real door** (face it and press Use; a short gatehouse room opens, with a door at the far end leading out to the courtyard). More Fire issues to fix as Jack finds them.
+2. **The Temple Tower's island** (a small island in the south, around (201,196)), then **the Temple Tower** (art in `art/temples/temple_tower`: gravel approach, wooden gate, courtyard, five-storey pagoda, shrine room, hidden chamber below). No story items.
+3. **The damaged Sky temple** (art already in `art/temples/sky_stonehenge_temple`: toppled stones, fallen lintels, scorch marks, a split temple stone and stairs underneath), built as a version that a story switch can turn on, as step 2.6 will need.
 
 ---
 
