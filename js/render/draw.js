@@ -19,9 +19,8 @@ function draw(){
   // boat
   const bx=(sail?P.rx:B.x)*T-cx,by=(sail?P.ry:B.y)*T-cy,bob=Math.round(Math.sin(t/400));
   const vert=sail&&(P.f==='u'||P.f==='d');
-  const h=[['#7a4a26','#a8703a','#8a5a2e'],['#1f4a73','#4a82b8','#3b6fa0'],['#4a2323','#b04a3c','#8a3730']][tier('boat')];
-  if(!vert){R(bx,by+4+bob,16,9,h[0]);R(bx+1,by+5+bob,14,7,h[1]);R(bx+14,by+6+bob,2,5,h[0]);R(bx+3,by+7+bob,10,3,h[2])}
-  else{R(bx+3,by+bob,9,16,h[0]);R(bx+4,by+1+bob,7,14,h[1]);R(bx+6,by+3+bob,3,10,h[2])}
+  const bt=tier('boat'),bdir=vert?(P.f==='u'?'u':'d'):(sail&&P.f==='l'?'l':'r');boatArt(bt,vert,bdir,bx,by+bob,'back');
+  if(sail&&(Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04)){g.fillStyle='rgba(232,246,255,.7)';for(let k=0;k<3;k++){const o=((t/90|0)+k)%3;const wx=bdir==='r'?bx-2-k*3:bdir==='l'?bx+17+k*3:bx+4+k*3*(o%2?1:-1)+3,wy=bdir==='u'?by+17+k*3:bdir==='d'?by-2-k*3:by+6+k*3-(o%2)*2;g.fillRect(wx|0,wy|0,2,1)}}   // a little wake behind a moving boat
   // entities by y
   S.gardens.forEach(g=>g.cells.forEach((cell,i)=>{const x=(g.x+i%3)*T-cx,y=(g.y+(i/3|0))*T-cy;
     R(x+1,y+1,T-2,T-2,'#2e1f10');R(x+2,y+2,T-4,T-4,'#8d5c36');R(x+3,y+5,T-6,1,'#6e4526');R(x+3,y+10,T-6,1,'#6e4526');
@@ -37,7 +36,7 @@ function draw(){
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,T-2,T-2);m=w||'It fits! Tap Use to place it.'}
     if($('msg').textContent!==m)say(m)}
-  const E=NPC.filter(n=>zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{R(n.x*T-cx+2,n.y*T-cy+13,12,3,'#00000033');CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3,{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0})}}));
+  const E=NPC.filter(n=>zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3,{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0})}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
@@ -45,9 +44,8 @@ function draw(){
   if(G.alive)E.push({y:G.y,f:()=>ghost(cx,cy,t)});
   E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;
-    if(!sail)R(sx+2,sy+13,12,3,'#00000033');
-    CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...lo(S.look),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true});
-    if(sail){if(!vert){R(bx,by+9+bob,16,4,h[0]);R(bx+1,by+9+bob,14,3,h[1])}else{R(bx+3,by+10+bob,9,6,h[0]);R(bx+4,by+10+bob,7,5,h[1])}}
+        CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...lo(S.look),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});
+    if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
