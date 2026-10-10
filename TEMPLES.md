@@ -33,7 +33,7 @@ The temples match the map landmarks in DESIGN.md: Temple of the Sea, Temple to t
 
 ## Temple Tower - `temple_tower/`
 
-*Island built (small island, stone dock in the north, gravel lantern path south through pines to a clearing); the temple complex is not built yet.*
+*Island, gate, courtyard, pagoda and shrine room built; the lower chamber is left for the story. (Island: small island, stone dock in the north, gravel lantern path south through pines to a clearing); the temple complex is not built yet.*
 - A Japanese pagoda complex (Horyu-ji style), with heavy use of wood tones and soft, warm light.
 - Route: a gravel path with stepping stones through pines, lined with glowing stone lanterns, then a wooden gate with a dark tiled roof, then a raked gravel courtyard framed by covered walkways.
 - The pagoda has five storeys: dark blue-grey tiled roofs with upturned corners and gold trim, wooden balconies with white plaster panels, and a tall spire with gold rings, on a stone base with steps.
