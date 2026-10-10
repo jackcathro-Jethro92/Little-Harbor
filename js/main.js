@@ -13,4 +13,4 @@ if(typeof S.fog==='string'&&S.fog.length===4800)for(let i=0;i<4800;i++)FOG[i]=S.
 // testing: a link ending in  ?go=212,218  puts the player on that tile (on foot) for the visit
 {const g=(new URLSearchParams(location.search).get('go')||'').split(',').map(Number);if(g.length===2&&g.every(Number.isFinite)&&at(g[0],g[1])!==undefined){sail=false;P.x=P.rx=g[0];P.y=P.ry=g[1];P.f='u'}}
 reveal();ui();
-if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'. Version '+BUILD+'.');
+showTitleOrStart();
