@@ -265,6 +265,19 @@ def check(b, url):
     assert pg2.evaluate("S.story.q==='q1'&&S.story.step===2&&wasSeen('festival')&&flag('met_stranger')"), "story state survives a reload"
     pg2.evaluate("sail=true;sleep()"); assert pg2.evaluate("S.story.q==='q1'&&flag('met_stranger')&&wasSeen('festival')"), "story state survives sleep"
     pg2.close()
+    # the opening cinematic (N10): plays first on a new visit; the home menu appears over it as the ship sails away (a tap skips to it); it plays only once per visit
+    pi = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); ierr = []; pi.on("pageerror", lambda e: ierr.append(str(e)))
+    pi.goto(url); pi.wait_for_timeout(1200)
+    assert pi.evaluate("!!$('intro')&&!$('title').classList.contains('open')"), "the opening scene plays before the title menu"
+    pi.tap("#intro"); pi.wait_for_timeout(300)
+    assert pi.evaluate("$('title').classList.contains('open')&&$('title').classList.contains('over')&&!!$('intro')"), "a tap skips to the home menu, shown over the scene"
+    assert pi.evaluate("[...document.querySelectorAll('#title-body button.tm')].map(b=>b.textContent)") == ["Continue", "New game", "Load game"], "the home menu has Continue, New game and Load game"
+    pi.click("#title-body button.tm >> text=Load game"); assert pi.evaluate("$('title-h').textContent==='Load game'&&!!$('intro')"), "Load game opens over the scene"
+    pi.click("#title-body button.tm >> text=Back"); pi.click("#title-body button.tm >> text=New game"); pi.wait_for_timeout(900)
+    assert pi.evaluate("!$('intro')&&!$('title').classList.contains('open')&&$('look').classList.contains('open')"), "New game closes the scene and starts the game"
+    pi.evaluate("sessionStorage.removeItem('lh-started')"); pi.reload(); pi.wait_for_timeout(300); assert pi.evaluate("!$('intro')&&$('title').classList.contains('open')"), "it plays only once per visit"
+    assert not ierr, ierr
+    pi.close()
     # the title menu (2.1b): opens at the start, Continue goes in; save to a file, a code and slots; loading is checked, backed up and reloads; new game keeps a backup; no movement while it is open
     pm = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); perr = []; pm.on("pageerror", lambda e: perr.append(str(e)))
     pm.goto(url); pm.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(SAVE)); pm.reload(); pm.wait_for_timeout(300)

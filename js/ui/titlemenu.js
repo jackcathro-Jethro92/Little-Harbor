@@ -28,11 +28,12 @@ function tmNote(t){const n=$('title-note');if(n)n.textContent=t||''}
 function tmButton(label,fn,dis){const b=document.createElement('button');b.className='tm';b.textContent=label;b.disabled=!!dis;b.onclick=fn;tmBody().appendChild(b);return b}
 function tmText(t,cls){const p=document.createElement('div');p.className=cls||'tmt';p.textContent=t;tmBody().appendChild(p);return p}
 function tmView(v){const body=tmBody();body.innerHTML='';tmNote('');
-  const title=$('title-h');title.textContent=v==='main'?'Little Harbor':v==='save'?'Save game':v==='load'?'Load game':v==='code'?'Save code':v==='paste'?'Paste a save code':'New game';
+  const over=tmEl().classList.contains('over'); // shown over the opening scene, which already shows the title
+  const title=$('title-h');title.textContent=v==='main'?(over?'':'Little Harbor'):v==='save'?'Save game':v==='load'?'Load game':v==='code'?'Save code':v==='paste'?'Paste a save code':'New game';
   if(v==='main'){
     if(tmMode==='title')tmButton('Continue',tmResume,!hasGame());else tmButton('Resume',tmResume);
     tmButton('New game',()=>hasGame()?tmView('new'):tmStartFresh());
-    tmButton('Save game',()=>tmView('save'),!hasGame());
+    if(tmMode!=='title')tmButton('Save game',()=>tmView('save'),!hasGame());
     tmButton('Load game',()=>tmView('load'));
     tmText(hasGame()?'Day '+S.day+'  ·  '+S.gold+' gold':'No saved game on this device yet.')}
   else if(v==='new'){tmText('Start a new game? Your current game is kept as a backup first, but you will not see it in the menu.');tmButton('Yes, start a new game',newGame);tmButton('No, go back',()=>tmView('main'))}
@@ -56,8 +57,8 @@ function tmView(v){const body=tmBody();body.innerHTML='';tmNote('');
 function tmConfirmLoad(d){if(!hasGame())return installSave(d);const body=tmBody();body.innerHTML='';$('title-h').textContent='Load this game?';tmNote('');
   tmText('Day '+d.day+(Number.isFinite(d.gold)?', '+d.gold+' gold':'')+'. It will replace your current game (which is kept as a backup first).');
   tmButton('Yes, load it',()=>installSave(d));tmButton('No, go back',()=>tmView('load'))}
-function tmOpen(mode){tmMode=mode;cancel&&cancel();holdAllStop();tmView('main');tmEl().classList.add('open')}
-function tmClose(){tmEl().classList.remove('open')}
+function tmOpen(mode){tmMode=mode;cancel&&cancel();holdAllStop();tmEl().classList.toggle('over',mode==='title'&&playIntro.running());tmView('main');tmEl().classList.add('open')}
+function tmClose(){tmEl().classList.remove('open','over');if(playIntro.running())playIntro.close()}
 function tmStartFresh(){tmClose();sessionStorage.setItem(STARTED,'1');enterGame()}
 function tmResume(){tmClose();sessionStorage.setItem(STARTED,'1');if(tmMode==='title')enterGame()}
 const holdAllStop=()=>{try{releaseAll()}catch(e){}};
@@ -65,5 +66,5 @@ function enterGame(){if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'
 // the menu button and the Escape key
 $('menubtn').addEventListener('click',()=>{if(document.querySelector('.open'))return;tmOpen('pause')});
 addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(tmEl().classList.contains('open')){if(tmMode==='pause')tmResume();return}if(document.querySelector('.open'))return;tmOpen('pause')});
-// start of the game: show the title menu once per visit (a reload after loading or starting a new game goes straight in)
-function showTitleOrStart(){let started=false;try{started=!!sessionStorage.getItem(STARTED)}catch(e){}if(started)enterGame();else tmOpen('title')}
+// start of the game: the opening cinematic (js/ui/intro.js) and then the title menu, once per visit (a reload after loading or starting a new game goes straight in)
+function showTitleOrStart(){let started=false,seen=false;try{started=!!sessionStorage.getItem(STARTED);seen=!!sessionStorage.getItem(INTRO_SEEN)}catch(e){}if(started)enterGame();else if(seen)tmOpen('title');else playIntro(()=>tmOpen('title'))}
