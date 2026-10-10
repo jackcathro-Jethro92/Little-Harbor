@@ -333,6 +333,19 @@ def check(b, url):
     ev("save()"); pg.reload(); pg.wait_for_timeout(500); pg.evaluate("TRIGGERS.push({id:'t_area',when:{area:[10,10,12,12]},do:[{gold:7}]})")
     assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
     ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
+    # the character screen: a Me button next to Bag shows the portrait, day, gold and health, and its Save button opens the save choices
+    pg.tap("#chbtn"); pg.wait_for_timeout(200)
+    assert ev("$('ch').classList.contains('open')&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)"), "Me opens the character screen"
+    assert ev("(()=>{const d=$('ch-pt').getContext('2d').getImageData(0,0,96,96).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]!==142)n++;return n>200})()"), "the figure is drawn"
+    pg.tap("#ch-quests"); pg.wait_for_timeout(200)
+    assert ev("$('qs').classList.contains('open')&&/No quest right now/.test($('qs-list').textContent)"), "the quest log opens, empty at first"
+    ev("QUESTS.push({id:'t_q1',name:'Test quest',steps:['Do the first thing.','Now the second thing.']},{id:'t_q0',name:'Old quest',steps:['x']});questSet('t_q1',1);questDone('t_q0');openQuests()")
+    assert ev("/Test quest/.test($('qs-list').textContent)&&/Now the second thing\\./.test($('qs-list').textContent)&&/FINISHED/.test($('qs-list').textContent)&&/Old quest/.test($('qs-list').textContent)"), "the log shows the current step and the finished list"
+    ev("questDone('t_q1');openQuests()"); assert ev("S.story.q===null&&/No quest right now/.test($('qs-list').textContent)&&S.story.done.length===2"), "a finished quest moves to the list"
+    pg.tap("#qs-back"); assert ev("!$('qs').classList.contains('open')&&$('ch').classList.contains('open')"), "Back returns to the character screen"
+    pg.tap("#ch-save"); pg.wait_for_timeout(200)
+    assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save opens the save choices"
+    ev("tmClose()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

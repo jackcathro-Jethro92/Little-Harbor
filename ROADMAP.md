@@ -45,7 +45,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.1 Story state | **Done** (10 Oct): `S.flags` for the switches and `S.story` `{q, step, seen}` for progress, saved and kept across sleep and reload |
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
 | 2.2 Dialogue box | **Done** (10 Oct): box at the bottom with a portrait slot, typed text, choices, flags and an end step (`DLG` table, `runDialogue`, `dlgSay`); portraits for 16 characters (`art/graphics/dialogue_and_shops.png`) |
-| 2.3 to 2.5, 2.7 to 2.12 | Not started |
+| 2.8 Quest log | **Done** (10 Oct): a Quests button on the character screen (Me); current quest and its next step, and a Finished list, read from the `QUESTS` table (there are no real quests yet) |
+| 2.3 to 2.5, 2.7, 2.9 to 2.12 | Not started (2.3 triggers are in their own pull request) |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
