@@ -148,6 +148,12 @@ def check(b, url):
     cot = ev("(()=>{const W=new Set(WK),s=new Set([160*MW+37]),q=[[37,160]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=(y+b)*MW+x+a;if(!s.has(i)&&W.has(at(x+a,y+b))){s.add(i);q.push([x+a,y+b])}}}"
             "return {moved:BL.some(b=>b.x===34&&b.y===158)&&!BL.some(b=>b.x===39&&b.y===158),door:s.has(160*MW+35),road:[40,41,42].every(x=>s.has(158*MW+x)||at(x,158)===6),gate:s.has(150*MW+36)}})()")
     assert all(cot.values()), cot
+    # NAMES.md and DIALOGUE.md must match the game: if a character or a line was added (or JACKS_LINES.txt changed) without running  python3 tools/make_lists.py  this fails
+    sys.path.insert(0, os.path.join(ROOT, "tools")); import make_lists
+    pgl, _ = load(b, url, SAVE); lbase = pgl.evaluate(make_lists.JS); pgl.evaluate("applyPirates(true)"); lpir = pgl.evaluate(make_lists.JS); pgl.close()
+    lnames, ldlg = make_lists.build(lbase, lpir)
+    assert lnames == open(os.path.join(ROOT, "NAMES.md"), encoding="utf-8").read(), "NAMES.md is out of date: run  python3 tools/make_lists.py  and commit the result"
+    assert ldlg == open(os.path.join(ROOT, "DIALOGUE.md"), encoding="utf-8").read(), "DIALOGUE.md is out of date: run  python3 tools/make_lists.py  and commit the result"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

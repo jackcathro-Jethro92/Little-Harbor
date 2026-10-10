@@ -1,8 +1,8 @@
 # Little Harbor: every spoken line, and who wrote it
 
-Made by `tools/make_lists.py`. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list. New story lines will be marked as placeholders when they are added.
+Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 93 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 93 placeholder.**
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.

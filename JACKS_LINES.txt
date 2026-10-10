@@ -1,0 +1,5 @@
+# Jack's own dialogue lines
+#
+# When you write a line of dialogue yourself, paste it here exactly as it appears in the game, one line per row.
+# The list in DIALOGUE.md then shows it as "Jack's" instead of "placeholder". Rows starting with # are ignored.
+# (Or just tell me which lines are yours and I will add them here.)
