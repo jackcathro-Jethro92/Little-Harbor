@@ -69,6 +69,8 @@ def check(b, url):
     # phone D-pad and keyboard move at the same speed: holding either for 1 s gives about the same number of steps
     def held(start, stop):
         ev("(()=>{window.__n=0;const mv=window.__mv||(window.__mv=move);window.move=d=>{window.__n++;return mv(d)}})()")
+        ev("window.__p0=window.__p0||[P.x,P.y]");  # both runs start on the same tile, so a wall or wanderer further along cannot skew the second one
+        ev("P.x=P.rx=window.__p0[0];P.y=P.ry=window.__p0[1];P.f='r'")
         start(); pg.wait_for_timeout(1000); stop()
         n = ev("window.__n"); ev("(()=>{window.move=window.__mv})()"); return n
     kb = held(lambda: pg.keyboard.down("ArrowRight"), lambda: pg.keyboard.up("ArrowRight"))
