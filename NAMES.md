@@ -6,7 +6,7 @@ Made by `tools/make_lists.py` from the running game. Nobody has been renamed. Te
 | --- | --- | --- |
 | Odo | Village | General store keeper |
 | Bram | Village | Fishing and boat shop |
-| Captain Rue | Village | Boat seller |
+| Murl | Village | Boat seller |
 | Mara | Village | Villager |
 | Pip | Village | Villager |
 | Old Tess | Village | Villager |
