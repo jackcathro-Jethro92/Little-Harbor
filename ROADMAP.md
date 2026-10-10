@@ -499,7 +499,7 @@ The rest can be built in any order after Phase 4, and the owner chooses prioriti
 ## Decisions made (Jack, 9 October 2026)
 
 1. **Story rewards versus shop items:** Bram's shop hides the sword, pickaxe and axe until the story gives them, then sells better versions.
-2. **Merl:** Captain Rue is Merl ("Captain Merl Rue"), one boatyard character.
+2. **Merl:** Captain Rue is Merl ("Captain Merl Rue"), one boatyard character. **Update, 10 October:** Jack renamed him **Murl** in NAMES.md and the game now says Murl (shop: Murl's Boatyard). The story text above still says Merl Rue until Jack confirms how it should read.
 3. **Quest 2 people:** the woodcutter is Hale (already in the Darkwood cottage); the lost man is a new villager.
 4. **Quest 1:** the stranger's letter arrives the first time you board your boat in the village; the stranger is on Island 1.
 5. **Quest 3:** the special mast timber grows on Island 6.

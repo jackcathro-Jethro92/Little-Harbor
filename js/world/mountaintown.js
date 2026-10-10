@@ -19,7 +19,7 @@ rect(GZ.x0,GZ.y0,GZ.x1,GZ.y1,(x,y)=>setT(x,y,(x===GZ.x0||x===GZ.x1||y===GZ.y0||y
 // ---------- the Gladiators' Arena (zone 4): sand floor, stands with a cheering crowd on three sides, door in the bottom wall ----------
 rect(AZ.x0,AZ.y0,AZ.x1,AZ.y1,(x,y)=>{const edge=x===AZ.x0||x===AZ.x1||y===AZ.y0||y===AZ.y1;setT(x,y,edge?22:(x===AZ.x0+1||x===AZ.x1-1||y===AZ.y0+1)&&y<AZ.y1-1?53:52)});setT(AZ.dx,AZ.y1,23);
 // ---------- people ----------
-const MT_NAMES=['Bergit','Halvard','Ingrid','Rolf','Sigrun','Tormund','Astrid','Leif'];
+const MT_NAMES=['Bergit','Halvard','Ingrid','Rolf','Sigrun','Tormund','Solveig','Leif'];
 const MT_SAY=[['The mountain air keeps you young.','Have you seen the guild fighters train? Loud lot.'],['I mine copper when the snow allows.','Lucie sells gems that glow. Pricey, though!'],['Our walls have never been breached.','Come see a bout at the arena, it is a good show.'],['I carve stone for the temple.','The road south goes through the Darkwood. Take a lantern of courage.'],['My husband fights in the arena. I faint every time.','Warm soup if you are cold, traveler.'],['Winters are long up here.','The warden knows every face. Do not cause trouble.'],['I weave wool from the mountain goats.','There is gold in these hills, they say.'],['I wanted to be a gladiator once. Then I saw them.','Mind the steps, they are steep.']];
 const MT_HOMES=[[18,62],[30,62],[18,69],[32,69],[22,72],...MT_HOUSES.map(([x,y])=>[x,y])];
 MT_NAMES.forEach((n,i)=>{const[hx,hy]=MT_HOMES[i],x=hx+1,y=hy+2;

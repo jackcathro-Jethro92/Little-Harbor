@@ -1,12 +1,12 @@
 # Little Harbor: named characters (for Jack to review)
 
-Made by `tools/make_lists.py` from the running game. Nobody has been renamed. Tell me which names to change and I will change them in one go.
+Made by `tools/make_lists.py` from the running game, and checked by the tests, so it is always up to date. Nobody has been renamed. Tell me which names to change and I will change them in one go.
 
 | Name | Where they live | Job or role |
 | --- | --- | --- |
 | Odo | Village | General store keeper |
 | Bram | Village | Fishing and boat shop |
-| Murl | Village | Boat seller |
+| Murl | Village | Boat seller (boatyard) |
 | Mara | Village | Villager |
 | Pip | Village | Villager |
 | Old Tess | Village | Villager |
@@ -42,6 +42,7 @@ Made by `tools/make_lists.py` from the running game. Nobody has been renamed. Te
 | Garrick | Walled Settlement | Blacksmith |
 | Tilda | Walled Settlement | Blacksmith's apprentice |
 | Gate Guard Bors | Walled Settlement | Gate guard |
+| Astrid | Walled Settlement | Apothecary |
 | Seamstress Wynn | Walled Settlement | Tailor |
 | Barber Fenwick | Walled Settlement | Barber |
 | Farmer Hobb | Walled Settlement | Dairy farmer |
@@ -55,7 +56,7 @@ Made by `tools/make_lists.py` from the running game. Nobody has been renamed. Te
 | Rolf | Mountain Town | Villager |
 | Sigrun | Mountain Town | Villager |
 | Tormund | Mountain Town | Villager |
-| Astrid | Mountain Town | Villager |
+| Solveig | Mountain Town | Villager |
 | Leif | Mountain Town | Villager |
 | Lucie | Mountain Town | Goldsmith |
 | Warden Orrin | Mountain Town | Mountain Town warden |
@@ -85,4 +86,4 @@ Made by `tools/make_lists.py` from the running game. Nobody has been renamed. Te
 | Cookie | Pirate camp (Volcano Island) | Pirate |
 
 Also named in the game: the town's pets (two dogs and a cat, unnamed), the farm animals (unnamed), and the spirit in the Darkwood (unnamed).
-Placeholders in this list: none yet; every name above was in the game before the roadmap started. The roadmap's story characters will be added when the story is built.
+Story characters will be added here when the story is built.

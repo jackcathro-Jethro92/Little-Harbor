@@ -1,4 +1,4 @@
-// ---------- shops: Odo's General Store, Bram's Tackle & Tools, Rue's Boatyard ----------
+// ---------- shops: Odo's General Store, Bram's Tackle & Tools, Murl's Boatyard ----------
 const sellPrice=id=>{const i=ITEMS[id];return i.kind==='ingredient'?Math.floor(i.price/2):i.value};
 function openGeneral(mode){
   const el=$('items'),buy=mode==='buy';el.innerHTML='';$('st').textContent="Odo's General Store · "+S.gold.toLocaleString()+'g';
@@ -13,13 +13,13 @@ function openGeneral(mode){
   $('store').classList.add('open')}
 function openStore(k){
   const rod=k==='rod',kind=rod?'rod':'boat',L=LIST(kind),own=ownTier(kind),el=$('items');
-  $('st').textContent=(rod?"Bram's Tackle & Tools":"Rue's Boatyard")+' · '+S.gold.toLocaleString()+'g';el.innerHTML='';
-  if(!rod&&L.filter(count).length===1){const n=document.createElement('div');n.className='it';n.innerHTML='<div>Rue: You only own the one boat, friend. Nothing to switch yet.</div>';el.appendChild(n)}
+  $('st').textContent=(rod?"Bram's Tackle & Tools":"Murl's Boatyard")+' · '+S.gold.toLocaleString()+'g';el.innerHTML='';
+  if(!rod&&L.filter(count).length===1){const n=document.createElement('div');n.className='it';n.innerHTML='<div>Murl: You only own the one boat, friend. Nothing to switch yet.</div>';el.appendChild(n)}
   L.forEach((id,i)=>{const it=ITEMS[id],r=document.createElement('div');r.className='it';
     const d=i?(rod?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'Better odds of rare fish'):'Your starter gear';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+d+'</div>';
     const b=document.createElement('button');
-    if(rod?i<=own:count(id)>0){if(rod){b.textContent='Owned';b.disabled=true}else if(S.eq.boat===id){b.textContent='In use';b.disabled=true}else{b.textContent='Use';b.onclick=()=>{S.eq.boat=id;ui();save();say('Rue: Now sailing the '+it.n.toLowerCase()+'.');openStore(k)}}}
+    if(rod?i<=own:count(id)>0){if(rod){b.textContent='Owned';b.disabled=true}else if(S.eq.boat===id){b.textContent='In use';b.disabled=true}else{b.textContent='Use';b.onclick=()=>{S.eq.boat=id;ui();save();say('Murl: Now sailing the '+it.n.toLowerCase()+'.');openStore(k)}}}
     else{b.textContent=it.price.toLocaleString()+'g';b.disabled=rod?!(i===own+1&&S.gold>=it.price):S.gold<it.price;
       b.onclick=()=>{S.gold-=it.price;add(id);S.eq[kind]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});

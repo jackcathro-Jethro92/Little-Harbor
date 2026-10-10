@@ -13,7 +13,7 @@ function drawCraft(){
 function doCraft(){const r=recipesAt()[crSel];if(!r||!canMake(r))return;
   for(const[id,n]of Object.entries(r.needs)){S.bag[id]-=n;if(!S.bag[id])delete S.bag[id]}
   if(r.gold)S.gold-=r.gold;let n=r.n;if(!r.skill&&!r.unique&&Math.random()<.03*lvl('crafting'))n++;add(r.out,n);
-  if(ITEMS[r.out].kind==='boat'){S.eq.boat=r.out;say('You built the '+ITEMS[r.out].n.toLowerCase()+' and set it as your boat! Switch boats any time at Rue\'s boatyard.');toast('Ship built!',2600)}
+  if(ITEMS[r.out].kind==='boat'){S.eq.boat=r.out;say('You built the '+ITEMS[r.out].n.toLowerCase()+' and set it as your boat! Switch boats any time at Murl\'s boatyard.');toast('Ship built!',2600)}
   else say((r.skill==='cooking'?'Cooked ':r.skill==='alchemy'?'Brewed ':'Crafted ')+ITEMS[r.out].n+' x'+n+'.');ui();gainXp(r.skill||'crafting',r.xp);save();drawCraft()}
 $('cr-go').onclick=doCraft;$('cr-back').onclick=closeCraft;
 addEventListener('keydown',e=>{const k=e.key.toLowerCase(),up=k==='arrowup'||k==='w',dn=k==='arrowdown'||k==='s',ok=k==='enter'||k===' ',back=k==='escape'||k==='x'||k==='backspace';

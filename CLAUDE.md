@@ -23,6 +23,10 @@ Split `index.html` into modules **without changing behaviour**: data tables (ite
 - Minimum checks for each change: page loads with no `pageerror`, the player can move, the world is connected (sea reaches every island, key routes are walkable), the bag/shop/crafting screens open, and old saves still load.
 - Draw a frame at many map positions to catch rendering errors (`draw()` is global).
 
+## Names and dialogue lists
+- `NAMES.md` and `DIALOGUE.md` list every named character and spoken line. Whenever you add or change a person or a line, run `python3 tools/make_lists.py` and commit the two files; the smoke test fails if they are out of date.
+- Every line you write is a placeholder until the owner writes his own. Lines the owner has written go in `JACKS_LINES.txt` (exact text, one per row) so they show as "Jack's". Never change or remove an existing line without being asked.
+
 ## Talking to the owner
 - The owner is not a programmer and has no coding experience. Explain everything in plain, everyday words.
 - Avoid jargon. If a technical word is needed (branch, pull request, merge), explain it briefly the first time.

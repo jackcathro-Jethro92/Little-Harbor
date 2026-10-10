@@ -54,7 +54,7 @@ for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(M[i]===1&&hs(x*11,y
 const NPC=[
  {n:'Odo',x:36,y:21,f:'d',skin:1,hair:3,shirt:2,shop:1,fixed:1,say:['Fresh fish, fair prices. Hand them over and I will pay.','Tuna fetch the best coin around here.']},
  {n:'Bram',x:41,y:21,f:'d',skin:2,hair:1,shirt:0,store:'rod',fixed:1},
- {n:'Captain Rue',x:37,y:34,f:'u',skin:1,hair:3,shirt:1,store:'boat',fixed:1},
+ {n:'Murl',x:37,y:34,f:'u',skin:1,hair:3,shirt:1,store:'boat',fixed:1},
  {n:'Mara',x:28,y:15,f:'d',skin:0,hair:4,shirt:3,say:['I paint the harbor every morning. Never looks the same twice.','Try fishing at dawn. The sardines run thick.']},
  {n:'Pip',x:31,y:26,f:'r',skin:3,hair:0,shirt:4,say:['Is it true there is a golden koi out past the rocks?','I want a boat when I grow up!']},
  {n:'Old Tess',x:24,y:21,f:'l',skin:2,hair:3,shirt:5,say:['Forty years on these waters, and the sea still surprises me.','Sleep on the boat and the waves will rock you right off.']},
