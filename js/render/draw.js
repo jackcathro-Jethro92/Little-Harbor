@@ -22,12 +22,7 @@ function draw(){
   const bt=tier('boat'),bdir=vert?(P.f==='u'?'u':'d'):(sail&&P.f==='l'?'l':'r');boatArt(bt,vert,bdir,bx,by+bob,'back');
   if(sail&&(Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04)){g.fillStyle='rgba(232,246,255,.7)';for(let k=0;k<3;k++){const o=((t/90|0)+k)%3;const wx=bdir==='r'?bx-2-k*3:bdir==='l'?bx+17+k*3:bx+4+k*3*(o%2?1:-1)+3,wy=bdir==='u'?by+17+k*3:bdir==='d'?by-2-k*3:by+6+k*3-(o%2)*2;g.fillRect(wx|0,wy|0,2,1)}}   // a little wake behind a moving boat
   // entities by y
-  S.gardens.forEach(g=>g.cells.forEach((cell,i)=>{const x=(g.x+i%3)*T-cx,y=(g.y+(i/3|0))*T-cy;
-    R(x+1,y+1,T-2,T-2,'#2e1f10');R(x+2,y+2,T-4,T-4,'#8d5c36');R(x+3,y+5,T-6,1,'#6e4526');R(x+3,y+10,T-6,1,'#6e4526');
-    if(cell){const c=CROPS[cell.c],age=S.day-cell.d,st=age>=c.d?3:Math.min(2,Math.floor(3*age/c.d)),col=CROPC[cell.c];
-      if(st===0)R(x+7,y+8,2,2,'#c9a35c');else if(st===1){R(x+7,y+6,2,6,'#3f8f3a');R(x+5,y+7,2,2,'#78b552');R(x+9,y+7,2,2,'#78b552')}
-      else if(st===2){R(x+5,y+4,6,8,'#3f8f3a');R(x+4,y+6,8,4,'#5aa83c')}
-      else{R(x+4,y+3,8,9,'#2f7d32');R(x+3,y+5,10,5,'#4fa03e');R(x+5,y+4,3,3,col);R(x+9,y+7,3,3,col);R(x+6,y+9,3,2,col)}}}));
+  S.gardens.forEach(gd=>gd.cells.forEach((cell,i)=>gardenCellArt(cell,(gd.x+i%3)*T-cx,(gd.y+(i/3|0))*T-cy)));
   if(placing){const k0=ITEMS[placing].kind,cell=(x,y,bad)=>R(x*T-cx+1,y*T-cy+1,T-2,T-2,bad?'rgba(220,70,60,.42)':'rgba(70,130,235,.5)');let m;
     if(k0==='claim'||k0==='prefab'||k0==='garden'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);

@@ -39,9 +39,9 @@ function tile(tx,ty,sx,sy,t){
       if(k<2)R(sx+j*4,k?sy+T-e:sy,l,e,col);else R(k===2?sx:sx+T-e,sy+j*4,e,l,col)}});
   if(m===6&&tx<100&&ty<fTop(tx)-1){R(sx,sy,T,T,n%3?'#b08f6c':'#b99a78');if(n<50)R(sx+n%11,sy+(n*5)%12,4,3,'#9e7e5d');if(n>75)R(sx+n%12,sy+(n*3)%13,2,1,'#cdb08c');if(n%17===0)R(sx+n%10+2,sy+9,2,2,'#7b7d86');return}
   if(m===6){pathTile(tx,ty,sx,sy);return}
-  if(m===9){R(sx,sy,T,T,'#5aaeb0');R(sx+2+n%9,sy+3+n%8,5,1,'#9bd9d3');R(sx+8,sy+10+n%3,4,1,'#7cc4c0');if(n%4===0)R(sx+5,sy+6,4,2,'#e8863a');fr(q=>q!==9,'#3f403b',4);fr(q=>q!==9,'#9a9b92',3);return}
+  if(m==9){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   if(m>=48&&m<=50){rockTile(tx,ty,sx,sy,m,n);return}
-  if(m===10){R(sx,sy,T,T,'#8d5c36');for(const ry of[2,9]){R(sx,sy+ry+3,T,2,'#6e4526');for(let k=0;k<3;k++){const x=sx+1+k*5,c=hs(tx*3+k,ty+ry)%4;R(x,sy+ry,4,3,'#4fa03e');R(x+1,sy+ry-1,2,1,'#78c257');if(c===0)R(x+1,sy+ry+3,2,1,'#e0762f')}}return}
+  if(m==10){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   const rk=TLV[i]>0&&(m===5||(m>=14&&m<=18));
   if(rk)rockFloor(tx,ty,sx,sy);else{if(zt===2){R(sx,sy,T,T,G[gi]);
   for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}
@@ -49,7 +49,7 @@ function tile(tx,ty,sx,sy,t){
   if(n>=45&&n<52&&m===1)bushArt(sx,sy);
   if(n>88&&m===1&&zt===2){const c=['#f2e55c','#f4f4f0','#f0a0c0'][n%3];R(sx+3+n%8,sy+4+n%7,2,2,c);R(sx+8+n%4,sy+9+n%4,2,2,c);R(sx+6,sy+11,1,1,c)}
   }
-  if(m===8){R(sx,sy+7,T,2,'#3a2713');R(sx,sy+8,T,2,'#8a6238');R(sx,sy+12,T,2,'#3a2713');R(sx,sy+13,T,1,'#8a6238');R(sx+1,sy+4,3,12,'#3a2713');R(sx+2,sy+4,1,11,'#7a5230');R(sx+12,sy+4,3,12,'#3a2713');R(sx+13,sy+4,1,11,'#7a5230')}
+  if(m===8)objectArt(m,tx,ty,sx,sy,n,t);
   if(m>=24&&m<=30)plantArt(m,n,sx,sy);
   if(m===31)plantArt(m,n,sx,sy);
   if(m===19)plantArt(m,n,sx,sy);
@@ -57,17 +57,17 @@ function tile(tx,ty,sx,sy,t){
   if(m===41){R(sx,sy,T,T,'#14291a');blob(sx+8,sy+9,8,'#1e3d27','#2b5736','#122a1b','#0a170f');R(sx+(n%3)*5,sy+3,4,3,'#2f6a42');R(sx+3+n%7,sy+9,3,2,'#122a1b')}
   if(m===42){R(sx,sy,T,T,'#46372a');R(sx+n%10,sy+(n*3)%12,4,2,'#3a2d22');R(sx+(n*7)%11,sy+(n*5)%13,3,1,'#5a4838')}
   if(m===45){R(sx+4,sy+16-16,8,16,'#6b4423');R(sx+3,sy,10,3,'#3d2a14');R(sx+7,sy+5,2,3,'#f2c14e');R(sx+5,sy+10,1,5,'#573a21')}
-  if(m===46){R(sx+3,sy+12,10,2,'#00000030');R(sx+4,sy+6,8,7,'#2e1f10');R(sx+5,sy+7,6,5,'#a8743f');R(sx+7,sy+5,2,3,'#d8b878');R(sx+10+((t/200|0)%2),sy+3+((t/300|0)%2),1,1,'#fff6c9');R(sx+3,sy+5,1,1,'#fff6c9')}
+  if(m===46)objectArt(m,tx,ty,sx,sy,n,t);
   if(m===47)plantArt(m,n,sx,sy);
-  if(m===12){R(sx,sy,T,T,'#8d8f87');R(sx,sy,T,3,'#b3b4ab');R(sx,sy+7,T,1,'#6b6d66');R(sx+(n%2?4:10),sy+3,1,4,'#6b6d66');R(sx+(n%2?10:4),sy+8,1,6,'#6b6d66');R(sx,sy+T-2,T,2,'#55574f')}
+  if(m==12){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   if(m===35||m===36){const bl=m===36;R(sx,sy,T,T,bl?'#55555d':'#6f7078');R(sx,sy,T,4,bl?'#6a6a72':'#8a8b94');R(sx+(n%3)*4,sy+6,5,3,'#5a5b63');R(sx+3+n%8,sy+11,6,3,'#5a5b63');
     if(!bl&&n%4===0)R(sx+4,sy,8,2,'#f0f4f8');if(bl){R(sx+2,sy+4,12,9,'#2e2e36');R(sx+3,sy+3,10,9,'#8d8f87');R(sx+4,sy+3,5,2,'#b0b2b8')}}
-  if(m===14){R(sx+3,sy+12,10,2,'#00000030');R(sx+4,sy+7,8,7,'#2e1f10');R(sx+5,sy+8,6,5,'#7a5230');R(sx+5,sy+7,6,2,'#c9a06a');R(sx+7,sy+8,2,1,'#8a6238')}
-  if((m>=15&&m<=17)||m===123||m===124){const c=m===123?'#f6c93a':m===124?'#e4ecf4':['#d9803f','#cfe3ef','#c9a227'][m-15];R(sx+2,sy+12,12,3,'#00000030');R(sx+2,sy+5,12,9,'#2e2e36');R(sx+3,sy+4,10,9,'#8d8f87');R(sx+4,sy+3,7,3,'#a9aaa3');R(sx+3,sy+10,10,3,'#6e7068');R(sx+5,sy+6,2,2,c);R(sx+9,sy+8,3,2,c);R(sx+6,sy+10,2,1,c);R(sx+10,sy+5,1,2,c)}
-  if(m===18){R(sx+3,sy+9,3,2,'#8d8f87');R(sx+9,sy+6,2,2,'#a9aaa3');R(sx+7,sy+11,3,2,'#6e7068')}
-  if(m===13){R(sx+3,sy+13,10,2,'#00000030');R(sx+4,sy+3,8,11,'#2f2f3a');R(sx+5,sy+4,6,9,'#9a9ba3');R(sx+6,sy+6,4,1,'#6b6c75');R(sx+7,sy+8,2,1,'#6b6c75')}
-  if(m===11){R(sx+2,sy+12,12,3,'#00000030');R(sx+3,sy+2,10,13,'#2e1f10');R(sx+4,sy+3,8,11,'#8a5a2e');R(sx+4,sy+3,8,2,'#a8743f');R(sx+4,sy+7,8,1,'#4a3018');R(sx+4,sy+11,8,1,'#4a3018')}
-  if(m===7){R(sx+3,sy+13,10,2,'#00000030');R(sx+5,sy+12,6,3,'#8b8d85');R(sx+6,sy+7,4,5,'#a5a69d');R(sx+4,sy+4,8,3,'#8b8d85');R(sx+5,sy+1,6,3,'#a5a69d');R(sx+7,sy+8,2,2,'#f2d27a')}
+  if(m===14)objectArt(m,tx,ty,sx,sy,n,t);
+  if((m>=15&&m<=17)||m===123||m===124)objectArt(m,tx,ty,sx,sy,n,t);
+  if(m===18)objectArt(m,tx,ty,sx,sy,n,t);
+  if(m===13)objectArt(m,tx,ty,sx,sy,n,t);
+  if(m===11)objectArt(m,tx,ty,sx,sy,n,t);
+  if(m===7)objectArt(m,tx,ty,sx,sy,n,t);
 }
 // the Darkwood gates: a red torii three tiles across (left post 51, middle 43/44, right post 51), mossy so it belongs to the forest
 function torii(sx,sy,part,inside,exit,n,t){
