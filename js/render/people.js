@@ -45,18 +45,6 @@ function critterSprite(k,col,fl,fr){return sprite('c'+k+col+fl+fr,24,22,c=>{cons
     pq(11,5,'#3a8a3a');pq(12,5,'#3a8a3a');pq(12,7,'#e8a0a0');q(0,3+fr,2,1,O);q(0,4,1,6,O);q(1,5,1,3,cc);for(const y of[7,9])q(5,y,1,1,'rgba(0,0,0,.25)')}
   else{q(7,5,2,10,O);q(3,3,10,3,O);q(4,4,8,1,'#d8b878');q(5,6,6,5,O);q(6,6,4,4,'#d8b878');q(6,0,4,4,O);q(7,1,2,2,'#d8b878');q(5,13,6,2,O)}})}
 function critterArt(a,cx,cy,t){const bob=((t/300+a.x*3)%7<.5)?1:0,fr=((t/180)|0)%2;g.drawImage(critterSprite(a.k,a.c||'',a.f?1:0,a.k==='dog'||a.k==='cat'?fr:0),(a.x*T-cx|0)-4,(a.y*T-cy+bob|0)-4)}
-// ---- boats: rowboat (brown), sloop (blue and white), trawler (red); bow toward the way you sail ----
-const BOATC=[{d:'#3a2210',m:'#a8703a',s:'#7a4a26',h:'#c99a5e',t:'#e8c898'},{d:'#10243a',m:'#4a82b8',s:'#2f5f8e',h:'#8ab8e0',t:'#f2f6fa'},{d:'#2a1212',m:'#b04a3c',s:'#7a2e24',h:'#d8806c',t:'#e8d8b0'}];
-const BOATROWS=[[2,9],[1,12],[0,14],[0,15],[0,16],[0,15],[0,14],[1,12],[2,9]];   // [first column, one past the last] of each hull row (y 3 to 11), bow to the right
-function boatSprite(tier,dir,part){return sprite('b'+tier+dir+part,32,32,c=>{const C=BOATC[tier]||BOATC[0],ox=8,oy=8,f=(x,y,w,h,col)=>pF(c,x,y,w,h,col);c.translate(ox+8,oy+7);
-    if(dir==='l')c.scale(-1,1);else if(dir==='u')c.rotate(-Math.PI/2);else if(dir==='d')c.rotate(Math.PI/2);c.translate(-8,-7);
-    const from=part==='front'?5:0;
-    BOATROWS.forEach(([a,b],i)=>{if(i<from)return;f(a-1,3+i,b-a+2,1,C.d);if(i===0)f(a,2,b-a,1,C.d);if(i===8)f(a,12,b-a,1,C.d)});
-    BOATROWS.forEach(([a,b],i)=>{if(i<from)return;f(a,3+i,b-a,1,i<=1?C.h:i<=5?C.m:i<=7?C.s:C.d)});
-    if(part==='back'){for(let x=3;x<14;x+=3)f(x,5,1,4,C.s);f(2,5,3,3,C.t);f(5,4,10,1,C.h);
-      if(tier===1){f(3,3+1,11,1,C.t);f(5,6,8,1,C.t)}if(tier===2){f(8,5,4,4,C.d);f(9,6,2,2,'#ffd86a');f(3,10,10,1,C.h)}}
-    else f(1,8,12,1,C.h)})}
-function boatArt(tier,vert,dir,bx,by,part){const s=boatSprite(tier,dir,part);g.drawImage(s,(bx|0)-8,(by|0)-8)}
 // ---- the spirit: a glowing ghost that sways, with a soft glow and a rippling hem ----
 function ghostArt(cx,cy,t){const x=G.x*T-cx,y=G.y*T-cy-2+Math.round(Math.sin(t/300)*2),w=t-G.hitAt<250&&((t/60|0)%2),B2=w?'#ffffff':(G.pois>t)?'rgba(180,238,160,.95)':'rgba(225,238,255,.92)',O='rgba(55,65,110,.95)',gw=g.createRadialGradient(x+8,y+7,2,x+8,y+7,16);
   gw.addColorStop(0,G.pois>t?'rgba(160,230,140,.35)':'rgba(190,210,255,.35)');gw.addColorStop(1,'rgba(190,210,255,0)');g.fillStyle=gw;g.fillRect(x-8,y-9,32,32);

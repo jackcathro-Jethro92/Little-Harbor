@@ -30,7 +30,8 @@ const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
  {out:'house_kit',n:1,needs:{medium_plank:12,hardwood_plank:4,rope:6,iron_bar:2},station:'bench',xp:60},
  // ships: built at the shipwright station; 'gold' is a fee, 'unique' means you can only build each once
  {out:'sloop',n:1,needs:{medium_plank:12,hardwood_plank:6,rope:8,iron_bar:4},gold:2000,unique:1,station:'shipwright',xp:80},
- {out:'trawler',n:1,needs:{medium_plank:24,hardwood_plank:16,rope:16,iron_bar:10},gold:8000,unique:1,station:'shipwright',xp:200},
+ {out:'schooner',n:1,needs:{medium_plank:24,hardwood_plank:16,rope:16,iron_bar:10},gold:8000,unique:1,station:'shipwright',xp:200},
+ {out:'brig',n:1,needs:{medium_plank:40,hardwood_plank:30,rope:30,iron_bar:20},gold:20000,unique:1,station:'shipwright',xp:350},
  // alchemy: herbs and mushrooms into potions
  {out:'healing_potion',n:1,needs:{basil:2,holly:1},station:'alchemy',xp:10,skill:'alchemy'},
  {out:'greater_healing',n:1,needs:{basil:3,holly:2,blue_cap:1},station:'alchemy',xp:24,skill:'alchemy'},

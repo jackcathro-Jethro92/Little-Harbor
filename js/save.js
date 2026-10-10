@@ -15,4 +15,6 @@ function migrate(o){
 let S=fresh();
 try{const raw=localStorage.getItem(KEY),o=JSON.parse(raw||'null');
   if(o&&o.look){if(o.v!==SAVE_V){try{localStorage.setItem(KEY+'-backup-v'+(o.v||1),raw)}catch(e){}}S=migrate(o)}}catch(e){}
+// the trawler became the schooner (boats redrawn from real ships): carry old saves over
+if(S.bag&&S.bag.trawler){S.bag.schooner=(S.bag.schooner||0)+S.bag.trawler;delete S.bag.trawler}if(S.eq&&S.eq.boat==='trawler')S.eq.boat='schooner';
 const save=()=>{try{S.fog=Array.from(FOG).join('');localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};

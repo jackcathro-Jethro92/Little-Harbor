@@ -91,8 +91,9 @@ const ITEMS={
  amulet_vital:{n:'Amulet of Vitality',kind:'jewel',slot:'amulet',price:3200,gem:'#4fd0c0',fx:{sta:30},desc:'An enchanted aquamarine pendant. +30 max stamina.'},
  amulet_ward:{n:'Amulet of Warding',kind:'jewel',slot:'amulet',price:6000,gem:'#c8d8f0',fx:{ward:.2},desc:'An enchanted diamond pendant. You take 20% less damage.'},
  amulet_sage:{n:"Scholar's Amulet",kind:'jewel',slot:'amulet',price:7500,gem:'#9a5ac8',fx:{xp:.1},desc:'An enchanted amethyst pendant. 10% more skill XP.'},
- rowboat:{n:'Rowboat',kind:'boat',price:0},
- sloop:{n:'Sloop',kind:'boat',price:100000,desc:'A sturdy sailing boat with better odds of rare fish.'},
- trawler:{n:'Trawler',kind:'boat',price:250000,desc:'A big working boat. The best odds of rare fish.'}
+ rowboat:{n:'Rowboat',kind:'boat',price:0,crew:[1,1],desc:'Two oars and a seat. Sails by yourself.'},
+ sloop:{n:'Sloop',kind:'boat',price:100000,crew:[1,1],desc:'One mast, a mainsail and a jib. Better odds of rare fish.'},
+ schooner:{n:'Schooner',kind:'boat',price:250000,crew:[2,3],desc:'Two masts with fore-and-aft sails. Good odds of rare fish.'},
+ brig:{n:'Brig',kind:'boat',price:600000,crew:[3,5],desc:'Two masts of square sails, a black hull and gun ports. The best odds of rare fish.'}
 };
 const LIST=k=>Object.keys(ITEMS).filter(i=>ITEMS[i].kind===k); // list order = tier order
