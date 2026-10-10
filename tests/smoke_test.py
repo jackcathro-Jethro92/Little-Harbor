@@ -337,6 +337,12 @@ def check(b, url):
     pg.tap("#chbtn"); pg.wait_for_timeout(200)
     assert ev("$('ch').classList.contains('open')&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)"), "Me opens the character screen"
     assert ev("(()=>{const d=$('ch-pt').getContext('2d').getImageData(0,0,96,96).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]!==142)n++;return n>200})()"), "the figure is drawn"
+    pg.tap("#ch-quests"); pg.wait_for_timeout(200)
+    assert ev("$('qs').classList.contains('open')&&/No quest right now/.test($('qs-list').textContent)"), "the quest log opens, empty at first"
+    ev("QUESTS.push({id:'t_q1',name:'Test quest',steps:['Do the first thing.','Now the second thing.']},{id:'t_q0',name:'Old quest',steps:['x']});questSet('t_q1',1);questDone('t_q0');openQuests()")
+    assert ev("/Test quest/.test($('qs-list').textContent)&&/Now the second thing\\./.test($('qs-list').textContent)&&/FINISHED/.test($('qs-list').textContent)&&/Old quest/.test($('qs-list').textContent)"), "the log shows the current step and the finished list"
+    ev("questDone('t_q1');openQuests()"); assert ev("S.story.q===null&&/No quest right now/.test($('qs-list').textContent)&&S.story.done.length===2"), "a finished quest moves to the list"
+    pg.tap("#qs-back"); assert ev("!$('qs').classList.contains('open')&&$('ch').classList.contains('open')"), "Back returns to the character screen"
     pg.tap("#ch-save"); pg.wait_for_timeout(200)
     assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save opens the save choices"
     ev("tmClose()")
