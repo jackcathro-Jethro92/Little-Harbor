@@ -10,5 +10,7 @@ setInterval(()=>AN.forEach(a=>{if(Math.random()<.5)return;const d=Object.values(
 setInterval(()=>CH.forEach(c=>{if(Math.random()<.5)return;const d=Object.values(D)[Math.random()*4|0],x=c.x+d[0],y=c.y+d[1];
   if(Math.abs(x-c.hx)>2||Math.abs(y-c.hy)>2||!walkable(x,y)||(P.x===x&&P.y===y))return;c.x=x;c.y=y;if(d[0])c.f=d[0]<0?1:0}),700);
 if(typeof S.fog==='string'&&S.fog.length===4800)for(let i=0;i<4800;i++)FOG[i]=S.fog[i]==='1'?1:0;
+// testing: a link ending in  ?go=212,218  puts the player on that tile (on foot) for the visit
+{const g=(new URLSearchParams(location.search).get('go')||'').split(',').map(Number);if(g.length===2&&g.every(Number.isFinite)&&at(g[0],g[1])!==undefined){sail=false;P.x=P.rx=g[0];P.y=P.ry=g[1];P.f='u'}}
 reveal();ui();
 if(!S.seen)openLook();else say('Welcome back. Day '+S.day+'. Version '+BUILD+'.');

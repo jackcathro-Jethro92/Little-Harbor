@@ -18,7 +18,7 @@ for(let k=1;k<MB.length;k++)for(let st=0;st<=40;st++){const px=Math.round(MB[k-1
   rect(px-6,py-6,px+6,py+6,(x,y)=>{if((x-px)**2+(y-py)**2<=36&&(at(x,y)===1||at(x,y)===2))setT(x,y,35)})}
 rect(39,130,44,135,(x,y)=>{if(at(x,y)===35)setT(x,y,36)});
 // islands from the sketch: [centre x, centre y, radius x, radius y, seed]
-[[206,81,8,7,1],[190,136,8,10,2],[244,138,32,31,3],[128,78,10,10,4],[144,170,9,8,6],[283,34,17,14,5],[202,200,7,7,7],[71,28,14,13,8],[60,42,4,4,9],[82,43,4,4,10],[74,18,5,5,11]].forEach(a=>isl(...a));
+[[206,81,8,7,1],[190,136,8,10,2],[244,138,32,31,3],[128,78,10,10,4],[144,170,9,8,6],[283,34,17,14,5],[71,28,14,13,8],[60,42,4,4,9],[82,43,4,4,10],[74,18,5,5,11]].forEach(a=>isl(...a));
 // Sailors' grave rocks
 for(let k=0;k<17;k++){const cx=74+hs(k,1)%33,cy=61+hs(k,2)%50,r=1+hs(k,3)%2;rect(cx-r,cy-r,cx+r,cy+r,(x,y)=>{if(!at(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1&&x>=0&&y>=0)setT(x,y,32)})}
 // trees, flax, ore and herbs on the new land
@@ -46,7 +46,7 @@ clr(67,24,76,30);BL.push({x:69,y:26,w:5,col:'#c8402a',orb:'#f2a22e'});clr(62,31,
 clr(279,30,288,35);BL.push({x:281,y:32,w:5,col:'#2f7fc4',orb:'#9ad3f0'});                                       // Temple of the Sea
 clr(240,134,249,139);BL.push({x:242,y:136,w:5,col:'#cfe3f0',orb:'#ffffff'});                                    // Temple to the Sky
 clr(5,24,14,29);BL.push({x:7,y:26,w:5,col:'#7a7a86',orb:'#c9cac1'});                                            // Temple to the Mountains
-clr(197,196,205,203);BL.push({x:200,y:198,w:2,tower:1});                                                        // Temple Tower
+BL.push({x:200,y:198,w:2,tower:1});                                                                             // Temple Tower (placeholder, rebuilt by js/world/towerisland.js)
 // west gate of the Walled Settlement, the road through the mountains, and the Darkwood's two gates
 
 const carvePath=pts=>{for(let k=1;k<pts.length;k++){const a=pts[k-1],b=pts[k],n=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]));for(let q=0;q<=n;q++){const x=Math.round(a[0]+(b[0]-a[0])*q/n),y=Math.round(a[1]+(b[1]-a[1])*q/n);rect(x-1,y-1,x+1,y+1,(xx,yy)=>{if(![0,5,12,45].includes(at(xx,yy)))setT(xx,yy,6)})}}};
@@ -108,4 +108,4 @@ const TLV=new Uint8Array(MW*MH);
    for(let k=2;k<=7;k++){tr(gx-k,gy,k);tr(gx+k,gy,k)}
    for(let k=4;k<=7;k++){tr(gx-k,gy-dir,k);tr(gx+k,gy-dir,k)}};
  frame(36,149,-1);frame(31,110,1)}
-const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',27,68],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',6,18],["Sailors' Grave Rocks",90,86],['Island 1',206,81],['Island 2',190,136],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Island 6',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,35],['Temple to the Sky',244,138],['Temple Tower',201,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',31,110]];
+const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',27,68],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',6,18],["Sailors' Grave Rocks",90,86],['Island 1',206,81],['Island 2',190,136],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Island 6',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,35],['Temple to the Sky',244,138],['Temple Tower',212,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',31,110]];

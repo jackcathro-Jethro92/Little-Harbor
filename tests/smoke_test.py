@@ -100,6 +100,11 @@ def check(b, url):
     ev("applyPirates(false)"); assert ev("!BL.some(b=>b.tent||b.ship)&&!NPC.some(n=>n.pirate)&&BL.some(b=>b.decor==='coldfire')&&LAND.some(l=>l[0]==='Volcano Island')"), "empty camp again"
     ev("S.flags={};sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y;draw()")
     ev("applyPirates(true);for(const[x,y]of[[70,28],[87,25],[94,25],[88,30]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()};applyPirates(false)")
+    # the Temple Tower's island: the old islet is gone, the gravel path runs from the south beach up to the big clearing in the north (walkable all the way), lanterns line it every four tiles, pines block
+    tow = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],ok=new Set(WK);let by=0;for(let y=170;y<224;y++)if(at(212,y)===103)by=y;const s=new Set([by*MW+212]),q=[by*MW+212];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(!s.has(j)&&ok.has(M[j])){s.add(j);q.push(j)}}}"
+            "return {beach:by>=215,clearing:s.has(177*MW+199)&&s.has(177*MW+225)&&s.has(193*MW+212),noPlaceholder:!BL.some(b=>b.tower),lanterns:TOWER_LAN.length>=10&&TOWER_LAN.every(l=>at(l.x,l.y)===7),pines:at(190,196)===102||[...Array(200)].some((_,k)=>at(190+k%20,190+(k/20|0))===102),pineBlocks:!WK.includes(102),clearOfPines:!(()=>{for(let y=177;y<=193;y++)for(let x=199;x<=225;x++)if(at(x,y)===102)return true;return false})(),belowZones:LAND.some(l=>l[0]==='Temple Tower'&&l[2]<224)}})()")
+    assert all(tow.values()), tow
+    ev("for(const[x,y]of[[212,219],[212,205],[212,194],[205,185],[200,200],[190,196]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
