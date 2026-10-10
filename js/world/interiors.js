@@ -1,3 +1,5 @@
+const ROOMTAB=[];   // rooms made from a table (the ships' decks and cabins, js/world/shiprooms.js): {z zone number, x0,y0,x1,y1, dx, ...}; zoneOf finds them here (roadmap step 2.9b begins)
+const roomZone=(x,y)=>{for(const r of ROOMTAB)if(x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1)return r.z;return 0};
 const FY=258,FOREST_PLAN=[[27,20],[28,22],[29,14],[30,24]]; // the Darkwood's foraging: forest sprigs, red caps, death caps, blue caps // the Darkwood is drawn FY rows below where its own coordinates say (see below)
 // ---------- home interior: a hidden room in the south-east sea, shown only when you are inside ----------
 const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},inRoom=(x,y)=>x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1;
@@ -12,7 +14,7 @@ for(let y=IR.y0;y<=IR.y1;y++)for(let x=IR.x0;x<=IR.x1;x++)M[y*MW+x]=(x===IR.x0||
 M[IR.y1*MW+IR.dx]=23;
 if(S.home)for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(S.home.y+j)*MW+S.home.x+i]=5;
 // ---------- the Darkwood: a separate forest map. Gates at both ends, a winding trail, dead ends with treasure, tall grass ----------
-const FZ={x0:100,y0:4+FY,x1:147,y1:39+FY},inFZ=(x,y)=>x>=FZ.x0&&x<=FZ.x1&&y>=FZ.y0&&y<=FZ.y1,zoneOf=(x,y)=>inRoom(x,y)?1:inFZ(x,y)?2:inGZ(x,y)?3:inAZ(x,y)?4:inSZ(x,y)?5:inHZ(x,y)?6:inVZ(x,y)?7:inPH(x,y)?8:inPG(x,y)?9:inTS(x,y)?10:0;
+const FZ={x0:100,y0:4+FY,x1:147,y1:39+FY},inFZ=(x,y)=>x>=FZ.x0&&x<=FZ.x1&&y>=FZ.y0&&y<=FZ.y1,zoneOf=(x,y)=>inRoom(x,y)?1:inFZ(x,y)?2:inGZ(x,y)?3:inAZ(x,y)?4:inSZ(x,y)?5:inHZ(x,y)?6:inVZ(x,y)?7:inPH(x,y)?8:inPG(x,y)?9:inTS(x,y)?10:roomZone(x,y);
 // zone 3: the Fighters Guild hall, zone 4: the Gladiators' Arena (hidden rooms in the south-east sea, like the home interior)
 const GZ={x0:270,y0:250,x1:281,y1:259,dx:275},inGZ=(x,y)=>x>=GZ.x0&&x<=GZ.x1&&y>=GZ.y0&&y<=GZ.y1;
 const AZ={x0:270,y0:262,x1:283,y1:275,dx:277},inAZ=(x,y)=>x>=AZ.x0&&x<=AZ.x1&&y>=AZ.y0&&y<=AZ.y1;

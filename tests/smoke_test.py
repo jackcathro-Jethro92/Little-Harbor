@@ -231,6 +231,28 @@ def check(b, url):
     ev("S.gold=1000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;openStore('boat')")
     assert ev("['sloop','schooner','brig'].every(id=>ITEMS[id].price===100)||!BOAT_TEST"), "boats cost 100 while testing"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    # ships' insides: 9 rooms (deck, quarters, storage for the sloop, schooner and brig) with every door, crate, bed and wheel reachable; bigger ships have more room, crates and storage; the helm, the doors, sleeping and the storage work
+    sh = ev("(()=>{const W=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],r={};const reach=(R,sx,sy)=>{const s=new Set([sy*MW+sx]),q=[[sx,sy]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(!s.has(i)&&nx>=R.x0&&nx<=R.x1&&ny>=R.y0&&ny<=R.y1&&W.has(at(nx,ny))){s.add(i);q.push([nx,ny])}}}return s};"
+            "r.rooms=SHIPNAMES.every(sn=>['deck','quarters','storage'].every(k=>SHIPR[sn][k]&&zoneOf(SHIPR[sn][k].dx,SHIPR[sn][k].y0+1)===SHIPR[sn][k].z));"
+            "r.reach=SHIPNAMES.every(sn=>['deck','quarters','storage'].every(k=>{const R=SHIPR[sn][k],s=reach(R,R.dx,k==='deck'?R.y1-2:R.y1-1);const have={},seen={};for(let y=R.y0;y<=R.y1;y++)for(let x=R.x0;x<=R.x1;x++){const t=at(x,y);if([23,128,129,130].includes(t)){seen[t]=1;if(D4.some(([a,b])=>s.has((y+b)*MW+x+a)))have[t]=(have[t]||0)+1;else if(t===23)have[t]=-99}}return Object.keys(seen).every(t=>have[t]>0)}));"
+            "const crates=sn=>{let n=0;const R=SHIPR[sn].storage;for(let y=R.y0;y<=R.y1;y++)for(let x=R.x0;x<=R.x1;x++)if(at(x,y)===130)n++;return n};"
+            "r.bigger=crates('sloop')<crates('schooner')&&crates('schooner')<crates('brig')&&ITEMS.sloop.store<ITEMS.schooner.store&&ITEMS.schooner.store<ITEMS.brig.store&&SHIPR.sloop.quarters.w<SHIPR.brig.quarters.w;"
+            "r.noRowboat=shipLevel()===-1&&!shipHidesPlayer();return r})()")
+    assert all(sh.values()), sh
+    flow = ev("(()=>{const r={};S.gold=5000;for(const id of['sloop','schooner','brig']){S.bag[id]=1}S.eq.boat='schooner';sail=true;P.x=P.rx=B.x=172;P.y=P.ry=B.y=190;P.f='d';ui();r.deckBtn=$('deck').style.visibility==='visible';r.hidden=shipHidesPlayer();"
+              "boardDeck();const D=SHIPR.schooner.deck,Q=SHIPR.schooner.quarters,St=SHIPR.schooner.storage;r.onDeck=zoneOf(P.x,P.y)===D.z&&!sail;"
+              "P.x=P.rx=D.dx-2;P.y=P.ry=D.y0+2;P.f='u';act();r.toQuarters=zoneOf(P.x,P.y)===Q.z;P.f='d';act();r.backDeck=zoneOf(P.x,P.y)===D.z;"
+              "P.x=P.rx=D.dx+2;P.y=P.ry=D.y0+2;P.f='u';act();r.toStorage=zoneOf(P.x,P.y)===St.z;P.f='d';act();r.backDeck2=zoneOf(P.x,P.y)===D.z;"
+              "const bed=(()=>{for(let y=Q.y0;y<=Q.y1;y++)for(let x=Q.x0;x<=Q.x1;x++)if(at(x,y)===129)return[x,y]})();P.x=P.rx=Q.dx;P.y=P.ry=Q.y1-1;"
+              "P.x=P.rx=bed[0];P.y=P.ry=bed[1]+1;P.f='u';const d0=S.day;S.hp=5;act();r.slept=S.day===d0+1&&S.hp>5&&zoneOf(P.x,P.y)===Q.z;"
+              "const cr=(()=>{for(let y=St.y0;y<=St.y1;y++)for(let x=St.x0;x<=St.x1;x++)if(at(x,y)===130)return[x,y]})();P.x=P.rx=cr[0];P.y=P.ry=cr[1]+1;P.f='u';S.bag.driftwood_rod=1;S.bag.sardine=30;act();r.storeOpen=$('store').classList.contains('open')&&/storage/.test($('st').textContent);"
+              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[1].click();r.stored=(S.ships.schooner.store.sardine||0)===30&&!S.bag.sardine;"
+              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[0].click();r.took=S.ships.schooner.store.sardine===29&&S.bag.sardine===1;"
+              "S.bag.copper_ore=500;openStorage('schooner');[...document.querySelectorAll('#items .it')].find(x=>/^Copper ore/.test(x.innerText)).querySelectorAll('button')[1].click();r.capacity=Object.values(S.ships.schooner.store).reduce((a,b)=>a+b,0)===ITEMS.schooner.store;"
+              "document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));P.x=P.rx=D.dx;P.y=P.ry=D.y1-2;P.f='d';act();r.helm=sail&&P.x===172&&P.y===190&&zoneOf(P.x,P.y)===0;return r})()")
+    assert all(flow.values()), flow
+    ev("S.eq.boat='rowboat';sail=false;ui()")
+    assert ev("$('deck').style.visibility")=='hidden', "no deck on the rowboat"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
