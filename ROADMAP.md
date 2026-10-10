@@ -38,6 +38,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | --- | --- |
 | 0.1 Repository and hosting | **Done** |
 | 0.2 Module split | **Done** (it was done early, not after the playtest) |
+| 2.9b Room list | Not started: a tidy-up to do just before house interiors or taverns (2.10, 6.3) |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
 | Phase 1 graphics upgrade | Not started |
 | 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
@@ -300,7 +301,10 @@ Variants must never move collisions where the player could get stuck.
 **2.9 NPC placement by story.** An NPC's location, lines and visibility can depend on flags. For example, the lost man appears in the village only after Quest 2, and pirates appear only during quests.
 - *Done when:* a test NPC moves home after a flag is set.
 
-**2.10 Interior loader.** Load rooms made in the interior designer (its exported JSON) as enterable interiors with doors. Reuse the home-interior approach and make it general.
+**2.9b Room list (a tidy-up that comes first, before 2.10).** Since N2 (10 October) every hidden room sits in the bottom rows of the map (rows 246 and down, below the sea you can reach). Each one is added by hand today: its own rectangle, its own number and its own check in `zoneOf`. That is fine for ten rooms but will not stay manageable for house interiors, taverns (N13), ships you can walk round (N11) and cutscene rooms. Replace the hand-made list with one **table of rooms** and one helper that picks a free spot, builds the room, registers its doors and gives it its number. A new room should then be one new row. If the space runs out the map can grow downwards without breaking saves (new rows go on the bottom).
+- *Done when:* all ten existing rooms come from the table and behave exactly as before (old saves and every door still work), a new test room can be added with one row, and the tests prove it.
+
+**2.10 Interior loader.** Load rooms made in the interior designer (its exported JSON) as enterable interiors with doors. Reuse the home-interior approach and make it general. Needs 2.9b (the room list) first.
 - *Done when:* one exported designer room, such as the tavern, can be entered from a building door in the village.
 
 **2.11 Story test switches.** A testing-only menu to jump straight to the start of any quest with the right items and flags. Keep it behind a `TEST_STORY` switch, like the existing test switches, and remove it at release.
