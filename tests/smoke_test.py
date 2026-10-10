@@ -210,6 +210,10 @@ def check(b, url):
             "const ps=S.placed,gs=S.gardens;S.placed=['camp_kit','alchemy_station','shipwright','cooking_station','standard_bench','forge'].map((id,k)=>({id,x:P.x-3+k,y:P.y-2}));S.gardens=[{x:P.x,y:P.y+2,cells:[0,1,2,3,4,5,6,7,8].map(k=>({c:['carrot','potato','cabbage'][k%3],d:S.day-k}))}];draw();S.placed=ps;S.gardens=gs}catch(e){ok=false}"
             "return {ok,sprites:[...SPRC.keys()].some(k=>k.startsWith('wall'))&&[...SPRC.keys()].some(k=>k==='o123')}})()")
     assert all(ob.values()), ob
+    # graphics 1.6: the Darkwood (floor, thick trees, trail, fireflies) and the home room (floor, rug, wall, window, door) draw everywhere inside them, and the guild and arena rooms that share the home tiles still draw
+    iw = ev("(()=>{let ok=true,n=0;try{sail=false;for(let y=FZ.y0;y<=FZ.y1;y+=3)for(let x=FZ.x0;x<=FZ.x1;x+=4){P.x=P.rx=x;P.y=P.ry=y;draw();n++}"
+            "for(let y=IR.y0;y<=IR.y1;y+=2)for(let x=IR.x0;x<=IR.x1;x+=2){P.x=P.rx=x;P.y=P.ry=y;draw();n++}P.x=P.rx=GZ.dx;P.y=P.ry=GZ.y1-1;draw();P.x=P.rx=AZ.dx;P.y=P.ry=AZ.y1-1;draw()}catch(e){ok=false}return {ok,n:n>60}})()")
+    assert all(iw.values()), iw
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

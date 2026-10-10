@@ -44,6 +44,7 @@ function draw(){
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
+  if(zoneOf(P.x,P.y)===2)fireflies(cx,cy,t);
   // fishing line
   if(fs){const [fx,fy]=front(),px=P.rx*T+(P.f==='l'?-1:18)-cx,py=P.ry*T+2-cy,ex=fx*T+8-cx,ey=fy*T+8-cy+(Math.sin(t/200)*(fs===2?3:1))|0;
     g.strokeStyle='#fff';g.lineWidth=1;g.beginPath();g.moveTo(px,py);g.lineTo(ex,ey);g.stroke();
