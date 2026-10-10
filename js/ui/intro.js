@@ -8,8 +8,8 @@ const playIntro=(()=>{
   const LEN=15.5; // seconds until "Tap to start"
   const BASE=270; // pixels across the shorter side of the screen (more = finer detail)
   const BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
-  const SKY=['#2557ad','#2c63ba','#3471c6','#3e7fd0','#4a8cd8','#589ade','#69a8e4','#7db6e9','#93c4ed','#aad1f1','#c0ddf4','#d3e8f6'];
-  const SEA=['#21427a','#264e8b','#2b5899','#3064a6','#3770b1','#3e7db9','#4689c1','#4f95c8','#58a0cd'];
+  const SKY=['#2756a6','#2e62b3','#376fbf','#447dc8','#5689cd','#6c96cf','#87a4cd','#a5b3c8','#c6bfbd','#e6c8ad','#f7d09d','#fdddab']; // blue overhead, warming to peach and gold at the horizon (sunrise)
+  const SEA=['#2f3f72','#2c4b86','#2b5596','#3062a3','#376eae','#3e7bb7','#4687bf','#4f93c6','#58a0cb'];
   const ease=t=>t<=0?0:t>=1?1:t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, outE=t=>t<=0?0:t>=1?1:1-Math.pow(1-t,3);
   const rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
   const rng=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
@@ -30,14 +30,14 @@ const playIntro=(()=>{
     const inside=(x,y)=>{if(y>h-2||y<0||x<0||x>=w)return false;if(inBase(x,y))return true;for(const b of bumps){const dx=x-b[0],dy=y-b[1];if(dx*dx+dy*dy<=b[2]*b[2])return true}return false};
     const c=mk(w,h),x=c.getContext('2d');
     for(let y=0;y<h;y++)for(let xx=0;xx<w;xx++){if(!inside(xx,y))continue;const ch=(xx+y)%2;let col;
-      if(!inside(xx,y-1)||!inside(xx-1,y-1))col='#ffffff';
-      else if(!inside(xx,y+1))col='#9fb8d4';
-      else if(!inside(xx+1,y+2)||!inside(xx,y+3)&&ch)col='#b9cee4';
-      else if(y>h*.74||y>h*.62&&ch)col='#d3e1ef';
-      else if(!inside(xx-2,y-3)&&ch||!inside(xx,y-3))col='#f8fbfe';
-      else col='#e8f1f9';
+      if(!inside(xx,y-1)||!inside(xx-1,y-1))col='#fff4dc';
+      else if(!inside(xx,y+1))col='#a99cbb';
+      else if(!inside(xx+1,y+2)||!inside(xx,y+3)&&ch)col='#c4b4c8';
+      else if(y>h*.74||y>h*.62&&ch)col='#e3d3d2';
+      else if(!inside(xx-2,y-3)&&ch||!inside(xx,y-3))col='#fff8ea';
+      else col='#f6ebdf';
       // creases: the lower edge of a puff that sits over another puff
-      if(col==='#e8f1f9'||col==='#f8fbfe')for(const b of bumps){const dx=xx-b[0],dy=y-b[1],d=Math.sqrt(dx*dx+dy*dy)-b[2];if(d>-1.4&&d<=0&&dy>0&&dx>-b[2]*.3){col=ch?'#d3e1ef':'#dde8f3';break}}
+      if(col==='#f6ebdf'||col==='#fff8ea')for(const b of bumps){const dx=xx-b[0],dy=y-b[1],d=Math.sqrt(dx*dx+dy*dy)-b[2];if(d>-1.4&&d<=0&&dy>0&&dx>-b[2]*.3){col=ch?'#e3d3d2':'#eadcd6';break}}
       x.fillStyle=col;x.fillRect(xx,y,1,1)}
     return c}
 
@@ -91,11 +91,11 @@ const playIntro=(()=>{
   // a far island on the horizon: two hills, round trees, a few cottages with red roofs, and a lighthouse whose light flashes
   function makeIsland(){const w=Math.round(62*K),h=Math.round(22*K),c=mk(w,h),x=c.getContext('2d'),r=rng(31);
     const hill=(cx,hw,hh,col)=>{x.fillStyle=col;for(let i=-hw;i<=hw;i++){const v=Math.round(hh*Math.pow(Math.cos(i/hw*Math.PI/2),.8));if(v>0)x.fillRect(cx+i,h-v,1,v)}};
-    hill(Math.round(w*.33),Math.round(w*.32),Math.round(h*.55),'#86a5c0');hill(Math.round(w*.62),Math.round(w*.3),Math.round(h*.38),'#7697b5');
+    hill(Math.round(w*.33),Math.round(w*.32),Math.round(h*.55),'#a29cb2');hill(Math.round(w*.62),Math.round(w*.3),Math.round(h*.38),'#9089a6');
     for(let i=0;i<9;i++){const tx=Math.round(w*(.08+r()*.5)),top=h-Math.round(h*.55*Math.pow(Math.cos((tx-w*.33)/(w*.32)*Math.PI/2),.8))-1;
-      x.fillStyle='#5f83a4';x.fillRect(tx-1,top-2,3,3);x.fillRect(tx,top-3,1,1);x.fillStyle='#6d90af';x.fillRect(tx-1,top-2,1,1)}
+      x.fillStyle='#7f7896';x.fillRect(tx-1,top-2,3,3);x.fillRect(tx,top-3,1,1);x.fillStyle='#bfa9a8';x.fillRect(tx-1,top-2,1,1)}
     for(const hx of[.48,.56,.66]){const bx=Math.round(w*hx),by=h-Math.round(h*.2);x.fillStyle='#e6edf2';x.fillRect(bx,by,4,3);x.fillStyle='#b8655a';x.fillRect(bx-1,by-2,6,2);x.fillStyle='#4d6f8f';x.fillRect(bx+1,by+1,1,1)}
-    const lx=Math.round(w*.8),ly=h-Math.round(h*.3);x.fillStyle='#7697b5';x.fillRect(lx-3,ly+2,8,h-ly-2);
+    const lx=Math.round(w*.8),ly=h-Math.round(h*.3);x.fillStyle='#9089a6';x.fillRect(lx-3,ly+2,8,h-ly-2);
     for(let y=0;y<10;y++){x.fillStyle=y%4<2?'#eef3f6':'#c8473a';x.fillRect(lx,ly-8+y,2,1)}
     x.fillStyle='#3d5874';x.fillRect(lx-1,ly-10,4,2);
     return{img:c,lx:lx+1,ly:ly-11}}
@@ -189,6 +189,11 @@ const playIntro=(()=>{
     if(phase==='play'&&t>3&&hintEl.textContent==='Tap to skip')hintEl.style.opacity=0;
     const cam=Math.round(TILT*ease((t-3.2)/5.3)),hz=HZ+TILT-cam,SHT=H-HZ;
     g.drawImage(sky,0,-cam);
+    // the rising sun, half up out of the sea to the right, with a dithered glow around it
+    const sx=Math.round(W*.7),sr=Math.round(17*K),sy=hz+Math.round(sr*.25);
+    if(sy-sr*3<H){for(let y=Math.max(0,sy-sr*3);y<Math.min(hz,H);y++)for(let x=sx-sr*3;x<=sx+sr*3;x++){const d=Math.hypot(x-sx,y-sy)/sr;if(d>3||d<=1)continue;
+        const b=BAYER[(y&3)*4+(x&3)]/16;if(d<1.5){if(b<.85){g.fillStyle='#ffe9a8';g.fillRect(x,y,1,1)}}else if(d<2.2){if(b<.5){g.fillStyle='#ffe0a0';g.fillRect(x,y,1,1)}}else if(b<.18){g.fillStyle='#fbd9a4';g.fillRect(x,y,1,1)}}
+      for(let y=Math.max(0,sy-sr);y<Math.min(hz,H);y++)for(let x=sx-sr;x<=sx+sr;x++){const d=Math.hypot(x-sx,y-sy)/sr;if(d>1)continue;g.fillStyle=d>.86?'#ffcf6a':d>.6?'#ffe596':'#fff6d2';g.fillRect(x,y,1,1)}}
     for(const c of clouds){const span=W+c.img.width+20,x=((c.x+c.v*t)%span+span)%span-c.img.width-10,y=c.y-cam;if(y<H&&y+c.img.height>0)g.drawImage(c.img,Math.round(x),y)}
     if(hz<H+island.img.height){const ix=Math.round(W*.06);g.drawImage(island.img,ix,hz-island.img.height);
       if(Math.sin(t*2.6)>.4){g.fillStyle='#fff3b0';g.fillRect(ix+island.lx-3,hz-island.img.height+island.ly,7,1);g.fillRect(ix+island.lx-1,hz-island.img.height+island.ly-1,3,3)}}
@@ -197,7 +202,7 @@ const playIntro=(()=>{
       const glide=Math.sin(t*.8+ph)>.45,f=glide?1:[0,1,2,1][Math.floor(t*(big?7:9)+ph*3)%4],x=x0+v*t,y=y0+Math.sin(t*w+ph)*4*K-cam*(big?1.2:1.05);
       const img=gulls[f][big];if(y>-30&&x<W+30)g.drawImage(img,Math.round(x),Math.round(y))});
     // the title rises up out of the sea; nothing below the horizon line is drawn, so it looks like it comes up from behind it
-    if(title&&t>7.6){const r=outE((t-7.6)/3.2),img=title.img,tx=Math.round((W-img.width)/2),top=HZ-Math.round(H*.09)-img.height,ty=Math.round(hz+2+(top-HZ-2)*r);
+    if(title&&t>7.6){const r=outE((t-7.6)/3.2),img=title.img,tx=Math.round((W-img.width)/2),top=HZ-Math.round(H*.16)-img.height,ty=Math.round(hz+2+(top-HZ-2)*r);
       g.save();g.beginPath();g.rect(0,0,W,hz);g.clip();g.drawImage(img,tx,ty);drawWeed(tx,ty,t);
       g.restore()}
     // the sea: rolling wave crests (bigger close up, tiny far away), white caps on the near ones, and twinkling light
@@ -205,7 +210,10 @@ const playIntro=(()=>{
       for(const w of waves){const y=hz+w.k;if(y>=H-1)continue;const s=Math.sin(t*w.sp+w.ph);if(s<-.3)continue;const u=w.k/SHT,x=Math.round(w.x+Math.sin(t*.5+w.ph)*u*5*K);
         g.fillStyle=u<.2?'#3f75b0':'#6ea5d4';g.fillRect(x,y,w.len,1);g.fillStyle='#22477f';g.fillRect(x+1,y+1,w.len,1);
         if(w.cap&&s>.55){g.fillStyle='#d6ebf7';g.fillRect(x+Math.round(w.len*.3),y-1,Math.max(1,Math.round(w.len*.35)),1)}}
-      for(const w of glints){const y=hz+w.k;if(y>=H)continue;if(Math.sin(t*w.sp+w.ph)<.55)continue;g.fillStyle=w.k<SHT*.3?'#b4d6ea':'#f0f8fc';g.fillRect(Math.round(w.x),y,w.len,1)}}
+      // the sun's path of light on the water, widening towards us and shimmering
+      for(let k=1;k<SHT&&hz+k<H;k++){const u=k/SHT,hw=2+u*W*.16,n=1+Math.round(u*3);for(let j=0;j<n;j++){const q=hash(k,j+Math.floor(t*4+j*1.7));if(q<.45)continue;
+        const x=Math.round(sx+(hash(j*7+k,Math.floor(t*3))-.5)*2*hw),len=1+Math.round(u*6*K*q);g.fillStyle=q>.85?'#fff3cf':q>.65?'#ffd98a':'#e9a96a';g.fillRect(x,hz+k,len,1)}}
+      for(const w of glints){const y=hz+w.k;if(y>=H)continue;if(Math.sin(t*w.sp+w.ph)<.55)continue;g.fillStyle=w.k<SHT*.3?'#e8d2b8':'#fff3dc';g.fillRect(Math.round(w.x),y,w.len,1)}}
     // the ship sails straight away from us towards the horizon, rolling gently, leaving a V-shaped white wake
     if(t>SHIP_T){const{z,X}=shipAt(t),s=S0/z,ys=hz+D/z+Math.sin(t*2.1)*.9*Math.min(s,1.6),xs=W/2+X/z;
       if(phase==='play'||t<LEN+3){emit+=dt*110;while(emit>=1){emit--;const q=Math.random(),side=Math.random()<.5?-1:1;
