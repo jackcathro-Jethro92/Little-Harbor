@@ -1,0 +1,1049 @@
+# Every text string in the first game file Jack uploaded (git commit f7ee28c, 7 October 2026), one per line. Used by tools/make_lists.py to tell original lines from placeholders. Do not edit.
+ &middot; 
+ &middot; <span class="
+ &middot; <span class="ok">Already built</span>
+ (poison x
+ (you have 
+ Cook it, or plant it in a garden.
+ Day 
+ HP 
+ HP  +
+ STA
+ Sells for 
+ and 
+ and set it as your boat! Switch boats any time at Rue's boatyard.
+ begins.
+ big
+ cur
+ fewer swings; 
+ fish for 
+ fish you are carrying.
+ for 
+ gold
+ gold.
+ gold. Pleasure!
+ gold. Sell it to Odo, or cook it.
+ health
+ health, +
+ health.
+ hits you for 
+ hits. Poisoned enemies are slowed, weakened and take damage over time.
+ in the grass
+ is coated. Poison x
+ level 
+ max health.
+ more night
+ needs 
+ nights.
+ picked up.
+ placed!
+ placed.
+ reached level 
+ seconds.
+ stamina
+ stamina.
+ station
+ tiles.
+! It is poisoned.
+! Worth about 
+"></span>
+">Gold 
+#000
+#00000026
+#00000030
+#00000033
+#00000045
+#050c08
+#0a170f
+#122a1b
+#12402a
+#141b26
+#14291a
+#143a25
+#1a1a2a
+#1b3a24
+#1e3d27
+#1f4a73
+#1f5236
+#1f5a2a
+#223b25
+#23222e
+#25421c
+#27432a
+#2a1b0e
+#2b2118
+#2b5736
+#2c4a2e
+#2d7a46
+#2e1f10
+#2e2e36
+#2e3a52
+#2e5a2a
+#2f2f3a
+#2f3d4b
+#2f4f22
+#2f5a24
+#2f6a42
+#2f6f4a
+#2f6fc4
+#2f7a3a
+#2f7d32
+#2f7fc4
+#2f8f7a
+#383838
+#3a2713
+#3a2a1a
+#3a2d22
+#3a3a44
+#3a3a48
+#3a63a8
+#3b4a6b
+#3b6e2e
+#3b6fa0
+#3b6fb5
+#3b6fd0
+#3b82c4
+#3d2a14
+#3f403b
+#3f5fa0
+#3f7f35
+#3f8a2c
+#3f8a5c
+#3f8f3a
+#3f9a5a
+#43702e
+#46372a
+#46586a
+#48a8f0
+#4a2323
+#4a3018
+#4a74c0
+#4a7ae0
+#4a82b8
+#4a86d8
+#4a9ae0
+#4caf72
+#4d7a33
+#4e2f1d
+#4f7a2a
+#4f8a3a
+#4f8fa6
+#4f9a5a
+#4f9f48
+#4fa03e
+#4fa04a
+#531c16
+#55555d
+#55574f
+#573a21
+#58d058
+#5a3a22
+#5a3f1e
+#5a4838
+#5a5b63
+#5aa83c
+#5aaeb0
+#5b8f3a
+#5b8fe6
+#5c8c3a
+#5d9a48
+#5e3d22
+#5f7183
+#5f9fe8
+#678f3f
+#6a6a72
+#6aa84a
+#6b3d1e
+#6b3f1d
+#6b4423
+#6b6c75
+#6b6d66
+#6bc04d
+#6c6a66
+#6e4526
+#6e4b2c
+#6e5a3c
+#6e7068
+#6e7078
+#6e8a4a
+#6f7078
+#6fae4c
+#74a048
+#78a34c
+#78ad4e
+#78b552
+#78c257
+#7a3ac8
+#7a3b55
+#7a4a1c
+#7a4a26
+#7a4a2c
+#7a4fa0
+#7a5230
+#7a5a30
+#7a5a38
+#7a7a86
+#7aa83c
+#7ac0f4
+#7c2c22
+#7cc4c0
+#7d5530
+#7e5f2e
+#7fa84f
+#86c06a
+#8a3730
+#8a5a2e
+#8a5a3a
+#8a5ac8
+#8a5d33
+#8a6238
+#8a6a35
+#8a8672
+#8a8b83
+#8a8b94
+#8aa05a
+#8aa0b5
+#8b8d85
+#8bd05a
+#8c4a12
+#8cc766
+#8d5c36
+#8d8f87
+#8fce6a
+#9a9b92
+#9a9b93
+#9a9ba3
+#9ac86a
+#9acb7a
+#9ad06a
+#9ad3f0
+#9bb8d0
+#9bd9d3
+#9c5bb5
+#9d9a90
+#a3a49c
+#a5a69d
+#a63f30
+#a85a3a
+#a8631f
+#a8703a
+#a8742f
+#a8743f
+#a8863a
+#a9763f
+#a97f4a
+#a98340
+#a9aaa3
+#b04a3c
+#b08850
+#b08a52
+#b0b2b8
+#b3b4ab
+#b5651d
+#b83a3a
+#b8412e
+#b84a3a
+#b8823f
+#b8c2cc
+#b97a50
+#b9824a
+#c0713a
+#c2c3ba
+#c49a62
+#c83820
+#c8402a
+#c8553d
+#c8603a
+#c8934e
+#c8a0f0
+#c8b890
+#c8c890
+#c97a3a
+#c97b99
+#c9852e
+#c9892f
+#c98b4a
+#c98b5a
+#c9965a
+#c9a06a
+#c9a227
+#c9a35c
+#c9cac1
+#c9d2da
+#cdb77a
+#cfe3ef
+#cfe3f0
+#cfe8a0
+#d19c5c
+#d4684d
+#d6b27a
+#d6f0b0
+#d83828
+#d8683c
+#d8a43c
+#d8b878
+#d8c88a
+#d8d4c4
+#d8d8a0
+#d8d8cf
+#d8ecff
+#d94b3a
+#d9534f
+#d9803f
+#d9833b
+#d98a3a
+#d98a3d
+#d98a5a
+#d9a441
+#d9b27a
+#d9b45f
+#d9d9d9
+#e0762f
+#e0a030
+#e0a050
+#e0ac84
+#e0b378
+#e0c07c
+#e6edf2
+#e8403a
+#e84828
+#e8632e
+#e8762f
+#e8863a
+#e8908a
+#e8c060
+#e8cc7a
+#e8d09a
+#e8d9a8
+#e8e0d0
+#e8e8e8
+#e9a7bd
+#e9d9b8
+#ead9a0
+#efe3bd
+#f06a5a
+#f0a0c0
+#f0e8d8
+#f0f4f8
+#f1c8a0
+#f2a22e
+#f2b83a
+#f2c14e
+#f2d27a
+#f2e55c
+#f2efe6
+#f3d9a4
+#f4dcdc
+#f4f4f0
+#f4f8ff
+#f6c85a
+#f6d2b0
+#f6f6f0
+#f8a830
+#f8d030
+#f8d3de
+#ffe27a
+#fff
+#fff6c9
+#ffffff
+% chance of an extra item when crafting.
+% chance of an extra log.
+% chance of extra fiber and herbs.
+% chance of extra ore.
+% chance of extra produce from your garden.
+% less stamina.
+% longer.
+% more health and stamina.
+% sooner
+% sooner and better odds of rare fish.
+% sooner.
+% stronger and last 
+% weapon damage and +
+%"></i></div><p>
+--acc
+-backup-v
+. Ready in 
+................
+.......r..r.....
+......KBBBBBK...
+......KBBKBBK...
+......KBBKKKK...
+......KKKKBBK...
+......KKKKKK....
+......KKSSKK....
+......KPPKPPK...
+......KPPPPK....
+......RRRRRR....
+......RRrrRR....
+......rrrrrr....
+.....KAAAAAAK...
+.....KBBK.KBBK..
+.....KHHHHHHK...
+.....KJJJJJJJSK.
+.....KJJJJJJK...
+.....KJJJSSJK...
+.....KJJJjjJK...
+.....KJJSSJJK...
+.....KJJjjJJK...
+.....KKKKKK.....
+.....KKKKKKKK...
+.....KKSSSSK....
+.....KPPKKPPK...
+.....KSSJJJJK...
+.....KSSSSSSK...
+.....KSSTTTTK...
+.....KTTSSTTK...
+.....KTTTSSTK...
+.....KTTTTTTK...
+.....KTTTTTTTSK.
+.....KTTTttTK...
+.....KTTttTTK...
+.....KjjJJJJK...
+.....KttTTTTK...
+....KAAAAAAAAK..
+....KAAAAAAK....
+....KHHHHHHHHK..
+....KHHHHHHK....
+....KHSSSSSSHK..
+....KHSSSSSSK...
+....KKJJJJJJKK..
+....KKJJTTJJKK..
+....KKTTTTTTKK..
+....KSESSSSESK..
+....KSSSSSSSSK..
+....KaaaaaaaaK..
+...KAAAAAAAAK...
+...KHHHHHHHHK...
+...KHHHHSSSSK...
+...KHHHSSSESK...
+...KHHSSSSSSSK..
+...KJKJJJJJJKJK.
+...KJKJJTTJJKJK.
+...KSKJJJJJJKSK.
+...KSKJJTTJJKSK.
+...KSKTTTTTTKSK.
+...KaaaaaaaaKKKK
+..KAAAAAAAAAAAAK
+..KAAAAAAAAAAK..
+..KKK...........
+..KKKaaaaaaKKK..
+..KKKaaaaaaaaKKK
+.KRRRK..........
+.KrrrK..........
+.cur
+.open
+</b> x
+</b><br>
+</div>
+</p>
+</p><p>
+</span>
+</span></h3><div class="xpbar"><i style="width:
+</span><span class="br">
+</span><span class="pips">
+</span><span>x
+<br>
+<br>Needs: 
+<div><b>
+<div>Rue: You only own the one boat, friend. Nothing to switch yet.</div>
+<h3><span>
+<span class="
+<span class="bcur">▶</span><span class="bn">
+<span class="pip
+<span>
+A 3 by 2 garden patch. Plant herbs and vegetables, then sleep and harvest.
+A big working boat. The best odds of rare fish.
+A bright red mushroom with white spots.
+A building is in the way.
+A crisp orange root.
+A cut of fresh pork.
+A flax bush is there. Cut it first.
+A fragrant garden herb.
+A fresh green sprig from the woods.
+A garden needs clear open ground.
+A good slab of beef.
+A heavy leafy head.
+A parchment that claims a 7 by 5 patch of land for your home.
+A plain starter rod.
+A prefabricated cottage. Place it on your claimed land.
+A rare blue mushroom that glows faintly.
+A sharp little blade for cutting flax.
+A starchy staple.
+A sturdier prefabricated house with a tiled roof.
+A sturdy blade for dangerous islands.
+A sturdy sailing boat with better odds of rare fish.
+A sweet pale root.
+A tent and campfire. Set it up on land and pack it away again. Stations go within 5 tiles of it.
+A tree is in the way.
+ALCHEMY STATION
+Aboard! Face open water and tap Use to cast.
+Aiko
+Alchemy
+Alchemy station
+All fish
+Apply to weapon
+Back on land.
+Baked potato
+Bamboo rod
+Basil
+Beef
+Beef steak
+Beef stew
+Beef stir-fry
+Better odds of rare fish
+Better odds of rare fish.
+Bite! Tap Use now!
+Bites 
+Blue cap mushroom
+Bought the 
+Braised cabbage
+Bram
+Bram's Tackle & Tools
+Breaks rock and digs out ore.
+Bream
+Brew
+Brew potions and remedies. Place within 5 tiles of camp or home.
+Brewed 
+Bring fish, ingredients or cooked meals.
+Broccoli
+Bronze ore
+Build
+Build ships from planks, rope and iron. Place within 5 tiles of camp or home.
+Busy morning, is it not?
+Buy food
+Buying
+CAMPFIRE
+CONSUMABLES
+COOKING STATION
+Cabbage
+Camp kit
+Cancel
+Captain Rue
+Carbon rod
+Carrot
+Chicken
+Chicken soup
+Choose a new spot, then tap Use.
+Chop!
+Claim some land first.
+Clink!
+Coats your weapon for 
+Coats your weapon. Hits poison enemies, weakening and slowing them.
+Combat
+Cook
+Cook stews and feasts (and everything the campfire can). Place within 5 tiles of camp.
+Cooked 
+Cooking
+Cooking station
+Copper ore
+Craft
+Craft rope and planks. Place within 5 tiles of camp.
+Crafted 
+Crafting
+Daichi
+Darkwood north gate
+Darkwood south gate
+Deadly poisonous. Handle with care.
+Death cap mushroom
+Dense and tough. Hard to chop, built to last.
+Dense planks that last for years.
+Driftwood rod
+Drink
+EQUIPPED
+Equip
+Equip a weapon first, then apply the poison.
+FORGE
+Face a clear tile and tap Use to place it. Open the Bag to cancel.
+Farming
+Fells trees for timber.
+Fiberglass rod
+Fish stew
+Fishing
+Flax fiber
+Food restores 
+Foraging
+Forest sprig
+Forge
+Forged from bronze, copper and tin at a forge.
+Forty years on these waters, and the sea still surprises me.
+Found 
+Fresh chicken meat.
+Fresh fish, fair prices. Hand them over and I will pay.
+Fresh produce and meat.
+Fully restores stamina.
+GEAR
+Garden
+Garden kit
+Garden packed up.
+Garden ready!
+Garden set up! Face a plot to plant something.
+Glossy leaves and red berries.
+Gold 
+Golden koi
+Golden koi sashimi
+Golden-brown ore, hard to mine.
+Goro
+Greater healing potion
+Greater stamina tonic
+Green florets, good for you.
+Grilled bream
+Grilled broccoli
+Grilled chicken
+Grilled mackerel
+Grilled sardine
+Grilled tuna steak
+Hair
+Hale
+Hana
+Hardwood log
+Hardwood plank
+Haru
+Harvested 
+Hat: 
+Healing potion
+Holly
+Home claim
+Home sweet home
+Hornets sting you! -4 health.
+House built!
+I forage here for the alchemists. Dead ends hide the best finds.
+I keep meaning to learn to fish.
+I paint the harbor every morning. Never looks the same twice.
+I want a boat when I grow up!
+INGREDIENTS
+In use
+Iron bar
+Is it true there is a golden koi out past the rocks?
+Island 1
+Island 2
+Island 3
+Island 4
+Island 5
+Island 6
+It fits! Tap Use to place it.
+It got away. Cast again.
+Jacket
+Jacket: 
+Keep the doorway clear.
+Keep to the trail. The Darkwood swallows folk who wander off it.
+Kenji
+Kiku
+Knife
+Land claimed!
+Land claimed! Craft a house kit and place it on your plot.
+Landed a 
+Leave a clear tile in front of the door.
+Light planks for simple building.
+Light, easy to work. Good for simple things.
+Line cast. Wait for the bite...
+Lovely day for it.
+MATERIALS
+MAX LEVEL
+Mackerel
+Mainland
+Mara
+Medium wood log
+Medium wood plank
+Mind the mushrooms. Some will cure you and some will kill you.
+Mind the tide if you head out.
+Mining
+Moss
+Mountain Town
+Move
+Move and sail twice as fast for 
+Move and sail twice as fast for a while.
+Move down
+Move left
+Move right
+Move up
+Next pocket
+No food yet. Cook something at a campfire!
+No ingredients yet. Go fishing or visit Odo!
+No materials yet. Chop trees and mine ore!
+Nothing equipped.
+Nothing here yet.
+Nothing to plant. Gather herbs or buy vegetables from Odo.
+Nothing to sell
+Odo buys fish, ingredients and cooked meals.
+Odo's General Store
+Odo's General Store · 
+Odo: 
+Odo: Here you go.
+Odo: Sold 
+Old Tess
+Only places you have sailed or walked near are shown.
+Ore needs 
+Owned
+Pack: 
+Packed up the camp
+Parsnip
+Part of that land is blocked (water, buildings, paths or fences).
+Pick up
+Pick up camp
+Pick up garden
+Pickaxe
+Pirate Island
+Pixelify Sans
+Place
+Plant 
+Planted 
+Poison coat x
+Poison vial
+Pork
+Pork chops
+Pork roast dinner
+Potato
+Potions are 
+Previous pocket
+Red cap mushroom
+Reddish ore. Smelts with bronze and tin.
+Restores 
+Restores a lot of health.
+Restores health.
+Restores stamina.
+Roast carrots
+Roast parsnip
+Rope
+Rowboat
+Rue's Boatyard
+Rue: Now sailing the 
+SHIPWRIGHT
+Sailing
+Sailors' Grave Rocks
+Sardine
+Seafood feast
+Sell
+Sell 1
+Sell all 
+Selling
+Sells for 
+Settlement Docks
+Ship built!
+Shipwright station
+Shirt
+Skin
+Sleep on the boat and the waves will rock you right off.
+Sloop
+Smelt ore into iron. Place within 5 tiles of camp.
+Soft silvery ore. Smelts with bronze and copper.
+Soft, damp moss from rocky places.
+Softwood log
+Softwood plank
+Someone is standing there.
+Something is already there.
+Sora
+Spirit Isle
+Stamina tonic
+Stations need a camp (or a home) nearby. Set up a camp kit first.
+Step onto land first.
+Stringy fiber cut from flax. Twist it into rope.
+Sturdy all-round timber.
+Sturdy planks for solid building.
+Swift 
+Swiftness potion
+Sword
+TESTING: the whole map is shown. Your red dot is you.
+Tall grass hides hornets. Do not say I did not warn you.
+Taro
+Temple Tower
+Temple of Fire
+Temple of the Sea
+Temple to the Mountains
+Temple to the Sky
+That's water. Face dry land.
+Thatched cottage kit
+The Darkwood
+The fish have been shy lately.
+The house must sit inside your claim on ground cleared of trees and ore.
+The spirit
+The spirit fades away... for now.
+The trees close in around you...
+Thirty winters I have cut timber here. Something is stirring in the deep woods.
+Tiled house kit
+Tin ore
+Too early. Wait for the bite.
+Too far from camp or home. Stations go within 
+Too tired to fish. Sleep on the boat to rest.
+Too tired to swing. Sleep on the boat to rest.
+Too tired. Sleep on the boat to rest.
+Travelling costs 
+Trawler
+Treasure!
+Trees need 
+Try fishing at dawn. The sardines run thick.
+Tuna
+Tuna fetch the best coin around here.
+Twisted from flax fiber. Needed to build ships and houses.
+Unequip
+Vegetable stew
+Village
+WORKBENCH
+Walk down the pier to your boat, face it, and tap Use.
+Walled Settlement
+Weapon
+Welcome back. Day 
+Welcome to the harbor!
+Woodcutter's axe
+Woodcutters' Shacks
+Woodcutting
+Workbench
+Worth 
+Wren
+You already have a camp set up.
+You already have a claim.
+You already have a house.
+You are exhausted! Sleep on the boat to recover.
+You are standing there.
+You aren't hungry right now.
+You ate the 
+You blacked out... and woke up on your boat. Lost 
+You built the 
+You can't build on the pier.
+You can't place that there.
+You can't set up camp indoors.
+You doze off on the boat.
+You drank the 
+You feel light on your feet! Moving twice as fast.
+You found 
+You gathered 
+You have no weapon! Buy a sword from Bram.
+You hit the spirit for 
+You need a knife to cut flax and pick herbs. Bram sells them.
+You need a pickaxe to mine. Bram sells them.
+You need a woodcutter's axe to chop trees. Bram sells them.
+You need the boat to fish. It is at the end of the pier.
+You sleep soundly at home.
+You step back out into the light.
+You step back outside.
+You step inside your home.
+You're already at full health.
+You're already fully rested.
+Your 
+Your house is built! Face the door and tap Use to go in.
+Your starter gear
+Your trusty starter boat.
+Yuki
+alchemy
+alchemy_station
+aria-label
+arrowdown
+arrowleft
+arrowright
+arrowup
+backspace
+bagbtn
+baked_potato
+basil
+bback
+bcap
+bdesc
+beef_steak
+beef_stew
+beef_stirfry
+bench
+bhead
+bleft
+blist
+block
+blue_cap
+bmain
+bnext
+boat
+bold 11px sans-serif
+bpop
+bprev
+braised_cabbage
+bream
+broccoli
+bronze_ore
+brow
+brow dim
+btitle
+btxt
+button
+cabbage
+camp
+camp_kit
+carrot
+center
+chicken
+chicken_soup
+chop
+claim
+click
+combat
+cooking
+cooking_station
+copper_ore
+cottage_kit
+cr-back
+cr-bt
+cr-det
+cr-go
+cr-list
+cr-title
+craft
+crafting
+crow
+dark
+death_cap
+display:none
+down
+dpad
+enter
+equip
+escape
+farming
+fiber
+fill
+fire
+fish
+fish_stew
+fishing
+flash
+food
+forage
+foraging
+forest_sprig
+forge
+g each.
+g. You can plant it in a garden.
+garden
+garden_kit
+gear
+gold
+greater_healing
+greater_stamina
+grilled
+grilled_bream
+grilled_broccoli
+grilled_chicken
+grilled_mackerel
+grilled_sardine
+grilled_tuna
+hair
+hard
+hardwood
+hardwood_plank
+healing_potion
+hidden
+holly
+home_claim
+house_kit
+https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap
+ingredient
+inset 0 0 0 5px #d83828
+iron_bar
+items
+jacket
+keydown
+knife
+koi_sashimi
+lack
+left
+light
+little-harbor-v1
+look
+mackerel
+map-back
+map-h
+map-t
+mapbtn
+mapov
+material
+medium
+medium_plank
+medium_wood
+menu
+menu-card
+menu-o
+menu-t
+mine
+mining
+moss
+nearest
+none
+null
+open
+padding:10px 22px;font-size:18px
+padding:10px 22px;margin-top:12px
+parsnip
+pickaxe
+plank
+pointercancel
+pointerdown
+pointerleave
+pointerup
+poison_vial
+pork_chops
+pork_roast
+potato
+potion
+prefab
+red_cap
+rgba(0,0,0,.2)
+rgba(180,238,160,.95)
+rgba(2,6,14,.93)
+rgba(2,6,14,0)
+rgba(220,70,60,.42)
+rgba(225,238,255,.92)
+rgba(240,240,240,
+rgba(255,255,255,.4)
+rgba(255,255,255,.65)
+rgba(55,65,110,.95)
+rgba(70,130,235,.5)
+right
+roast_carrots
+roast_parsnip
+rope
+s campfire; 
+sailing
+sardine
+sclose
+seafood_feast
+sell
+shipwright
+shirt
+sk-back
+sk-list
+sk-title
+skbtn
+skills
+skin
+slate
+sleep
+sloop
+soft
+softwood
+softwood_plank
+staf
+stamina_tonic
+stan
+standard_bench
+stat
+station
+status
+store
+straw
+string
+stylesheet
+swiftness_potion
+sword
+thatch
+tin_ore
+toast
+tool
+track
+trawler
+tuna
+unique
+utf-8
+veggie_stew
+viewport
+visible
+weapon
+width:auto;height:auto;border-radius:6px;padding:6px 8px
+width=device-width, initial-scale=1, viewport-fit=cover
+wood
+woodcutting
+wrap
