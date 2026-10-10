@@ -100,41 +100,65 @@ const playIntro=(()=>{
     x.fillStyle='#3d5874';x.fillRect(lx-1,ly-10,4,2);
     return{img:c,lx:lx+1,ly:ly-11}}
 
-  // the title, carved from sun-bleached driftwood: wood grain, knots and cracks, chipped edges, a bevelled worn outline,
-  // and strands of seaweed hanging off the bottoms of the letters (and a few draped over the top), drawn every frame so they sway
-  function makeTitle(){const k=Math.min(W,H)/BASE,f1=Math.round(30*k),f2=Math.round(56*k),b1=f1+4,b2=Math.round(b1+f2*.92+6),tw=W,th=b2+8,c=mk(tw,th),x=c.getContext('2d');
-    x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
-    x.font='700 '+f1+'px "Pixelify Sans", ui-monospace, Menlo, monospace';x.fillText('Little',tw/2,b1);
-    x.font='700 '+f2+'px "Pixelify Sans", ui-monospace, Menlo, monospace';x.fillText('Harbor',tw/2,b2);
-    const d=x.getImageData(0,0,tw,th).data,M0=new Uint8Array(tw*th);for(let i=0;i<tw*th;i++)M0[i]=d[i*4+3]>=120?1:0;
-    const at0=(X,Y)=>X>=0&&Y>=0&&X<tw&&Y<th&&M0[Y*tw+X];
-    // chip the edges so the letters look like worn, broken wood
-    const M=new Uint8Array(M0);let x0=tw,x1=0,y0=th,y1=0;
-    for(let Y=0;Y<th;Y++)for(let X=0;X<tw;X++){const i=Y*tw+X;if(!M0[i])continue;
-      if((!at0(X-1,Y)||!at0(X+1,Y)||!at0(X,Y-1)||!at0(X,Y+1))&&hash(X,Y)<.2)M[i]=0;
-      if(M[i]){if(X<x0)x0=X;if(X>x1)x1=X;if(Y<y0)y0=Y;if(Y>y1)y1=Y}}
-    if(x1<x0)return null;
-    const m=(X,Y)=>X>=0&&Y>=0&&X<tw&&Y<th&&M[Y*tw+X],deep=(X,Y)=>{for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++)if(!m(X+i,Y+j))return false;return true};
-    const r=rng(99),inner=[];for(let Y=y0;Y<=y1;Y++)for(let X=x0;X<=x1;X++)if(deep(X,Y))inner.push([X,Y]);
-    const knots=[],cracks=new Set();
-    for(let i=0;i<7&&inner.length;i++){const[X,Y]=inner[r()*inner.length|0];knots.push([X,Y,1.6+r()*1.4])}
-    for(let i=0;i<14&&inner.length;i++){let[X,Y]=inner[r()*inner.length|0];const dir=r()<.5?-1:1,n=3+(r()*5|0);for(let j=0;j<n&&m(X,Y);j++){cracks.add(Y*tw+X);X+=dir;if(r()<.25)Y+=r()<.5?-1:1}}
-    const OUT='#2a221b',P=4,ow=x1-x0+1+P*2,oh=y1-y0+1+P*2,o=mk(ow,oh),ox=o.getContext('2d');
-    for(let Y=y0-P;Y<=y1+P;Y++)for(let X=x0-P;X<=x1+P;X++){let col=null;
-      if(m(X,Y)){const v=Y+1.6*Math.sin(X*.06+Y*.05)+.7*Math.sin(X*.21+1.7),fr=v/3.3-Math.floor(v/3.3),n=hash(X,Y);
-        const st=hash(Math.floor((X+Y*3)/7),Math.floor(v/3.3));col=fr<.16?'#76634c':fr<.3?'#9a8668':st<.3?'#b19e80':st<.85?'#c3b294':'#d6c8ad';if(n>.93)col='#8d7a5e';
-        for(const[kx,ky,kr]of knots){const dd=Math.hypot(X-kx,(Y-ky)*1.4);if(dd<kr*.55){col='#4a3b2c';break}if(dd<kr){col='#76634c';break}if(dd<kr+1.2&&fr<.5){col='#8d7a5e';break}}
-        if(cracks.has(Y*tw+X))col='#3d3024';
-        if(!m(X,Y-1))col='#ece0c6';else if(!m(X,Y+1)||!m(X,Y+2)&&n<.6)col='#5f4f3c';else if(!m(X-1,Y))col='#dccdb0';else if(!m(X+1,Y))col='#86735a'}
-      else if(m(X-1,Y)||m(X+1,Y)||m(X,Y-1)||m(X,Y+1)||m(X-1,Y-1)||m(X+1,Y-1)||m(X-1,Y+1)||m(X+1,Y+1))col=OUT;
-      else if(m(X,Y-2)||m(X-1,Y-2)||m(X+1,Y-2)||m(X,Y-3))col='rgba(12,28,58,.5)';
-      if(col){ox.fillStyle=col;ox.fillRect(X-x0+P,Y-y0+P,1,1)}}
+  // the title, built from pieces of sun-bleached driftwood laid along the strokes of each capital letter (like driftwood letters on a beach):
+  // every stick has its own shade, rounded ends, wood grain and a dark gap around it; sticks poke out past the corners and overlap where strokes meet.
+  // Strands of seaweed hang off the bottoms of the letters (and a few are draped over the tops), drawn every frame so they sway.
+  // Each letter is a list of strokes on a 6 x 8 grid (x across, y down), with its width.
+  const OCT=[[1.5,0,4.5,0],[4.5,0,6,1.5],[6,1.5,6,6.5],[6,6.5,4.5,8],[4.5,8,1.5,8],[1.5,8,0,6.5],[0,6.5,0,1.5],[0,1.5,1.5,0]];
+  const LETTERS={L:[5,[[0,0,0,8],[0,8,5,8]]],I:[3,[[1.5,0,1.5,8],[0,0,3,0],[0,8,3,8]]],T:[6,[[0,0,6,0],[3,0,3,8]]],
+    E:[5,[[0,0,0,8],[0,0,5,0],[0,4,4,4],[0,8,5,8]]],H:[5.5,[[0,0,0,8],[5.5,0,5.5,8],[0,4,5.5,4]]],A:[6.4,[[0,8,3.2,0],[3.2,0,6.4,8],[1.3,5.2,5.1,5.2]]],
+    R:[5.5,[[0,0,0,8],[0,0,4,0],[4,0,5.5,1.4],[5.5,1.4,5.5,2.8],[5.5,2.8,4,4.2],[4,4.2,0,4.2],[2.2,4.2,5.5,8]]],
+    B:[5.8,[[0,0,0,8],[0,0,4,0],[4,0,5.2,1.2],[5.2,1.2,5.2,2.9],[5.2,2.9,4,4],[4,4,0,4],[4,4,5.8,5.3],[5.8,5.3,5.8,6.8],[5.8,6.8,4.6,8],[4.6,8,0,8]]],
+    O:[6,OCT]};
+  function makeTitle(){const k=Math.min(W,H)/BASE,r=rng(2024),sticks=[];
+    const rows=[['LITTLE',Math.max(3,3.4*k),1.7*k,1],['HARBOR',Math.max(4,5*k),2.3*k,2]];
+    const gapRow=Math.round(17*k),M8=Math.round(10*k);let y=M8;
+    for(const[word,u,rad,bundle]of rows){const sp=2.3*u,wid=[...word].reduce((t,ch)=>t+LETTERS[ch][0]*u,0)+sp*(word.length-1);let x0=(W-wid)/2;
+      for(const ch of word){const[lw,segs]=LETTERS[ch];
+        for(const[a1,b1,a2,b2]of segs){const ax=x0+a1*u,ay=y+b1*u,bx=x0+a2*u,by=y+b2*u,len=Math.hypot(bx-ax,by-ay),dx=(bx-ax)/len,dy=(by-ay)/len,nx=-dy,ny=dx;
+          // long strokes are made of two or three overlapping pieces; thick strokes are a bundle of two sticks side by side
+          const pieces=len>u*5.5?(r()<.5?2:3):len>u*3?(r()<.6?1:2):1;
+          for(let b=0;b<bundle;b++){const off=bundle>1?(b-.5)*rad*1.5:0;
+            for(let q=0;q<pieces;q++){const s0=q/pieces*len-(q?rad*1.5:0),s1=(q+1)/pieces*len+(q<pieces-1?rad*1.5:0),e0=(q===0?-(1+r()*rad*1.1):0),e1=(q===pieces-1?1+r()*rad*1.1:0),tilt=(r()-.5)*1.2,jit=(r()-.5)*.8;
+              sticks.push({ax:ax+dx*(s0+e0)+nx*(off+tilt+jit),ay:ay+dy*(s0+e0)+ny*(off+tilt+jit),bx:ax+dx*(s1+e1)+nx*(off-tilt+jit),by:ay+dy*(s1+e1)+ny*(off-tilt+jit),
+                r:rad*(.8+r()*.4),bend:(r()-.5)*rad*.8,tone:r()*6|0,seed:r()*1000})}}}
+        x0+=lw*u+sp}
+      y+=8*u+gapRow}
+    const tw=W,th=Math.ceil(y+M8);
+    for(let i=sticks.length-1;i>0;i--){const j=r()*(i+1)|0;[sticks[i],sticks[j]]=[sticks[j],sticks[i]]}
+    // paint the sticks: dark gap around each, light top edge, shaded underside, grain along the length, darker rounded ends, the odd knot
+    const TONES=['#d3c7ae','#c2b294','#ad9b7e','#dcd2bf','#9f8d71','#b9a98b'],DARK=['#a89a80','#978669','#84735a','#b3a690','#78684f','#8f7f64'],LIGHT=['#e9e1cf','#dacdb2','#c8b89b','#f0e9db','#b9a88b','#d2c4a8'];
+    const S=new Uint8Array(tw*th),px=new Array(tw*th).fill(null);
+    for(const st of sticks){const rad=st.r,x0=Math.floor(Math.min(st.ax,st.bx)-rad-2),x1=Math.ceil(Math.max(st.ax,st.bx)+rad+2),y0=Math.floor(Math.min(st.ay,st.by)-rad-2),y1=Math.ceil(Math.max(st.ay,st.by)+rad+2),len=Math.hypot(st.bx-st.ax,st.by-st.ay);
+      const knot=r()<.35?.2+r()*.6:-1;
+      for(let yy=y0;yy<=y1;yy++)for(let xx=x0;xx<=x1;xx++){if(xx<0||yy<0||xx>=tw||yy>=th)continue;const q=segQ(st,xx,yy);if(q.d>rad+.9)continue;const i=yy*tw+xx;
+        if(q.d>rad){px[i]='#3b2f23';S[i]=1;continue}
+        const v=q.v/rad,along=q.u*len,end=Math.min(q.u*len,(1-q.u)*len);let col=TONES[st.tone];
+        if(v<-.45)col=LIGHT[st.tone];else if(v>.5)col=DARK[st.tone];
+        const lane=Math.round(v*rad*1.6+st.seed);if(hash(lane,Math.floor((along+st.seed)/(4+hash(lane,1)*6)))>.72)col=DARK[st.tone];
+        if(end<1.6)col=DARK[st.tone];
+        if(knot>0&&Math.hypot(along-knot*len,v*rad)<1.3)col='#5e4f3c';
+        if(hash(xx*3+st.seed,yy)>.97)col='#6d5d47';
+        px[i]=col;S[i]=1}}
+    let X0=tw,X1=0,Y0=th,Y1=0;for(let i=0;i<tw*th;i++)if(S[i]){const X=i%tw,Y=i/tw|0;if(X<X0)X0=X;if(X>X1)X1=X;if(Y<Y0)Y0=Y;if(Y>Y1)Y1=Y}
+    if(X1<X0)return null;
+    const m=(X,Y)=>X>=0&&Y>=0&&X<tw&&Y<th&&S[Y*tw+X];
+    const P=4,ow=X1-X0+1+P*2,oh=Y1-Y0+1+P*2,o=mk(ow,oh),ox=o.getContext('2d');
+    for(let Y=Y0-P;Y<=Y1+P;Y++)for(let X=X0-P;X<=X1+P;X++){let col=null;
+      if(m(X,Y))col=px[Y*tw+X];
+      else if(m(X-1,Y)||m(X+1,Y)||m(X,Y-1)||m(X,Y+1))col='#2a2119';
+      else if(m(X,Y-2)||m(X-1,Y-2)||m(X+1,Y-2)||m(X,Y-3))col='rgba(12,28,58,.45)';
+      if(col){ox.fillStyle=col;ox.fillRect(X-X0+P,Y-Y0+P,1,1)}}
     // seaweed: hanging from the bottom edges of the letters, and a few strands draped over the tops
     const weed=[];let lastX=-9;
-    for(let X=x0;X<=x1;X++)for(let Y=y1;Y>=y0;Y--){if(m(X,Y)&&!m(X,Y+1)&&!m(X,Y+2)){if(hash(X,Y*3)>.74&&X-lastX>2){weed.push({x:X-x0+P,y:Y-y0+P+1,len:Math.round((5+hash(Y,X)*14)*k),ph:hash(X*7,Y)*6,w:hash(X,Y*7)<.55?2:1,top:0});lastX=X}break}}
+    for(let X=X0;X<=X1;X++)for(let Y=Y1;Y>=Y0;Y--){if(m(X,Y)&&!m(X,Y+1)&&!m(X,Y+2)){if(hash(X,Y*3)>.74&&X-lastX>2){weed.push({x:X-X0+P,y:Y-Y0+P+1,len:Math.round((5+hash(Y,X)*14)*k),ph:hash(X*7,Y)*6,w:hash(X,Y*7)<.55?2:1,top:0});lastX=X}break}}
     lastX=-9;
-    for(let X=x0;X<=x1;X++)for(let Y=y0;Y<=y1;Y++){if(m(X,Y)&&!m(X,Y-1)){if(hash(X*3,Y)>.93&&X-lastX>6){weed.push({x:X-x0+P,y:Y-y0+P-1,len:Math.round((6+hash(Y,X*5)*9)*k),ph:hash(X,Y*11)*6,w:2,top:1});lastX=X}break}}
-    return{img:o,mask:M,tw,x0,y0,x1,y1,P,weed}}
+    for(let X=X0;X<=X1;X++)for(let Y=Y0;Y<=Y1;Y++){if(m(X,Y)&&!m(X,Y-1)){if(hash(X*3,Y)>.93&&X-lastX>6){weed.push({x:X-X0+P,y:Y-Y0+P-1,len:Math.round((6+hash(Y,X*5)*9)*k),ph:hash(X,Y*11)*6,w:2,top:1});lastX=X}break}}
+    return{img:o,mask:S,tw,x0:X0,y0:Y0,x1:X1,y1:Y1,P,weed}}
+  // where a pixel sits relative to a (slightly bent) stick: distance from its centre line, how far along it is, and which side
+  function segQ(st,X,Y){const vx=st.bx-st.ax,vy=st.by-st.ay,l2=vx*vx+vy*vy||1;let u=((X-st.ax)*vx+(Y-st.ay)*vy)/l2;u=u<0?0:u>1?1:u;
+    const l=Math.sqrt(l2),nx=-vy/l,ny=vx/l,b=st.bend*Math.sin(Math.PI*u),cx=st.ax+vx*u+nx*b,cy=st.ay+vy*u+ny*b,ex=X-cx,ey=Y-cy;
+    const up=ny>0||(ny===0&&nx>0)?-1:1;return{d:Math.hypot(ex,ey),u,v:-(ex*nx+ey*ny)*up}} // v < 0 on the upper (lit) side
 
   function drawWeed(tx,ty,t){for(const s of title.weed){for(let j=0;j<s.len;j++){const u=j/s.len,off=Math.round(Math.sin(t*1.4+s.ph-j*.28)*j*.11),X=tx+s.x+off,Y=ty+s.y+j;
       const w=u<.65?s.w:1;g.fillStyle='#1b4227';g.fillRect(X-1,Y,1,1);
@@ -210,7 +234,6 @@ const playIntro=(()=>{
     el=document.createElement('div');el.id='intro';el.className='open';el.setAttribute('role','button');el.setAttribute('aria-label','Opening scene. Tap to skip.');
     el.innerHTML='<canvas id="intro-c"></canvas><div id="intro-hint">Tap to skip</div>';document.body.appendChild(el);
     cv=el.firstChild;g=cv.getContext('2d');hintEl=$('intro-hint');setup();
-    if(document.fonts&&document.fonts.load)document.fonts.load('700 56px "Pixelify Sans"').then(()=>{title=makeTitle()},()=>{});
     el.addEventListener('pointerdown',e=>{e.preventDefault();tap(e)});
     onKey=e=>tap(e);addEventListener('keydown',onKey,true);
     onResize=()=>setup();addEventListener('resize',onResize);
