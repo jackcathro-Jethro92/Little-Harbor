@@ -218,3 +218,16 @@ function towerInside(m,sx,sy,tx,ty,n,t){const{O,gold,wood,wood2,glow}=TW,r=ty-TS
     if(tx===TS.dx){R(sx+5,sy-4,6,9,O);R(sx+6,sy-3,4,7,'#b87a3a');R(sx+9,sy-6,3,3,'#b87a3a');R(sx+11,sy-5,3,1,'#b87a3a');R(sx+6,sy+4,4,2,'#b87a3a')}else R(sx+4+n%5,sy+2,6,3,tx<TS.dx?'#e8d8a0':'#c8402a')}
   else if(m===114){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy+7,8,6,O);R(sx+5,sy+8,6,4,wood);R(sx+3,sy+4,10,4,O);R(sx+4,sy+5,8,2,'#7a5230')}
   else if(m===115){floor();R(sx+7,sy-12,2,12,O);R(sx+4,sy-1,8,3,O);R(sx+5,sy,6,6,'#e8b030');R(sx+6,sy+1,4,4,fl?'#fff2a8':glow);R(sx+4,sy+6,8,2,O)}}
+// ---------- the damaged Temple to the Sky (js/world/skydamage.js; art/temples/sky_stonehenge_temple/5_circle_damaged and 6_temple_stone_damaged) ----------
+// Tiles (all on grass): 117 and 118 the left and right halves of the split temple stone (blocked), 119 dark stairs going down between them (blocked), 120 scorched ground (walkable),
+// 121 a toppled standing stone lying on the ground (blocked), 122 rubble (walkable). skySmoke draws two rising puffs of grey smoke over a scorched spot (a building marked `skysmoke`).
+function skyDamagedTile(m,sx,sy,tx,ty,n,t){const O='#3a3430';grassBg(tx,ty,sx,sy,n);
+  if(m===117||m===118){const L=m===117,x0=L?sx+1:sx,w=T-1;R(x0-(L?0:0),sy,w,T,O);R(x0+(L?1:1),sy+1,w-2,T-2,'#9a9a92');R(x0+1,sy+1,w-2,4,'#c0c0b6');R(x0+1,sy+T-4,w-2,3,'#7a7a72');
+    R(x0+(L?4:3),sy+7,5,1,'#4a4a44');R(x0+(L?8:6),sy+7,1,4,'#4a4a44');R(x0+(L?4:5),sy+11,5,1,'#4a4a44');R(x0+(L?4:5),sy+9,1,2,'#4a4a44');R(x0+(L?3:3),sy+5,2,1,'#bcbcb2');
+    R(L?sx+T-3:sx+1,sy+2,2,T-4,'#2a2a2a');R(L?sx+T-5:sx+3,sy+9,2,1,'#2a2a2a');R(L?sx+2:sx+T-5,sy+T-2,3,2,'#4a4a44')}
+  else if(m===119){R(sx,sy,T,T,'#0c0c10');for(let i=0;i<4;i++){R(sx+1,sy+2+i*4,T-2,1,'#3a3a46');R(sx+1,sy+3+i*4,T-2,2,'#1c1c24')}R(sx,sy,1,T,O);R(sx+T-1,sy,1,T,O)}
+  else if(m===120){R(sx,sy,T,T,'#5a5046');for(let k=0;k<8;k++){const r=hs(tx*7+k,ty*3+k)%100;R(sx+r%14,sy+(r*3)%14,2,2,k%3?'#3a322c':'#7a6e5e')}}
+  else if(m===121){const v=n%2===0;if(v){R(sx+2,sy+T-3,12,3,'#00000030');R(sx+3,sy-2,9,T,O);R(sx+4,sy-1,7,T-2,'#a8a8a0');R(sx+4,sy-1,2,T-2,'#bcbcb2');R(sx+4,sy+4,7,1,'#7a7a72');R(sx+6,sy+8,2,1,'#b8b858')}
+    else{R(sx,sy+T-4,T,3,'#00000030');R(sx-1,sy+3,T+2,9,O);R(sx,sy+4,T,7,'#a8a8a0');R(sx,sy+4,T,2,'#bcbcb2');R(sx+7,sy+4,1,7,'#7a7a72');R(sx+3,sy+8,2,1,'#b8b858')}}
+  else{for(let k=0;k<4;k++){const r=hs(tx*5+k,ty*9+k)%100,w=2+r%3;R(sx+r%11+1,sy+(r*3)%11+2,w,w-1,k%2?'#9a9a92':'#b8b8ae');R(sx+r%11+1,sy+(r*3)%11+1+w-1,w,1,'#6a6a62')}}}
+function skySmoke(b,x,y,t){for(let k=0;k<6;k++){const a=((t/80+k*6)%36),s=6+a/3,o=Math.sin(a*.3+k*2)*4,al=Math.max(0,.95-a/40).toFixed(2);R(x+2+o,y-2-a*1.5,s,s*.85,'rgba(96,96,104,'+al+')');R(x+3+o,y-2-a*1.5,s-3,(s-3)*.85,'rgba(150,150,158,'+al+')')}}

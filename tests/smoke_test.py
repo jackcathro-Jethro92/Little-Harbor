@@ -111,6 +111,16 @@ def check(b, url):
             "sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act();r.in=zoneOf(P.x,P.y)===10;r.floor=at(P.x,P.y)===108;r.stands=[...Array(11*10)].filter((_,k)=>at(156+k%11,226+(k/11|0))===114).length===4;P.f='d';act();r.out=zoneOf(P.x,P.y)===0&&P.x===212&&P.y===205;return r})()")
     assert all(tt.values()), tt
     ev("for(const[x,y,f]of[[212,192,'d'],[212,199,'d'],[206,203,'d'],[212,207,'u']]){sail=false;P.x=P.rx=x;P.y=P.ry=y;P.f=f;draw()};sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act();draw();P.f='d';act();draw()")
+    # the damaged Sky temple: off it matches the normal temple; on it has the split stone with stairs, smoke and toppled stones, the temple stays reachable from the avenue, and off puts everything back
+    sk0 = ev("(()=>{window.__a=[];for(let y=96;y<=128;y++)for(let x=218;x<=254;x++)window.__a.push(at(x,y));return window.__a.length})()")
+    ev("applySky(true)")
+    skd = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],ok=new Set(WK);const s=new Set([125*MW+236]),q=[125*MW+236];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(!s.has(j)&&ok.has(M[j])){s.add(j);q.push(j)}}}"
+            "let toppled=0;for(let y=96;y<=128;y++)for(let x=218;x<=254;x++)if(at(x,y)===121)toppled++;"
+            "return {split:at(235,108)===117&&at(236,108)===119&&at(237,108)===118,stairsBlock:!WK.includes(119)&&!WK.includes(117),smoke:BL.filter(b=>b.skysmoke).length===2,toppled:toppled>=6,reach:s.has(109*MW+236)&&s.has(111*MW+236)&&s.has(105*MW+236),scorch:at(236,109)===120&&WK.includes(120)&&WK.includes(122)}})()")
+    assert all(skd.values()), skd
+    ev("for(const[x,y]of[[236,113],[236,104],[230,108],[242,110]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
+    ev("applySky(false)")
+    assert ev("(()=>{let k=0;for(let y=96;y<=128;y++)for(let x=218;x<=254;x++)if(at(x,y)!==window.__a[k++])return false;return !BL.some(b=>b.skydmg)})()"), "undamaged temple restored exactly"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
