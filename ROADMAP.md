@@ -52,7 +52,7 @@ The world is much further along than when this roadmap was first written. Everyt
 
 | Note | Status |
 | --- | --- |
-| N1 Movement | **Not started, and still the most important.** Only the speed of the D-pad and the keyboard was matched (pull request #12). The feel is untouched. |
+| N1 Movement | **In progress.** Done: tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Still to approve on the phone: how the walking animation and the camera feel. |
 | N2 Sea square | Not started, and bigger now: the hidden rooms added since (guild, arena, Earth sanctum, Sea hall and vault, Fire hall) sit in the south-east corner of the sea and need moving off the map too |
 | N3 Cottage | Not started |
 | N4 Stairs | On hold until the shading revamp |

@@ -4,6 +4,7 @@ A top-down pixel-art fishing and exploration game for phones (primarily iPhone 1
 
 ## How to play (controls)
 - **D-pad** moves (hold to repeat); keyboard: arrows or WASD. Walking takes a step every 0.07 s while a direction is held; the boat sails twice as fast (a step every 0.035 s). Both are set by `STEP_MS` in `js/systems/stats.js`, and the phone D-pad and the keyboard share one held-direction timer in `js/input.js`, so they move at exactly the same speed (the PC no longer depends on the computer's own key-repeat rate). **Use** button (Space/Enter) interacts with the tile you face.
+- **Turning and tapping** (`js/input.js`): pressing a direction you are not facing only **turns** you on the spot (you start walking only if you keep holding it past `TURN_MS`, 0.12 s). Pressing the direction you already face takes **one step at once**, and if you keep holding it you walk on after `REPEAT_MS` (0.17 s), so a quick tap is exactly one tile. Held directions are kept in a list: the newest one decides, and letting go of it while an older key is still held carries on in the older direction instead of stopping. The boat works the same way. Facing a tile without moving makes it easy to line up with doors, people and water.
 - Buttons: **Sleep** (only on the boat or at home), **Bag** (B), **Skills** (K), **Map** (M).
 - Facing water from the boat and pressing Use casts a line; when the bite alert appears, press Use again within about a second.
 
