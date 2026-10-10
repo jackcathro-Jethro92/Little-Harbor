@@ -41,8 +41,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.9b Room list | **Begun** (10 Oct): the ships' nine rooms come from a table (`ROOMTAB`, `js/world/shiprooms.js`); the ten older rooms are still made by hand and need moving into the table |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
 | Phase 1 graphics upgrade | **Started:** 1.1 ground and water built (10 Oct, pictures in `art/graphics/step_1_1_before_after_*.png`); 1.2 trees and plants built (pictures in `art/graphics/step_1_2_before_after_*.png`); 1.3 buildings built (`art/graphics/step_1_3_before_after_*.png`); 1.4 characters, boats and animals built (`art/graphics/step_1_4_before_after_*.png`); 1.5 objects and stations built (`art/graphics/step_1_5_before_after_*.png`); 1.6 Darkwood and home room built (`art/graphics/step_1_6_before_after_*.png`); 1.7 light built (`art/graphics/step_1_7_before_after.png`; test with `?time=night`); Phase 1 is complete and waiting for Jack's approval |
-| 2.1b Title menu and save files | Not started: planned for Sat 17 Oct, no save reminders |
-| 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
+| 2.1b Title menu and save files | **Done** (10 Oct): title screen, ☰ menu, save to a file, save code, three slots, safe loading, new game with backup (see DESIGN.md controls) |
+| 2.1 Story state | **Done** (10 Oct): `S.flags` for the switches and `S.story` `{q, step, seen}` for progress, saved and kept across sleep and reload |
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
 | 2.2 to 2.5, 2.7 to 2.12 | Not started |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |

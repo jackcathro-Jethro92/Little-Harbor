@@ -25,6 +25,7 @@ def load(b, url, save):
     pg = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
     errs = []; pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("response", lambda r: r.status >= 400 and r.url.startswith("http://127.0.0.1") and errs.append("%d %s" % (r.status, r.url)))
+    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}")
     pg.goto(url)
     pg.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(save)); pg.reload(); pg.wait_for_timeout(400)
     return pg, errs
@@ -253,6 +254,45 @@ def check(b, url):
     assert all(flow.values()), flow
     ev("S.eq.boat='rowboat';sail=false;ui()")
     assert ev("$('deck').style.visibility")=='hidden', "no deck on the rowboat"
+    # story state (2.1): defaults, survives saving, reloading and sleeping; old saves without it still load
+    pg2 = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
+    pg2.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}")
+    pg2.goto(url); pg2.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(SAVE)); pg2.reload(); pg2.wait_for_timeout(300)
+    assert pg2.evaluate("(()=>{const s=storyState();return s.q===null&&s.step===0&&s.seen.length===0})()"), "old saves get the default story state"
+    pg2.evaluate("questSet('q1',2);markSeen('festival');setFlag('met_stranger');save()"); pg2.reload(); pg2.wait_for_timeout(300)
+    assert pg2.evaluate("S.story.q==='q1'&&S.story.step===2&&wasSeen('festival')&&flag('met_stranger')"), "story state survives a reload"
+    pg2.evaluate("sail=true;sleep()"); assert pg2.evaluate("S.story.q==='q1'&&flag('met_stranger')&&wasSeen('festival')"), "story state survives sleep"
+    pg2.close()
+    # the title menu (2.1b): opens at the start, Continue goes in; save to a file, a code and slots; loading is checked, backed up and reloads; new game keeps a backup; no movement while it is open
+    pm = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); perr = []; pm.on("pageerror", lambda e: perr.append(str(e)))
+    pm.goto(url); pm.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(SAVE)); pm.reload(); pm.wait_for_timeout(300)
+    assert pm.evaluate("$('title').classList.contains('open')&&!document.querySelector('#title-body button.tm').disabled&&document.querySelector('#title-body button.tm').textContent==='Continue'"), "title menu opens with Continue"
+    x0 = pm.evaluate("P.x"); pm.evaluate("move('r')"); pm.keyboard.down("ArrowRight"); pm.wait_for_timeout(250); pm.keyboard.up("ArrowRight")
+    assert pm.evaluate("P.x") == x0 + 1, "only the direct move() call moved: the key was ignored while the menu is open"
+    pm.click("#title-body button.tm >> text=Continue"); assert pm.evaluate("!$('title').classList.contains('open')&&/Welcome back/.test($('msg').textContent)")
+    pm.click("#menubtn"); assert pm.evaluate("$('title').classList.contains('open')&&/Resume/.test($('title-body').innerText)"), "the menu button opens the pause menu"
+    pm.keyboard.press("Escape"); assert pm.evaluate("!$('title').classList.contains('open')"), "Escape closes it again"
+    pm.keyboard.press("Escape"); pm.click("#title-body button.tm >> text=Save game"); pm.click("#title-body button.tm >> text=Show a save code")
+    code = pm.evaluate("document.querySelector('.tmta').value"); assert code.startswith("LH1:"), code[:10]
+    assert pm.evaluate("c=>{const d=parseSave(c);return d.day===S.day&&d.look.skin===S.look.skin&&d.gold===S.gold}", code), "a save code reads back as the same game"
+    bad = pm.evaluate("(()=>{const r=[];for(const t of['', 'hello','{\"look\":1,\"day\":3}','LH1:@@@',JSON.stringify({look:{},day:2,v:99})]){try{parseSave(t);r.push('accepted')}catch(e){r.push(typeof e==='string')}}return r})()")
+    assert bad == [True] * 5, ("bad saves must be refused with a sentence", bad)
+    pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Slot 2")
+    assert pm.evaluate("!!slotInfo(2)&&slotInfo(2).day===S.day"), "saved to slot 2"
+    pm.evaluate("S.gold=777;save()"); pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Load game"); pm.click("#title-body button.tm >> text=Slot 2")
+    pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_timeout(600)
+    assert pm.evaluate("S.gold===10&&!$('title').classList.contains('open')&&!!localStorage.getItem('little-harbor-v1-backup-before-load')"), "loading a slot restores that game, goes straight in and keeps a backup"
+    fobj = pm.evaluate("JSON.stringify(saveFileObj())"); pm.evaluate("S.gold=555;save()"); pm.keyboard.press("Escape")
+    pm.click("#title-body button.tm >> text=Load game")
+    pm.set_input_files("input[type=file]", {"name": "mine.json", "mimeType": "application/json", "buffer": fobj.encode()}); pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_timeout(600)
+    assert pm.evaluate("S.gold===10"), "loading a save file works"
+    pm.keyboard.press("Escape"); pm.click("#title-body button.tm >> text=Load game")
+    pm.set_input_files("input[type=file]", {"name": "junk.json", "mimeType": "application/json", "buffer": b"not a save"})
+    pm.wait_for_timeout(300); assert pm.evaluate("/not a Little Harbor save/.test($('title-note').textContent)&&S.gold===10"), "a wrong file is refused and changes nothing"
+    pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=New game"); pm.click("#title-body button.tm >> text=Yes, start a new game"); pm.wait_for_timeout(600)
+    assert pm.evaluate("!S.seen&&!!localStorage.getItem('little-harbor-v1-backup-new-game')"), "new game starts fresh and keeps the old game as a backup"
+    assert not perr, perr
+    pm.close()
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
