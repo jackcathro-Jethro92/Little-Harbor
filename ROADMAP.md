@@ -41,6 +41,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.9b Room list | Not started: a tidy-up to do just before house interiors or taverns (2.10, 6.3) |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
 | Phase 1 graphics upgrade | Not started |
+| 2.1b Title menu and save files | Not started: planned for Sat 17 Oct, no save reminders |
 | 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
 | 2.2 to 2.5, 2.7 to 2.12 | Not started |
@@ -177,7 +178,7 @@ The draft is a path through Phases 0 to 4 with one goal: play the festival openi
 
 | Day | Steps | What Jack does |
 | --- | --- | --- |
-| Sat 17 Oct | 2.1 story state, 2.2 dialogue box with portrait slot, N5 shop sub-menus | Try the dialogue box and the new shop menus |
+| Sat 17 Oct | 2.1 story state, **2.1b title menu and save files**, 2.2 dialogue box with portrait slot, N5 shop sub-menus | Try the title menu (save to a file, clear the browser, load it back), the dialogue box and the new shop menus |
 | Sun 18 Oct | 2.3 triggers, 2.7 seagull letters, 2.8 quest log, 2.11 story test switches | Try a test letter; use the test switches |
 | Mon 19 Oct | 2.4 scenes, 2.5 gates, 2.6 world variants (festival decorations), 2.9 NPCs by story | Watch a test scene |
 | Tue 20 Oct | 3.1 enemy table, **3.6 turn-based battles (basic)** | Fight a test pirate battle |
@@ -248,6 +249,17 @@ This is the most important phase. Every later quest is built from these parts. U
 - Add `S.story` with `{ q: current quest id, step: step within it, flags: {}, seen: [] }`, defaulting to the start for old saves. Bump `SAVE_V` with a proper migration.
 - Flags are plain names, for example `met_stranger`, `has_compass`, `forest_boulder_open`.
 - *Done when:* flags survive save, reload and sleep, and old saves still load.
+
+**2.1b Title menu and save files (decided 10 October).** The game saves by itself, but only inside the browser it is played in, so clearing data or changing browser starts a new game. Add an **opening title menu screen** that is the home for saving and loading:
+- **New game** and **Continue** (continue the automatic save).
+- **Save to file** (downloads a small file) and **Load from file** (picks one back up).
+- **Save code:** the same save as plain text to copy and paste, for any phone where file downloads are awkward.
+- **Three save slots** kept inside the browser, named for example "Slot 1 - Day 12".
+- A small **Menu** button in the game returns to this screen at any time, so a player can save to a file whenever they like.
+- Loading is checked and safe: it confirms the file is a real Little Harbor save, keeps a backup of the current save first, and upgrades older saves automatically (the existing `migrate()`).
+- **No reminders or warnings to save**, and no accounts or cloud saving (the game is plain files on GitHub Pages).
+- Needs 2.1, because the file simply holds everything the game stores, so the story state is included automatically.
+- *Done when:* a game can be saved to a file, the browser data cleared, and the file loaded to carry on exactly where it left off, on the phone and on the PC; a broken or wrong file is refused with a friendly message and changes nothing. Tests cover the round trip, the slots and a refused file.
 
 **2.2 Dialogue box (with portraits, N9).**
 - A FireRed-style text box at the bottom of the screen, with tap or Use to advance and an optional speaker name.
