@@ -46,24 +46,19 @@ function tile(tx,ty,sx,sy,t){
   if(rk)rockFloor(tx,ty,sx,sy);else{if(zt===2){R(sx,sy,T,T,G[gi]);
   for(let k=0;k<4;k++){const r=hs(tx*3+k,ty*7)%100;if(r<55)R(sx+r%14,sy+(r*7)%14,2,1,G[(gi+1+(r&1))%3])}
   if(n<34){const bx=sx+2+n%10,by=sy+3+(n*3)%9;R(bx,by,1,3,'#4d7a33');R(bx+2,by-1,1,4,'#5c8c3a');R(bx+4,by,1,3,'#4d7a33')}}else grassTile(tx,ty,sx,sy);
-  if(n>=45&&n<52&&m===1)blob(sx+8,sy+9,5,'#5b8f3a','#78ad4e','#43702e','#2f4f22');
+  if(n>=45&&n<52&&m===1)bushArt(sx,sy);
   if(n>88&&m===1&&zt===2){const c=['#f2e55c','#f4f4f0','#f0a0c0'][n%3];R(sx+3+n%8,sy+4+n%7,2,2,c);R(sx+8+n%4,sy+9+n%4,2,2,c);R(sx+6,sy+11,1,1,c)}
   }
   if(m===8){R(sx,sy+7,T,2,'#3a2713');R(sx,sy+8,T,2,'#8a6238');R(sx,sy+12,T,2,'#3a2713');R(sx,sy+13,T,1,'#8a6238');R(sx+1,sy+4,3,12,'#3a2713');R(sx+2,sy+4,1,11,'#7a5230');R(sx+12,sy+4,3,12,'#3a2713');R(sx+13,sy+4,1,11,'#7a5230')}
-  if(m>=24&&m<=30){R(sx+2,sy+13,12,2,'#00000026');
-    if(m===24){R(sx+3,sy+9,10,5,'#2e5a2a');R(sx+4,sy+8,8,2,'#5d9a48');R(sx+5,sy+10,2,2,'#86c06a');R(sx+9,sy+11,2,2,'#86c06a')}
-    else if(m===25){R(sx+4,sy+5,8,8,'#12402a');R(sx+3,sy+7,10,4,'#2d7a46');R(sx+5,sy+6,3,3,'#3f9a5a');R(sx+6,sy+10,2,2,'#d83828');R(sx+9,sy+8,2,2,'#d83828')}
-    else if(m===26){R(sx+5,sy+5,6,8,'#3f8a2c');R(sx+3,sy+7,10,5,'#6bc04d');R(sx+7,sy+3,2,4,'#8bd05a');R(sx+4,sy+8,2,2,'#9ad06a')}
-    else if(m===27){R(sx+7,sy+3,1,11,'#4f7a2a');R(sx+4,sy+5,3,2,'#78b552');R(sx+9,sy+7,3,2,'#78b552');R(sx+4,sy+10,3,2,'#78b552');R(sx+9,sy+11,2,2,'#9ad06a')}
-    else{const c=['#d83828','#d8d8a0','#4a7ae0'][m-28],o='#2e1f10';R(sx+7,sy+9,3,5,'#f0e8d8');R(sx+3,sy+4,11,6,o);R(sx+4,sy+5,9,4,c);R(sx+6,sy+6,1,1,'#fff');R(sx+10,sy+5,1,1,'#fff');R(sx+3,sy+11,1,1,'#f0e8d8');R(sx+2,sy+10,4,3,o);R(sx+3,sy+11,2,1,c)}}
-  if(m===31){R(sx+4,sy+11,3,2,'#6e8a4a');R(sx+9,sy+12,2,1,'#6e8a4a')}
-  if(m===19){R(sx+2,sy+13,12,2,'#00000026');for(let k=0;k<5;k++){const x=sx+3+k*2,h=8+((n>>k)&3);R(x,sy+14-h,1,h,'#3f7f35');R(x+((k&1)?1:-1),sy+14-h+2,1,3,'#78b552');R(x-1,sy+12-h,3,3,'#5b8fe6');R(x,sy+13-h,1,1,'#f4f8ff')}}
-  if(m===20){R(sx+3,sy+11,1,3,'#8aa05a');R(sx+7,sy+10,1,4,'#8aa05a');R(sx+11,sy+11,1,3,'#8aa05a')}
+  if(m>=24&&m<=30)plantArt(m,n,sx,sy);
+  if(m===31)plantArt(m,n,sx,sy);
+  if(m===19)plantArt(m,n,sx,sy);
+  if(m===20)plantArt(m,n,sx,sy);
   if(m===41){R(sx,sy,T,T,'#14291a');blob(sx+8,sy+9,8,'#1e3d27','#2b5736','#122a1b','#0a170f');R(sx+(n%3)*5,sy+3,4,3,'#2f6a42');R(sx+3+n%7,sy+9,3,2,'#122a1b')}
   if(m===42){R(sx,sy,T,T,'#46372a');R(sx+n%10,sy+(n*3)%12,4,2,'#3a2d22');R(sx+(n*7)%11,sy+(n*5)%13,3,1,'#5a4838')}
   if(m===45){R(sx+4,sy+16-16,8,16,'#6b4423');R(sx+3,sy,10,3,'#3d2a14');R(sx+7,sy+5,2,3,'#f2c14e');R(sx+5,sy+10,1,5,'#573a21')}
   if(m===46){R(sx+3,sy+12,10,2,'#00000030');R(sx+4,sy+6,8,7,'#2e1f10');R(sx+5,sy+7,6,5,'#a8743f');R(sx+7,sy+5,2,3,'#d8b878');R(sx+10+((t/200|0)%2),sy+3+((t/300|0)%2),1,1,'#fff6c9');R(sx+3,sy+5,1,1,'#fff6c9')}
-  if(m===47){for(let k=0;k<6;k++){R(sx+1+k*2,sy+3+(n+k)%4,1,11,k%2?'#1f5a2a':'#2f7a3a');R(sx+1+k*2,sy+3+(n+k)%4,1,2,'#4fa04a')}}
+  if(m===47)plantArt(m,n,sx,sy);
   if(m===12){R(sx,sy,T,T,'#8d8f87');R(sx,sy,T,3,'#b3b4ab');R(sx,sy+7,T,1,'#6b6d66');R(sx+(n%2?4:10),sy+3,1,4,'#6b6d66');R(sx+(n%2?10:4),sy+8,1,6,'#6b6d66');R(sx,sy+T-2,T,2,'#55574f')}
   if(m===35||m===36){const bl=m===36;R(sx,sy,T,T,bl?'#55555d':'#6f7078');R(sx,sy,T,4,bl?'#6a6a72':'#8a8b94');R(sx+(n%3)*4,sy+6,5,3,'#5a5b63');R(sx+3+n%8,sy+11,6,3,'#5a5b63');
     if(!bl&&n%4===0)R(sx+4,sy,8,2,'#f0f4f8');if(bl){R(sx+2,sy+4,12,9,'#2e2e36');R(sx+3,sy+3,10,9,'#8d8f87');R(sx+4,sy+3,5,2,'#b0b2b8')}}
@@ -108,12 +103,4 @@ function rockTile(tx,ty,sx,sy,m,n){const i=ty*MW+tx,P=rockPal(i);
   for(let k=0;k<3;k++){const y=sy+5+k*3;R(sx,y,T,1,c[2]);R(sx+((tx*5+k*7)%11),y+1,5,1,c[0])}
   R(sx+(n%4)*4,sy+3,2,5,c[0]);R(sx,sy+12,T,1,c[2]);R(sx,sy+13,T,3,c[3])}
 function blob(cx,cy,r,c0,c1,c2,ol){for(let p=0;p<2;p++){const rr=p?r:r+1;for(let d=-rr;d<=rr;d++){const w=Math.round(Math.sqrt(rr*rr-d*d+.25));R(cx-w,cy+d,2*w+1,1,p?(d<-r*.35?c1:d>r*.3?c2:c0):ol)}}}
-function tree(tx,ty,sx,sy){
-  const n=hs(tx,ty)%100,sh=SHAKE[ty*MW+tx];if(sh&&performance.now()-sh<220)sx+=((performance.now()/40|0)%2?1:-1);R(sx-1,sy+11,18,5,'#00000026');
-  if(n%7===0&&n%2){const c='#7a5230',o='#2e1f10';R(sx+6,sy+2,4,14,o);R(sx+7,sy+3,2,13,c);R(sx+7,sy-2,2,6,c);R(sx+3,sy,5,2,c);R(sx+9,sy+1,5,2,c);R(sx+2,sy-3,2,4,c);R(sx+12,sy-2,2,4,c);return}
-  const pk=n%5===0,P=pk?['#e9a7bd','#f8d3de','#c97b99','#7a3b55']:{soft:['#6fae4c','#8cc766','#4f8a3a','#2f5a24'],medium:['#4f8a3a','#6aa84a','#3b6e2e','#25421c'],hard:['#2f6f4a','#3f8a5c','#1f5236','#143a25']}[wood(tx,ty)];
-  R(sx+5,sy+6,6,10,'#2e1f10');R(sx+6,sy+6,4,10,'#7a5230');R(sx+6,sy+6,1,10,'#5e3d22');R(sx+4,sy+14,8,2,'#2e1f10');
-  blob(sx+8,sy-3,6,...P);blob(sx+3,sy+2,5,...P);blob(sx+13,sy+2,5,...P);blob(sx+8,sy+4,5,...P);
-  if(pk){[[4,-1],[11,-4],[8,3],[14,2],[2,3]].forEach(([a,b])=>R(sx+a,sy+b,1,1,'#fff'))}
-  else{[[5,-4],[10,0],[3,3]].forEach(([a,b])=>R(sx+a,sy+b,2,1,P[3]))}
-}
+function tree(tx,ty,sx,sy){treeArt(tx,ty,sx,sy)}   // the art is in js/render/plants.js
