@@ -127,6 +127,9 @@ Jack reviewed the current build and sent these notes. Each has an id (**N1** to 
 - **N10. Cinematics** for the opening of the game and key moments: the village attack (Quest 7) and the island rising from the sea (Quest 10).
   - Built on the scene system (2.4) as new step **2.12**.
   - A short, basic version of the opening goes into the draft as part of 4.0. The full opening cinematic and the other two come later.
+  - **Done (10 October): the title cinematic** that plays when the game opens (`js/ui/intro.js`, see DESIGN.md "Opening cinematic"). Sunrise sky with gulls, the camera tilts down to the sea, the driftwood title with seaweed rises out of the water with the credit line under it, and a ship seen from behind sails towards the horizon. The home menu (Continue, New game, Load game) appears over it as the ship sails away. This is separate from the sea festival opening in 4.0, which still plays when a new game starts.
+  - **Notes for whoever builds 2.4 and 2.12:** the title cinematic is a stand-alone scene on its own canvas (low-resolution pixels scaled up, all drawn in code, no image files). Its parts can be reused for the other cinematics: the dithered sky and sea gradients, puffy clouds, gulls, the ship seen from behind with its V-shaped wake, letterbox bars and tap-to-skip. `playIntro(onMenu)` starts it, `playIntro.close()` fades it out and `playIntro.running()` says whether it is on screen. It plays once per visit (`sessionStorage` key `lh-intro`); the tests skip it by setting `lh-started`.
+  - **Still to do for it:** music and sound (no sound system yet), and checking it on the iPhone itself.
 - **N11. Ships remodelled to look like their real-life inspirations,** each needing a set number of crew. Built as new step **6.1**:
 
   | Ship | Crew needed |
