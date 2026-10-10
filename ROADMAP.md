@@ -40,7 +40,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | 0.2 Module split | **Done** (it was done early, not after the playtest) |
 | 2.9b Room list | Not started: a tidy-up to do just before house interiors or taverns (2.10, 6.3) |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
-| Phase 1 graphics upgrade | Not started |
+| Phase 1 graphics upgrade | **Started:** 1.1 ground and water built (10 Oct), waiting for Jack's approval of the screenshots (`art/graphics/step_1_1_before_after_*.png`) |
 | 2.1b Title menu and save files | Not started: planned for Sat 17 Oct, no save reminders |
 | 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
