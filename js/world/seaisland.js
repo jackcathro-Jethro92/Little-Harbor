@@ -12,7 +12,7 @@
  const LV=new Map();
  for(let y=Y0;y<=Y1;y++)for(let x=X0;x<=X1;x++){const r=rr(x,y),i=y*MW+x;if(r>=1||r<RING[3])continue;
    const lv=r<RING[2]?3:r<RING[1]?2:r<RING[0]?1:0,n=hs(x*11,y*13)%100;LV.set(i,lv);TLV[i]=LVL_TLV[lv];
-   M[i]=lv===3?48:lv===0&&r>.93?2:n<6?19:n<9?[26,27,25][n%3]:1}                                    // sand on the shore, bare rock on the rim, grass between (with some flax and herbs)
+   M[i]=lv===3?48:lv===0&&r>.93?2:n<6?19:n<9?[26,25][n%2]:1}                                    // sand on the shore, bare rock on the rim, grass between (with some flax and herbs)
  const lvAt=(x,y)=>{const v=LV.get(y*MW+x);return v===undefined?(rr(x,y)<RING[3]?99:0):v};      // the lake counts as high, the sea outside as level 0
  const border=[[],[],[]];
  LV.forEach((lv,i)=>{if(lv<1)return;const x=i%MW,y=(i/MW)|0;if(D4.some(([a,b])=>lvAt(x+a,y+b)<lv)){M[i]=49;border[lv-1].push(i)}});   // a cliff face wherever a tile has a lower neighbour

@@ -1,4 +1,4 @@
-const FY=258; // the Darkwood is drawn FY rows below where its own coordinates say (see below)
+const FY=258,FOREST_PLAN=[[27,20],[28,22],[29,14],[30,24]]; // the Darkwood's foraging: forest sprigs, red caps, death caps, blue caps // the Darkwood is drawn FY rows below where its own coordinates say (see below)
 // ---------- home interior: a hidden room in the south-east sea, shown only when you are inside ----------
 const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},inRoom=(x,y)=>x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1;
 if(!S.wv){S.wv=2; // saves from the small world used old coordinates: move them into the big map
@@ -37,10 +37,15 @@ trail([[123,38],[123,34],[128,31],[128,26],[121,24],[115,20],[118,15],[123,12]],
 trail([[123,12],[129,10],[134,7],[136,5]],1,42);
 trail([[123,34],[112,34],[110,30]],0,42);trail([[128,26],[138,26],[140,22]],0,42);trail([[115,20],[108,18],[106,13]],0,42);trail([[134,8],[140,11]],0,42);
 setT(123,39,43);setT(122,39,51);setT(124,39,51);setT(136,4,43);setT(135,4,51);setT(137,4,51); // exit arches: a three-wide torii at each end
-{const gr=[],hb=[];rect(FZ.x0,FZ.y0,FZ.x1,FZ.y1,(x,y)=>{if(at(x,y)!==40)return;const n=hs(x*13,y*7)%100;
-  if(Math.hypot(x-123,y-10)<=6.5){if(n<10)hb.push([x,y]);return}
-  if(n<45)gr.push([x,y]);else if(n<62&&nearT(x,y,1,v=>v===41))hb.push([x,y])});
-  gr.forEach(([x,y])=>setT(x,y,47));hb.forEach(([x,y])=>setT(x,y,[28,29,29,30,30,25,24,27][hs(x,y*5)%8]))}
+{const gr=[];rect(FZ.x0,FZ.y0,FZ.x1,FZ.y1,(x,y)=>{if(at(x,y)!==40)return;const n=hs(x*13,y*7)%100;
+  if(Math.hypot(x-123,y-10)>6.5&&n<45)gr.push([x,y])});
+  gr.forEach(([x,y])=>setT(x,y,47));
+  // mushrooms (28 red cap, 29 death cap, 30 blue cap) and forest sprigs (27) grow only here, and not many: picked by the world's fixed hash on clearing and trail tiles,
+  // away from the gates, the cottage and the two people, never touching each other (FOREST_PLAN: [tile, how many])
+  const keep=(x,y)=>Math.hypot(x-123,y-38)<5||Math.hypot(x-136,y-5)<5||(x>=118&&x<=124&&y>=5&&y<=11)||Math.hypot(x-107,y-12)<2.5;
+  const cand=[];rect(FZ.x0,FZ.y0,FZ.x1,FZ.y1,(x,y)=>{if((at(x,y)===40||at(x,y)===42)&&!keep(x,y))cand.push([x,y])});
+  const taken=[];FOREST_PLAN.forEach(([tile,count])=>{let got=0;cand.map(([x,y])=>[x,y,hs(x*89+tile,y*31+5)]).sort((p,q)=>p[2]-q[2]).forEach(([x,y])=>{
+    if(got>=count||at(x,y)===47||taken.some(([a,b])=>Math.abs(a-x)<2&&Math.abs(b-y)<2))return;setT(x,y,tile);taken.push([x,y]);got++})})}
 BL.push({x:120,y:7,w:3,roof:'thatch'});for(let j=0;j<2;j++)for(let i=0;i<3;i++)setT(120+i,7+j,5);       // the woodcutter's cottage
 [[126,9],[127,11],[117,11]].forEach(([x,y])=>{if(at(x,y)===40)setT(x,y,14)});
 setT(121,9,40);setT(107,12,40);
@@ -49,5 +54,5 @@ NPC.push({n:'Hale',x:121,y:9,hx:121,hy:9,f:'d',skin:2,hair:1,shirt:2,jk:3,hat:'c
 }
 const FB=[[109,29],[140,21],[106,11],[140,10],[119,16],[130,28]].map(([x,y])=>[x,y+FY]);FB.forEach(([x,y])=>setT(x,y,46)); // treasure bundles
 const FLOOT=[{i:[['healing_potion',1]],g:30},{i:[['stamina_tonic',1],['blue_cap',2]]},{i:[['greater_healing',1]]},{i:[['iron_bar',1],['rope',2]]},{i:[['death_cap',1]],g:80},{i:[['swiftness_potion',1],['forest_sprig',2]]}];
-Object.keys(S.cut).forEach(i=>{if((ORE[S.cut[i].m]&&!ORE_AT.has(+i))||[48,49,50].includes(M[i])){delete S.cut[i];return}   // ore records from before the move to the mountains are dropped
+Object.keys(S.cut).forEach(i=>{if((ORE[S.cut[i].m]&&!ORE_AT.has(+i))||([27,28,29,30].includes(S.cut[i].m)&&!inFZ(i%MW,(i/MW)|0))||[48,49,50].includes(M[i])){delete S.cut[i];return}   // ore records from before the move to the mountains are dropped
   M[i]=STUB(S.cut[i].m)});
