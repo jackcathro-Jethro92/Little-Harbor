@@ -214,6 +214,13 @@ def check(b, url):
     iw = ev("(()=>{let ok=true,n=0;try{sail=false;for(let y=FZ.y0;y<=FZ.y1;y+=3)for(let x=FZ.x0;x<=FZ.x1;x+=4){P.x=P.rx=x;P.y=P.ry=y;draw();n++}"
             "for(let y=IR.y0;y<=IR.y1;y+=2)for(let x=IR.x0;x<=IR.x1;x+=2){P.x=P.rx=x;P.y=P.ry=y;draw();n++}P.x=P.rx=GZ.dx;P.y=P.ry=GZ.y1-1;draw();P.x=P.rx=AZ.dx;P.y=P.ry=AZ.y1-1;draw()}catch(e){ok=false}return {ok,n:n>60}})()")
     assert all(iw.values()), iw
+    # graphics 1.7: the day cycle goes dark and light again, sleeping brings the morning, the tint and glow draw outdoors and indoors, ?time=night freezes the time, and nothing is saved
+    li = ev("(()=>{const r={};let ok=true;try{dayStart=performance.now()-DAY_MS*.8;r.night=daylight().dark>.9;dayStart=performance.now()-DAY_MS*.3;r.day=daylight().dark===0;lightMorning();r.morning=daylight().dark===0&&daylight().warm<.6;"
+            "dayStart=performance.now()-DAY_MS*.8;sail=false;for(const[x,y]of[[156,113],[100,219],[212,178],[IR.dx,IR.dy-1],[FZ.x0+23,FZ.y0+30]]){P.x=P.rx=x;P.y=P.ry=y;draw()}lightMorning()}catch(e){ok=false}r.ok=ok;r.unsaved=!JSON.stringify(S).includes('dayStart');return r})()")
+    assert all(li.values()), li
+    pgt, errt = load(b, url + "?time=night", SAVE)
+    assert pgt.evaluate("daylight().dark===1&&FORCE_TIME==='night'"), "?time=night"
+    pgt.close()
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

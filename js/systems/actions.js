@@ -42,7 +42,7 @@ function act(){
   }
 }
 function sleep(){
-  if(!sail&&!inRoom(P.x,P.y))return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
+  if(!sail&&!inRoom(P.x,P.y))return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();say((inRoom(P.x,P.y)?'You sleep soundly at home.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
 }
