@@ -16,6 +16,7 @@ function act(){
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
   const tt=at(x,y);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
+    if(fireTriggers('talk',n.n))return;
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}
     if(n.store==='tailor'||n.store==='barber'){const t=n.store==='tailor';menu(t?"Seamstress Wynn's Tailor":"Barber Fenwick's",[t?'Try on clothes':'Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook(n.store)});return}
     if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
@@ -46,5 +47,5 @@ function act(){
 function sleep(){
   const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';if(!sail&&!inRoom(P.x,P.y)&&!inQ)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
-  const ev2=dailyEvents();say((inRoom(P.x,P.y)?'You sleep soundly at home.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
+  const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
 }
