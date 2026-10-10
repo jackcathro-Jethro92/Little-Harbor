@@ -3,7 +3,7 @@ function draw(){
   const t=performance.now();
   const gl=sail?GLIDE.sail:GLIDE.walk;P.rx+=(P.x-P.rx)*gl;P.ry+=(P.y-P.ry)*gl;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
   let cx=Math.max(0,Math.min(MW*T-VW,P.rx*T+8-VW/2)),cy=Math.max(0,Math.min((zoneOf(P.x,P.y)?MH:WH)*T-VH,P.ry*T+8-VH/2));
-  cx|=0;cy|=0;
+  cx|=0;cy|=0;if(CINEMA){cx=CINEMA.cx|0;cy=CINEMA.cy|0}   // the home-menu film moves the camera on its own (js/ui/cinematic.js)
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0);ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
     if(tx<MW&&ty<MH)tile(tx,ty,tx*T-cx,ty*T-cy,t);
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0)+1;ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
@@ -37,7 +37,7 @@ function draw(){
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
   S.placed.forEach(p=>E.push({y:p.y,f:()=>obj(p,cx,cy,t)}));
   if(G.alive)E.push({y:G.y,f:()=>ghost(cx,cy,t)});
-  E.push({y:P.ry+.1,f:()=>{
+  if(!CINEMA)E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;
         if(!shipHidesPlayer())CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...lo(S.look),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');

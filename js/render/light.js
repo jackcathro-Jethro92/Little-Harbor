@@ -5,7 +5,7 @@
 const DAY_MS=600000,FORCE_TIME=(new URLSearchParams(location.search).get('time')||'');
 let dayStart=performance.now()-DAY_MS*.08;               // the game opens in the morning
 const lightMorning=()=>{dayStart=performance.now()-DAY_MS*.08};
-function dayPhase(){const f={dawn:.93,day:.3,dusk:.62,night:.82}[FORCE_TIME];return f!==undefined?f:(((performance.now()-dayStart)/DAY_MS)%1+1)%1}
+function dayPhase(){if(CINEMA)return CINEMA.phase;const f={dawn:.93,day:.3,dusk:.62,night:.82}[FORCE_TIME];return f!==undefined?f:(((performance.now()-dayStart)/DAY_MS)%1+1)%1}
 // returns {dark: 0..1 how night it is, warm: 0..1 how much dusk or dawn orange}
 function daylight(){const p=dayPhase(),ramp=(a,b,x)=>Math.max(0,Math.min(1,(x-a)/(b-a)));
   const dark=p<.55?0:p<.7?ramp(.55,.7,p):p<.9?1:1-ramp(.9,1,p),warm=p>=.5&&p<.7?Math.sin(ramp(.5,.7,p)*Math.PI):p>=.88?Math.sin(ramp(.88,1,p)*Math.PI)*.8:0;return{dark,warm}}

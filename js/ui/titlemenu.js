@@ -56,8 +56,8 @@ function tmView(v){const body=tmBody();body.innerHTML='';tmNote('');
 function tmConfirmLoad(d){if(!hasGame())return installSave(d);const body=tmBody();body.innerHTML='';$('title-h').textContent='Load this game?';tmNote('');
   tmText('Day '+d.day+(Number.isFinite(d.gold)?', '+d.gold+' gold':'')+'. It will replace your current game (which is kept as a backup first).');
   tmButton('Yes, load it',()=>installSave(d));tmButton('No, go back',()=>tmView('load'))}
-function tmOpen(mode){tmMode=mode;cancel&&cancel();holdAllStop();tmView('main');tmEl().classList.add('open')}
-function tmClose(){tmEl().classList.remove('open')}
+function tmOpen(mode){tmMode=mode;mode==='title'?cinemaStart():cinemaStop();cancel&&cancel();holdAllStop();tmView('main');tmEl().classList.add('open')}
+function tmClose(){cinemaStop();tmEl().classList.remove('open')}
 function tmStartFresh(){tmClose();sessionStorage.setItem(STARTED,'1');enterGame()}
 function tmResume(){tmClose();sessionStorage.setItem(STARTED,'1');if(tmMode==='title')enterGame()}
 const holdAllStop=()=>{try{releaseAll()}catch(e){}};

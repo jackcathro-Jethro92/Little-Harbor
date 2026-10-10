@@ -333,6 +333,15 @@ def check(b, url):
     ev("save()"); pg.reload(); pg.wait_for_timeout(500); pg.evaluate("TRIGGERS.push({id:'t_area',when:{area:[10,10,12,12]},do:[{gold:7}]})")
     assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
     ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
+    # the home menu film: while the title menu is open the world plays behind the buttons, the player stays where they were, and Continue stops it
+    ev("window.__p=[P.x,P.y,sail]");ev("tmOpen('title')"); pg.wait_for_timeout(1500)
+    assert ev("CINEMA!==null&&$('title').classList.contains('cine')&&$('title-bg').style.opacity==='1'"), "the film plays behind the title menu"
+    assert ev("(()=>{const d=$('title-bg').getContext('2d').getImageData(0,0,176,208).data,s=new Set();for(let i=0;i<d.length;i+=4*37)s.add(d[i]+','+d[i+1]+','+d[i+2]);return s.size>40})()"), "the film is a real picture"
+    assert ev("JSON.stringify([P.x,P.y,sail])===JSON.stringify(window.__p)"), "the player's place is untouched by the film"
+    ev("tmView('save')"); assert ev("CINEMA!==null"), "the film keeps going on the save and load pages"
+    ev("tmResume()"); assert ev("CINEMA===null&&!$('title').classList.contains('open')"), "Continue stops the film"
+    ev("tmOpen('pause')"); assert ev("CINEMA===null&&!$('title').classList.contains('cine')"), "the in-game menu has no film"; ev("tmClose()")
+    ev("SHOTS.forEach(s=>{cinemaStart();CINEMA.t0=performance.now()-SHOTS.indexOf(s)*SHOT_MS-SHOT_MS/2;cinemaFrame();cinemaStop()})")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
