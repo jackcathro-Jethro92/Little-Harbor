@@ -1,7 +1,7 @@
 // ---------- save data (versioned) ----------
 const slotOf=id=>{const i=ITEMS[id];return i.kind==='jewel'?i.slot:i.kind==='tool'?({mine:'pickaxe',chop:'axe',cut:'knife'})[i.use]:i.kind};
 const SAVE_V=3;
-const fresh=()=>({v:SAVE_V,look:{skin:0,hair:1,shirt:5,jk:1},day:1,gold:0,seen:0,hp:50,sta:100,xp:{},cut:{},placed:[],gardens:[],claim:null,home:null,coat:0,buff:0,arena:0,flags:{},bag:{driftwood_rod:1,rowboat:1},eq:{rod:LIST('rod')[0],boat:LIST('boat')[0],weapon:null,pickaxe:null,axe:null,knife:null,ring:null,amulet:null}});
+const fresh=()=>({v:SAVE_V,look:{skin:0,hair:1,shirt:5,jk:1},day:1,gold:0,seen:0,hp:50,sta:100,xp:{},cut:{},placed:[],gardens:[],claim:null,home:null,coat:0,buff:0,arena:0,flags:{},ships:{},bag:{driftwood_rod:1,rowboat:1},eq:{rod:LIST('rod')[0],boat:LIST('boat')[0],weapon:null,pickaxe:null,axe:null,knife:null,ring:null,amulet:null}});
 function migrate(o){
   const f=fresh();
   if(o.v>=SAVE_V)return {...f,...o,eq:{...f.eq,...o.eq}};

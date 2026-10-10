@@ -5,6 +5,7 @@ function act(){
   if(fs===2)return hook();
   const[x,y]=front(),n=npcAt(x,y);
   if(G.alive&&G.x===x&&G.y===y)return swing();
+  if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(at(x,y)===23){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();
   {const en=!sail&&ENTR.find(q=>q.x===x&&q.y===y);if(en)return enterHall(en)}
@@ -42,7 +43,7 @@ function act(){
   }
 }
 function sleep(){
-  if(!sail&&!inRoom(P.x,P.y))return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';if(!sail&&!inRoom(P.x,P.y)&&!inQ)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
-  const ev2=dailyEvents();say((inRoom(P.x,P.y)?'You sleep soundly at home.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
+  const ev2=dailyEvents();say((inRoom(P.x,P.y)?'You sleep soundly at home.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

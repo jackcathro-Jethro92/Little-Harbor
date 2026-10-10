@@ -10,6 +10,7 @@ function tile(tx,ty,sx,sy,t){
   if(mm>=64&&mm<=77){seaTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=78&&mm<=81){skyTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=82&&mm<=101){fireTile(mm,sx,sy,tx,ty,n,t);return}
+  if(mm>=125&&mm<=139){shipTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=117&&mm<=122){skyDamagedTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=102&&mm<=116){towerTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm===54||mm===55){ // jagged rock: angular grey peaks with a lit left face, a dark right face and cracks; 54 stands in the sea, 55 on the shore

@@ -94,8 +94,8 @@ const ITEMS={
  amulet_ward:{n:'Amulet of Warding',kind:'jewel',slot:'amulet',price:6000,gem:'#c8d8f0',fx:{ward:.2},desc:'An enchanted diamond pendant. You take 20% less damage.'},
  amulet_sage:{n:"Scholar's Amulet",kind:'jewel',slot:'amulet',price:7500,gem:'#9a5ac8',fx:{xp:.1},desc:'An enchanted amethyst pendant. 10% more skill XP.'},
  rowboat:{n:'Rowboat',kind:'boat',price:0,crew:[1,1],desc:'Two oars and a seat. Sails by yourself.'},
- sloop:{n:'Sloop',kind:'boat',price:BOAT_TEST?100:100000,crew:[1,1],desc:'One mast, a mainsail and a jib. Better odds of rare fish.'},
- schooner:{n:'Schooner',kind:'boat',price:BOAT_TEST?100:250000,crew:[2,3],desc:'Two masts with fore-and-aft sails. Good odds of rare fish.'},
- brig:{n:'Brig',kind:'boat',price:BOAT_TEST?100:600000,crew:[3,5],desc:'Two masts of square sails, a black hull and gun ports. The best odds of rare fish.'}
+ sloop:{n:'Sloop',kind:'boat',price:BOAT_TEST?100:100000,crew:[1,1],store:40,desc:'One mast, a mainsail and a jib. Better odds of rare fish.'},
+ schooner:{n:'Schooner',kind:'boat',price:BOAT_TEST?100:250000,crew:[2,3],store:100,desc:'Two masts with fore-and-aft sails. Good odds of rare fish.'},
+ brig:{n:'Brig',kind:'boat',price:BOAT_TEST?100:600000,crew:[3,5],store:240,desc:'Two masts of square sails, a black hull and gun ports. The best odds of rare fish.'}
 };
 const LIST=k=>Object.keys(ITEMS).filter(i=>ITEMS[i].kind===k); // list order = tier order

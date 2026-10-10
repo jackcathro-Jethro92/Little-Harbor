@@ -38,7 +38,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | --- | --- |
 | 0.1 Repository and hosting | **Done** |
 | 0.2 Module split | **Done** (it was done early, not after the playtest) |
-| 2.9b Room list | Not started: a tidy-up to do just before house interiors or taverns (2.10, 6.3) |
+| 2.9b Room list | **Begun** (10 Oct): the ships' nine rooms come from a table (`ROOMTAB`, `js/world/shiprooms.js`); the ten older rooms are still made by hand and need moving into the table |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
 | Phase 1 graphics upgrade | **Started:** 1.1 ground and water built (10 Oct, pictures in `art/graphics/step_1_1_before_after_*.png`); 1.2 trees and plants built (pictures in `art/graphics/step_1_2_before_after_*.png`); 1.3 buildings built (`art/graphics/step_1_3_before_after_*.png`); 1.4 characters, boats and animals built (`art/graphics/step_1_4_before_after_*.png`); 1.5 objects and stations built (`art/graphics/step_1_5_before_after_*.png`); 1.6 Darkwood and home room built (`art/graphics/step_1_6_before_after_*.png`); 1.7 light built (`art/graphics/step_1_7_before_after.png`; test with `?time=night`); Phase 1 is complete and waiting for Jack's approval |
 | 2.1b Title menu and save files | Not started: planned for Sat 17 Oct, no save reminders |
@@ -62,7 +62,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | N6 Names list | **Done** (10 Oct): see `NAMES.md` for Jack to review. Nobody has been renamed. |
 | N7 Dialogue human-written | **Marked** (10 Oct): `DIALOGUE.md` lists every line as original or placeholder. Nothing was changed. |
 | N8, N9, N10, N12, N13 | Not started |
-| N11 Ships | **Looks done** (10 Oct): rowboat, sloop, schooner and brig drawn from the reference chart (`art/graphics/ships_new.png`), the trawler became the schooner (saves migrated) and the brig is new (Murl's boatyard, 600,000; shipwright recipe). The crew rule (who can sail which ship) is not built yet: step 6.1 and 6.2. |
+| N11 Ships | **Looks done, and walkable** (10 Oct): deck, quarters with a bed and storage room with crates on the sloop, schooner and brig (see DESIGN.md "Aboard the ships"). Looks (10 Oct): rowboat, sloop, schooner and brig drawn from the reference chart (`art/graphics/ships_new.png`), the trawler became the schooner (saves migrated) and the brig is new (Murl's boatyard, 600,000; shipwright recipe). The crew rule (who can sail which ship) is not built yet: step 6.1 and 6.2. |
 
 ### Story switches (what exists today)
 
