@@ -41,7 +41,7 @@ The world is much further along than when this roadmap was first written. Everyt
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
 | Phase 1 graphics upgrade | Not started |
 | 2.1 Story state | **Partly:** a simple `S.flags` switch field exists (see below); the full `S.story` is not built |
-| 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version and the other variants are not built |
+| 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
 | 2.2 to 2.5, 2.7 to 2.12 | Not started |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
