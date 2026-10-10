@@ -203,7 +203,7 @@ def check(b, url):
     assert hb["n"] >= 40 and hb["kinds"] >= 10 and hb["cached"], hb
     # graphics 1.4: people are shaded once and cached (same picture reused), all three boats draw sailing in every direction and moored, animals, chickens and the spirit draw, and every hair style still draws
     pe = ev("(()=>{sail=false;P.x=P.rx=156;P.y=P.ry=113;draw();const a=PCACHE.size;draw();const b=PCACHE.size;let ok=true;try{for(const id of LIST('boat')){S.eq.boat=id;for(const d of['u','d','l','r']){sail=true;P.x=P.rx=B.x=172;P.y=P.ry=B.y=190;P.f=d;draw()}sail=false;draw()}"
-            "for(const a of AN.slice(0,4)){P.x=P.rx=a.x;P.y=P.ry=a.y+1;draw()}G.alive=true;P.x=P.rx=G.x;P.y=P.ry=G.y+1;draw()}catch(e){ok=false}S.eq.boat='rowboat';return {cached:a>5&&b===a,ok,boats:['b0r','b0u','b1l','b2d'].every(k=>[...SPRC.keys()].some(q=>q.startsWith('b'+k.slice(1,2))))}})()")
+            "for(const a of AN.slice(0,4)){P.x=P.rx=a.x;P.y=P.ry=a.y+1;draw()}G.alive=true;P.x=P.rx=G.x;P.y=P.ry=G.y+1;draw()}catch(e){ok=false}S.eq.boat='rowboat';return {cached:a>5&&b===a,ok,boats:['ship0r','ship1u','ship2l','ship3d'].every(k=>[...SPRC.keys()].some(q=>q.startsWith(k)))&&LIST('boat').join()==='rowboat,sloop,schooner,brig'}})()")
     assert all(pe.values()), pe
     # graphics 1.5: every object tile (lantern, fence, barrel, gravestone, stump, rubble, treasure, five ores, pond, crop plot, wall) and every station and garden stage draws; the wall and the gold ore never share a picture
     ob = ev("(()=>{sail=false;P.x=P.rx=156;P.y=P.ry=113;let ok=true;try{const i=(P.y-1)*MW+P.x,keep=M[i];for(const m of[7,8,9,10,11,12,13,14,15,16,17,18,46,123,124]){M[i]=m;draw()}M[i]=keep;"
@@ -221,6 +221,16 @@ def check(b, url):
     pgt, errt = load(b, url + "?time=night", SAVE)
     assert pgt.evaluate("daylight().dark===1&&FORCE_TIME==='night'"), "?time=night"
     pgt.close()
+    # ships: an old save that owned and used the trawler now has the schooner, and the shipwright can build the schooner and the brig
+    old2 = json.loads(json.dumps(SAVE)); old2["bag"] = dict(SAVE.get("bag", {}), trawler=1); old2["eq"] = dict(SAVE.get("eq", {}), boat="trawler")
+    pgs, errs2 = load(b, url, old2)
+    shp = pgs.evaluate("({schooner:S.bag.schooner===1,noTrawler:S.bag.trawler===undefined,eq:S.eq.boat==='schooner',tier:tier('boat')===2,recipes:['schooner','brig'].every(id=>RECIPES.some(r=>r.out===id&&r.station==='shipwright')),crew:ITEMS.brig.crew[0]===3&&ITEMS.rowboat.crew[1]===1})")
+    assert all(shp.values()) and not errs2, (shp, errs2)
+    pgs.close()
+    # testing prices: while BOAT_TEST is on, all three bought boats cost 100 gold at Murl's boatyard
+    ev("S.gold=1000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;openStore('boat')")
+    assert ev("['sloop','schooner','brig'].every(id=>ITEMS[id].price===100)||!BOAT_TEST"), "boats cost 100 while testing"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

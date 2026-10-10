@@ -61,7 +61,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | N5 Shop sub-menus | Not started (also covers Garrick and Lucie) |
 | N6 Names list | **Done** (10 Oct): see `NAMES.md` for Jack to review. Nobody has been renamed. |
 | N7 Dialogue human-written | **Marked** (10 Oct): `DIALOGUE.md` lists every line as original or placeholder. Nothing was changed. |
-| N8 to N13 | Not started |
+| N8, N9, N10, N12, N13 | Not started |
+| N11 Ships | **Looks done** (10 Oct): rowboat, sloop, schooner and brig drawn from the reference chart (`art/graphics/ships_new.png`), the trawler became the schooner (saves migrated) and the brig is new (Murl's boatyard, 600,000; shipwright recipe). The crew rule (who can sail which ship) is not built yet: step 6.1 and 6.2. |
 
 ### Story switches (what exists today)
 
