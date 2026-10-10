@@ -175,11 +175,46 @@ function tent(b,x,y,t){const W=b.w*T,c=b.tent,O='#2a1b0e';R(x-2,y+27,W+4,5,'#000
   R(x+W/2-1,y+3,2,26,'#00000020');R(x+W/2-5,y+16,10,14,O);R(x+W/2-4,y+17,8,13,'#1a1008');R(x+W/2,y+17,1,13,'#3a2a18');
   R(x+W/2-1,y-4,1,9,'#6e4a1a');R(x+W/2,y-4,6,4,'#d8302a');R(x+W/2,y-3,5,1,'#f0b040')}
 // ---------- the Temple Tower's island (see art/temples/temple_tower) ----------
-// Tiles: 102 pine tree (drawn on grass, rises above its tile, blocks), 103 raked gravel (walkable), 104 gravel with a flat stepping stone (walkable).
+// Tiles: 102 pine tree (drawn on grass, rises above its tile, blocks), 103 raked gravel (walkable), 104 gravel with a flat stepping stone (walkable), 105 stone dock slab over the water (walkable).
 function towerTile(m,sx,sy,tx,ty,n,t){const O='#1c2a22';
   if(m===102){grassBg(tx,ty,sx,sy,n);R(sx+2,sy+11,12,3,'#00000030');R(sx+7,sy+9,2,6,'#5a3a24');
     R(sx+2,sy+6,12,5,O);R(sx+3,sy+7,10,3,'#24533a');R(sx+4,sy+1,8,6,O);R(sx+5,sy+2,6,4,'#2b6444');R(sx+6,sy-5,4,7,O);R(sx+7,sy-4,2,5,'#2f7050');
     R(sx+3,sy+7,3,1,'#3a8060');R(sx+5,sy+2,2,1,'#3a8060')}
+  else if(m===106){R(sx,sy,T,T,O);R(sx,sy+1,T,6,TW.roof);R(sx,sy+1,T,1,TW.roof2);R(sx,sy+6,T,2,TW.gold);R(sx,sy+8,T,8,TW.plaster);R(sx,sy+8,2,8,TW.wood);R(sx+T-2,sy+8,2,8,TW.wood);if(n%3===0)R(sx+4,sy+10,8,3,TW.glow);R(sx,sy+T-2,T,2,'#8a826a')}
+  else if(m===107){R(sx,sy,T,T,'#d4cbb6');R(sx+4,sy+14,8,2,'#00000030');R(sx+5,sy-18,6,34,O);R(sx+6,sy-18,4,33,TW.wood);R(sx+6,sy-18,1,33,'#7a5230')}
+  else if(m>=108){towerInside(m,sx,sy,tx,ty,n,t)}
+  else if(m===105){R(sx,sy,T,T,'#2f6fc4');R(sx,sy+T-2,T,2,'#00000030');R(sx,sy,T,T-1,'#3a3a40');R(sx+1,sy,T-2,T-2,'#a4a69d');R(sx+1,sy,T-2,2,'#bfc1b8');R(sx+1,sy+T-4,T-2,2,'#85877f');if(tx%2===0)R(sx+T-3,sy+3,1,8,'#85877f');else R(sx+3+n%4,sy+4,3,1,'#bfc1b8')}
   else{R(sx,sy,T,T,'#d4cbb6');for(let k=0;k<5;k++){const r=hs(tx*5+k,ty*3)%100;R(sx+r%14,sy+(r*3)%14,2,1,k%2?'#b8ae98':'#e6dfcf')}
     R(sx,sy+3,T,1,'#c6bda8');R(sx,sy+9,T,1,'#c6bda8');R(sx,sy+14,T,1,'#c6bda8');
     if(m===104){R(sx+3,sy+3,10,9,'#8d8f87');R(sx+4,sy+3,8,2,'#a9aba2');R(sx+3,sy+10,10,2,'#6e7068')}}}
+// ---------- the Temple Tower complex (see art/temples/temple_tower) ----------
+// Tiles 106-115 are in towerTile above; the gate roof and the five-storey pagoda are buildings. Colours: dark blue-grey tiled roofs with gold trim, dark wood, white plaster, glowing paper.
+const TW={O:'#1c1a22',roof:'#3e4a5e',roof2:'#566580',gold:'#d8a838',wood:'#5a3a24',wood2:'#3a2418',plaster:'#ece6d4',glow:'#f6e9b0'};
+function towerRoof(cx,top,w,h){const{O,roof,roof2,gold}=TW;for(let r=0;r<h;r++){const rw=Math.round(w*(.55+.45*r/(h-1)));R(cx-rw/2-1,top+r,rw+2,1,O);R(cx-rw/2,top+r,rw,1,r<2?roof2:(r%3===0?'#344052':roof))}
+  R(cx-w/2-1,top+h-1,w+2,3,O);R(cx-w/2,top+h-1,w,2,gold);R(cx-w/2-3,top+h-4,4,3,O);R(cx-w/2-2,top+h-4,2,2,gold);R(cx+w/2,top+h-4,4,3,O);R(cx+w/2,top+h-4,2,2,gold)}
+function towerGate(b,x,y,t){const W=b.w*T,{O,wood,wood2}=TW;R(x+16,y-12,W-32,5,O);R(x+17,y-11,W-34,3,wood);R(x+16,y-3,W-32,3,O);R(x+17,y-2,W-34,1,wood2);towerRoof(x+W/2,y-30,W+14,14)}
+function towerPagoda(b,x,y,t){const W=b.w*T,Yb=y+80,cx=x+W/2,{O,wood,wood2,plaster,glow,gold}=TW,fl=((t/700)|0)%2;
+  R(x-2,Yb-3,W+4,6,'#00000030');R(x,Yb-12,W,12,O);R(x+1,Yb-11,W-2,10,'#8d8f87');R(x+1,Yb-11,W-2,2,'#b3b4ab');R(x+1,Yb-3,W-2,2,'#6e7068');for(let i=10;i<W-6;i+=18)R(x+i,Yb-9,1,7,'#6e7068');
+  R(cx-14,Yb-2,28,4,O);R(cx-13,Yb-2,26,3,'#a9aba2');R(cx-10,Yb,20,1,'#85877f');
+  for(let k=0;k<5;k++){const w=96-14*k,wx=cx-w/2,wb=Yb-12-k*22,wt=wb-14;
+    R(wx,wt,w,14,O);R(wx+1,wt+1,w-2,12,wood);for(let px=wx+5;px<wx+w-9;px+=11){R(px,wt+3,8,8,plaster);R(px+1,wt+4,6,5,((px>>3)+k+fl)%3===0?glow:'#e6dcae');R(px+3,wt+4,1,5,wood2)}
+    if(k===0){R(cx-7,wt+1,14,13,O);R(cx-6,wt+2,12,12,wood2);R(cx-1,wt+2,2,12,'#2a1a10');R(cx+3,wt+8,2,2,gold);R(cx-8,wt,16,2,gold)}
+    R(wx-3,wb-1,w+6,3,O);R(wx-2,wb-1,w+4,2,'#7a5230');
+    towerRoof(cx,wt-9,w+16,9)}
+  const rt=Yb-12-4*22-14-9;R(cx-1,rt-16,2,17,O);R(cx-0,rt-16,1,17,wood);for(let i=0;i<4;i++){R(cx-3,rt-14+i*3,6,2,O);R(cx-2,rt-14+i*3,4,1,gold)}R(cx-2,rt-19,4,4,O);R(cx-1,rt-18,2,2,gold)}
+
+// the shrine room's tiles (zone 10)
+function towerInside(m,sx,sy,tx,ty,n,t){const{O,gold,wood,wood2,glow}=TW,r=ty-TS.y0,fl=((t/400)|0)%2;
+  const floor=()=>{R(sx,sy,T,T,'#cfc28a');R(sx,sy+T-1,T,1,'#8a8650');if(tx%2===0)R(sx+T-1,sy,1,T,'#8a8650');R(sx+3,sy+4,2,1,'#c0b378')};
+  if(m===116){R(sx,sy,T,T,'#d4cbb6');R(sx,sy+3,T,1,'#c6bda8');R(sx,sy+9,T,1,'#c6bda8')}
+  else if(m===108)floor();
+  else if(m===109){if(r<=1){R(sx,sy,T,T,'#241a14');R(sx,sy+T-2,T,2,wood);R(sx+1,sy+2,T-2,T-6,'#2e2018');R(sx+3,sy+4,T-6,T-10,'#3a281c');
+      if(tx===TS.dx&&r===1){R(sx-10,sy-14,36,24,O);R(sx-9,sy-13,34,22,'#7a5230');R(sx-6,sy-10,28,16,'#2a1a10');R(sx-6,sy-10,28,2,gold);R(sx-9,sy+7,34,2,gold)}}
+    else{R(sx,sy,T,T,wood2);R(sx+1,sy+1,T-2,T-2,'#f2e8c4');R(sx+1,sy+1,T-2,T-2,fl?'#f6ecc8':'#f2e8c4');R(sx+T/2-1,sy+1,2,T-2,wood2);R(sx+1,sy+T/2-1,T-2,2,wood2)}}
+  else if(m===110){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy-12,8,28,O);R(sx+5,sy-12,6,27,'#4a2c1a');R(sx+5,sy-12,2,27,'#6a4228');R(sx+4,sy-12,8,3,gold)}
+  else if(m===112||m===111){R(sx,sy,T,T,'#14100e');R(sx,sy,T,2,'#b8322a');R(sx+1,sy+T-3,T-2,2,'#7a2420');
+    if(m===111){R(sx+2,sy-10,12,3,O);R(sx+1,sy-9,14,2,gold);R(sx+3,sy-12,10,3,gold);R(sx+3,sy-6,10,12,O);R(sx+4,sy-5,8,10,'#c8901a');R(sx+6,sy-2,4,7,O);R(sx+7,sy-1,2,5,fl?'#fff2a8':glow)}}
+  else if(m===113){floor();R(sx,sy+3,T,11,O);R(sx+1,sy+4,T-2,9,'#b8322a');R(sx+1,sy+4,T-2,2,'#d84a3a');R(sx+1,sy+11,T-2,2,'#8a2420');
+    if(tx===TS.dx){R(sx+5,sy-4,6,9,O);R(sx+6,sy-3,4,7,'#b87a3a');R(sx+9,sy-6,3,3,'#b87a3a');R(sx+11,sy-5,3,1,'#b87a3a');R(sx+6,sy+4,4,2,'#b87a3a')}else R(sx+4+n%5,sy+2,6,3,tx<TS.dx?'#e8d8a0':'#c8402a')}
+  else if(m===114){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy+7,8,6,O);R(sx+5,sy+8,6,4,wood);R(sx+3,sy+4,10,4,O);R(sx+4,sy+5,8,2,'#7a5230')}
+  else if(m===115){floor();R(sx+7,sy-12,2,12,O);R(sx+4,sy-1,8,3,O);R(sx+5,sy,6,6,'#e8b030');R(sx+6,sy+1,4,4,fl?'#fff2a8':glow);R(sx+4,sy+6,8,2,O)}}
