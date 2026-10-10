@@ -11,7 +11,7 @@ function isl(cx,cy,rx,ry,sd){for(let y=cy-ry-3;y<=cy+ry+3;y++)for(let x=cx-rx-3;
 // mainland: everything west of a winding coast
 const CP=[[0,9],[39,21],[51,37],[68,54],[94,61],[108,59],[126,67],[150,80],[163,91],[170,100],[190,111],[200,129],[214,149],[227,151],[240,153]];
 const coastX=y=>{for(let i=1;i<CP.length;i++)if(y<=CP[i][0]){const a=CP[i-1],b=CP[i];return a[1]+(b[1]-a[1])*(y-a[0])/(b[0]-a[0])}return 153};
-for(let y=0;y<MH;y++){const c=coastX(y)+2.2*Math.sin(y*.3)+1.3*Math.sin(y*.8);for(let x=0;x<c&&x<MW;x++)if(!M[y*MW+x])M[y*MW+x]=c-x<2.4?2:1}
+for(let y=0;y<WH;y++){const c=coastX(y)+2.2*Math.sin(y*.3)+1.3*Math.sin(y*.8);for(let x=0;x<c&&x<MW;x++)if(!M[y*MW+x])M[y*MW+x]=c-x<2.4?2:1}
 // mountain range (impassable) with a boulder-blocked pass at its north end
 const MB=[[40,133],[47,157],[69,175],[95,198],[116,218]];
 for(let k=1;k<MB.length;k++)for(let st=0;st<=40;st++){const px=Math.round(MB[k-1][0]+(MB[k][0]-MB[k-1][0])*st/40),py=Math.round(MB[k-1][1]+(MB[k][1]-MB[k-1][1])*st/40);
@@ -22,10 +22,10 @@ rect(39,130,44,135,(x,y)=>{if(at(x,y)===35)setT(x,y,36)});
 // Sailors' grave rocks
 for(let k=0;k<17;k++){const cx=74+hs(k,1)%33,cy=61+hs(k,2)%50,r=1+hs(k,3)%2;rect(cx-r,cy-r,cx+r,cy+r,(x,y)=>{if(!at(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1&&x>=0&&y>=0)setT(x,y,32)})}
 // trees, flax, ore and herbs on the new land
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*3,y*5)%100;M[i]=n<13?4:n<18?19:1}
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1&&M[i]!==2)continue;
+for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*3,y*5)%100;M[i]=n<13?4:n<18?19:1}
+for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1&&M[i]!==2)continue;
   if((hs(x*5,y*3)%100<20&&nearT(x,y,2,v=>v===35))||(M[i]===1&&hs(x*5,y*3)%100<2))M[i]=15+hs(x,y*7)%3}
-{const hp=[];for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
+{const hp=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*17,y*19)%100;let t=0;
   if(nearT(x,y,1,v=>v===4)){if(n<16)t=[28,28,29,30][hs(x,y*5)%4];else if(n<26)t=25}
   else if(nearT(x,y,1,v=>[15,16,17,32,35].includes(v))){if(n<40)t=24}
   else if(n<5)t=27;else if(n<9)t=26;
@@ -88,10 +88,10 @@ const TLV=new Uint8Array(MW*MH);
  const rw=(x,y)=>Math.max(0,Math.round((fTop(x)-y)/8+.7*Math.sin(x*.08+y*.04)+.5*Math.sin(y*.06-x*.04+2)));
  const lt=rw(27,68),lw=rw(9,26),lv=(x,y)=>inR(x,y,PT)?lt:inR(x,y,PW)?lw:rw(x,y);
  const GREEN=[1,4,14,19,20,24,25,26,27,28,29,30,31],ROCK=[5,15,16,17,18],XS=[[0,-1],[0,1],[-1,0],[1,0]];
- for(let y=0;y<MH;y++)for(let x=0;x<100;x++){if(y>=fTop(x)||inV(x,y)||x>coastX(y)+5)continue;const i=y*MW+x;
+ for(let y=0;y<WH;y++)for(let x=0;x<100;x++){if(y>=fTop(x)||inV(x,y)||x>coastX(y)+5)continue;const i=y*MW+x;
    if(GREEN.includes(M[i])){M[i]=48;TLV[i]=Math.min(250,lv(x,y)+1)}else if(ROCK.includes(M[i]))TLV[i]=Math.min(250,lv(x,y)+1)}
  const cl=[];
- for(let y=0;y<MH;y++)for(let x=0;x<100;x++){const i=y*MW+x;if(M[i]!==48||inR(x,y,PI)||inR(x,y,PWI))continue;
+ for(let y=0;y<WH;y++)for(let x=0;x<100;x++){const i=y*MW+x;if(M[i]!==48||inR(x,y,PI)||inR(x,y,PWI))continue;
    if(XS.some(([a,b])=>{const j=i+b*MW+a;return TLV[j]&&TLV[j]<TLV[i]}))cl.push(i)}
  cl.forEach(i=>{M[i]=hs(i,3)%100<8?50:49});
  // join every walkable patch with a few rock steps so no terrace is cut off: add steps wherever a cliff touches two separate patches
