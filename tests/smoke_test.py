@@ -419,6 +419,17 @@ def check(b, url):
     ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');P.x=P.rx=n.x;P.y=P.ry=n.y;setFlag('t_found',0);setFlag('t_found')})()"); assert ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');return !(n.x===P.x&&n.y===P.y)&&WK.includes(at(n.x,n.y))})()"), "a person is never put on top of the player"
     ev("setFlag('t_found',0)"); assert ev("NPC.find(q=>q.n==='Lost Test').hidden===1"), "clearing the flag hides them again"
     ev("NPC.splice(NPC.findIndex(q=>q.n==='Lost Test'),1);STORY_PEOPLE.length=0")
+    # story test switches (2.11): the menu lists every quest start; a jump clears the story, applies the rows before it (earlier quests done), gives items and gold, moves the player and keeps the bag
+    ev("STORY_JUMPS.push({id:'t_a',name:'Test A',after:'q1',quest:'t_qa',flags:['t_ja'],give:{sardine:2},gold:5},{id:'t_b',name:'Test B',after:'t_a',quest:'t_qb',flags:['t_jb'],at:[32+OX,33+OY]})")
+    ev("setFlag('t_stale');S.letters=['old'];S.bag.carrot=3;S.gold=100;const g0=S.gold;tmOpen('pause')")
+    assert ev("[...document.querySelectorAll('#title-body button')].some(b=>b.textContent==='Test: jump to a quest')"), "the menu has the test button"
+    ev("[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
+    assert ev("document.querySelectorAll('#title-body button').length>=12&&/Quest 10/.test($('title-body').textContent)&&/Quest 1:/.test($('title-body').textContent)"), "every quest start is listed"
+    ev("[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test B').click()")
+    assert ev("S.story.q==='t_qb'&&S.story.done.includes('t_qa')&&flag('t_ja')&&flag('t_jb')&&!flag('t_stale')&&S.letters.length===0&&S.gold===105&&S.bag.carrot===3&&S.bag.sardine>=2&&P.x===32+OX&&P.y===33+OY&&!$('title').classList.contains('open')"), "a jump clears the story, applies earlier rows, gives items, moves the player and keeps the bag"
+    ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
+    ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
+    pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
