@@ -142,3 +142,14 @@ Travelling from temple to temple, you return the keys to each spirit.
 The Fire temple is last, and there you find an old woman.
 “So it is true. Our long lost brother has returned. Thank you. Water has raised an island up from the sea just for you, so that you might find peace and a home to build your new life. Inside the letter is a key to a home on your new island. Keep this safe. You have done a great service to everyone on this land. Though they might not know it. This world owes you a great debt. Go well brother.”
 The fire spirit gives you the letter and The island now appears on your map, the key enclosed gives you access to your own home and you have completed the main story of the game.
+
+---
+
+## Decisions Jack made about this text (11 Oct)
+
+These are notes for the builders. The text above is untouched.
+
+- **Rue is a woman.** She is the new character from Quest 2 (the lost villager who later joins your crew). Where the text says "the man" or "he" about Rue, the game will use "she" and "her" only when Jack rewrites those lines; until then the text stays as written. The old trader called Rue is now Murl (the boatyard), so there is no clash.
+- **Murl** is the boatyard owner's name everywhere, including Quest 3's title.
+- **Keys and temples:** the "Air" key belongs to the **Sky** temple and the "Water" key to the **Sea** temple. The other two are Earth and Fire.
+- **Quest 1** happens on the **Sea temple island** (the "northern water temple").
