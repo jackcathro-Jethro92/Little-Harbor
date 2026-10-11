@@ -381,6 +381,20 @@ def check(b, url):
     ev("TRIGGERS.push({id:'t_gate_trg',do:[{set:'t_boulder_open'}]});fireTriggers('step')"); assert ev("at(__g[0],__g[1])===1"), "a trigger can open it"
     ev("save()"); pg.reload(); pg.wait_for_timeout(500)
     ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36});applyGates()" % json.dumps(cells)); assert ev("flag('t_boulder_open')&&at(__g[0],__g[1])===1&&at(__g[0]+1,__g[1])===1"), "an opened gate stays open after a reload"
+    # seagull letters (2.7): a trigger row sends a letter; a gull lands, the letter opens, closing it keeps it in the bag's LETTERS pocket; it is not sent twice; Skip still keeps it; saved
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;LETTERS.t_letter={from:'A stranger',title:'A plea',text:'Please come quick.\\n\\nHurry!'};LETTERS.t_l2={from:'Bjorn',title:'Second',text:'Hello.'};TRIGGERS.push({id:'t_ltr',when:{talk:'Odo'},do:[{letter:'t_letter'},{set:'t_after_letter'}]});window.__x=0;window.__sent=sendLetter('t_letter',()=>{window.__x=1})")
+    pg.wait_for_timeout(500); assert ev("window.__sent===true&&SCENE!==null&&GULL!==null&&!$('letter').classList.contains('open')"), "the gull comes first"
+    pg.wait_for_timeout(2900); assert ev("GULL!==null&&GULL.fly===false&&$('letter').classList.contains('open')&&/From A stranger/.test($('letter-from').textContent)&&document.querySelectorAll('#letter-text p').length===2&&hasLetter('t_letter')"), "it lands and the letter opens"
+    ev("move('u')"); assert ev("P.y===33+OY"), "no walking while the letter is open"
+    pg.tap("#letter-close"); pg.wait_for_timeout(1700); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
+    assert ev("sendLetter('t_letter')===false"), "a letter you have is not sent twice"
+    ev("openBag();bagGo(1);bagGo(1);bagGo(1);bagGo(1)"); assert ev("$('btitle').textContent==='LETTERS'&&/A plea/.test($('blist').textContent)"), "the bag has a LETTERS pocket with it"
+    ev("bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
+    ev("closeLetter();closeBag()")
+    ev("sendLetter('t_l2')"); pg.wait_for_timeout(300); ev("skipScene()"); assert ev("SCENE===null&&GULL===null&&hasLetter('t_l2')&&!$('letter').classList.contains('open')"), "Skip keeps the letter without showing it"
+    ev("S.letters=S.letters.filter(i=>i!=='t_letter');save()"); ev("(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); ev("skipScene()")
+    assert ev("hasLetter('t_letter')&&flag('t_after_letter')&&SCENE===null"), "a trigger row sends a letter and carries on"
+    ev("save()"); pg.reload(); pg.wait_for_timeout(500); assert ev("S.letters.includes('t_l2')&&S.letters.includes('t_letter')"), "letters are saved"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
