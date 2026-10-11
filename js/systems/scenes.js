@@ -10,10 +10,10 @@
 //   anything in TACT (js/systems/triggers.js): {set:'flag'} {clear:'flag'} {give:{item:n}} {gold:n} {toast:'text'} {quest:['q',step]} {move:['Name',x,y]} ... run at once. Note {move} puts a person there for good (saved);
 //   {walk} is only for the scene, so walk a person back if they should return.
 // A scene never changes where the player really is except through its own walk and tp steps. The camera is released and the fade cleared when it ends or is skipped.
-const SCENES={};
+const SCENES={},SCSTEP={};   // SCSTEP: extra step kinds added by other files (the seagull letters add gull and letter)
 let SCENE=null,SCENECAM=null;
 const scActor=n=>n==='You'?P:NPC.find(q=>q.n===n);
-function scEnd(){const s=SCENE;if(!s)return;SCENE=null;SCENECAM=null;clearInterval(s.shakeT);$('c').style.transform='';const fl=$('flash');fl.style.transitionDuration='';fl.style.opacity=0;
+function scEnd(){const s=SCENE;if(!s)return;SCENE=null;SCENECAM=null;clearInterval(s.shakeT);GULL=null;$('c').style.transform='';const fl=$('flash');fl.style.transitionDuration='';fl.style.opacity=0;
   document.body.classList.remove('scene');NPC.forEach(n=>{n.busy=0});if(s.onEnd)s.onEnd()}
 // a step that takes time registers `hold`: finish() puts the end state in place and goes on; skipping calls it
 function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd();const st=s.steps[s.i++];let done=false;
@@ -39,9 +39,10 @@ function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd
   else if(st.shake!==undefined){if(fast)return go();const c=$('c'),t0=performance.now();clearInterval(s.shakeT);
     s.shakeT=setInterval(()=>{const k=(performance.now()-t0)/st.shake;if(k>=1){clearInterval(s.shakeT);c.style.transform='';return}c.style.transform='translate('+((Math.random()*6-3)*(1-k)).toFixed(1)+'px,'+((Math.random()*6-3)*(1-k)).toFixed(1)+'px)'},40);
     const t=setTimeout(go,st.shake);hold(()=>{clearTimeout(t);clearInterval(s.shakeT);c.style.transform=''})}
+  else if(Object.keys(st).some(q=>SCSTEP[q])){const k=Object.keys(st).find(q=>SCSTEP[q]);SCSTEP[k](st[k],{go,hold,fast,s})}
   else{const k=Object.keys(st).find(q=>TACT[q]);if(k)TACT[k](st[k]);go()}}
-function runScene(id,onEnd){const steps=SCENES[id];if(!steps||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
-  SCENE={id,steps,i:0,fast:false,hold:null,onEnd,shakeT:null};document.body.classList.add('scene');scNext();return true}
+function runScene(id,onEnd){const steps=Array.isArray(id)?id:SCENES[id];if(!steps||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
+  SCENE={id:Array.isArray(id)?'(list)':id,steps,i:0,fast:false,hold:null,onEnd,shakeT:null};document.body.classList.add('scene');scNext();return true}
 function skipScene(){const s=SCENE;if(!s||s.fast)return;s.fast=true;if(s.hold){s.hold.finish()}else scNext()}
 $('scene-skip').onclick=skipScene;
-addEventListener('keydown',e=>{if(!SCENE||dlgActive())return;e.stopImmediatePropagation();e.preventDefault();if(e.key==='Escape')skipScene()},true);   // (while a box is open, js/ui/dialogue.js handles Space, Enter and Escape itself)
+addEventListener('keydown',e=>{if(!SCENE||dlgActive()||$('letter').classList.contains('open'))return;e.stopImmediatePropagation();e.preventDefault();if(e.key==='Escape')skipScene()},true);   // (while a box is open, js/ui/dialogue.js handles Space, Enter and Escape itself)
