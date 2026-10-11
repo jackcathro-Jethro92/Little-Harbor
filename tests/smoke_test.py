@@ -406,6 +406,19 @@ def check(b, url):
     ev("setFlag('t_var_on',0)"); assert ev("at(__v[0],__v[1])===1&&at(__v[0]+1,__v[1])===1"), "and puts the first look back when it is cleared"
     ev("P.x=P.rx=__v[0];P.y=P.ry=__v[1];setFlag('t_var_on',1)"); assert ev("WK.includes(at(P.x,P.y))&&(P.x!==__v[0]||P.y!==__v[1])&&Math.abs(P.x-__v[0])+Math.abs(P.y-__v[1])<=2"), "a player standing where a variant blocks is moved to the nearest free tile"
     ev("setFlag('t_var_on',0)")
+    # people by story (2.9): a story-only person is hidden until a flag, then stands where the row says and speaks its own line; an everyday person gets new lines and a dialogue for a while and goes back after
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;DLG.t_pp={start:'a',nodes:{a:{who:'Pip',text:'Story talk.'}}};window.__g=nearestTile(P.x+4,P.y-3,(x,y)=>at(x,y)===1&&!npcAt(x,y));NPC.push({n:'Lost Test',x:__g[0],y:__g[1],hx:__g[0],hy:__g[1],f:'d',skin:1,hair:1,shirt:1,say:['Plain chat.']});window.__pip=NPC.find(q=>q.n==='Pip');window.__p0=[__pip.x,__pip.y,__pip.say[0]]")
+    ev("STORY_PEOPLE.push({npc:'Lost Test',if:{flag:'t_found'},at:[P.x+2,P.y],f:'l',say:['Thank you!']},{npc:'Lost Test',hide:1},{npc:'Pip',if:{flag:'t_pipstory'},say:['Pip story line.'],dlg:'t_pp'});applyStoryPeople()")
+    assert ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');return n.hidden===1&&!npcAt(n.x,n.y)})()"), "a story-only person starts out of the way"
+    assert ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test'),w=[];const o=CharacterSprite.draw;CharacterSprite.draw=(c,x,y,l)=>{w.push(1)};try{draw()}finally{CharacterSprite.draw=o}return NPC.filter(q=>!q.hidden&&zoneOf(q.x,q.y)===0).length>0})()"), "hiding them does not break drawing"
+    ev("setFlag('t_found')"); assert ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');return !n.hidden&&n.x===P.x+2&&n.y===P.y&&n.f==='l'&&n.say[0]==='Thank you!'&&npcAt(n.x,n.y)===n})()"), "the flag brings them to the spot, facing the way the row says, with their own line"
+    ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');P.x=P.rx=n.x-1;P.y=P.ry=n.y;P.f='r';act()})()"); pg.wait_for_timeout(300); assert ev("dlgActive()&&$('dlg-txt').textContent==='Thank you!'"), "talking to them says the row's line"
+    ev("dlgAdvance();dlgAdvance()")
+    ev("setFlag('t_pipstory');(()=>{P.x=P.rx=__pip.x;P.y=P.ry=__pip.y+1;P.f='u';act()})()"); pg.wait_for_timeout(500); assert ev("dlgActive()&&$('dlg-txt').textContent==='Story talk.'"), "a dialogue row replaces the everyday chat"
+    ev("dlgAdvance();dlgAdvance();setFlag('t_pipstory',0)"); assert ev("__pip.say[0]===__p0[2]&&!__pip.dlg&&__pip.x===__p0[0]&&__pip.y===__p0[1]"), "when no row matches they go back to how they were built"
+    ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');P.x=P.rx=n.x;P.y=P.ry=n.y;setFlag('t_found',0);setFlag('t_found')})()"); assert ev("(()=>{const n=NPC.find(q=>q.n==='Lost Test');return !(n.x===P.x&&n.y===P.y)&&WK.includes(at(n.x,n.y))})()"), "a person is never put on top of the player"
+    ev("setFlag('t_found',0)"); assert ev("NPC.find(q=>q.n==='Lost Test').hidden===1"), "clearing the flag hides them again"
+    ev("NPC.splice(NPC.findIndex(q=>q.n==='Lost Test'),1);STORY_PEOPLE.length=0")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

@@ -18,6 +18,7 @@ function act(){
   const tt=at(x,y);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
     if(fireTriggers('talk',n.n))return;
+    if(n.dlg&&runDialogue(n.dlg))return;
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}
     if(n.store==='tailor'||n.store==='barber'){const t=n.store==='tailor';menu(t?"Seamstress Wynn's Tailor":"Barber Fenwick's",[t?'Try on clothes':'Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook(n.store)});return}
     if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
