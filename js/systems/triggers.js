@@ -5,7 +5,7 @@
 //     day:1               a morning starts (sleeping)         beaten:'group'  an enemy group is beaten (the enemy table, step 3.1, calls enemyBeaten('group'))
 //   if (all must be true):  flag:'a'  noflag:'a'  has:{item:n}  gold:n  day:n (this day or later)  quest:'q' (and optional step:n)
 //   do (run one after another; a `say` waits until the box is closed):
-//     {letter:'letter_id'} (a seagull brings it, js/systems/letters.js)  {scene:'scene_id'} (a cutscene, js/systems/scenes.js)  {say:'dlg_id'}  {set:'flag'}  {clear:'flag'}  {give:{item:n}}  {take:{item:n}}  {gold:n}  {toast:'text'}  {quest:['q',step]}  {step:n}  {move:['Name',x,y]}  {msg:'text'}
+//     {battle:'battle_id'} (a turn-based fight, js/systems/battle.js)  {letter:'letter_id'} (a seagull brings it, js/systems/letters.js)  {scene:'scene_id'} (a cutscene, js/systems/scenes.js)  {say:'dlg_id'}  {set:'flag'}  {clear:'flag'}  {give:{item:n}}  {take:{item:n}}  {gold:n}  {toast:'text'}  {quest:['q',step]}  {step:n}  {move:['Name',x,y]}  {msg:'text'}
 //   Later steps add their own rows to TACT: gates (2.5), world variants (2.6), seagull letters (2.7).
 // A row fires once and is remembered in S.story.seen (saved), unless it has repeat:1. Only one row fires at a time; while a box is open nothing fires.
 // Story rows are added to this table by their quest's file; keep `id`s unique. Test rows for the smoke test are pushed in by the test itself.
@@ -17,7 +17,7 @@ const TACT={
  take:v=>{Object.entries(v).forEach(([id,n])=>{S.bag[id]=Math.max(0,count(id)-n);if(!S.bag[id])delete S.bag[id]});ui();save()},
  gold:v=>{S.gold=Math.max(0,S.gold+v);ui();save()},
  toast:v=>toast(v,2600), msg:v=>say(v),
- scene:()=>{}, letter:()=>{}, quest:v=>questSet(v[0],v[1]||0), step:v=>questStep(v),
+ scene:()=>{}, letter:()=>{}, battle:()=>{}, quest:v=>questSet(v[0],v[1]||0), step:v=>questStep(v),
  move:v=>{const m=storyState().moved=storyState().moved||{};m[v[0]]=[v[1],v[2]];save();placeStoryNpcs()}
 };
 // people a trigger has moved stay where they were put (saved in S.story.moved, put back at load)
@@ -31,7 +31,7 @@ function trgIf(c){if(!c)return true;const s=storyState();
   if(c.quest!==undefined&&s.q!==c.quest)return false;if(c.step!==undefined&&s.step!==c.step)return false;return true}
 function trgRun(list,i,done){if(i>=list.length){trgRunning=false;if(done)done();return}
   const a=list[i],k=Object.keys(a).find(q=>TACT[q]);const next=()=>trgRun(list,i+1,done);if(!k){next();return}
-  if(k==='say')TACT.say(a.say,next);else if(k==='scene'){if(!runScene(a.scene,next))next()}else if(k==='letter'){if(!sendLetter(a.letter,next))next()}else{TACT[k](a[k]);next()}}
+  if(k==='say')TACT.say(a.say,next);else if(k==='scene'){if(!runScene(a.scene,next))next()}else if(k==='letter'){if(!sendLetter(a.letter,next))next()}else if(k==='battle'){if(!startBattle(a.battle,next))next()}else{TACT[k](a[k]);next()}}
 // kind: 'step' (the player moved), 'talk' (ev = the person), 'day' (a morning), 'beaten' (ev = the group). Returns true if a row fired.
 function fireTriggers(kind,ev){if(typeof applyStoryPeople==='function')applyStoryPeople();if(trgRunning||(typeof dlgActive==='function'&&dlgActive()))return false;
   const now=new Set();let hit=null;
