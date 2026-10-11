@@ -395,6 +395,17 @@ def check(b, url):
     ev("S.letters=S.letters.filter(i=>i!=='t_letter');save()"); ev("(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); ev("skipScene()")
     assert ev("hasLetter('t_letter')&&flag('t_after_letter')&&SCENE===null"), "a trigger row sends a letter and carries on"
     ev("save()"); pg.reload(); pg.wait_for_timeout(500); assert ev("S.letters.includes('t_l2')&&S.letters.includes('t_letter')"), "letters are saved"
+    # world variants (2.6): the VARIANTS table drives the pirate camp and the damaged Sky temple from their flags, a simple tile row swaps and restores tiles, and nobody is left standing in a blocked tile
+    ev("sail=false;setFlag('pirates_here',0);setFlag('sky_damaged',0)"); assert ev("!NPC.some(n=>n.pirate)&&at(236,108)!==119"), "both variants start off"
+    ev("setFlag('pirates_here',1)"); assert ev("NPC.filter(n=>n.pirate).length===10&&BL.filter(b=>b.ship).length===3"), "setting the flag builds the pirate camp live"
+    ev("setFlag('sky_damaged',1)"); assert ev("at(236,108)===119"), "setting the flag damages the Sky temple live"
+    ev("setFlag('pirates_here',0);setFlag('sky_damaged',0)"); assert ev("!NPC.some(n=>n.pirate)&&at(236,108)!==119"), "clearing the flags puts both back"
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY"); vc = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1)return[x,y]}})()")
+    ev("window.__v=%s;VARIANTS.push({id:'t_var',flag:'t_var_on',tiles:[[__v[0],__v[1],12],[__v[0]+1,__v[1],12]]});applyVariants()" % json.dumps(vc)); assert ev("at(__v[0],__v[1])===1"), "a tile row does nothing while its flag is off"
+    ev("setFlag('t_var_on',1)"); assert ev("at(__v[0],__v[1])===12&&at(__v[0]+1,__v[1])===12"), "a tile row swaps its tiles when the flag is set"
+    ev("setFlag('t_var_on',0)"); assert ev("at(__v[0],__v[1])===1&&at(__v[0]+1,__v[1])===1"), "and puts the first look back when it is cleared"
+    ev("P.x=P.rx=__v[0];P.y=P.ry=__v[1];setFlag('t_var_on',1)"); assert ev("WK.includes(at(P.x,P.y))&&(P.x!==__v[0]||P.y!==__v[1])&&Math.abs(P.x-__v[0])+Math.abs(P.y-__v[1])<=2"), "a player standing where a variant blocks is moved to the nearest free tile"
+    ev("setFlag('t_var_on',0)")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

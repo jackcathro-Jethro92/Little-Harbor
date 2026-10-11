@@ -24,4 +24,4 @@ function applySky(on){if(typeof groundDirty==="function")groundDirty();
   set(AX-1,CY,117);set(AX,CY,119);set(AX+1,CY,118);set(AX-1,CY+1,120);set(AX,CY+1,120);set(AX+1,CY+1,120);
   BL.push({x:AX-3,y:CY-1,w:1,skydmg:1,skysmoke:1},{x:AX+3,y:CY-1,w:1,skydmg:1,skysmoke:1});
 }
-applySky(flag('sky_damaged'));
+// (applied at load, and live when the flag changes, by the VARIANTS table in js/world/variants.js)
