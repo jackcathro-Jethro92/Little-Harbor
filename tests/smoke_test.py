@@ -359,6 +359,16 @@ def check(b, url):
     pg.tap("#ch-save"); pg.wait_for_timeout(200)
     assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save opens the save choices"
     ev("tmClose()")
+    # scenes (2.4): a 7-step scene walks the player and a villager, fades, pans the camera, speaks and sets a flag; input is paused meanwhile; Skip lands in the same end state; a trigger row can start one
+    ev("DLG.t_sc={start:'a',nodes:{a:{who:'Murl',text:'Scene line.'}}};SCENES.t_scene=[{fade:'out',ms:50},{tp:['You',P.x,P.y]},{walk:['You',P.x+2,P.y,60]},{face:['You','l']},{fade:'in',ms:50},{pan:[P.x+6,P.y,100]},{say:'t_sc'},{set:'t_scene_done'},{pan:['back',100]},{walk:['Odo',NPC.find(q=>q.n==='Odo').x+2,NPC.find(q=>q.n==='Odo').y,60]}];window.__s=[P.x,P.y,NPC.find(q=>q.n==='Odo').x,NPC.find(q=>q.n==='Odo').y];window.__e=0;runScene('t_scene',()=>{window.__e=1})")
+    ev("move('u');act();sleep()"); assert ev("P.x===__s[0]&&P.y===__s[1]&&SCENE!==null"), "no walking, using or sleeping during a scene"
+    pg.wait_for_timeout(700); assert ev("dlgActive()&&$('dlg-txt').textContent==='Scene line.'&&P.x===__s[0]+2&&P.f==='l'&&SCENECAM!==null&&!flag('t_scene_done')"), "the scene walked, faced, panned and is now speaking"
+    ev("dlgAdvance()"); pg.wait_for_timeout(1000)
+    assert ev("window.__e===1&&SCENE===null&&SCENECAM===null&&flag('t_scene_done')&&NPC.find(q=>q.n==='Odo').x===__s[2]+2&&$('flash').style.opacity==='0'&&!document.body.classList.contains('scene')"), "the scene ends with the camera back and the fade cleared"
+    ev("P.x=P.rx=__s[0];P.y=P.ry=__s[1];NPC.find(q=>q.n==='Odo').x=__s[2];setFlag('t_scene_done',0);window.__e=0;runScene('t_scene',()=>{window.__e=1})"); pg.wait_for_timeout(300); ev("skipScene()")
+    assert ev("window.__e===1&&SCENE===null&&P.x===__s[0]+2&&flag('t_scene_done')&&NPC.find(q=>q.n==='Odo').x===__s[2]+2&&!dlgActive()&&SCENECAM===null"), "Skip lands in the same end state with no box left open"
+    ev("setFlag('t_scene_done',0);TRIGGERS.push({id:'t_sc_trg',when:{talk:'Murl'},do:[{scene:'t_scene'},{set:'t_after'}]})"); ev("(()=>{const n=NPC.find(q=>q.n==='Murl');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(300); ev("skipScene()")
+    assert ev("flag('t_scene_done')&&flag('t_after')&&SCENE===null"), "a trigger starts a scene and carries on after it"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

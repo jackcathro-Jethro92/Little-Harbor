@@ -33,4 +33,4 @@ $('dlg').addEventListener('click',()=>dlgAdvance());
 addEventListener('keydown',e=>{if(!dlgActive())return;const k=e.key;
   if(k===' '||k==='Enter'){e.preventDefault();e.stopPropagation();dlgAdvance()}
   else if((k==='ArrowDown'||k==='s'||k==='ArrowUp'||k==='w')&&dlgNode&&dlgNode.choices&&!dlgTimer){e.preventDefault();e.stopPropagation();const n=dlgNode.choices.length;dlgSel=(dlgSel+(k==='ArrowDown'||k==='s'?1:n-1))%n;[...$('dlg-ch').children].forEach((b,i)=>b.className=i===dlgSel?'sel':'')}
-  else if(k==='Escape'){e.stopImmediatePropagation()}},true);
+  else if(k==='Escape'){if(typeof SCENE!=='undefined'&&SCENE)skipScene();e.stopImmediatePropagation()}},true);
