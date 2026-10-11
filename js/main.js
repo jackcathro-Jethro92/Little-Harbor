@@ -1,7 +1,7 @@
 // ---------- start: draw loop, timers, restore explored map, first screen ----------
 (function loop(){draw();requestAnimationFrame(loop)})();
 setInterval(ghostTick,600);setInterval(arenaTick,600);setInterval(()=>{if(S.buff)ui();const t=performance.now();if(G.alive&&G.pois>t){G.hp-=2;G.hitAt=t;if(G.hp<=0)ghostDie()}},1000);setInterval(save,5000);
-setInterval(()=>NPC.forEach(n=>{if(n.fixed||n.busy||Math.random()<.6)return;
+setInterval(()=>NPC.forEach(n=>{if(n.fixed||n.busy||n.hidden||Math.random()<.6)return;
   const d=Object.values(D)[Math.random()*4|0],x=n.x+d[0],y=n.y+d[1];
   if(Math.abs(x-n.hx)>3||Math.abs(y-n.hy)>2||(P.x===x&&P.y===y)||!walkable(x,y))return;
   n.x=x;n.y=y;n.f=d[0]?(d[0]>0?'r':'l'):(d[1]>0?'d':'u')}),900);
@@ -13,4 +13,5 @@ if(typeof S.fog==='string'&&S.fog.length===4800)for(let i=0;i<4800;i++)FOG[i]=S.
 // testing: a link ending in  ?go=212,218  puts the player on that tile (on foot) for the visit
 {const g=(new URLSearchParams(location.search).get('go')||'').split(',').map(Number);if(g.length===2&&g.every(Number.isFinite)&&at(g[0],g[1])!==undefined){sail=false;P.x=P.rx=g[0];P.y=P.ry=g[1];P.f='u'}}
 reveal();ui();
+applyStoryPeople();
 showTitleOrStart();

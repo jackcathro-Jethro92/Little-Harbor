@@ -21,7 +21,7 @@ const TACT={
  move:v=>{const m=storyState().moved=storyState().moved||{};m[v[0]]=[v[1],v[2]];save();placeStoryNpcs()}
 };
 // people a trigger has moved stay where they were put (saved in S.story.moved, put back at load)
-function placeStoryNpcs(){const m=storyState().moved||{};Object.keys(m).forEach(name=>{const n=NPC.find(q=>q.n===name);if(n){n.x=m[name][0];n.y=m[name][1]}})}
+function placeStoryNpcs(){const m=storyState().moved||{};Object.keys(m).forEach(name=>{const n=NPC.find(q=>q.n===name);if(n){n.x=n.hx=m[name][0];n.y=n.hy=m[name][1];if(n._b){n._b.x=n._b.hx=n.x;n._b.y=n._b.hy=n.y}}})}
 placeStoryNpcs();
 let trgRunning=false;const trgInside=new Set();
 function trgIf(c){if(!c)return true;const s=storyState();
@@ -33,7 +33,7 @@ function trgRun(list,i,done){if(i>=list.length){trgRunning=false;if(done)done();
   const a=list[i],k=Object.keys(a).find(q=>TACT[q]);const next=()=>trgRun(list,i+1,done);if(!k){next();return}
   if(k==='say')TACT.say(a.say,next);else if(k==='scene'){if(!runScene(a.scene,next))next()}else if(k==='letter'){if(!sendLetter(a.letter,next))next()}else{TACT[k](a[k]);next()}}
 // kind: 'step' (the player moved), 'talk' (ev = the person), 'day' (a morning), 'beaten' (ev = the group). Returns true if a row fired.
-function fireTriggers(kind,ev){if(trgRunning||(typeof dlgActive==='function'&&dlgActive()))return false;
+function fireTriggers(kind,ev){if(typeof applyStoryPeople==='function')applyStoryPeople();if(trgRunning||(typeof dlgActive==='function'&&dlgActive()))return false;
   const now=new Set();let hit=null;
   for(const t of TRIGGERS){const w=t.when||{};
     let ok;if(kind==='talk')ok=w.talk!==undefined&&w.talk===ev;else if(kind==='beaten')ok=w.beaten!==undefined&&w.beaten===ev;else if(kind==='day')ok=w.day!==undefined||(!w.area&&!w.zone&&w.talk===undefined&&w.beaten===undefined);

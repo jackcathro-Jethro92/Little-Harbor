@@ -51,7 +51,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.5 Gates | **Done** (11 Oct): the `GATES` table (`js/systems/gates.js`): blocked until a flag is set, or opened by Use with the right tool; no real gate placed yet |
 | 2.7 Seagull letters | **Done** (11 Oct): `LETTERS` table and `{letter:'id'}` trigger action (`js/systems/letters.js`): a gull lands, the letter opens, and it is kept in a LETTERS pocket in the bag |
 | 2.6 World variants | **Machinery done** (11 Oct): the `VARIANTS` table (`js/world/variants.js`) now drives the pirate camp and the damaged Sky temple from their flags (same look as before), supports simple tile swaps, applies live whenever a flag changes and never leaves anyone stuck. **Still to add as rows when their art and quests arrive:** festival decorations, village under attack, Temple Tower sealed/open, the risen island |
-| 2.9, 2.10, 2.11 | Not started. **Next up: 2.9 people by story, then 2.11 story test switches** |
+| 2.9 People by story | **Done** (11 Oct): the `STORY_PEOPLE` table (`js/systems/storypeople.js`): a person's place, chat lines, dialogue and whether they are there at all follow flags, quest and day; no real rows yet |
+| 2.10, 2.11 | Not started. **Next up: 2.11 story test switches**, then 2.10 (after the playtest) |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
