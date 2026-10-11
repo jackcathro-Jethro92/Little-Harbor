@@ -430,6 +430,16 @@ def check(b, url):
     ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
     ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
     pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
+    # enemy table (3.1): the spirit is a row of ENEMY_TYPES and fights as before; a spawned test enemy chases and hurts, drops gold and items, reports its group when all are beaten, and is cleared away
+    ev("sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon=S.eq.weapon||'sword';add('sword');S.eq.weapon='sword';ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';const h0=G.hp;window.__h0=h0;act()")
+    assert ev("G.hp<__h0&&/You hit the spirit for/.test($('msg').textContent)&&ENEMY_TYPES[G.t].n==='Spirit'"), "the spirit is fought through the table as before"
+    ev("for(let i=0;i<10&&G.alive;i++){S.sta=100;act()}"); assert ev("!G.alive&&G.resp===40&&/fades away/.test($('msg').textContent)"), "it falls with its own message and a respawn count"
+    ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning enemy is back at home each morning"
+    ev("ENEMY_TYPES.t_imp={n:'Imp',hp:10,dmg:3,cd:1,speed:1,chase:6,art:'ghost',xp:5,gold:[7,7],drops:[['sardine',1,2]],respawn:0,die:'The imp pops.'};S.gold=0;S.bag.sardine=0;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;window.__o=nearestTile(P.x+2,P.y-2,(x,y)=>at(x,y)===1&&!npcAt(x,y));TRIGGERS.push({id:'t_imps',when:{beaten:'t_group'},do:[{set:'t_imps_beaten'}]});window.__e1=spawnEnemy('t_imp',__o[0],__o[1],{group:'t_group'});window.__e2=spawnEnemy('t_imp',__o[0]+1,__o[1],{group:'t_group'})")
+    ev("S.hp=50;P.x=P.rx=__o[0];P.y=P.ry=__o[1]+3;for(let i=0;i<12;i++)enemiesTick()"); assert ev("S.hp<50&&(Math.abs(__e1.x-P.x)+Math.abs(__e1.y-P.y)<=2||Math.abs(__e2.x-P.x)+Math.abs(__e2.y-P.y)<=2)"), "enemies from the table chase and hurt"
+    ev("draw()"); ev("P.x=P.rx=__e1.x;P.y=P.ry=__e1.y+1;P.f='u';S.hp=50;for(let i=0;i<6&&__e1.alive;i++){S.sta=100;act()}"); assert ev("!__e1.alive&&!flag('t_imps_beaten')&&S.gold===7&&S.bag.sardine===2"), "a kill gives its gold and drops, and the group is not done while one lives"
+    ev("P.x=P.rx=__e2.x;P.y=P.ry=__e2.y+1;P.f='u';for(let i=0;i<6&&__e2.alive;i++){S.sta=100;act()}"); assert ev("!__e2.alive&&flag('t_imps_beaten')"), "beating the last of a group fires its trigger"
+    ev("enemiesTick()"); assert ev("!ENEMIES.includes(__e1)&&!ENEMIES.includes(__e2)&&ENEMIES.length===1"), "beaten enemies that do not respawn are cleared away"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

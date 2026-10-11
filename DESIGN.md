@@ -209,6 +209,7 @@ Potions scale with Alchemy level; food with Cooking level. Swiftness doubles mov
 
 ## Combat (early)
 Only one enemy exists: the **spirit** on the graveyard isle southwest of the village pier (about 12 HP, hits for 6 every ~2 s when adjacent, chases within 7 tiles). Swing by facing it and pressing Use with a sword equipped (5 stamina). Respawns after ~25 s or on sleeping. Enemies and the Darkwood are meant to gain creatures later.
+- **The enemy table (3.1):** every real-time enemy is a row of `ENEMY_TYPES` in `js/data/enemies.js` (name, hp, damage, wait between hits, speed, chase range, island or free roaming, art, xp, gold, drops, respawn, death message) and every enemy that exists is an entry of `ENEMIES` in `js/systems/combat.js` (the spirit `G` is the first). `spawnEnemy('id',x,y,{group})` adds one; `enemyAt(x,y)`, `swing(e)`, `enemyDie(e)`, `enemiesTick()` and `enemiesMorning()` do the rest, and drawing goes through `ENEMY_ART` (`js/render/entities.js`). When every enemy of a `group` is beaten, `enemyBeaten(group)` fires the triggers waiting for it. The spirit fights exactly as before. Turn-based fighters (pirates, the boss, guild fighters) will use a battle screen (step 3.6).
 
 ## Code layout
 `index.html` has the page markup and loads `css/style.css` plus these scripts, in this order. They are classic scripts sharing one global scope (so `P`, `S`, `draw()` and so on stay global for tests and the console). Load order matters: world generation runs while the files load, and keyboard handlers fire in the order they were added.

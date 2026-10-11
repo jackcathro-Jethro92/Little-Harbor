@@ -33,7 +33,7 @@ const ISL=new Set();
 for(let y=38;y<=50;y++)for(let x=14;x<=30;x++){const dx=(x-22)/5,dy=(y-44)/3.6,d=dx*dx+dy*dy+.1*Math.sin(x*1.3+y*.9);
   if(d<1&&!M[y*MW+x]){M[y*MW+x]=d>.7?2:1;ISL.add(y*MW+x)}}
 [[20,43],[24,45],[23,41],[19,45]].forEach(([x,y])=>{if(M[y*MW+x]===1)M[y*MW+x]=13});
-const G={x:22,y:44,hx:22,hy:44,hp:12,max:12,alive:true,cd:0,hitAt:0,resp:0,f:'d'};
+const G={t:'spirit',x:22,y:44,hx:22,hy:44,hp:12,max:12,alive:true,cd:0,hitAt:0,resp:0,f:'d',pois:0};   // the spirit on the graveyard isle; every enemy lives in ENEMIES (js/systems/combat.js)
 // ---------- ore outcrops (copper 15, tin 16, bronze 17) ----------
 for(let y=10;y<=34;y++)for(let x=12;x<=19;x++){const i=y*MW+x;if((M[i]===1||M[i]===2)&&hs(x*5,y*3)%100<14)M[i]=15+hs(x,y*7)%3}
 ISL.forEach(i=>{const x=i%MW,y=(i/MW)|0;if(M[i]===1&&hs(x*5,y*3)%100<14)M[i]=15+hs(x,y*7)%3});
