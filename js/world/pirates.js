@@ -21,4 +21,4 @@ function applyPirates(on){if(typeof groundDirty==="function")groundDirty();
   const spots=[...tents.map(([x,y])=>[x+1,y+2]),[87,18],[87,21],[87,23],[88,24],[86,24],[88,26]].filter(([x,y])=>ground(x,y)&&at(x,y)!==100);
   PIRATES.forEach((p,i)=>{const s=spots[i%spots.length];if(!s)return;const o={...p,x:s[0],y:s[1],hx:s[0],hy:s[1],f:'d',pirate:1,pack:false,jon:true,bio:{age:null,job:'Pirate',backstory:null,likes:[],quests:[]}};NPC.push(o)});
 }
-applyPirates(flag('pirates_here'));
+// (applied at load, and live when the flag changes, by the VARIANTS table in js/world/variants.js)

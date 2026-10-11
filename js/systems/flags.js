@@ -3,7 +3,7 @@
 // For testing, a link ending in  ?flags=pirates_here  (several allowed, comma separated) turns flags on for that visit without saving them.
 const FORCE_FLAGS=new Set((new URLSearchParams(location.search).get('flags')||'').split(',').filter(Boolean));
 const flag=n=>FORCE_FLAGS.has(n)||!!(S.flags&&S.flags[n]);
-const setFlag=(n,v=1)=>{S.flags=S.flags||{};S.flags[n]=v?1:0;save();if(typeof applyGates==='function')applyGates()};
+const setFlag=(n,v=1)=>{S.flags=S.flags||{};S.flags[n]=v?1:0;save();if(typeof applyGates==='function')applyGates();if(typeof applyVariants==='function')applyVariants()};
 // ---- story state (roadmap 2.1): S.flags above are the story's yes/no switches; S.story says where the player is in the quests. All of it is saved and survives sleeping and reloading. ----
 // S.story = { q: the current quest id (or null), step: the step inside it, seen: ids of scenes, letters and talks already shown }. Old saves get the default.
 const storyState=()=>{const s=S.story=S.story||{};if(!Array.isArray(s.seen))s.seen=[];if(s.step===undefined)s.step=0;if(s.q===undefined)s.q=null;if(!Array.isArray(s.done))s.done=[];return s};
@@ -13,8 +13,8 @@ const questStep=n=>{storyState().step=n;save()};
 const questDone=id=>{const s=storyState();if(!s.done.includes(id))s.done.push(id);if(s.q===id){s.q=null;s.step=0}save()};
 const wasSeen=id=>storyState().seen.includes(id);
 const markSeen=id=>{const s=storyState();if(!s.seen.includes(id)){s.seen.push(id);save()}};
-// overnight arrivals: when `when` is set and `set` is not yet, sleeping sets it, runs `apply` (which changes the world) and shows `msg`. Add a row for each future arrival.
+// overnight arrivals: when `when` is set and `set` is not yet, sleeping sets it (which changes the world through the VARIANTS table, js/world/variants.js) and shows `msg`. Add a row for each future arrival.
 const ARRIVALS=[
- {when:'pirates_called',set:'pirates_here',msg:'In the night, three ships dropped anchor off the volcano island. Pirates have come ashore!',apply:()=>applyPirates(true)}
+ {when:'pirates_called',set:'pirates_here',msg:'In the night, three ships dropped anchor off the volcano island. Pirates have come ashore!'}
 ];
-function dailyEvents(){const out=[];ARRIVALS.forEach(a=>{if(flag(a.when)&&!flag(a.set)){setFlag(a.set,1);a.apply();out.push(a.msg)}});return out.join(' ')}
+function dailyEvents(){const out=[];ARRIVALS.forEach(a=>{if(flag(a.when)&&!flag(a.set)){setFlag(a.set,1);if(a.apply)a.apply();out.push(a.msg)}});return out.join(' ')}
