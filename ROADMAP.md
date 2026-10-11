@@ -49,7 +49,8 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.3 Triggers | **Done** (10 Oct): the `TRIGGERS` table (`js/systems/triggers.js`): rows fire once on an area, a room, talking, a morning or a beaten enemy group, and can say a line, set flags, give or take items and gold, move people and change the quest step |
 | 2.12 Cinematics | **Begun:** the title cinematic is done (see N10 below); the festival opening, the village attack and the rising island are not built |
 | 2.4 Scenes | **Done** (11 Oct): `SCENES` table and `runScene` (`js/systems/scenes.js`): wait, fade, walk, face, jump, say, line, camera pan, shake and any trigger action; input paused; Skip button; a trigger starts one with `{scene:'id'}` |
-| 2.5, 2.7, 2.9, 2.10, 2.11 | Not started. **Next up: 2.5 gates, then 2.7 seagull letters, 2.9 people by story, 2.11 story test switches** |
+| 2.5 Gates | **Done** (11 Oct): the `GATES` table (`js/systems/gates.js`): blocked until a flag is set, or opened by Use with the right tool; no real gate placed yet |
+| 2.7, 2.9, 2.10, 2.11 | Not started. **Next up: 2.7 seagull letters, then 2.9 people by story, 2.11 story test switches** |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
