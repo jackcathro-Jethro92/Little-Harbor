@@ -7,6 +7,7 @@ function act(){
   const[x,y]=front(),n=npcAt(x,y);
   if(G.alive&&G.x===x&&G.y===y)return swing();
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
+  if(useGate(x,y))return;
   if(at(x,y)===23){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();
   {const en=!sail&&ENTR.find(q=>q.x===x&&q.y===y);if(en)return enterHall(en)}

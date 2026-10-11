@@ -3,7 +3,7 @@
 // For testing, a link ending in  ?flags=pirates_here  (several allowed, comma separated) turns flags on for that visit without saving them.
 const FORCE_FLAGS=new Set((new URLSearchParams(location.search).get('flags')||'').split(',').filter(Boolean));
 const flag=n=>FORCE_FLAGS.has(n)||!!(S.flags&&S.flags[n]);
-const setFlag=(n,v=1)=>{S.flags=S.flags||{};S.flags[n]=v?1:0;save()};
+const setFlag=(n,v=1)=>{S.flags=S.flags||{};S.flags[n]=v?1:0;save();if(typeof applyGates==='function')applyGates()};
 // ---- story state (roadmap 2.1): S.flags above are the story's yes/no switches; S.story says where the player is in the quests. All of it is saved and survives sleeping and reloading. ----
 // S.story = { q: the current quest id (or null), step: the step inside it, seen: ids of scenes, letters and talks already shown }. Old saves get the default.
 const storyState=()=>{const s=S.story=S.story||{};if(!Array.isArray(s.seen))s.seen=[];if(s.step===undefined)s.step=0;if(s.q===undefined)s.q=null;if(!Array.isArray(s.done))s.done=[];return s};

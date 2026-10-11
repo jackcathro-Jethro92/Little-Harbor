@@ -369,6 +369,18 @@ def check(b, url):
     assert ev("window.__e===1&&SCENE===null&&P.x===__s[0]+2&&flag('t_scene_done')&&NPC.find(q=>q.n==='Odo').x===__s[2]+2&&!dlgActive()&&SCENECAM===null"), "Skip lands in the same end state with no box left open"
     ev("setFlag('t_scene_done',0);TRIGGERS.push({id:'t_sc_trg',when:{talk:'Murl'},do:[{scene:'t_scene'},{set:'t_after'}]})"); ev("(()=>{const n=NPC.find(q=>q.n==='Murl');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(300); ev("skipScene()")
     assert ev("flag('t_scene_done')&&flag('t_after')&&SCENE===null"), "a trigger starts a scene and carries on after it"
+    # gates (2.5): a test boulder across two grass tiles blocks until its flag is set (by a trigger, or by Use with the needed tool), stays open after a reload, and never walls anyone in
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY");
+    cells = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1&&at(x,y+1)===1&&at(x-1,y)===1)return[x,y]}})()")
+    ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36,msg:'A boulder blocks the way.',needs:{eq:'pickaxe'},opens:'You break the boulder.'});applyGates()" % json.dumps(cells))
+    assert ev("at(__g[0],__g[1])===36&&at(__g[0]+1,__g[1])===36&&!walkable(__g[0],__g[1])"), "a closed gate blocks"
+    ev("P.x=P.rx=__g[0];P.y=P.ry=__g[1]+1;P.f='u';S.eq.pickaxe=null;act()"); assert ev("$('msg').textContent==='A boulder blocks the way.'&&at(__g[0],__g[1])===36"), "without the tool it only says why"
+    ev("S.eq.pickaxe='pickaxe';act()"); assert ev("flag('t_boulder_open')&&at(__g[0],__g[1])===1&&at(__g[0]+1,__g[1])===1&&walkable(__g[0],__g[1])"), "with the tool, Use opens it and the ground comes back"
+    ev("S.eq.pickaxe=null;P.x=P.rx=__g[0];P.y=P.ry=__g[1];setFlag('t_boulder_open',0)"); assert ev("at(__g[0],__g[1])===1&&at(__g[0]+1,__g[1])===36&&gatePending"), "a gate does not close on someone standing in it"
+    ev("move('d');"); assert ev("at(__g[0],__g[1])===36&&!gatePending"), "it closes once they step off"
+    ev("TRIGGERS.push({id:'t_gate_trg',do:[{set:'t_boulder_open'}]});fireTriggers('step')"); assert ev("at(__g[0],__g[1])===1"), "a trigger can open it"
+    ev("save()"); pg.reload(); pg.wait_for_timeout(500)
+    ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36});applyGates()" % json.dumps(cells)); assert ev("flag('t_boulder_open')&&at(__g[0],__g[1])===1&&at(__g[0]+1,__g[1])===1"), "an opened gate stays open after a reload"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
