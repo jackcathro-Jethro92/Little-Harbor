@@ -46,7 +46,9 @@ The world is much further along than when this roadmap was first written. Everyt
 | 2.6 World variants | **Partly:** the pirate camp has an empty and a populated version; the Sky temple's damaged version is built (switch `sky_damaged`, `applySky`); the other variants are not built |
 | 2.2 Dialogue box | **Done** (10 Oct): box at the bottom with a portrait slot, typed text, choices, flags and an end step (`DLG` table, `runDialogue`, `dlgSay`); portraits for 16 characters (`art/graphics/dialogue_and_shops.png`) |
 | 2.8 Quest log | **Done** (10 Oct): a Quests button on the character screen (Me); current quest and its next step, and a Finished list, read from the `QUESTS` table (there are no real quests yet) |
-| 2.3 to 2.5, 2.7, 2.9 to 2.12 | Not started (2.3 triggers are in their own pull request) |
+| 2.3 Triggers | **Done** (10 Oct): the `TRIGGERS` table (`js/systems/triggers.js`): rows fire once on an area, a room, talking, a morning or a beaten enemy group, and can say a line, set flags, give or take items and gold, move people and change the quest step |
+| 2.12 Cinematics | **Begun:** the title cinematic is done (see N10 below); the festival opening, the village attack and the rising island are not built |
+| 2.4, 2.5, 2.7, 2.9, 2.10, 2.11 | Not started. **Next up: 2.4 scenes, then 2.5 gates, 2.7 seagull letters, 2.9 people by story, 2.11 story test switches** |
 | Phase 3 combat and enemies | Not started (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
 | Phase 4 first playable slice | Not started |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
@@ -80,6 +82,8 @@ A save field `S.flags` holds simple yes/no story switches (`flag()`, `setFlag()`
 5. **Temple Tower:** **finish it and its island before the roadmap starts.**
 
 ### Before the roadmap officially starts: finish the temples (decided 10 October)
+
+**Update (11 October, Jack): the Temple Tower, its island and any more Fire temple fixes are moved to after the playtest.** The roadmap now carries on with the story machinery (2.4 onwards). The damaged Sky temple is already built.
 
 Do these first, one pull request each, then begin the roadmap at N1:
 1. **Fire temple fixes.** Done so far: the great gate's black doorway is now a **real door** (face it and press Use; a short gatehouse room opens, and its far door leads straight into the fire hall; the hall's door leads back to the gatehouse). More Fire issues to fix as Jack finds them.
