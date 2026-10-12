@@ -9,10 +9,10 @@
 QUESTS.push({id:'q2',name:'Find the Lost Man',
  steps:['[Placeholder] The village elder is looking for you. Talk to Bjorn the Elder.','[Placeholder] Rue went to the mainland for weapons and has not come back. Ask Garrick the blacksmith in the Walled Settlement.','[Placeholder] Garrick says a ship went down north of the forest. Go through the Darkwood and find Rue by the woodcutter\u2019s cottage.','[Placeholder] You found Rue. Tell Garrick.','[Placeholder] Take Rue home to the village.','[Placeholder] Tell Bjorn the Elder that Rue is safe.'],
  goals:['Bjorn the Elder','Garrick',[36,146],'Garrick','Rue','Bjorn the Elder']});
-NPC.push({n:'Bjorn the Elder',x:159,y:122,hx:159,hy:122,f:'d',skin:0,hair:3,shirt:4,jk:3,hat:'none',hstyle:'bald',pack:false,fixed:1,say:['[Placeholder] The harbor looks after those who look after it.'],bio:{age:null,job:'Village elder',backstory:null,likes:[],q:null}});
+NPC.push({n:'Bjorn the Elder',x:155,y:104,hx:155,hy:104,f:'d',skin:0,hair:3,shirt:4,jk:3,hat:'none',hstyle:'bald',pack:false,fixed:1,say:['[Placeholder] The harbor looks after those who look after it.'],bio:{age:null,job:'Village elder',backstory:null,likes:[],q:null}});
 NPC.push({n:'Rue',x:124,y:9+FY,hx:124,hy:9+FY,f:'l',skin:2,hair:5,shirt:3,jk:5,hat:'cap',hc:2,hstyle:'ponytail',pack:false,fixed:1,say:['[Placeholder] Good on the ropes and fast in a fight, that is me.'],bio:{age:null,job:'Sailor',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.push(
- {npc:'Bjorn the Elder',if:{flag:'q1_done'},at:[159,122],f:'d'},{npc:'Bjorn the Elder',hide:1},
+ {npc:'Bjorn the Elder',if:{flag:'q1_done'},at:[155,104],f:'d'},{npc:'Bjorn the Elder',hide:1},
  {npc:'Rue',if:{flag:'q2_garrick2'},at:[153,122],f:'r'},
  {npc:'Rue',if:{flag:'q2_rue_found'},hide:1},
  {npc:'Rue',if:{flag:'q2_started'},at:[124,9+FY],f:'l'},
