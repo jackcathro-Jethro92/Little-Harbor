@@ -46,9 +46,9 @@ function critterSprite(k,col,fl,fr){return sprite('c'+k+col+fl+fr,24,22,c=>{cons
   else{q(7,5,2,10,O);q(3,3,10,3,O);q(4,4,8,1,'#d8b878');q(5,6,6,5,O);q(6,6,4,4,'#d8b878');q(6,0,4,4,O);q(7,1,2,2,'#d8b878');q(5,13,6,2,O)}})}
 function critterArt(a,cx,cy,t){const bob=((t/300+a.x*3)%7<.5)?1:0,fr=((t/180)|0)%2;g.drawImage(critterSprite(a.k,a.c||'',a.f?1:0,a.k==='dog'||a.k==='cat'?fr:0),(a.x*T-cx|0)-4,(a.y*T-cy+bob|0)-4)}
 // ---- the spirit: a glowing ghost that sways, with a soft glow and a rippling hem ----
-function ghostArt(cx,cy,t){const x=G.x*T-cx,y=G.y*T-cy-2+Math.round(Math.sin(t/300)*2),w=t-G.hitAt<250&&((t/60|0)%2),B2=w?'#ffffff':(G.pois>t)?'rgba(180,238,160,.95)':'rgba(225,238,255,.92)',O='rgba(55,65,110,.95)',gw=g.createRadialGradient(x+8,y+7,2,x+8,y+7,16);
-  gw.addColorStop(0,G.pois>t?'rgba(160,230,140,.35)':'rgba(190,210,255,.35)');gw.addColorStop(1,'rgba(190,210,255,0)');g.fillStyle=gw;g.fillRect(x-8,y-9,32,32);
+function ghostArt(e,cx,cy,t){const x=e.x*T-cx,y=e.y*T-cy-2+Math.round(Math.sin(t/300)*2),w=t-e.hitAt<250&&((t/60|0)%2),B2=w?'#ffffff':(e.pois>t)?'rgba(180,238,160,.95)':'rgba(225,238,255,.92)',O='rgba(55,65,110,.95)',gw=g.createRadialGradient(x+8,y+7,2,x+8,y+7,16);
+  gw.addColorStop(0,e.pois>t?'rgba(160,230,140,.35)':'rgba(190,210,255,.35)');gw.addColorStop(1,'rgba(190,210,255,0)');g.fillStyle=gw;g.fillRect(x-8,y-9,32,32);
   pF(g,x+3,y+16,10,2,'rgba(0,0,0,.2)');pF(g,x+4,y,8,2,O);pF(g,x+2,y+1,12,13,O);pF(g,x+3,y+2,10,12,B2);pF(g,x+5,y+1,6,1,B2);pF(g,x+4,y+3,3,2,'rgba(255,255,255,.7)');
   const wv=(t/180|0)%2;pF(g,x+3,y+12,3,3,B2);pF(g,x+10,y+12,3,3,B2);pF(g,x+6,y+13,4,2,O);pF(g,x+3,y+13+wv,2,2,B2);pF(g,x+11,y+14-wv,2,1,B2);
   pF(g,x+5,y+5,2,3,'#1a1a2a');pF(g,x+9,y+5,2,3,'#1a1a2a');pP(g,x+5,y+5,'#6a7aff');pP(g,x+9,y+5,'#6a7aff');pF(g,x+7,y+10,2,2,'#1a1a2a');
-  if(G.hp<G.max){pF(g,x+1,y-5,14,4,'#383838');pF(g,x+2,y-4,12*G.hp/G.max,2,'#58d058')}}
+  if(e.hp<e.max){pF(g,x+1,y-5,14,4,'#383838');pF(g,x+2,y-4,12*e.hp/e.max,2,'#58d058')}}

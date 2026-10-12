@@ -5,7 +5,7 @@ function act(){
   if(fs===1)return say('Too early. Wait for the bite.');
   if(fs===2)return hook();
   const[x,y]=front(),n=npcAt(x,y);
-  if(G.alive&&G.x===x&&G.y===y)return swing();
+  {const en=enemyAt(x,y);if(en)return swing(en)}
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(useGate(x,y))return;
   if(at(x,y)===23){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
@@ -48,7 +48,7 @@ function act(){
 }
 function sleep(){
   if(SCENE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';if(!sail&&!inRoom(P.x,P.y)&&!inQ)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();G.alive=true;G.hp=G.max;G.x=G.hx;G.y=G.hy;
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';if(!sail&&!inRoom(P.x,P.y)&&!inQ)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
 }
