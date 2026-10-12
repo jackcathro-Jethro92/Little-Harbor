@@ -46,6 +46,7 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
     else{r(2,6,12,4,'#2e1f10');r(3,7,10,2,'#a8743f');r(3,10,2,4,'#6b4423');r(11,10,2,4,'#6b4423')}}
   else if(id==='knife'){for(let t=0;t<6;t++)r(3+t,12-t,2,2,'#7a5230');for(let t=0;t<5;t++)r(8+t,7-t,2,2,'#c9d2da')}
   else if(K==='jewel'){const c=ITEMS[id].gem;if(ITEMS[id].slot==='ring'){r(4,6,8,8,'#2e1f10');r(5,7,6,6,'#e8c050');r(6,8,4,4,'#2e1f10');r(6,3,4,4,'#2e1f10');r(7,4,2,2,c);r(7,4,1,1,'#fff')}
+    else if(ITEMS[id].slot==='armour'){r(3,2,10,3,'#2e1f10');r(2,3,3,4,'#2e1f10');r(11,3,3,4,'#2e1f10');r(4,3,8,11,'#2e1f10');r(5,4,6,9,'#8fb4d8');r(5,4,6,2,'#c4def2');r(7,6,2,6,'#5f86ac');r(7,7,2,2,c)}
     else if(ITEMS[id].slot==='boots'){r(4,2,5,9,'#2e1f10');r(5,3,3,7,'#9a6a3a');r(3,10,9,4,'#2e1f10');r(4,11,8,2,'#b8824a');r(5,3,3,1,'#e8d8b0');r(6,6,1,1,c)}
     else{r(3,1,1,5,'#c8a040');r(12,1,1,5,'#c8a040');r(4,5,2,2,'#c8a040');r(10,5,2,2,'#c8a040');r(6,7,4,2,'#c8a040');r(5,9,6,6,'#2e1f10');r(6,10,4,4,c);r(6,10,1,1,'#fff')}}
   else if(K==='weapon'&&ITEMS[id].wtype==='axe'){const c=ITEMS[id].blade||'#c9d2da';for(let t=0;t<10;t++)r(3+t,13-t,2,2,'#6b4423');r(8,2,6,6,'#2e1f10');r(9,3,4,4,c);r(9,3,4,1,'#f4f4f0')}

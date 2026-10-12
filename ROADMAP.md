@@ -37,7 +37,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quest 4 (5.4) is built too. Next: Quest 5 and the Sea Temple (5.5), then the playtest from Saturday 24 October.
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 and 5 (5.4, 5.5) are built too. Next: Quest 6 and the Sky Temple (5.6), then the playtest from Saturday 24 October.
 
 | Step | Status |
 | --- | --- |
@@ -453,7 +453,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **Reward:** **enchanted boots** (armour slot from 3.4).
 - **Sets:** `q4_done`, `earth_key_at_tower`. Opens the Temple Tower (`art/temples/temple_tower`) with its four key stands.
 
-### 5.5 Quest 5: Saviour of the Seas (Sea Temple, the "Knossos Temple")
+### 5.5 Quest 5: Saviour of the Seas (Sea Temple, the "Knossos Temple") *(built, 13 Oct)*
 - **Where:** the Sea Temple, in the middle of a crater lake on Island 5. Use `art/temples/knossos_temple`: rim gate, boardwalk, gatehouse, courtyard, hall, stairs, vault.
 - **What happens:** the pirates are already in the vault with the Sea Key. The player defeats them and takes the key back. As they flee, a pirate shouts the dynamite line ("guess it's dynamite then!"), setting up Quest 6.
 - **Reward:** at the Tower, the Earth spirit (the young girl) gives **enchanted armour**. She sends you to the Sky Temple.

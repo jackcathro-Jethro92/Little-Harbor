@@ -6,7 +6,7 @@ const stepMs=()=>swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sa
 // // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
 const MAXHP=50,MAXSTA=100,STAM={walk:.04,sail:.04,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
-const fx=k=>['ring','amulet','boots'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
+const fx=k=>['ring','amulet','boots','armour'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
 const maxHp=()=>MAXHP+4*lvl('combat')+fx('hp'),maxSta=()=>MAXSTA+fx('sta');
 function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q=>q.id===id),b=lvl(id);S.xp[id]=(S.xp[id]||0)+n;const a=lvl(id);
   if(n>=1&&a===b)toast('+'+n+' '+k.n+' XP');

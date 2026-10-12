@@ -216,7 +216,9 @@ function towerInside(m,sx,sy,tx,ty,n,t){const{O,gold,wood,wood2,glow}=TW,r=ty-TS
     if(m===111){R(sx+2,sy-10,12,3,O);R(sx+1,sy-9,14,2,gold);R(sx+3,sy-12,10,3,gold);R(sx+3,sy-6,10,12,O);R(sx+4,sy-5,8,10,'#c8901a');R(sx+6,sy-2,4,7,O);R(sx+7,sy-1,2,5,fl?'#fff2a8':glow)}}
   else if(m===113){floor();R(sx,sy+3,T,11,O);R(sx+1,sy+4,T-2,9,'#b8322a');R(sx+1,sy+4,T-2,2,'#d84a3a');R(sx+1,sy+11,T-2,2,'#8a2420');
     if(tx===TS.dx){R(sx+5,sy-4,6,9,O);R(sx+6,sy-3,4,7,'#b87a3a');R(sx+9,sy-6,3,3,'#b87a3a');R(sx+11,sy-5,3,1,'#b87a3a');R(sx+6,sy+4,4,2,'#b87a3a')}else R(sx+4+n%5,sy+2,6,3,tx<TS.dx?'#e8d8a0':'#c8402a')}
-  else if(m===114){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy+7,8,6,O);R(sx+5,sy+8,6,4,wood);R(sx+3,sy+4,10,4,O);R(sx+4,sy+5,8,2,'#7a5230')}
+  else if(m===114){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy+7,8,6,O);R(sx+5,sy+8,6,4,wood);R(sx+3,sy+4,10,4,O);R(sx+4,sy+5,8,2,'#7a5230');
+    const kf={[TS.dx-4]:'earth_key_at_tower',[TS.dx-2]:'sea_key_at_tower',[TS.dx+2]:'sky_key_at_tower',[TS.dx+4]:'fire_key_at_tower'}[tx];   // a key rests on its stand once it is kept here
+    if(kf&&ty===TS.y1-2&&flag(kf)){R(sx+5,sy-2,5,5,O);R(sx+6,sy-1,3,3,gold);R(sx+7,sy,1,1,O);R(sx+7,sy+3,2,7,O);R(sx+8,sy+3,1,6,gold);R(sx+9,sy+7,2,2,gold)}}
   else if(m===115){floor();R(sx+7,sy-12,2,12,O);R(sx+4,sy-1,8,3,O);R(sx+5,sy,6,6,'#e8b030');R(sx+6,sy+1,4,4,fl?'#fff2a8':glow);R(sx+4,sy+6,8,2,O)}}
 // ---------- the damaged Temple to the Sky (js/world/skydamage.js; art/temples/sky_stonehenge_temple/5_circle_damaged and 6_temple_stone_damaged) ----------
 // Tiles (all on grass): 117 and 118 the left and right halves of the split temple stone (blocked), 119 dark stairs going down between them (blocked), 120 scorched ground (walkable),

@@ -35,7 +35,7 @@ SCENES.q4_aftermath=[
  {msg:'Take the Earth Key to the Temple Tower. The compass will show the way.'}];
 SCENES.q4_tower=[
  {set:'q4_old_man'},{wait:400},{say:'q4_old1'},{take:{earth_key:1}},{set:'earth_key_at_tower'},{toast:'The old man keeps the Earth Key safe.'},{say:'q4_old2'},
- {ensure:{enchanted_boots:1}},{toast:'You got the enchanted boots!'},{set:'q4_done'},{done:'q4'},
+ {ensure:{enchanted_boots:1}},{toast:'You got the enchanted boots!'},{set:'q4_done'},{done:'q4'},{quest:['q5',0]},
  {msg:'The old man asks you to go back to the Sea temple for the key in its chamber.'}];
 TRIGGERS.push(
  // the next time the player is on foot on the mainland (the south, the pier, or the mountain country in the north)
