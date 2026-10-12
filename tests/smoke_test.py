@@ -34,6 +34,7 @@ def load(b, url, save):
 def check(b, url):
     pg, errs = load(b, url, SAVE)
     ev = pg.evaluate
+    ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
         pg.tap(btn); pg.wait_for_timeout(100)
