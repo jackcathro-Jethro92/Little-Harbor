@@ -14,6 +14,7 @@ button{font:inherit;font-weight:700;color:var(--ink);background:var(--panel);bor
 button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
 button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 .row button{flex:1}
+#ctx{justify-content:flex-start}#ctx button{flex:0 0 96px}
 .pad{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:352px}
 .dpad{display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(2,50px);gap:5px}
 .dpad button{padding:0;font-size:19px}
@@ -80,7 +81,7 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #ch-pt{width:128px;height:128px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px}
 #ch-info{margin:10px 0;text-align:left}#ch-info div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:2px dotted #b98e55;font-size:16px}
 #ch-more{text-align:left}#ch-more h4{margin:10px 0 2px;font-size:15px}#ch-more p{margin:0;font-size:14px;line-height:1.4}
-#ch-quests,#ch-save,#ch-back,#qs-back{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:8px}
+#ch-load,#ch-save,#ch-back,#qs-back{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:8px}
 #sk-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
 #sk-list{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:4px 12px}
 .sk{padding:10px 0;border-bottom:2px dotted #b98e55;color:#4a2f14}

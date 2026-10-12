@@ -350,19 +350,24 @@ def check(b, url):
     ev("save()"); pg.reload(); pg.wait_for_timeout(500); pg.evaluate("TRIGGERS.push({id:'t_area',when:{area:[10,10,12,12]},do:[{gold:7}]})")
     assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
     ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
-    # the character screen: a Me button next to Bag shows the portrait, day, gold and health, and its Save button opens the save choices
+    # the buttons and the Menu screen: Bag, Quests, Skills, Map and Menu in one row; Menu shows the summary with Save game and Load game (no Quests); Quests is its own screen
+    assert ev("[...$('bagbtn').parentElement.children].map(b=>b.textContent).join()==='Bag,Quests,Skills,Map,Menu'&&[...$('ctx').children].map(b=>b.textContent).join()==='Deck,Sleep'"), "the button row is Bag, Quests, Skills, Map, Menu, with Deck and Sleep in their own row"
     pg.tap("#chbtn"); pg.wait_for_timeout(200)
-    assert ev("$('ch').classList.contains('open')&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)"), "Me opens the character screen"
+    assert ev("$('ch').classList.contains('open')&&$('ch-title').textContent==='MENU'&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)&&!document.getElementById('ch-quests')"), "Menu opens the summary, without a Quests button"
     assert ev("(()=>{const d=$('ch-pt').getContext('2d').getImageData(0,0,96,96).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]!==142)n++;return n>200})()"), "the figure is drawn"
-    pg.tap("#ch-quests"); pg.wait_for_timeout(200)
-    assert ev("$('qs').classList.contains('open')&&/No quest right now/.test($('qs-list').textContent)"), "the quest log opens, empty at first"
+    pg.tap("#ch-save"); pg.wait_for_timeout(200)
+    assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save game opens the save choices"
+    ev("tmClose()"); pg.tap("#chbtn"); pg.wait_for_timeout(100); pg.tap("#ch-load"); pg.wait_for_timeout(200)
+    assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Load game'"), "Load game opens the load choices"
+    ev("tmClose()")
+    pg.tap("#qsbtn"); pg.wait_for_timeout(200)
+    assert ev("$('qs').classList.contains('open')&&/No quest right now/.test($('qs-list').textContent)"), "Quests opens the quest log, empty at first"
     ev("QUESTS.push({id:'t_q1',name:'Test quest',steps:['Do the first thing.','Now the second thing.']},{id:'t_q0',name:'Old quest',steps:['x']});questSet('t_q1',1);questDone('t_q0');openQuests()")
     assert ev("/Test quest/.test($('qs-list').textContent)&&/Now the second thing\\./.test($('qs-list').textContent)&&/FINISHED/.test($('qs-list').textContent)&&/Old quest/.test($('qs-list').textContent)"), "the log shows the current step and the finished list"
     ev("questDone('t_q1');openQuests()"); assert ev("S.story.q===null&&/No quest right now/.test($('qs-list').textContent)&&S.story.done.length===2"), "a finished quest moves to the list"
-    pg.tap("#qs-back"); assert ev("!$('qs').classList.contains('open')&&$('ch').classList.contains('open')"), "Back returns to the character screen"
-    pg.tap("#ch-save"); pg.wait_for_timeout(200)
-    assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save opens the save choices"
-    ev("tmClose()")
+    pg.tap("#qs-back"); assert ev("!$('qs').classList.contains('open')&&!$('ch').classList.contains('open')"), "Back returns to the game"
+    pg.keyboard.press("q"); pg.wait_for_timeout(100); assert ev("$('qs').classList.contains('open')"), "the Q key opens the quest log"
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(100); assert ev("!$('qs').classList.contains('open')"), "Escape closes it"
     # scenes (2.4): a 7-step scene walks the player and a villager, fades, pans the camera, speaks and sets a flag; input is paused meanwhile; Skip lands in the same end state; a trigger row can start one
     ev("DLG.t_sc={start:'a',nodes:{a:{who:'Murl',text:'Scene line.'}}};SCENES.t_scene=[{fade:'out',ms:50},{tp:['You',P.x,P.y]},{walk:['You',P.x+2,P.y,60]},{face:['You','l']},{fade:'in',ms:50},{pan:[P.x+6,P.y,100]},{say:'t_sc'},{set:'t_scene_done'},{pan:['back',100]},{walk:['Odo',NPC.find(q=>q.n==='Odo').x+2,NPC.find(q=>q.n==='Odo').y,60]}];window.__s=[P.x,P.y,NPC.find(q=>q.n==='Odo').x,NPC.find(q=>q.n==='Odo').y];window.__e=0;runScene('t_scene',()=>{window.__e=1})")
     ev("move('u');act();sleep()"); assert ev("P.x===__s[0]&&P.y===__s[1]&&SCENE!==null"), "no walking, using or sleeping during a scene"
