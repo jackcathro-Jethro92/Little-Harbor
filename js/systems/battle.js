@@ -44,13 +44,23 @@ function startBattle(id,onEnd){const row=BATTLES[id];if(!row||BATTLE||SCENE)retu
   $('battle').classList.add('open');drawField();bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
   (async()=>{await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
 function bTurn(){const B=BATTLE;if(!B)return;B.picking=true;bDraw();$('bt-msg').textContent='What will you do?';
-  bMenu([['Attack',bAttack],['Item',bItems],['Run',bRun]])}
-async function bAttack(){const B=BATTLE;B.picking=false;bMenu([]);let f=B.foes[B.sel];if(!f||!f.alive)f=bAlive()[0];B.sel=B.foes.indexOf(f);
-  const w=eq('weapon'),base=w?hitDamage():2,d=Math.max(1,Math.round(base*(.85+Math.random()*.3)));f.hp-=d;gainXp('combat',1);
-  bShake(f.el,'hit');await bSay('You '+(w?'strike':'punch')+' '+f.t.n+' for '+d+'!');
+  bMenu([['Attack',bAttackMenu],['Block',bBlock],['Item',bItems],['Run',bRun]])}
+// Attack opens the list of attacks the player knows with the weapon in hand (js/data/attacks.js); each costs stamina and one you cannot afford is greyed out
+function bAttackMenu(){const B=BATTLE;B.picking=true;$('bt-msg').textContent='Choose an attack. Stamina '+Math.ceil(S.sta)+'.';
+  bMenu([...knownAttacks().map(id=>[ATTACKS[id].n+' ('+ATTACKS[id].cost+')',()=>bAttack(id),S.sta<ATTACKS[id].cost]),['Back',bTurn]])}
+async function bAttack(id){const B=BATTLE,A=ATTACKS[id];B.picking=false;bMenu([]);let f=B.foes[B.sel];if(!f||!f.alive)f=bAlive()[0];B.sel=B.foes.indexOf(f);
+  const w=eq('weapon'),t=weaponType(),sk=t==='starter'?null:t,lv0=sk?lvl(sk):0;
+  S.sta=Math.max(0,S.sta-A.cost);
+  const base=w?w.damage:2,d=Math.max(1,Math.round(base*(1+.08*lv0+fx('dmg'))*A.power*(.85+Math.random()*.3)));f.hp-=d;gainXp('combat',1);if(sk&&A.xp)gainXp(sk,A.xp);
+  bShake(f.el,'hit');await bSay('You use '+A.n+' on '+f.t.n+' for '+d+'!');
+  if(sk&&lvl(sk)>lv0){const learned=WEAPON_MOVES[t].filter(([,req])=>req>lv0&&req<=lvl(sk)).map(([i])=>ATTACKS[i].n);
+    await bSay('Your '+SKILLS.find(q=>q.id===sk).n+' skill reached level '+lvl(sk)+'!'+(learned.length?' You learned '+learned.join(' and ')+'!':''))}
+  if(A.stun&&f.hp>0&&Math.random()<A.stun){f.stun=1;await bSay(f.t.n+' is stunned!')}
   if(w&&S.coat>0){S.coat--;f.pois=3;ui();await bSay(f.t.n+' is poisoned!')}
   if(f.hp<=0){f.alive=false;bDraw();await bSay(f.t.n+' is beaten!')}else bDraw();
   if(!bAlive().length)return bEnd('won');bFoes()}
+// Block: much less damage this turn, and some stamina back
+async function bBlock(){const B=BATTLE;B.picking=false;bMenu([]);S.sta=Math.min(maxSta(),S.sta+BLOCK_STAMINA);B.blocking=true;bDraw();await bSay('You raise your guard and catch your breath. +'+BLOCK_STAMINA+' stamina.');bFoes()}
 function bItems(){const B=BATTLE;B.picking=false;const ids=[...LIST('food'),...LIST('potion')].filter(count);
   if(!ids.length){$('bt-msg').textContent='You have nothing to use.';return bMenu([['Back',bTurn]])}
   $('bt-msg').textContent='Use which?';bMenu([...ids.map(id=>[ITEMS[id].n+' x'+count(id),()=>bUse(id)]),['Back',bTurn]])}
@@ -64,10 +74,11 @@ async function bRun(){const B=BATTLE;B.picking=false;bMenu([]);
 async function bFoes(){const B=BATTLE;
   for(const f of B.foes){if(!f.alive)continue;
     if(f.pois>0){f.pois--;f.hp-=2;bDraw();if(f.hp<=0){f.alive=false;bDraw();await bSay(f.t.n+' succumbs to the poison!');if(!bAlive().length)return bEnd('won');continue}}
+    if(f.stun>0){f.stun--;await bSay(f.t.n+' is stunned and loses its turn!');continue}
     if(f.t.flee&&f.hp<=f.max*f.t.flee.at){f.alive=false;f.fled=true;bDraw();await bSay(f.t.flee.msg||f.t.n+' runs away!');if(!bAlive().length)return bEnd('escaped');continue}
-    const raw=rnd(f.t.hit[0],f.t.hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))));S.hp=Math.max(0,S.hp-d);ui();flashHit();bShake($('bt-meBox'),'hit');bDraw();
+    const raw=rnd(f.t.hit[0],f.t.hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))*(B.blocking?BLOCK_TAKES:1)));S.hp=Math.max(0,S.hp-d);ui();flashHit();bShake($('bt-meBox'),'hit');bDraw();
     await bSay(f.t.n+' '+(f.t.atk||'attacks')+'! -'+d+' health.');if(S.hp<=0)return bEnd('lost')}
-  bTurn()}
+  B.blocking=false;bTurn()}
 function bActions(list){(list||[]).forEach(a=>{const k=Object.keys(a).find(q=>TACT[q]&&!['say','scene','letter','battle'].includes(q));if(k)TACT[k](a[k])})}
 async function bEnd(result){const B=BATTLE;let msg='';
   if(result==='won'||result==='escaped'){let xp=0,gold=0;const got=[];B.foes.forEach(f=>{if(!f.fled||result==='escaped'){xp+=Math.round(f.t.xp*(f.fled?.5:1))}if(!f.fled){if(f.t.gold)gold+=rnd(f.t.gold[0],f.t.gold[1]);(f.t.drops||[]).forEach(([id,ch,n])=>{if(Math.random()<ch){add(id,n||1);got.push(ITEMS[id].n.toLowerCase()+(n>1?' x'+n:''))}})}});

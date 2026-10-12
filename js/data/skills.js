@@ -2,7 +2,9 @@
 const LV=[100,380,770,1300,2150,3300,4800,6900,10000,15000]; // total XP needed for levels 1-10
 const SKILLS=[
  {id:'fishing',n:'Fishing',c:'#3b82c4',perk:l=>'Bites '+3*l+'% sooner and better odds of rare fish.'},
- {id:'combat',n:'Combat',c:'#d9534f',perk:l=>'+'+8*l+'% weapon damage and +'+4*l+' max health.'},
+ {id:'combat',n:'Combat',c:'#d9534f',perk:l=>'+'+4*l+' max health (and +'+8*l+'% damage in the arena and guild).'},
+ {id:'sword',n:'Sword',c:'#b8c2cc',perk:l=>weaponPerk('sword',l)},
+ {id:'axe',n:'Axe',c:'#a8683a',perk:l=>weaponPerk('axe',l)},
  {id:'sailing',n:'Sailing',c:'#2f8f7a',perk:l=>'Travelling costs '+6*l+'% less stamina.'},
  {id:'mining',n:'Mining',c:'#8d8f87',perk:l=>'Ore needs '+Math.floor(l/3)+' fewer swings; '+4*l+'% chance of extra ore.'},
  {id:'woodcutting',n:'Woodcutting',c:'#7a5230',perk:l=>'Trees need '+Math.floor(l/3)+' fewer swings; '+4*l+'% chance of an extra log.'},

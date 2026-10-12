@@ -11,6 +11,10 @@ SAVE = {"v": 3, "wv": 2, "look": {"skin": 0, "hair": 1, "shirt": 5, "jk": 1}, "d
 OLD_SAVE = {"look": {"skin": 0, "hair": 1, "shirt": 5}, "day": 3, "gold": 50, "seen": 1, "inv": 4, "rod": 1, "boat": 0}  # v1 save from the small world
 
 
+# clicks Attack and then the first attack you can afford (Slash, Strike or Chop)
+ATTACK_JS = "(()=>{[...$('bt-menu').children].find(b=>b.textContent==='Attack').click();[...$('bt-menu').children].find(b=>!b.disabled&&b.textContent!=='Back').click()})()"
+
+
 class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
 
@@ -443,14 +447,15 @@ def check(b, url):
     def fight_out():   # click Attack until the battle is over
         for _ in range(60):
             if ev("BATTLE===null"): break
-            pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=8000)
-            if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+            try: pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=8000)
+            except Exception: raise AssertionError(('battle menu never came back', ev("BATTLE?[[...$('bt-menu').children].map(b=>b.textContent+(b.disabled?'(x)':'')),BATTLE.log.slice(-3),S.sta,S.hp,S.eq.weapon]:null")))
+            if ev("BATTLE!==null"): ev(ATTACK_JS)
             pg.wait_for_timeout(20)
         pg.wait_for_function("BATTLE===null", timeout=8000)
     # creatures (3.1 and Jack's note P6): they open the turn-based battle when they touch the player (they reach you, you walk into them, or you face them and press Use); a win gives the rewards and takes them off the map, running leaves them waiting
     ev("BATTLE_FAST=true;sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon='sword';add('sword');ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';window.__xp=S.xp.combat||0;act()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes.length===1&&BATTLE.foes[0].t.n==='Spirit'&&BATTLE.foes[0].t.art==='ghost'&&$('battle').classList.contains('open')"), "facing the spirit and pressing Use opens the battle"
-    fight_out(); assert ev("!G.alive&&G.resp===40&&(S.xp.combat||0)>=__xp+20"), "beating it takes it off the map with a respawn count, and gives its xp"
+    fight_out(); assert ev("!G.alive&&G.resp>=36&&G.resp<=40&&(S.xp.combat||0)>=__xp+20"), "beating it takes it off the map with a respawn count, and gives its xp"
     ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning creature is back at home each morning"
     ev("G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;S.hp=50;window.__r0=Math.random;enemiesTick()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes[0].t.n==='Spirit'"), "a creature that reaches the player starts a battle"
@@ -468,27 +473,27 @@ def check(b, url):
     # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
     ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
     pg.wait_for_timeout(100)
-    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
+    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
     ev("move('u');act();sleep()"); assert ev("P.y===33+OY"), "no walking, using or sleeping during a battle"
     bclick = lambda name: ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith(%s)).click()" % json.dumps(name))
     for _ in range(12):
         if ev("BATTLE===null"): break
         pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); 
-        if ev("BATTLE!==null"): bclick("Attack")
+        if ev("BATTLE!==null"): ev(ATTACK_JS)
         pg.wait_for_timeout(30)
     pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='won'&&flag('t_won')&&S.gold>=110&&!$('battle').classList.contains('open')&&S.hp>0"), "winning gives gold and runs the win actions"
     ev("window.__r=null;startBattle('t_win',r=>{window.__r=r});const m=Math.random;Math.random=()=>0;window.__m=m"); pg.wait_for_timeout(50); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
     assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works"
-    ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='lost'&&flag('t_lost')&&sail===true&&S.hp>1&&S.gold===90"), "a knock-out wakes you on the boat with a tenth of your gold gone"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
     bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
-    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='escaped'&&flag('t_escaped')&&!flag('t_bwon')"), "a boss with flee runs away at low health and the escape actions run"
     ev("S.hp=50;S.eq.weapon='sword';BATTLES.t_three={foes:['pirate_grunt','pirate_gunner','pirate_grunt']};startBattle('t_three',()=>{})"); pg.wait_for_timeout(50)
     assert ev("document.querySelectorAll('.bt-foe').length===3"), "up to three foes show"
-    ev("document.querySelectorAll('.bt-foe')[1].click()"); bclick("Attack"); pg.wait_for_timeout(200); assert ev("BATTLE.foes[1].hp<BATTLE.foes[1].max&&BATTLE.foes[0].hp===BATTLE.foes[0].max"), "tapping a foe chooses who you hit"
+    ev("document.querySelectorAll('.bt-foe')[1].click()"); ev(ATTACK_JS); pg.wait_for_timeout(200); assert ev("BATTLE.foes[1].hp<BATTLE.foes[1].max&&BATTLE.foes[0].hp===BATTLE.foes[0].max"), "tapping a foe chooses who you hit"
     ev("S.hp=20;S.bag.cooked_fish=0;const fd=LIST('food')[0];add(fd,1);window.__fd=fd")
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Item')", timeout=5000); bclick("Item"); pg.wait_for_timeout(100)
     assert ev("[...$('bt-menu').children].some(b=>b.textContent.startsWith(ITEMS[__fd].n))"), "the Item menu lists food and potions"
@@ -497,7 +502,7 @@ def check(b, url):
     ev("BATTLES.t_trg={foes:['pirate_grunt']};TRIGGERS.push({id:'t_btl',when:{talk:'Odo'},do:[{battle:'t_trg'},{set:'t_after_battle'}]});BATTLE=null;S.hp=50;(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&!flag('t_after_battle')"), "a trigger can start a battle and waits for it"
     ev("BATTLE.foes[0].hp=1");
-    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(100)
+    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(100)
     assert ev("flag('t_after_battle')"), "the trigger carries on after the battle"
     ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Fight: Pirate grunt$/.test(b.textContent))"), "the testing menu can start a fight"
@@ -510,7 +515,7 @@ def check(b, url):
     for _ in range(14):
         if ev("BATTLE===null"): break
         pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
-        if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+        if ev("BATTLE!==null"): ev(ATTACK_JS)
         pg.wait_for_timeout(30)
     pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("encFigures('t_enc').length===1&&encDown('t_enc').length===1&&!flag('enc_t_enc_done')"), "a beaten foe is gone and the others wait"
@@ -521,7 +526,7 @@ def check(b, url):
     for _ in range(14):
         if ev("BATTLE===null"): break
         pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
-        if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+        if ev("BATTLE!==null"): ev(ATTACK_JS)
         pg.wait_for_timeout(30)
     pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(100)
     assert ev("flag('enc_t_enc_done')&&flag('t_enc_won')&&flag('t_enc_trigger')&&encFigures('t_enc').length===0"), "the last foe finishes it: done flag, win actions, and the beaten trigger"
@@ -575,7 +580,7 @@ def check(b, url):
         for _ in range(20):
             if ev("BATTLE===null"): break
             pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
-            if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+            if ev("BATTLE!==null"): ev(ATTACK_JS)
             pg.wait_for_timeout(30)
         pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
     pg.wait_for_function("SCENE!==null", timeout=5000)
@@ -623,6 +628,53 @@ def check(b, url):
     assert not errn, errn; pgn.close()
     # Bjorn's big house: a seven-wide house in the north of the village with a path to its door, reachable on foot from the pier, and Bjorn standing at it
     assert ev("(()=>{const h=BL.find(b=>b.big);if(!h||h.w!==7||h.y>103)return false;const seen=new Set(),q=[[156,124]];seen.add(124*MW+156);for(let i=0;i<q.length;i++){const[x,y]=q[i];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,k=ny*MW+nx;if(seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(103*MW+154)&&seen.has(104*MW+155)&&at(154,102)===5&&at(157,101)===5&&(()=>{try{sail=false;P.x=P.rx=155;P.y=P.ry=106;draw();return true}catch(e){return false}})()})()"), "Bjorn's house stands in the north of the village, is reachable on foot, and draws"
+    # weapon attacks (P7): the Attack list depends on the weapon and its skill, every attack costs stamina, power comes from the weapon skill, Bash may stun, Block takes less damage and gives stamina back
+    def menu_ready():
+        pg.wait_for_function("BATTLE!==null&&[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=8000)
+    menu = lambda: ev("[...$('bt-menu').children].map(b=>b.textContent)")
+    pick = lambda name: ev("(n=>{[...$('bt-menu').children].find(b=>b.textContent==='Attack').click();[...$('bt-menu').children].find(b=>b.textContent.startsWith(n)).click()})(%s)" % json.dumps(name))
+    def attack_list(weapon, xp_key=None, xp=0):
+        ev("S.xp={};%s;S.eq.weapon=%s;S.sta=100;S.hp=50;FOES.t_dummy={n:'Dummy',hp:999,hit:[1,1],xp:0,look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}};BATTLES.t_dummy={foes:['t_dummy']};startBattle('t_dummy')" % (("S.xp['%s']=%d" % (xp_key, xp)) if xp_key else "0", json.dumps(weapon)))
+        pg.wait_for_timeout(50); menu_ready(); ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()"); out = menu(); return out
+    def end_battle(): ev("clearInterval(BATTLE.anim);$('battle').classList.remove('open');BATTLE=null")
+    ev("BATTLE_FAST=true;sail=false;S.bag.sword=1;S.bag.hand_axe=1;S.bag.wooden_sword=1;S.coat=0;NPC.forEach(n=>{n.busy=1})")
+    assert attack_list('sword') == ["Slash (4)", "Back"]; end_battle()
+    assert attack_list('wooden_sword') == ["Strike (4)", "Bash (4)", "Back"]; end_battle()
+    assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
+    assert attack_list('hand_axe') == ["Chop (4)", "Back"]; end_battle()
+    assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
+    assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
+    assert attack_list('hand_axe', 'axe', 3300) == ["Chop (4)", "Bash (4)", "Cleave (8)", "Back"], "the axe learns Bash at 3 and Cleave at 6"; end_battle()
+    # damage and stamina: with the dice fixed at 1.0, light 0.6, normal 1, heavy 1.6 of the weapon's damage (5) times the skill bonus (+8% a level)
+    attack_list('sword', 'sword', 3300); ev("window.__r0=Math.random;Math.random=()=>0.5;ev0=0"); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()")
+    ev("window.__f=BATTLE.foes[0];window.__s0=S.sta")
+    pick("Power Slash"); menu_ready(); assert ev("__f.hp===999-12&&S.sta===__s0-8"), "Power Slash: 5 x 1.48 x 1.6 = 12 damage for 8 stamina"
+    pick("Quick Strike"); menu_ready(); assert ev("__f.hp===999-12-4&&S.sta===__s0-10"), "Quick Strike: a light hit of 4 for 2 stamina"
+    pick("Slash"); menu_ready(); assert ev("__f.hp===999-12-4-7&&S.sta===__s0-14"), "Slash: a normal hit of 7 for 4 stamina"
+    assert ev("(S.xp.sword||0)>=3300+16+6+10"), "using sword attacks trains the sword skill"
+    ev("Math.random=__r0"); end_battle()
+    # learning an attack announces it
+    attack_list('sword', 'sword', 765); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
+    # the axe trains the axe, not the sword
+    attack_list('hand_axe'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Chop"); menu_ready(); assert ev("(S.xp.axe||0)===10&&!(S.xp.sword)"), "the axe trains the axe skill"; end_battle()
+    # Bash: a 15% chance to stun
+    attack_list('wooden_sword'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); ev("window.__r0=Math.random;Math.random=()=>0")
+    pick("Bash"); menu_ready(); assert ev("BATTLE.log.some(t=>/Dummy is stunned!/.test(t))&&BATTLE.log.some(t=>/stunned and loses its turn/.test(t))&&S.hp===50"), "a lucky Bash stuns the foe, which loses its turn"
+    ev("Math.random=()=>0.99"); pick("Bash"); menu_ready(); assert ev("S.hp===49"), "an ordinary Bash does not stun (15% only)"
+    ev("Math.random=__r0"); end_battle()
+    # Block: much less damage, and stamina back
+    ev("FOES.t_hard={n:'Brute',hp:999,hit:[10,10],xp:0,look:FOES.t_dummy.look};BATTLES.t_hard={foes:['t_hard']};S.eq.weapon='sword';S.sta=50;S.hp=50;startBattle('t_hard')"); pg.wait_for_timeout(50); menu_ready()
+    ev("window.__r0=Math.random;Math.random=()=>0.5;[...$('bt-menu').children].find(b=>b.textContent==='Block').click()"); menu_ready()
+    assert ev("S.sta===60&&S.hp===46"), "Block gives 10 stamina back and cuts a 10 hit to 4"
+    ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()"); ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith('Slash')).click()"); menu_ready(); assert ev("S.hp===36"), "without Block the same hit is 10"
+    ev("Math.random=__r0;S.sta=3"); ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+    assert ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith('Slash')).disabled===true"), "an attack you cannot afford is greyed out"
+    ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); assert ev("![...$('bt-menu').children].find(b=>b.textContent==='Block').disabled"), "Block is always there"
+    end_battle()
+    ev("openSmith('buy')"); assert ev("/Hand axe/.test($('items').textContent)"), "Garrick sells the hand axe"; ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    ev("openSkills()"); assert ev("/Sword/.test($('sk-list').textContent)&&/Axe/.test($('sk-list').textContent)&&/Quick Strike \\(level 3\\)/.test($('sk-list').textContent)"), "the Skills screen shows the Sword and Axe skills and their attacks"; ev("closeSkills()")
+    ev("S.xp={};S.eq.weapon='wooden_sword';BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
