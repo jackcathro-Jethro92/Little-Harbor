@@ -302,11 +302,11 @@ def check(b, url):
     pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Slot 2")
     assert pm.evaluate("!!slotInfo(2)&&slotInfo(2).day===S.day"), "saved to slot 2"
     pm.evaluate("S.gold=777;save()"); pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Load game"); pm.click("#title-body button.tm >> text=Slot 2")
-    pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&S.gold===10", timeout=15000)   # (the page reloads: wait for it, not a fixed time)
+    pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&typeof saveFileObj==='function'&&S.gold===10", timeout=15000)   # (the page reloads: wait for it, not a fixed time)
     assert pm.evaluate("S.gold===10&&!$('title').classList.contains('open')&&!!localStorage.getItem('little-harbor-v1-backup-before-load')"), "loading a slot restores that game, goes straight in and keeps a backup"
     fobj = pm.evaluate("JSON.stringify(saveFileObj())"); pm.evaluate("S.gold=555;save()"); pm.keyboard.press("Escape")
     pm.click("#title-body button.tm >> text=Load game")
-    pm.set_input_files("input[type=file]", {"name": "mine.json", "mimeType": "application/json", "buffer": fobj.encode()}); pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&S.gold===10", timeout=15000)
+    pm.set_input_files("input[type=file]", {"name": "mine.json", "mimeType": "application/json", "buffer": fobj.encode()}); pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&typeof saveFileObj==='function'&&S.gold===10", timeout=15000)
     assert pm.evaluate("S.gold===10"), "loading a save file works"
     pm.keyboard.press("Escape"); pm.click("#title-body button.tm >> text=Load game")
     pm.set_input_files("input[type=file]", {"name": "junk.json", "mimeType": "application/json", "buffer": b"not a save"})
@@ -633,7 +633,7 @@ def check(b, url):
     # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)
     ev("S.bag.woodcutters_axe=0;S.eq.axe=null;S.gold=0;S.bag.ironwood_log=0")
     assert ev("LAND.some(l=>l[0]==='Oak Island')&&(()=>{let n=0;for(let y=160;y<=180;y++)for(let x=135;x<=153;x++)if(at(x,y)===140)n++;return n===3})()"), "three ironwood logs lie on Oak Island"
-    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjon sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('its all yours')"), "Murl's two speeches are Jack's words"
+    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjorn sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('its all yours')"), "Murl's two speeches are Jack's words"
     ev("setFlag('q3_started',0);openStore('rod')"); assert ev("!/Woodcutter/.test($('items').textContent)"), "Bram does not sell the axe any more"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     talk("Murl"); assert ev("flag('q3_started')&&S.story.q==='q3'&&S.story.step===0&&!dlgActive()&&Math.abs(questGoal()[0]-144)<=2"), "Murl starts Quest 3 and the compass points at Oak Island"

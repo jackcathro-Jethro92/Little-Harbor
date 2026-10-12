@@ -49,7 +49,7 @@ Reward: Pickaxe, sword, crew member (plus a healing potion and a stamina potion 
 Quest 3: Merl’s Quest
 When you go to find Merl, he is working on a ship by his workshop, carving the wood. He tells you he needs some special timber to build this ship’s mast. It needs to be extra hard, and the best timber for it grows on one of the islands. If you can find some and bring it back, he will make it worth your while.
 (Murl)
-“Old Bjon sent ya did he? Well i need some help finding some timber. Im building a Mast for my next ship. I need some special wood for this though. Only the straightest strongest wood will do. Go to (Island 6 “Oak island”) Look for a hard wood mast tree. Bring me back one of those and ill make it worth your while”
+“Old Bjorn sent ya did he? Well i need some help finding some timber. Im building a Mast for my next ship. I need some special wood for this though. Only the straightest strongest wood will do. Go to Oak Island Look for a hard wood mast tree. Bring me back one of those and ill make it worth your while”
 When you finish, he gives you gold. He also tells you he has written to the woodcutter, who has a spare axe he isn’t using any more. You can have it if you go and get it.
 (Murl)
 “Well done! Here take this gold. But I wrote to my old friend Hale. He's that fella who cutts the timber in the darkwood. He says he had a spare axe you can have. You just gotta go get it and its all yours”

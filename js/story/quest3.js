@@ -7,7 +7,7 @@
 QUESTS.push({id:'q3',name:"Murl's Quest",
  steps:['[Placeholder] Murl needs a straight, hard log for a ship mast. Sail to Oak Island (Island 6) and find one.','[Placeholder] You have the ironwood log. Take it back to Murl at the boatyard.'],
  goals:[[144,170],'Murl']});
-DLG.q3_murl1={start:'a',nodes:{a:{who:'Murl',text:"Old Bjon sent ya did he? Well i need some help finding some timber. Im building a Mast for my next ship. I need some special wood for this though. Only the straightest strongest wood will do. Go to (Island 6 “Oak island”) Look for a hard wood mast tree. Bring me back one of those and ill make it worth your while"}}};   // JACK
+DLG.q3_murl1={start:'a',nodes:{a:{who:'Murl',text:"Old Bjorn sent ya did he? Well i need some help finding some timber. Im building a Mast for my next ship. I need some special wood for this though. Only the straightest strongest wood will do. Go to Oak Island Look for a hard wood mast tree. Bring me back one of those and ill make it worth your while"}}};   // JACK
 DLG.q3_murl_wait={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Still no mast timber? Look on Oak Island, the one south of here. A straight log of hardwood. You will know it when you see it.'}}};
 DLG.q3_murl_got={start:'a',nodes:{a:{who:'Murl',text:"Well done! Here take this gold. But I wrote to my old friend Hale. He's that fella who cutts the timber in the darkwood. He says he had a spare axe you can have. You just gotta go get it and its all yours"}}};   // JACK
 DLG.q3_hale={start:'a',nodes:{a:{who:'Hale',text:'[Placeholder] Murl wrote to me. Said you would be along. Here, the old axe. Chop kindly.'}}};
