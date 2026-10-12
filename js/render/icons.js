@@ -1,5 +1,5 @@
 // ---------- bag icons ----------
-const MC={softwood:'#c9a06a',medium_wood:'#a8743f',hardwood:'#6b4423',copper_ore:'#d9803f',tin_ore:'#cfe3ef',bronze_ore:'#c9a227',iron_bar:'#b8c2cc',softwood_plank:'#d9b27a',medium_plank:'#b9824a',hardwood_plank:'#7a5230',fiber:'#d8c88a',rope:'#b08a52'};
+const MC={centipede_fang:'#e8d8b0',softwood:'#c9a06a',medium_wood:'#a8743f',hardwood:'#6b4423',copper_ore:'#d9803f',tin_ore:'#cfe3ef',bronze_ore:'#c9a227',iron_bar:'#b8c2cc',softwood_plank:'#d9b27a',medium_plank:'#b9824a',hardwood_plank:'#7a5230',fiber:'#d8c88a',rope:'#b08a52'};
 const FORC={moss:'#5d9a48',holly:'#2d7a46',basil:'#6bc04d',forest_sprig:'#78b552',red_cap:'#d83828',death_cap:'#c8c890',blue_cap:'#4a7ae0'};
 const ING={carrot:'#e8762f',parsnip:'#e8d9a8',potato:'#b08850',cabbage:'#6fae4c',broccoli:'#3f8f3a',beef:'#b83a3a',chicken:'#e0a050',pork:'#e8908a'};
 const FOODC={roast_carrots:'#e8762f',baked_potato:'#b08850',roast_parsnip:'#e8d9a8',braised_cabbage:'#6fae4c',grilled_broccoli:'#3f8f3a',grilled_chicken:'#e0a050',pork_chops:'#e8908a',beef_steak:'#b83a3a',veggie_stew:'#d98a3a',chicken_soup:'#e8c060',pork_roast:'#d98a5a',beef_stew:'#a85a3a',beef_stirfry:'#c8603a',grilled_sardine:'#c9a06a',grilled_mackerel:'#c98b4a',grilled_bream:'#d9803f',grilled_tuna:'#b84a3a',fish_stew:'#d98a3a',seafood_feast:'#e8632e',koi_sashimi:'#f6c85a'};
@@ -34,6 +34,7 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
   else if(K==='food'){const c=FOODC[id]||'#c9a06a';if(id.startsWith('grilled')&&FC[id.slice(8)]){r(2,6,10,5,'#2e1f10');r(3,7,8,3,c);r(11,4,3,8,'#2e1f10');r(11,5,2,6,c);r(5,7,1,3,'#7a4a1c');r(8,7,1,3,'#7a4a1c')}
     else if(/stew|soup|dinner|fry|feast|sashimi/.test(id)){r(2,8,12,5,'#2e1f10');r(3,8,10,4,'#a8743f');r(3,6,10,3,c);r(5,4,1,2,'#e8e8e8');r(9,3,1,2,'#e8e8e8')}
     else{r(2,10,12,3,'#2e1f10');r(3,9,10,3,'#e8e0d0');r(4,5,8,5,'#2e1f10');r(5,6,6,3,c)}}
+  else if(K==='key'){r(3,3,10,10,'#2e1f10');r(4,4,8,8,'#c9a227');r(5,5,6,6,'#f4ecd0');r(7,5,2,3,'#c83820');r(7,8,2,3,'#383838');r(7,7,2,2,'#2e1f10')}
   else if(K==='claim'){r(3,2,10,12,'#2e1f10');r(4,3,8,10,'#f3d9a4');r(5,5,6,1,'#8a6a35');r(5,7,6,1,'#8a6a35');r(5,9,4,1,'#8a6a35');r(9,10,3,3,'#c83820')}
   else if(K==='prefab'){r(2,7,12,7,'#2e1f10');r(3,8,10,5,'#e9d9b8');r(6,10,3,4,'#6b4423');r(1,3,14,5,'#2e1f10');r(2,4,12,3,id==='house_kit'?'#5f7183':'#c9a35c')}
   else if(K==='station'){if(id==='camp_kit'){r(6,2,4,3,'#d8b878');r(3,4,10,10,'#2e1f10');r(4,5,8,8,'#d8b878');r(7,8,2,5,'#3d2a14')}

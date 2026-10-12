@@ -18,7 +18,6 @@ SCENES.festival_opening=[
  {say:'fest_initiate'},
  {toast:'Murl gives you the rowboat!'},{set:'festival_done'},{msg:'Walk down the pier to your boat, face it, and tap Use.'}];
 LETTERS.q1_letter={from:'A stranger',title:'Please come quick!',text:'Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry'};
-QUESTS.push({id:'q1',name:'A Stranger’s Letter, Part 1',steps:['[Placeholder] A stranger has sent a letter asking for help. Sail to the northern water temple.']});
 TRIGGERS.push(
  {id:'festival_open',when:{start:1},if:{noflag:'festival_done'},do:[{set:'festival_on'},{scene:'festival_opening'}]},
  {id:'festival_down',when:{day:1},if:{flag:'festival_on'},do:[{clear:'festival_on'}]},

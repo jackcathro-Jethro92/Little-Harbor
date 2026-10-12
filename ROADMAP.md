@@ -71,7 +71,8 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 | 3.6 Turn-based battles | **Basic version done:** the battle screen with Attack / Item / Run, up to three foes, rewards, and a boss who flees (`js/systems/battle.js`, `js/data/battles.js`); test fights are in the testing menu. Still to do: the Skill menu entry, armour in the damage sums, converting the arena and guild fights, tuning after the playtest |
 | **Phase 4: first playable slice** | |
 | 4.0 Festival opening | **Built** (12 Oct): decorations, the opening scene with Murl and the rowboat, the morning-after clean-up, and the first seagull letter on boarding the boat, which starts Quest 1 (`js/story/opening.js`); all lines are placeholders except the letter, which is Jack's own text |
-| 4.1 Quest 1, 4.2 Quest 2 | **Not started: next is 4.1** |
+| 4.1 Quest 1 | **Built** (12 Oct): the pirates one by one in the Sea temple courtyard, the last pirate's warning, the old stranger and the compass (a small arrow to the quest goal), and the villager's news back home; Jack's three lines word for word, everything else placeholder (`js/story/quest1.js`) |
+| 4.2 Quest 2 | **Not started: next** |
 | **Later phases** | |
 | Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact and damaged) and Fire built; Temple Tower not built.** None of the quests are built. |
 | 6.3 Taverns | Not started (the Walled Settlement and Mountain Town have people and shops but no interiors) |

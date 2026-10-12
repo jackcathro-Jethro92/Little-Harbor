@@ -7,3 +7,7 @@
 Murl: You only own the one boat, friend. Nothing to switch yet.
 Murl: Now sailing the 
 Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry
+# Quest 1 (the three spoken lines of the pirate, the stranger and the villager, exactly as Jack wrote them)
+This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!
+Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough
+Have you heard! Pirates have been sited taking of fire island and setting up some kind of camp! Id steer clear of those waters if i was you. They look mean alright. You should go talk to Bjorn. I think i is looking for you.
