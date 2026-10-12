@@ -5,7 +5,7 @@ function act(){
   if(fs===1)return say('Too early. Wait for the bite.');
   if(fs===2)return hook();
   const[x,y]=front(),n=npcAt(x,y);
-  {const en=enemyAt(x,y);if(en)return swing(en)}
+  {const en=enemyAt(x,y);if(en&&!sail)return startEnemyBattle(en)}
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(useGate(x,y))return;
   if(at(x,y)===23){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}

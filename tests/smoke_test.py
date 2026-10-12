@@ -34,6 +34,7 @@ def load(b, url, save):
 def check(b, url):
     pg, errs = load(b, url, SAVE)
     ev = pg.evaluate
+    ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
         pg.tap(btn); pg.wait_for_timeout(100)
@@ -439,16 +440,31 @@ def check(b, url):
     ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
     ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
     pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
-    # enemy table (3.1): the spirit is a row of ENEMY_TYPES and fights as before; a spawned test enemy chases and hurts, drops gold and items, reports its group when all are beaten, and is cleared away
-    ev("sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon=S.eq.weapon||'sword';add('sword');S.eq.weapon='sword';ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';S.hp=50;const h0=G.hp;window.__h0=h0;act();window.__m=$('msg').textContent")
-    assert ev("G.hp<__h0&&/You hit the spirit for/.test(__m)&&ENEMY_TYPES[G.t].n==='Spirit'"), "the spirit is fought through the table as before"
-    ev("window.__m2='';for(let i=0;i<10&&G.alive;i++){S.hp=50;S.sta=100;act();if(!G.alive)window.__m2=$('msg').textContent}"); assert ev("!G.alive&&G.resp===40&&/fades away/.test(__m2)"), "it falls with its own message and a respawn count"
-    ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning enemy is back at home each morning"
+    def fight_out():   # click Attack until the battle is over
+        for _ in range(60):
+            if ev("BATTLE===null"): break
+            pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=8000)
+            if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+            pg.wait_for_timeout(20)
+        pg.wait_for_function("BATTLE===null", timeout=8000)
+    # creatures (3.1 and Jack's note P6): they open the turn-based battle when they touch the player (they reach you, you walk into them, or you face them and press Use); a win gives the rewards and takes them off the map, running leaves them waiting
+    ev("BATTLE_FAST=true;sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon='sword';add('sword');ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';window.__xp=S.xp.combat||0;act()"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&BATTLE.foes.length===1&&BATTLE.foes[0].t.n==='Spirit'&&BATTLE.foes[0].t.art==='ghost'&&$('battle').classList.contains('open')"), "facing the spirit and pressing Use opens the battle"
+    fight_out(); assert ev("!G.alive&&G.resp===40&&(S.xp.combat||0)>=__xp+20"), "beating it takes it off the map with a respawn count, and gives its xp"
+    ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning creature is back at home each morning"
+    ev("G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;S.hp=50;window.__r0=Math.random;enemiesTick()"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&BATTLE.foes[0].t.n==='Spirit'"), "a creature that reaches the player starts a battle"
+    ev("Math.random=()=>0;[...$('bt-menu').children].find(b=>b.textContent==='Run').click()"); pg.wait_for_function("BATTLE===null", timeout=8000); ev("Math.random=__r0")
+    assert ev("G.alive&&G.cd>0"), "running away leaves the creature on the map, waiting a moment"
+    ev("G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';move('u')"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null"), "walking into a creature starts the battle"
+    ev("Math.random=()=>0;[...$('bt-menu').children].find(b=>b.textContent==='Run').click()"); pg.wait_for_function("BATTLE===null", timeout=8000); ev("Math.random=__r0")
     ev("ENEMY_TYPES.t_imp={n:'Imp',hp:10,dmg:3,cd:1,speed:1,chase:6,art:'ghost',xp:5,gold:[7,7],drops:[['sardine',1,2]],respawn:0,die:'The imp pops.'};S.gold=0;S.bag.sardine=0;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;window.__o=nearestTile(P.x+2,P.y-2,(x,y)=>at(x,y)===1&&!npcAt(x,y));TRIGGERS.push({id:'t_imps',when:{beaten:'t_group'},do:[{set:'t_imps_beaten'}]});window.__e1=spawnEnemy('t_imp',__o[0],__o[1],{group:'t_group'});window.__e2=spawnEnemy('t_imp',__o[0]+1,__o[1],{group:'t_group'})")
-    ev("S.hp=50;P.x=P.rx=__o[0];P.y=P.ry=__o[1]+3;for(let i=0;i<12;i++)enemiesTick()"); assert ev("S.hp<50&&(Math.abs(__e1.x-P.x)+Math.abs(__e1.y-P.y)<=2||Math.abs(__e2.x-P.x)+Math.abs(__e2.y-P.y)<=2)"), "enemies from the table chase and hurt"
-    ev("draw()"); ev("P.x=P.rx=__e1.x;P.y=P.ry=__e1.y+1;P.f='u';S.hp=50;for(let i=0;i<6&&__e1.alive;i++){S.sta=100;act()}"); assert ev("!__e1.alive&&!flag('t_imps_beaten')&&S.gold===7&&S.bag.sardine===2"), "a kill gives its gold and drops, and the group is not done while one lives"
-    ev("P.x=P.rx=__e2.x;P.y=P.ry=__e2.y+1;P.f='u';for(let i=0;i<6&&__e2.alive;i++){S.sta=100;act()}"); assert ev("!__e2.alive&&flag('t_imps_beaten')"), "beating the last of a group fires its trigger"
-    ev("enemiesTick()"); assert ev("!ENEMIES.includes(__e1)&&!ENEMIES.includes(__e2)&&ENEMIES.length===1"), "beaten enemies that do not respawn are cleared away"
+    ev("draw()"); ev("S.hp=50;P.x=P.rx=__e1.x;P.y=P.ry=__e1.y+1;P.f='u';act()"); pg.wait_for_timeout(100); fight_out()
+    assert ev("!__e1.alive&&!flag('t_imps_beaten')&&S.gold===7&&S.bag.sardine===2"), "a win gives the gold and drops, and the group is not done while one lives"
+    ev("S.hp=50;P.x=P.rx=__e2.x;P.y=P.ry=__e2.y+1;P.f='u';act()"); pg.wait_for_timeout(100); fight_out()
+    assert ev("!__e2.alive&&flag('t_imps_beaten')"), "beating the last of a group fires its trigger"
+    ev("enemiesTick()"); assert ev("!ENEMIES.includes(__e1)&&!ENEMIES.includes(__e2)&&ENEMIES.length===1"), "beaten creatures that do not respawn are cleared away"
     # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
     ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
     pg.wait_for_timeout(100)
@@ -511,18 +527,20 @@ def check(b, url):
     assert ev("flag('enc_t_enc_done')&&flag('t_enc_won')&&flag('t_enc_trigger')&&encFigures('t_enc').length===0"), "the last foe finishes it: done flag, win actions, and the beaten trigger"
     ev("S.hp=50;ENEMY_TYPES.t_imp2={n:'Imp',hp:6,dmg:2,cd:1,speed:1,chase:6,art:'ghost',xp:1,respawn:0};ENCOUNTERS.push({id:'t_rt',mode:'realtime',near:1,foes:[{type:'t_imp2',at:[3,-2]},{type:'t_imp2',at:[4,-2]}],win:[{set:'t_rt_won'}]});startEncounter('t_rt')")
     assert ev("ENEMIES.filter(e=>e.group==='t_rt').length===2"), "a real-time encounter spawns its enemies as a group"
-    ev("ENEMIES.filter(e=>e.group==='t_rt').forEach(e=>{P.x=P.rx=e.x;P.y=P.ry=e.y+1;P.f='u';for(let i=0;i<8&&e.alive;i++){S.sta=100;S.hp=50;act()}})")
+    for _k in range(2):
+        ev("(()=>{const e=ENEMIES.find(q=>q.group==='t_rt'&&q.alive);P.x=P.rx=e.x;P.y=P.ry=e.y+1;P.f='u';S.hp=50;act()})()"); pg.wait_for_timeout(100); fight_out()
     assert ev("flag('enc_t_rt_done')&&flag('t_rt_won')&&ENEMIES.filter(e=>e.group==='t_rt').length===0"), "beating the group finishes a real-time encounter"
     ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Encounter: Three pirates, one by one$/.test(b.textContent))"), "the testing menu can start an encounter"
     ev("tmClose()")
-    # the giant centipede (3.2): four live in the Darkwood on walkable ground, it draws facing every way, bites, drops its fang and gold, and is back each morning
+    # the giant centipede (3.2): four live in the Darkwood on walkable ground, it draws facing every way and on the battle screen, fights with its own numbers, drops its fang and gold, and is back each morning
     ev("ENEMIES.forEach(e=>{if(e.t==='centipede')e.resp=0});enemiesMorning()")
     assert ev("(()=>{const c=ENEMIES.filter(e=>e.t==='centipede');return c.length>=4&&c.every(e=>e.y>=FY&&WK.includes(at(e.x,e.y))&&e.alive)&&ENEMY_TYPES.centipede.art==='centipede'})()"), "four centipedes wait in the Darkwood on walkable ground"
     assert ev("(()=>{let bad=0;sail=false;const c=ENEMIES.find(e=>e.t==='centipede');P.x=P.rx=c.x;P.y=P.ry=c.y+3;for(const f of'lrud'){c.f=f;try{draw()}catch(e){bad++}}c.hp=5;try{draw()}catch(e){bad++}c.hp=c.max;c.pois=performance.now()+2000;try{draw()}catch(e){bad++}c.pois=0;return bad===0})()"), "it draws in every direction, hurt and poisoned"
-    ev("(()=>{const c=ENEMIES.find(e=>e.t==='centipede');window.__c=c;S.hp=50;S.gold=0;S.bag.centipede_fang=0;S.sta=100;S.eq.weapon='sword';add('sword');P.x=P.rx=c.x;P.y=P.ry=c.y+1;P.f='u';c.cd=0;window.__r0=Math.random;Math.random=()=>0;enemiesTick();Math.random=__r0})()")
-    assert ev("S.hp===43"), "it bites for 7"
-    ev("(()=>{Math.random=()=>0;for(let i=0;i<12&&__c.alive;i++){S.sta=100;S.hp=50;act()}Math.random=__r0})()")
+    ev("(()=>{const c=ENEMIES.find(e=>e.t==='centipede');window.__c=c;S.hp=50;S.gold=0;S.bag.centipede_fang=0;S.sta=100;S.eq.weapon='sword';add('sword');P.x=P.rx=c.x;P.y=P.ry=c.y+1;P.f='u';c.cd=0;window.__r0=Math.random;enemiesTick()})()"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&BATTLE.foes[0].t.n==='Giant centipede'&&BATTLE.foes[0].t.art==='centipede'&&BATTLE.foes[0].hp===30&&BATTLE.foes[0].t.hit[0]===3&&BATTLE.foes[0].t.hit[1]===6"), "a centipede that reaches the player starts a battle with its own numbers"
+    assert ev("(()=>{const px=cv=>{const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;let n=0;for(let i=3;i<d.length;i+=4)if(d[i]>0)n++;return n};const bg=$('bt-bg').getContext('2d').getImageData(0,0,122,150).data,cols=new Set();for(let i=0;i<bg.length;i+=4*61)cols.add(bg[i]+','+bg[i+1]+','+bg[i+2]);return px(BATTLE.foes[0].cv)>300&&cols.size>12&&BATTLE.foes[0].el.querySelector('.bt-shadow')!==null})()"), "the creature is drawn on the battle screen, standing on a painted green field with a shadow"
+    ev("Math.random=()=>0"); fight_out(); ev("Math.random=__r0")
     assert ev("!__c.alive&&S.gold>=5&&S.gold<=15&&S.bag.centipede_fang===1&&ITEMS.centipede_fang.kind==='material'"), "beating it gives gold and a fang"
     ev("enemiesMorning()"); assert ev("__c.alive&&__c.hp===__c.max&&__c.x===__c.hx"), "it is back at home the next morning"
     # the opening (4.0): a new game plays the festival scene (decorations up, Murl's lines, Skip works), the morning after takes the decorations down, and the first boarding of the boat in the village brings the stranger's letter and starts Quest 1
