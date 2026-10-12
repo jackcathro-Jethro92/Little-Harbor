@@ -87,7 +87,7 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 ## The batches
 - **Batch 6: quick fixes.** P16 (stamina bar), P17 (Quest 2 trigger), P18 (slower movement; the old speed becomes the swiftness potion's), P19 (Find Rue), P22 (Old Sword), P23 (the distracted notification), P24 (slower centipede respawn), P25 (the map fits).  **(built)**
 - **Batch 7: items.** P20 (fish values) and P21 (the tent). **(built)**
-- **Batch 8: battle animations.** P26.
+- **Batch 8: battle animations and stamina.** P26 (sway, swing, hit flash, damage numbers, shield flash, foes that block) and P27 (walking and sailing cost 0.04 stamina a step instead of 0.08). **(built)**
 
 ## Questions for Jack
 1. **P20 fish values:** by how much? A first suggestion: lower every fish's sell value by about a third (for example a 30-gold fish becomes 20), keeping the rarer fish more valuable than the common ones. Say a number or a feel ("half") and I will set it.
@@ -99,3 +99,4 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 - **P21:** The tent is part of the camp kit and works like sleeping on the boat. Not answered yet: where it can be placed. My default: anywhere on land, away from buildings.
 - **P26:** All of the animations: the player's swing, enemy hits, damage numbers, a flash when a hit lands, and a shield that flashes in front of the character when blocking. New: opponents can block too, and sometimes do.
 - **P26 (added):** Characters in a battle always sway slightly from side to side, even when idle.
+- **P27 (added):** Walking and sailing use less stamina: 0.04 a step (was 0.08). Jack agreed to the number.

@@ -182,3 +182,24 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #cine i{position:absolute;left:0;right:0;height:0;background:#000;transition:height 1.2s ease}
 #cine i:first-child{top:0}#cine i:last-child{bottom:0}
 #cine.on i{height:13%}
+
+/* battle animations (js/systems/battle.js): everyone sways a little, lunges when they strike, and hits show a flash, a number and a slash or shield */
+@keyframes btSway{0%,100%{transform:translateX(-3px)}50%{transform:translateX(3px)}}
+.bt-foe canvas,#bt-meBox canvas{animation:btSway 2.4s ease-in-out infinite}
+@keyframes btLunge{0%,100%{transform:translate(0,0)}45%{transform:translate(26px,-26px)}}
+.lunge{animation:btLunge .36s ease-out}
+@keyframes btFoeLunge{0%,100%{transform:translateY(0)}45%{transform:translateY(30px)}}
+.foelunge{animation:btFoeLunge .36s ease-out}
+@keyframes btFlash{0%,100%{filter:none}30%{filter:brightness(3) saturate(.4)}}
+.flash{animation:btFlash .3s}
+.bt-fx{position:absolute;z-index:6;pointer-events:none;transform:translate(-50%,-50%)}
+.bt-fx.dmg{font-size:30px;font-weight:700;color:#fff;text-shadow:2px 0 #b8281c,-2px 0 #b8281c,0 2px #b8281c,0 -2px #b8281c;animation:btFloat .9s ease-out forwards}
+.bt-fx.dmg.small{font-size:22px;color:#cfe3ff;text-shadow:2px 0 #1f4a8a,-2px 0 #1f4a8a,0 2px #1f4a8a,0 -2px #1f4a8a}
+.bt-fx.dmg.player{color:#ffe0dc}
+@keyframes btFloat{0%{opacity:0;margin-top:10px}15%{opacity:1}100%{opacity:0;margin-top:-46px}}
+.bt-fx.slash,.bt-fx.chop{width:84px;height:7px;background:linear-gradient(90deg,transparent,#fff 40%,#fff 60%,transparent);border-radius:4px;box-shadow:0 0 8px #fff;animation:btSlash .3s ease-out forwards}
+.bt-fx.slash{--rot:-35deg}.bt-fx.chop{--rot:72deg;width:96px;height:10px}
+@keyframes btSlash{0%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot)) scaleX(0)}60%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot)) scaleX(1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--rot)) scaleX(1)}}
+.bt-fx.shield img{width:48px;height:56px;image-rendering:pixelated;animation:btShield .6s ease-out forwards}
+@keyframes btShield{0%{opacity:0;transform:scale(.5)}25%{opacity:1;transform:scale(1.15)}60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.bt-foe canvas,#bt-meBox canvas{animation:none}}
