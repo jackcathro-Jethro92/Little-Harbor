@@ -37,12 +37,13 @@ function bDraw(){const B=BATTLE;if(!B)return;
     const bar=document.createElement('div');bar.className='bt-bar';const fill=document.createElement('i');fill.style.width=Math.max(0,Math.round(100*f.hp/f.max))+'%';bar.appendChild(fill);tag.appendChild(bar);d.appendChild(tag);
     d.onclick=()=>{if(f.alive&&B.picking){B.sel=i;bDraw()}};f.el=d;$('bt-foes').appendChild(d)});
   const cv=$('bt-me'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.drawImage(shadePerson({...lo({...S.look}),view:'b',frame:0}),0,0,24,24,0,0,cv.width,cv.height);
-  $('bt-hp').style.width=Math.max(0,Math.round(100*S.hp/maxHp()))+'%';$('bt-hpn').textContent=Math.ceil(S.hp)+' / '+maxHp()+' HP';$('bt-stan').textContent=Math.ceil(S.sta)+' STA'}
+  $('bt-hp').style.width=Math.max(0,Math.round(100*S.hp/maxHp()))+'%';$('bt-hpn').textContent=Math.ceil(S.hp)+' / '+maxHp()+' HP';$('bt-sta').style.width=Math.max(0,Math.min(100,Math.round(100*S.sta/maxSta())))+'%';$('bt-stan').textContent=Math.ceil(S.sta)+' STA'}
 const bShake=(el,cls)=>{if(!el||BATTLE_FAST)return;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),320)};
 function startBattle(id,onEnd){const row=BATTLES[id];if(!row||BATTLE||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
   BATTLE={id,row,onEnd,sel:0,picking:false,foes:row.foes.slice(0,3).map(k=>({k,t:FOES[k],hp:FOES[k].hp,max:FOES[k].hp,pois:0,alive:true,fled:false}))};
   $('battle').classList.add('open');drawField();bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
-  (async()=>{await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
+  const note=AMBUSH_NOTE;AMBUSH_NOTE=false;
+  (async()=>{if(note)await bSay('You were attacked while distracted!');await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
 function bTurn(){const B=BATTLE;if(!B)return;B.picking=true;bDraw();$('bt-msg').textContent='What will you do?';
   bMenu([['Attack',bAttackMenu],['Block',bBlock],['Item',bItems],['Run',bRun]])}
 // Attack opens the list of attacks the player knows with the weapon in hand (js/data/attacks.js); each costs stamina and one you cannot afford is greyed out

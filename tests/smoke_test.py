@@ -587,7 +587,7 @@ def check(b, url):
     pg.wait_for_function("SCENE!==null", timeout=5000)
     assert ev("flag('enc_q1_pirates_done')&&S.story.step===2&&SCENE.id==='q1_aftermath'"), "beating the fifth pirate starts the aftermath scene"
     ev("skipScene()"); pg.wait_for_timeout(100)
-    assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q==='q2'&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given, Quest 1 finished and the stranger gone inside"
+    assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q===null&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given (Quest 2 not in the log yet), Quest 1 finished and the stranger gone inside"
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
     assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
@@ -693,6 +693,17 @@ def check(b, url):
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
     ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').textContent)"), "smith shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    # Batch 6 (playtest #2): slower walking with the old speed kept for the swiftness potion, Old Sword, stamina bar, ambush over an open screen, slower centipede respawn
+    assert ev("STEP_MS.walk>SWIFT_MS.walk&&STEP_MS.sail>SWIFT_MS.sail&&SWIFT_MS.walk===110&&SWIFT_MS.sail===60&&(S.buff=0,stepMs()===STEP_MS.walk)&&(sail=false,S.buff=Date.now()+5e4,stepMs()===110)&&(S.buff=0,true)"), "walking is slower; the old speed is the swiftness speed"
+    assert ev("ITEMS.sword.n==='Old Sword'&&ENEMY_TYPES.centipede.respawn>=240"), "Old Sword, slower centipede respawn"
+    ev("BATTLE_FAST=true;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
+    assert ev("$('bag').classList.contains('open')&&canBeAmbushed()"), "a creature may ambush over the bag"
+    ev("enemiesTick()"); pg.wait_for_function("BATTLE!==null&&BATTLE.log&&BATTLE.log.includes('You were attacked while distracted!')")
+    assert ev("!$('bag').classList.contains('open')&&$('bt-sta').style.width!==''&&$('bt-sta').style.width!=='0%'"), "the bag closed, the notice showed, the stamina bar is drawn"
+    ev("clearInterval(BATTLE.anim);BATTLE=null;$('battle').classList.remove('open');ENEMIES.splice(ENEMIES.indexOf(window.__amb),1)")
+    ev("$('look').classList.add('open')"); assert ev("!canBeAmbushed()"), "no ambush over the look editor"
+    ev("$('look').classList.remove('open');showMap()"); assert ev("(()=>{const r=$('mc').getBoundingClientRect();return $('map-back').getBoundingClientRect().bottom<=innerHeight&&r.height>50})()"), "the map fits the window"
+    ev("$('mapov').classList.remove('open')")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

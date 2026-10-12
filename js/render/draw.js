@@ -1,7 +1,7 @@
 // ---------- one frame: tiles, trees, buildings, entities sorted by y, light, fishing line ----------
 function draw(){
   const t=performance.now();
-  const gl=sail?GLIDE.sail:GLIDE.walk;P.rx+=(P.x-P.rx)*gl;P.ry+=(P.y-P.ry)*gl;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
+  const gl=glideAmt();P.rx+=(P.x-P.rx)*gl;P.ry+=(P.y-P.ry)*gl;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
   let cx=Math.max(0,Math.min(MW*T-VW,P.rx*T+8-VW/2)),cy=Math.max(0,Math.min((zoneOf(P.x,P.y)?MH:WH)*T-VH,P.ry*T+8-VH/2));
   if(SCENECAM){cx=Math.max(0,Math.min(MW*T-VW,SCENECAM.x*T+8-VW/2));cy=Math.max(0,Math.min((zoneOf(P.x,P.y)?MH:WH)*T-VH,SCENECAM.y*T+8-VH/2))}   // a scene is moving the camera (js/systems/scenes.js)
   cx|=0;cy|=0;

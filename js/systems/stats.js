@@ -1,5 +1,7 @@
 // ---------- stats: health, stamina, skill levels and XP ----------
-const STEP_MS={walk:110,sail:60},GLIDE={walk:.12,sail:.2}; // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
+const STEP_MS={walk:160,sail:90},GLIDE={walk:.085,sail:.14},SWIFT_MS={walk:110,sail:60},SWIFT_GLIDE={walk:.12,sail:.2}; // SWIFT_* is the old normal speed, now what a swiftness potion gives
+const swift=()=>S.buff>Date.now(),stepMs=()=>(swift()?SWIFT_MS:STEP_MS)[sail?'sail':'walk'],glideAmt=()=>(swift()?SWIFT_GLIDE:GLIDE)[sail?'sail':'walk'];
+// // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
 const MAXHP=50,MAXSTA=100,STAM={walk:.08,sail:.08,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
 const fx=k=>['ring','amulet'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
