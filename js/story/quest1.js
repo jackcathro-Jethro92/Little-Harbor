@@ -16,7 +16,7 @@ STORY_PEOPLE.push(
  {npc:'Villager',if:{flag:'q1_villager_gone'},hide:1},
  {npc:'Villager',if:{flag:'q1_villager_here'},at:[156,121],f:'d'},
  {npc:'Villager',hide:1});
-ENCOUNTERS.push({id:'q1_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});
+ENCOUNTERS.push({id:'q1_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[283,41]},{foe:'pirate_grunt',at:[283,39]},{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});   // two on the boardwalk path to the temple, three in the courtyard
 DLG.q1_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!"}}};   // JACK
 DLG.q1_stranger={start:'a',nodes:{
  a:{who:'Old Stranger',text:'[Placeholder] ...Is it safe? Have they gone?',next:'b'},
@@ -35,7 +35,7 @@ SCENES.q1_village=[
  {say:'q1_villager'},
  {walk:['Villager',156,119,110]},{set:'q1_villager_gone'}];
 TRIGGERS.push(
- {id:'q1_arrive',when:{area:[279,32,287,37]},if:{quest:'q1',noflag:'q1_done'},do:[{encounter:'q1_pirates'},{step:1}]},
+ {id:'q1_land',when:{walk:[254,12,312,60],n:1},if:{quest:'q1',noflag:'q1_done'},do:[{encounter:'q1_pirates'},{step:1}]},   // the pirates are standing at their posts from the moment the player first steps ashore
  {id:'q1_aftermath',when:{beaten:'q1_pirates'},do:[{step:2},{scene:'q1_aftermath'}]},
  {id:'q1_villager',when:{walk:[140,105,183,135],n:2},if:{flag:'q1_done',noflag:'q1_villager_gone'},do:[{scene:'q1_village'}]}
 );

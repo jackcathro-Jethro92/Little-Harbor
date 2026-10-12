@@ -544,9 +544,10 @@ def check(b, url):
     ev("BATTLE_FAST=true;sail=false;storyReset();ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});NPC.forEach(n=>{n.busy=1});S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');S.bag.grandfather_compass=0;storyJump('q1')")
     assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&questGoal()[0]===283&&count('grandfather_compass')===0"), "Quest 1 begins with the letter, a goal and no compass yet"
     assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sited taking of fire island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
-    ev("P.x=P.rx=283;P.y=P.ry=38;move('u');"); pg.wait_for_timeout(100)
-    assert ev("encFigures('q1_pirates').length===3&&S.story.step===1&&!dlgActive()"), "stepping into the courtyard brings the pirates (the player says nothing)"
-    for k in range(3):
+    assert ev("encFigures('q1_pirates').length===0&&S.story.step===0"), "no pirates before the player lands"
+    ev("sail=true;const wp=nearestTile(283,47,(x,y)=>at(x,y)===1);P.x=P.rx=wp[0];P.y=P.ry=wp[1]+1;sail=false;move('u')"); pg.wait_for_timeout(100)
+    assert ev("encFigures('q1_pirates').length===5&&S.story.step===1&&!dlgActive()&&encFigures('q1_pirates').filter(n=>n.y>=38&&n.y<=43&&n.x>=282&&n.x<=284).length===2&&encFigures('q1_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the first step ashore puts five pirates at their posts, two of them on the path to the temple (the player says nothing)"
+    for k in range(5):
         ev("(()=>{const n=encFigures('q1_pirates')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;act()})()"); pg.wait_for_timeout(100)
         for _ in range(20):
             if ev("BATTLE===null"): break
@@ -555,7 +556,7 @@ def check(b, url):
             pg.wait_for_timeout(30)
         pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
     pg.wait_for_function("SCENE!==null", timeout=5000)
-    assert ev("flag('enc_q1_pirates_done')&&S.story.step===2&&SCENE.id==='q1_aftermath'"), "beating the third pirate starts the aftermath scene"
+    assert ev("flag('enc_q1_pirates_done')&&S.story.step===2&&SCENE.id==='q1_aftermath'"), "beating the fifth pirate starts the aftermath scene"
     ev("skipScene()"); pg.wait_for_timeout(100)
     assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q==='q2'&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given, Quest 1 finished and the stranger gone inside"
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
@@ -574,7 +575,7 @@ def check(b, url):
         ev("(()=>{const n=NPC.find(q=>q.n===%s&&!q.hidden);sail=false;const f=[[0,1,'u'],[0,-1,'d'],[1,0,'l'],[-1,0,'r']].find(([a,b])=>{const x=n.x+a,y=n.y+b;return WK.includes(at(x,y))&&!npcAt(x,y)});P.x=P.rx=n.x+f[0];P.y=P.ry=n.y+f[1];P.f=f[2];act()})()" % json.dumps(name))
         ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
     ev("BATTLE_FAST=true;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
-    assert ev("S.story.q==='q2'&&S.story.step===0&&questGoal()[0]===159&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
+    assert ev("S.story.q==='q2'&&S.story.step===0&&questGoal()[0]===155&&questGoal()[1]===104&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
     assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. Im guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack's six lines are in word for word"
     ev("setFlag('q2_got_sword',0);setFlag('q2_got_pickaxe',0);openStore('rod')"); assert ev("!/Sword|Pickaxe/.test($('items').textContent)"), "Bram does not sell the sword or pickaxe yet"
     talk("Bjorn the Elder"); assert ev("flag('q2_started')&&S.story.step===1&&!dlgActive()&&questGoal()!==null"), "Bjorn starts the quest and sends the player to Garrick"
@@ -597,6 +598,8 @@ def check(b, url):
     start = pgn.evaluate("({gold:S.gold,bag:Object.keys(S.bag).filter(k=>S.bag[k]).sort(),weapon:S.eq.weapon,rod:S.eq.rod,dmg:eq('weapon').damage,shop:(openStore('rod'),/Wooden sword/.test($('items').textContent))})")
     assert start == {"gold": 0, "bag": ["driftwood_rod", "rowboat", "wooden_sword"], "weapon": "wooden_sword", "rod": "driftwood_rod", "dmg": 3, "shop": False}, start
     assert not errn, errn; pgn.close()
+    # Bjorn's big house: a seven-wide house in the north of the village with a path to its door, reachable on foot from the pier, and Bjorn standing at it
+    assert ev("(()=>{const h=BL.find(b=>b.big);if(!h||h.w!==7||h.y>103)return false;const seen=new Set(),q=[[156,124]];seen.add(124*MW+156);for(let i=0;i<q.length;i++){const[x,y]=q[i];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,k=ny*MW+nx;if(seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(103*MW+154)&&seen.has(104*MW+155)&&at(154,102)===5&&at(157,101)===5&&(()=>{try{sail=false;P.x=P.rx=155;P.y=P.ry=106;draw();return true}catch(e){return false}})()})()"), "Bjorn's house stands in the north of the village, is reachable on foot, and draws"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
