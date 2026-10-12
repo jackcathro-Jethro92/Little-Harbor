@@ -10,53 +10,69 @@ Read `CLAUDE.md` (rules), `DESIGN.md` (what exists today) and `TEMPLES.md` (appr
 
 ---
 
-## Where we are now (updated 10 October 2026)
+## Where we are now (updated 12 October 2026)
 
-The world is much further along than when this roadmap was first written. Everything below is merged and playable (pull requests up to #18).
+The world, the graphics upgrade and all the story machinery are built, and the fighting is in place. What is left for the playtest draft is the story itself: the festival opening and Quests 1 and 2 (Phase 4). Everything below is merged and playable (pull requests up to #61).
 
 **Built and working:**
 - **World:** a 320 x 240 tile world with fog of war and the sea connected all the way round, including:
   - the village island and the mainland;
   - the **Walled Settlement**: 15 houses, 18 people, the blacksmith (Garrick), the tailor (Wynn) and the barber (Fenwick), three farms with livestock, and two dogs and a cat;
   - the **Mountain Town**: 8 houses, the goldsmith (Lucie), the **Fighters Guild** and the **Gladiators' Arena** (both enterable), and a north gate with a path up to the Earth temple;
-  - the **Darkwood** forest zone and the home interior;
+  - the **Darkwood** forest zone (now with four giant centipedes) and the home interior;
   - a **stone barrier** of jagged rocks along the north-west coast, so the mountain country can only be reached through the Darkwood.
-- **Four of the five temples** (world only, no story): the **Earth temple** (plaza, pyramid, sanctum), the **Sea temple** (terraced crater island, boardwalk, courtyard, hall, vault), the **Sky temple** (zigzag hillside island, lantern-lined path, stone circle; the *intact* version only) and the **Fire temple** (volcano island, lava moat, gate, courtyard, fire hall; a little smaller than the others).
-- **Pirate Island groundwork:** the island starts empty, and a story switch brings ten pirates, six tents and three ships overnight (see "Story switches" below).
-- **Systems:** sailing, simple fishing, 10 skills, 93 items (including enchanted jewellery with buffs), 35 recipes, crafting stations, home and garden, one real-time enemy (the spirit), arena bouts, guild training, hair styles, the FireRed-style bag, and five traders (Bram, Odo, Rue, Garrick, Lucie) plus the tailor and barber screens.
-- **Tests and hosting:** GitHub Pages is live and every pull request runs the smoke tests in Chromium and WebKit. The game is already split into modules under `js/` (see `DESIGN.md`).
+- **Four of the five temples** (world only, no story): the **Earth temple**, the **Sea temple**, the **Sky temple** (intact, and a damaged version a story switch can turn on) and the **Fire temple**. The Temple Tower and its island are not built (moved to after the playtest).
+- **Pirate Island:** starts empty; a story switch brings ten pirates, six tents and three ships.
+- **Graphics (Phase 1):** the whole upgrade is built and Jack has approved it: ground and water, trees and plants, buildings, characters, boats and animals, objects and stations, the Darkwood and home room, and a day and night cycle with window and lantern glow.
+- **Menus and saving:** the opening cinematic with the home menu (Continue, New game, Save game, Load game, with save to a file, a save code and three slots), the character screen (**Me**: portrait, stats, Quests, Save), the quest log, and the dialogue box with portraits.
+- **Story machinery (Phase 2, finished except 2.10):** triggers, scenes (cutscenes with a Skip button), gates, seagull letters (kept in a LETTERS pocket in the bag), world variants, people by story, and story test switches. These are all tables, so a quest is rows of data. **No real quest, scene, letter or gate is written yet.**
+- **Fighting (Phase 3):** the enemy table, the spirit and the giant centipede (real-time), the turn-based battle screen for pirates (Attack / Item / Run, up to three foes, a boss who flees) and encounters (groups of foes started by a trigger). You can try the fights from the testing menu.
+- **Systems:** sailing, simple fishing, 10 skills, 96 items (including enchanted jewellery with buffs), 36 recipes, crafting stations, home and garden, arena bouts, guild training, hair styles, the FireRed-style bag, five traders plus the tailor and barber screens, and ships you can walk around inside.
+- **Tests and hosting:** GitHub Pages is live and every pull request runs the smoke tests in Chromium and WebKit. The game is split into modules under `js/` (see `DESIGN.md`).
 
 **Designed but not in the game yet:**
-- **The Temple Tower** (art in `art/temples/temple_tower`): the last temple, and its island.
-- **The interior designer:** a separate tool at https://claude.ai/artifact/3ABF4QvjFtSdhJYrJc1UEc that exports rooms as JSON. It has 198 props and 19 starter rooms: shops, tavern, inn and so on.
-- **A graphics-upgrade mockup:** `art/graphics/graphics_upgrade_mockup.js`, with before and after pictures. The files are in `little-harbor-handoff.zip` and still need unpacking into the repo before Phase 1.
-- **The ten-quest story outline:** in this file, Phase 4 onwards. **No quest, dialogue system, battle screen or story state exists yet.**
+- **The Temple Tower** (art in `art/temples/temple_tower`): the last temple, and its island (after the playtest).
+- **The interior designer:** a separate tool at https://claude.ai/artifact/3ABF4QvjFtSdhJYrJc1UEc that exports rooms as JSON. It has 198 props and 19 starter rooms: shops, tavern, inn and so on. Needed for 2.10.
+- **The ten quests:** Jack's own text is saved word for word in `STORY_TEXT.md`; the outline is in Phase 4 onwards. None is built yet.
 
 ### Progress at a glance
 
+**Next up: Phase 4 (4.0 the festival opening, 4.1 Quest 1, 4.2 Quest 2).** Then the playtest from Saturday 24 October.
+
 | Step | Status |
 | --- | --- |
+| **Phase 0: the workshop** | |
 | 0.1 Repository and hosting | **Done** |
-| 0.2 Module split | **Done** (it was done early, not after the playtest) |
-| 2.9b Room list | **Begun** (10 Oct): the ships' nine rooms come from a table (`ROOMTAB`, `js/world/shiprooms.js`); the ten older rooms are still made by hand and need moving into the table |
+| 0.2 Module split | **Done** (early, not after the playtest) |
 | 0.3 Test harness | **Partly:** smoke tests and the automatic test run are done; the 10-spot screenshot script is not |
-| Phase 1 graphics upgrade | **Started:** 1.1 ground and water built (10 Oct, pictures in `art/graphics/step_1_1_before_after_*.png`); 1.2 trees and plants built (pictures in `art/graphics/step_1_2_before_after_*.png`); 1.3 buildings built (`art/graphics/step_1_3_before_after_*.png`); 1.4 characters, boats and animals built (`art/graphics/step_1_4_before_after_*.png`); 1.5 objects and stations built (`art/graphics/step_1_5_before_after_*.png`); 1.6 Darkwood and home room built (`art/graphics/step_1_6_before_after_*.png`); 1.7 light built (`art/graphics/step_1_7_before_after.png`; test with `?time=night`); Phase 1 is complete and waiting for Jack's approval |
-| 2.1b Title menu and save files | **Done** (10 Oct): title screen, ☰ menu, save to a file, save code, three slots, safe loading, new game with backup (see DESIGN.md controls) |
-| 2.1 Story state | **Done** (10 Oct): `S.flags` for the switches and `S.story` `{q, step, seen}` for progress, saved and kept across sleep and reload |
-| 2.2 Dialogue box | **Done** (10 Oct): box at the bottom with a portrait slot, typed text, choices, flags and an end step (`DLG` table, `runDialogue`, `dlgSay`); portraits for 16 characters (`art/graphics/dialogue_and_shops.png`) |
-| 2.8 Quest log | **Done** (10 Oct): a Quests button on the character screen (Me); current quest and its next step, and a Finished list, read from the `QUESTS` table (there are no real quests yet) |
-| 2.3 Triggers | **Done** (10 Oct): the `TRIGGERS` table (`js/systems/triggers.js`): rows fire once on an area, a room, talking, a morning or a beaten enemy group, and can say a line, set flags, give or take items and gold, move people and change the quest step |
-| 2.12 Cinematics | **Begun:** the title cinematic is done (see N10 below); the festival opening, the village attack and the rising island are not built |
-| 2.4 Scenes | **Done** (11 Oct): `SCENES` table and `runScene` (`js/systems/scenes.js`): wait, fade, walk, face, jump, say, line, camera pan, shake and any trigger action; input paused; Skip button; a trigger starts one with `{scene:'id'}` |
-| 2.5 Gates | **Done** (11 Oct): the `GATES` table (`js/systems/gates.js`): blocked until a flag is set, or opened by Use with the right tool; no real gate placed yet |
-| 2.7 Seagull letters | **Done** (11 Oct): `LETTERS` table and `{letter:'id'}` trigger action (`js/systems/letters.js`): a gull lands, the letter opens, and it is kept in a LETTERS pocket in the bag |
-| 2.6 World variants | **Machinery done** (11 Oct): the `VARIANTS` table (`js/world/variants.js`) now drives the pirate camp and the damaged Sky temple from their flags (same look as before), supports simple tile swaps, applies live whenever a flag changes and never leaves anyone stuck. **Still to add as rows when their art and quests arrive:** festival decorations, village under attack, Temple Tower sealed/open, the risen island |
-| 2.9 People by story | **Done** (11 Oct): the `STORY_PEOPLE` table (`js/systems/storypeople.js`): a person's place, chat lines, dialogue and whether they are there at all follow flags, quest and day; no real rows yet |
-| 2.11 Story test switches | **Done** (11 Oct): `TEST_STORY` and the `STORY_JUMPS` table (`js/systems/storytest.js`): a "Test: jump to a quest" button in the menus and a `?story=q2` link; the rows for Quests 1 to 10 exist but are empty until each quest is built |
-| 2.10 Interior loader | Not started (after the playtest). **Phase 2 is otherwise finished; next is Phase 3: enemies and turn-based battles (3.1, 3.2, 3.3, 3.6)** |
-| Phase 3 combat and enemies | **Begun** (11 Oct): 3.1 the enemy table is done (`ENEMY_TYPES`, `ENEMIES`, `spawnEnemy`; the spirit moved onto it, groups fire `enemyBeaten`). 3.6 the basic turn-based battle is built (`js/systems/battle.js`, `js/data/battles.js`: Attack / Item / Run, up to three foes, rewards, a boss that flees; try it from the test menu). 3.3 encounters are built (`js/systems/encounters.js`: the `ENCOUNTERS` table, a group of foes started by a trigger, fought in the world, a done flag and `{beaten}` trigger when all are beaten; test fights in the testing menu). 3.2 the forest beast is built: the giant centipede (`centipede` in `ENEMY_TYPES`, four in the Darkwood, drops a centipede fang). Still to do under 3.2: the pirate and temple enemies' numbers (pirates are already in `FOES`), guardians and ghosts for the Tower. Not started: 3.4 armour, 3.5 pirate ships; the Skill menu entry and converting the arena and guild come later (the arena's four bouts and the guild are real-time and will need converting to turn-based under 3.6) |
-| Phase 4 first playable slice | Not started |
-| Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact) and Fire built; Temple Tower not built.** None of the quests are built. |
+| **Phase 1: graphics** | |
+| 1.1 to 1.7 | **All done and approved by Jack** (11 Oct): ground and water, trees and plants, buildings, characters and animals, objects and stations, the Darkwood and home room, light. Before and after pictures are in `art/graphics/`. N4 (the stairs colour) can now be looked at again. |
+| **Phase 2: story machinery** | |
+| 2.1 Story state | **Done:** `S.flags` for the switches and `S.story` `{q, step, seen, done}` for progress, saved and kept across sleep and reload |
+| 2.1b Title menu and save files | **Done:** home menu, save to a file, save code, three slots, safe loading, new game with backup |
+| 2.2 Dialogue box | **Done:** box with portrait slot, typed text, choices, flags (`DLG`, `runDialogue`, `dlgSay`); portraits for 16 characters |
+| 2.3 Triggers | **Done:** the `TRIGGERS` table (`js/systems/triggers.js`) |
+| 2.4 Scenes | **Done:** the `SCENES` table and `runScene` (`js/systems/scenes.js`), with a Skip button |
+| 2.5 Gates | **Done:** the `GATES` table (`js/systems/gates.js`); no real gate placed yet |
+| 2.6 World variants | **Machinery done:** the `VARIANTS` table (`js/world/variants.js`) drives the pirate camp and the damaged Sky temple and never leaves anyone stuck. **Still to add as rows:** festival decorations (needed for the draft), village under attack, Temple Tower sealed/open, the risen island |
+| 2.7 Seagull letters | **Done:** the `LETTERS` table and `{letter:'id'}` (`js/systems/letters.js`) |
+| 2.8 Quest log | **Done:** the Quests button on the **Me** screen, read from the `QUESTS` table (no real quests yet) |
+| 2.9 People by story | **Done:** the `STORY_PEOPLE` table (`js/systems/storypeople.js`); no real rows yet |
+| 2.9b Room list | **Begun:** the ships' nine rooms come from a table (`ROOMTAB`); the ten older rooms are still made by hand and need moving into it (before 2.10) |
+| 2.10 Interior loader | Not started (after the playtest) |
+| 2.11 Story test switches | **Done:** `TEST_STORY` and `STORY_JUMPS` (`js/systems/storytest.js`); the rows for Quests 1 to 10 are empty until each quest is built |
+| 2.12 Cinematics | **Begun:** the opening title cinematic is done; the festival opening scene, the village attack and the rising island are not built |
+| **Phase 3: combat and enemies** | |
+| 3.1 Enemy table | **Done:** `ENEMY_TYPES` and `ENEMIES` (`js/data/enemies.js`, `js/systems/combat.js`); the spirit moved onto it |
+| 3.2 Story enemies | **Partly:** the forest beast is done (the giant centipede, four in the Darkwood, drops a fang); the pirate grunt, gunner and captain exist as turn-based fighters (`FOES`). Still to do: temple guardians and ghosts for the Tower chamber (with the Tower, after the playtest) |
+| 3.3 Encounters | **Done:** the `ENCOUNTERS` table (`js/systems/encounters.js`); no real encounter placed yet |
+| 3.4 Armour slots | **After the playtest** (needed for the Quest 4 to 6 rewards) |
+| 3.5 Pirate ships at sea | **After the playtest.** Until then a gate (2.5) can block the pirate island's waters |
+| 3.6 Turn-based battles | **Basic version done:** the battle screen with Attack / Item / Run, up to three foes, rewards, and a boss who flees (`js/systems/battle.js`, `js/data/battles.js`); test fights are in the testing menu. Still to do: the Skill menu entry, armour in the damage sums, converting the arena and guild fights, tuning after the playtest |
+| **Phase 4: first playable slice** | |
+| 4.0 Festival opening, 4.1 Quest 1, 4.2 Quest 2 | **Not started: next** |
+| **Later phases** | |
+| Phase 5 temples (the *places*) | **Earth, Sea, Sky (intact and damaged) and Fire built; Temple Tower not built.** None of the quests are built. |
 | 6.3 Taverns | Not started (the Walled Settlement and Mountain Town have people and shops but no interiors) |
 
 ### Your notes (N1 to N13) at a glance
@@ -66,17 +82,19 @@ The world is much further along than when this roadmap was first written. Everyt
 | N1 Movement | **Done for the first playthrough** (Jack approved, 10 Oct): tap to turn, one tap is one tile, switching direction no longer stops you (see DESIGN.md controls). Walking animation and camera can be adjusted after the playthrough. |
 | N2 Sea square | **Done.** Every hidden room (home, Darkwood, guild, arena, all temple halls, the Tower shrine room) now sits in rows 246-299, below the sea you can reach (the map grew from 240 to 300 rows; boats stop at row 239). No outlined square at sea. Old saves are migrated (`S.wv` 3). |
 | N3 Cottage | **Done** (10 Oct): moved to (34,158); the road runs unbroken. |
-| N4 Stairs | On hold until the shading revamp |
+| N4 Stairs | **Ready to look at:** the shading revamp (Phase 1) is done and approved, so the stairs colour can be checked now and adjusted only if still hard to see |
 | N5 Shop sub-menus | **Done** (10 Oct): tabs in Bram, Murl, Garrick, Lucie, Astrid and Odo's sell screen |
 | N6 Names list | **Done** (10 Oct): see `NAMES.md` for Jack to review. Nobody has been renamed. |
 | N7 Dialogue human-written | **Marked** (10 Oct): `DIALOGUE.md` lists every line as original or placeholder. Nothing was changed. |
-| N9 Portraits | **Partly** (10 Oct): the portrait slot and 16 portraits exist; more are added with the story |
-| N8, N10, N12, N13 | Not started |
+| N8 Turn-based combat | **Basic version done** (see 3.6 above): to be tested and tuned at the playtest |
+| N9 Portraits | **Partly:** the portrait slot and 16 portraits exist; more are added with the story |
+| N10 Cinematics | **Begun:** the opening title cinematic is done; the festival opening, the village attack and the rising island come later (2.12) |
+| N12 More crew, N13 Taverns | Not started (after the playtest: 6.2, 6.3) |
 | N11 Ships | **Looks done, and walkable** (10 Oct): deck, quarters with a bed and storage room with crates on the sloop, schooner and brig (see DESIGN.md "Aboard the ships"). Looks (10 Oct): rowboat, sloop, schooner and brig drawn from the reference chart (`art/graphics/ships_new.png`), the trawler became the schooner (saves migrated) and the brig is new (Murl's boatyard, 600,000; shipwright recipe). The crew rule (who can sail which ship) is not built yet: step 6.1 and 6.2. |
 
 ### Story switches (what exists today)
 
-A save field `S.flags` holds simple yes/no story switches (`flag()`, `setFlag()` in `js/systems/flags.js`), plus a table of overnight changes (`ARRIVALS`). The first use is the pirates: a quest sets `pirates_called`, and at the next sleep the game sets `pirates_here` and the camp fills (ten pirates, six tents, three ships). Testing link: add `?flags=pirates_here` (or `pirates_called`, then sleep) to the game's address. When step 2.1 is built, these flags move into `S.story.flags`, with a migration so nothing is lost.
+Story switches are yes/no flags in the save (`S.flags`; `flag()` and `setFlag()` in `js/systems/flags.js`), and quest progress is in `S.story`. Changing a flag changes the world straight away, through these tables: world variants (`VARIANTS`: the pirate camp and the damaged Sky temple), gates (`GATES`), people by story (`STORY_PEOPLE`) and encounters (`ENCOUNTERS`). The overnight arrivals table (`ARRIVALS`) sets a flag at the next sleep: when a quest sets `pirates_called`, sleeping sets `pirates_here` and the camp fills (ten pirates, six tents, three ships). Testing links: add `?flags=pirates_here` (or `sky_damaged`; several allowed, comma separated) to the game's address to see a variant for that visit, or `?story=q2` to jump to a quest start (testing only).
 
 ### Decisions on the open items (Jack, 10 October 2026)
 
@@ -165,11 +183,11 @@ The draft is a path through Phases 0 to 4 with one goal: play the festival openi
 - **Steps:** 0.1, 0.3 · 1.1 to 1.4 · 2.1 to 2.9 and 2.11 (2.4 and 2.8 can be basic; 2.6 is used for the festival decorations) · 3.1, 3.2 (pirate grunt, pirate boss, one forest beast), 3.3, 3.6 (basic) · 4.0 (with a short opening scene), 4.1, 4.2.
 
 **After the playtest:**
-- **Phase 0:** 0.2, the module split. It is risky and slow, and the single file works fine for now.
-- **Phase 1:** 1.5 to 1.7 (objects and stations, forest and interior, lighting).
-- **Phase 2:** 2.10 interior loader (Quest 2 meets Hale outside his Darkwood cottage instead), 2.12 full cinematics.
-- **Phase 3:** 3.4 armour, 3.5 pirate ships.
+- **Phase 2:** 2.9b the room list (finish moving the ten older rooms into the table), 2.10 interior loader (Quest 2 meets Hale outside his Darkwood cottage instead), 2.12 full cinematics.
+- **Phase 3:** 3.4 armour, 3.5 pirate ships, and the Skill menu, the arena and guild conversion and the tuning for 3.6.
+- **Phase 5:** the Temple Tower and its island, and any more Fire temple fixes (moved here by Jack, 11 October).
 - **Phase 6:** 6.1 ships, 6.2 crew, 6.3 taverns.
+- *Already done early:* Phase 0's module split (0.2) and Phase 1's steps 1.5 to 1.7 (objects and stations, forest and interior, lighting).
 
 **Simplifications allowed for the draft:**
 - **Text:** placeholder text for new story lines. Existing dialogue stays word for word (N7).
@@ -346,26 +364,25 @@ Variants must never move collisions where the player could get stuck.
 
 ## Phase 3: Combat and enemies the story needs
 
-**3.1 Enemy table.** Make enemies data-driven, like items: hp, damage, speed, chase range, drops and art. Move the existing spirit into this table.
+**3.1 Enemy table.** *Done.* Make enemies data-driven, like items: hp, damage, speed, chase range, drops and art. The existing spirit moved into this table (`ENEMY_TYPES`, `ENEMIES`, `spawnEnemy`).
 
-**3.2 Enemy types for the story:**
-- pirate grunt (melee)
-- pirate gunner (ranged, slow shots)
-- forest beasts for the Darkwood
-- temple guardians and ghosts for the Tower chamber
-- the pirate boss, with simple attack patterns and a retreat at low hp (story fights where he escapes)
+**3.2 Enemy types for the story.** *Partly done.*
+- pirate grunt, pirate gunner and the pirate boss (a captain who retreats at low hp, for the story fights where he escapes): **done** as turn-based fighters (`FOES`), see 3.6
+- forest beasts for the Darkwood: **done**, the giant centipede (four in the Darkwood)
+- temple guardians and ghosts for the Tower chamber: **later**, with the Temple Tower (after the playtest)
 
-**3.3 Encounters.** Groups of enemies that spawn when a trigger fires and set a flag when all are defeated ("defeat the pirates one by one").
+**3.3 Encounters.** *Done.* Groups of enemies that spawn when a trigger fires and set a flag when all are defeated ("defeat the pirates one by one"): `ENCOUNTERS`, battle mode and real-time mode.
 
-**3.4 Armour slots.** Add body, boots and helmet slots to the Equipped pocket, with defence and bonuses (needed for Quest 4 to 6 rewards).
+**3.4 Armour slots.** *After the playtest.* Add body, boots and helmet slots to the Equipped pocket, with defence and bonuses (needed for Quest 4 to 6 rewards).
 
-**3.5 Pirate ships at sea.** Ships that patrol areas and block or chase the boat, used to stop sailing routes until the story allows them.
-**3.6 Turn-based battles (N8).** Pirates, the pirate boss and fighters-guild characters use a **turn-based** battle instead of real-time fighting. Other creatures keep real-time combat.
-- **Battle screen:** a separate screen in the FireRed spirit: the player and enemies on either side, health bars, and a menu of **Attack / Skill / Item / Run**.
-- **Rules:** damage uses the existing Combat skill, weapon and armour stats. Potions and food work from the Item menu. Poison works as a status. A boss can end a fight early by escaping, as the story needs (Quests 1 and 6).
-- **Data:** enemy parties, moves and rewards live in tables.
+**3.5 Pirate ships at sea.** *After the playtest.* Ships that patrol areas and block or chase the boat, used to stop sailing routes until the story allows them. Until then a gate (2.5) can block the pirate island's waters.
+
+**3.6 Turn-based battles (N8).** *Basic version done.* Pirates, the pirate boss and fighters-guild characters use a **turn-based** battle instead of real-time fighting. Other creatures keep real-time combat.
+- **Battle screen:** a separate screen in the FireRed spirit: the player and enemies on either side, health bars, and a menu of **Attack / Skill / Item / Run**. *Built: Attack, Item and Run; the Skill entry is still to come.*
+- **Rules:** damage uses the existing Combat skill, weapon and armour stats. Potions and food work from the Item menu. Poison works as a status. A boss can end a fight early by escaping, as the story needs (Quests 1 and 6). *Built: weapon and Combat level, food and potions, poison coat on the foe, a boss who flees. Armour comes with 3.4.*
+- **Data:** enemy parties, moves and rewards live in tables (`FOES`, `BATTLES`).
 - **Draft version:** a basic version is enough for Quest 1. The system will be tested and tuned after the playtest, so keep it simple and easy to change.
-- *Done when:* a pirate encounter starts a battle, the battle can be won, lost or run from, the boss can escape, and winning sets the encounter's flag.
+- *Done when:* a pirate encounter starts a battle, the battle can be won, lost or run from, the boss can escape, and winning sets the encounter's flag. **Met.** Still to do: converting the arena bouts and the guild training to turn-based, and tuning after the playtest.
 
 - *Done when (for the phase):* each enemy can be fought in a test arena, encounters set their flags, armour changes damage taken, and turn-based battles work for pirates.
 
