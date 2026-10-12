@@ -1,6 +1,7 @@
 // ---------- triggers (roadmap step 2.3): one table of "when this happens, do that", so a quest is rows, not new code ----------
 // Each row of TRIGGERS: {id, when:{...what happens...}, if:{...what must already be true...}, do:[...actions...], repeat:1}.
 //   when (one of; leave it out to fire at the next step or morning once `if` is true):
+//     start:1             a new game's character screen is finished           board:[x0,y0,x1,y1]  the player gets into the boat inside that box
 //     area:[x0,y0,x1,y1]  the player steps into that box      zone:n    the player enters hidden room / zone n      talk:'Name'  the player talks to that person
 //     day:1               a morning starts (sleeping)         beaten:'group'  an enemy group is beaten (the enemy table, step 3.1, calls enemyBeaten('group'))
 //   if (all must be true):  flag:'a'  noflag:'a'  has:{item:n}  gold:n  day:n (this day or later)  quest:'q' (and optional step:n)
@@ -36,10 +37,10 @@ function trgRun(list,i,done){if(i>=list.length){trgRunning=false;if(done)done();
 function fireTriggers(kind,ev){if(typeof applyStoryPeople==='function')applyStoryPeople();if(trgRunning||(typeof dlgActive==='function'&&dlgActive()))return false;
   const now=new Set();let hit=null;
   for(const t of TRIGGERS){const w=t.when||{};
-    let ok;if(kind==='talk')ok=w.talk!==undefined&&w.talk===ev;else if(kind==='beaten')ok=w.beaten!==undefined&&w.beaten===ev;else if(kind==='day')ok=w.day!==undefined||(!w.area&&!w.zone&&w.talk===undefined&&w.beaten===undefined);
+    let ok;if(kind==='talk')ok=w.talk!==undefined&&w.talk===ev;else if(kind==='beaten')ok=w.beaten!==undefined&&w.beaten===ev;else if(kind==='start')ok=w.start!==undefined;else if(kind==='board')ok=Array.isArray(w.board)&&P.x>=w.board[0]&&P.y>=w.board[1]&&P.x<=w.board[2]&&P.y<=w.board[3];else if(kind==='day')ok=w.day!==undefined||(!w.area&&!w.zone&&w.talk===undefined&&w.beaten===undefined&&w.start===undefined&&w.board===undefined);
     else{ // a step: areas and zones fire on the way in, not again while the player stays inside; a row with no `when` fires as soon as its `if` is true
       const inside=w.area?(P.x>=w.area[0]&&P.y>=w.area[1]&&P.x<=w.area[2]&&P.y<=w.area[3]):w.zone!==undefined?zoneOf(P.x,P.y)===w.zone:null;
-      if(inside!==null){if(inside)now.add(t.id);ok=inside&&!trgInside.has(t.id)}else ok=w.talk===undefined&&w.beaten===undefined&&w.day===undefined}
+      if(inside!==null){if(inside)now.add(t.id);ok=inside&&!trgInside.has(t.id)}else ok=w.talk===undefined&&w.beaten===undefined&&w.day===undefined&&w.start===undefined&&w.board===undefined}
     if(ok&&!hit&&(t.repeat||!wasSeen('trg:'+t.id))&&trgIf(t.if))hit=t}
   if(kind==='step'){trgInside.clear();now.forEach(i=>trgInside.add(i))}
   if(!hit)return false;if(!hit.repeat)markSeen('trg:'+hit.id);trgRunning=true;trgRun(hit.do||[],0);return true}

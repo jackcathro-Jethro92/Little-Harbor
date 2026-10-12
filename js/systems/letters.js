@@ -7,7 +7,8 @@ let GULL=null;
 const myLetters=()=>{if(!Array.isArray(S.letters))S.letters=[];return S.letters};
 const hasLetter=id=>myLetters().includes(id);
 // the tile the gull lands on: in front of the player if it is free, else beside or behind
-function gullSpot(){const f=[P.f,...({u:'lrd',d:'lru',l:'udr',r:'udl'}[P.f]||'').split('')];
+function gullSpot(){if(sail)return[P.x,P.y];   // aboard the boat the gull lands on the boat
+ const f=[P.f,...({u:'lrd',d:'lru',l:'udr',r:'udl'}[P.f]||'').split('')];
   for(const d of f){const x=P.x+D[d][0],y=P.y+D[d][1];if(at(x,y)!==undefined&&WK.includes(at(x,y))&&!npcAt(x,y)&&!(B.x===x&&B.y===y))return[x,y]}return[P.x,P.y-1]}
 function drawGull(cx,cy,t){const G2=GULL;if(!G2)return;const x=G2.x-cx,y=G2.y-cy-G2.h,flap=G2.fly?Math.sin(t/70)>0:0;
   g.fillStyle='rgba(0,0,0,.22)';g.fillRect((G2.x-cx)-3|0,(G2.y-cy)+4,7,2);
