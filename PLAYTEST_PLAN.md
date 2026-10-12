@@ -86,7 +86,7 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 
 ## The batches
 - **Batch 6: quick fixes.** P16 (stamina bar), P17 (Quest 2 trigger), P18 (slower movement; the old speed becomes the swiftness potion's), P19 (Find Rue), P22 (Old Sword), P23 (the distracted notification), P24 (slower centipede respawn), P25 (the map fits).  **(built)**
-- **Batch 7: items.** P20 (fish values) and P21 (the tent): both wait for Jack's answers.
+- **Batch 7: items.** P20 (fish values) and P21 (the tent). **(built)**
 - **Batch 8: battle animations.** P26.
 
 ## Questions for Jack

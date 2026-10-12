@@ -2,11 +2,11 @@
 // TESTING: while this is true every boat costs 100 gold in Murl's boatyard (real prices: sloop 100,000, schooner 250,000, brig 600,000). Set it to false to go back. Remove with the other testing switches before release.
 const BOAT_TEST=true;
 const ITEMS={
- sardine:{n:'Sardine',kind:'fish',value:6,xp:5,rarity:50,pull:.6},
- mackerel:{n:'Mackerel',kind:'fish',value:12,xp:8,rarity:30,pull:.9},
- bream:{n:'Bream',kind:'fish',value:30,xp:15,rarity:14,pull:1.2},
- tuna:{n:'Tuna',kind:'fish',value:120,xp:40,rarity:5,pull:1.7},
- koi:{n:'Golden koi',kind:'fish',value:600,xp:100,rarity:1,pull:2.2},
+ sardine:{n:'Sardine',kind:'fish',value:3,xp:5,rarity:50,pull:.6},
+ mackerel:{n:'Mackerel',kind:'fish',value:6,xp:8,rarity:30,pull:.9},
+ bream:{n:'Bream',kind:'fish',value:15,xp:15,rarity:14,pull:1.2},
+ tuna:{n:'Tuna',kind:'fish',value:60,xp:40,rarity:5,pull:1.7},
+ koi:{n:'Golden koi',kind:'fish',value:300,xp:100,rarity:1,pull:2.2},
  softwood:{n:'Softwood log',kind:'material',desc:'Light, easy to work. Good for simple things.'},
  medium_wood:{n:'Medium wood log',kind:'material',desc:'Sturdy all-round timber.'},
  hardwood:{n:'Hardwood log',kind:'material',desc:'Dense and tough. Hard to chop, built to last.'},
@@ -32,7 +32,7 @@ const ITEMS={
  softwood_plank:{n:'Softwood plank',kind:'material',desc:'Light planks for simple building.'},
  medium_plank:{n:'Medium wood plank',kind:'material',desc:'Sturdy planks for solid building.'},
  hardwood_plank:{n:'Hardwood plank',kind:'material',desc:'Dense planks that last for years.'},
- camp_kit:{n:'Camp kit',kind:'station',price:150,place:'camp',desc:'A tent and campfire. Set it up on land and pack it away again. Stations go within 5 tiles of it.'},
+ camp_kit:{n:'Camp kit',kind:'station',price:150,place:'camp',desc:'A tent and campfire. Sleep in the tent to start a new day. Set it up on land and pack it away again. Stations go within 5 tiles of it.'},
  standard_bench:{n:'Workbench',kind:'station',price:100,place:'bench',desc:'Craft rope and planks. Place within 5 tiles of camp.'},
  forge:{n:'Forge',kind:'station',price:400,place:'forge',desc:'Smelt ore into iron. Place within 5 tiles of camp.'},
  grilled_sardine:{n:'Grilled sardine',kind:'food',hp:3,sta:15,value:7},
