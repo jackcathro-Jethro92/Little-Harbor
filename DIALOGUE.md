@@ -312,10 +312,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 - *placeholder* `fest_welcome.a` Murl: [Placeholder] Gather round, everyone! The Little Harbor Sea Festival begins!
 - *placeholder* `fest_initiate.a` Murl: [Placeholder] And here is our newest fisher, fresh to the harbor. Come on up!
-- *placeholder* `fest_initiate.b` You: [Placeholder] Thank you, Murl. I will do my best.
 - *placeholder* `fest_initiate.c` Murl: [Placeholder] Every fisher needs a boat. This little rowboat is yours. She is tied up at the end of the pier.
 - *placeholder* `fest_initiate.d` Murl: [Placeholder] Go on, take her out. The sea is waiting.
-- *placeholder* `q1_see_pirates.a` You: [Placeholder] Pirates! They are attacking the temple. I have to stop them.
 - *Jack's* `q1_pirate.a` Pirate grunt: This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!
 - *placeholder* `q1_stranger.a` Old Stranger: [Placeholder] ...Is it safe? Have they gone?
 - *Jack's* `q1_stranger.b` Old Stranger: Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough

@@ -15,6 +15,6 @@ const wasSeen=id=>storyState().seen.includes(id);
 const markSeen=id=>{const s=storyState();if(!s.seen.includes(id)){s.seen.push(id);save()}};
 // overnight arrivals: when `when` is set and `set` is not yet, sleeping sets it (which changes the world through the VARIANTS table, js/world/variants.js) and shows `msg`. Add a row for each future arrival.
 const ARRIVALS=[
- {when:'pirates_called',set:'pirates_here',msg:'In the night, three ships dropped anchor off the volcano island. Pirates have come ashore!'}
+ {when:'pirates_called',set:'pirates_here',msg:''}
 ];
-function dailyEvents(){const out=[];ARRIVALS.forEach(a=>{if(flag(a.when)&&!flag(a.set)){setFlag(a.set,1);if(a.apply)a.apply();out.push(a.msg)}});return out.join(' ')}
+function dailyEvents(){const out=[];ARRIVALS.forEach(a=>{if(flag(a.when)&&!flag(a.set)){setFlag(a.set,1);if(a.apply)a.apply();if(a.msg)out.push(a.msg)}});return out.join(' ')}

@@ -7,8 +7,7 @@
 VARIANTS.push({id:'festival',flag:'festival_on',apply:on=>{FESTIVAL_ON=on}});applyVariants(true);
 DLG.fest_welcome={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Gather round, everyone! The Little Harbor Sea Festival begins!'}}};
 DLG.fest_initiate={start:'a',nodes:{
- a:{who:'Murl',text:'[Placeholder] And here is our newest fisher, fresh to the harbor. Come on up!',next:'b'},
- b:{who:'You',text:'[Placeholder] Thank you, Murl. I will do my best.',next:'c'},
+ a:{who:'Murl',text:'[Placeholder] And here is our newest fisher, fresh to the harbor. Come on up!',next:'c'},
  c:{who:'Murl',text:'[Placeholder] Every fisher needs a boat. This little rowboat is yours. She is tied up at the end of the pier.',next:'d'},
  d:{who:'Murl',text:'[Placeholder] Go on, take her out. The sea is waiting.'}}};
 SCENES.festival_opening=[

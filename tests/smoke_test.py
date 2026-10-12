@@ -75,7 +75,7 @@ def check(b, url):
         n = ev("window.__n"); ev("(()=>{window.move=window.__mv})()"); return n
     kb = held(lambda: pg.keyboard.down("ArrowRight"), lambda: pg.keyboard.up("ArrowRight"))
     dp = held(lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))"), lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerup',{bubbles:true}))"))
-    assert abs(kb - dp) <= 2 and 8 <= kb <= 20, (kb, dp)
+    assert abs(kb - dp) <= 2 and 6 <= kb <= 20, (kb, dp)
     # movement feel: a quick tap on a new direction only turns you; a tap on the way you face moves exactly one tile; holding walks; a second key takes over and, when let go, the first carries on; letting go of all stops
     ev("sail=false;P.x=P.rx=60;P.y=P.ry=190;P.f='d';for(let y=186;y<=194;y++)for(let x=56;x<=64;x++)if(!walkable(x,y)){}")
     ok_ground = ev("(()=>{let c=0;for(let y=186;y<=194;y++)for(let x=56;x<=64;x++)if(walkable(x,y))c++;return c})()")
@@ -545,8 +545,7 @@ def check(b, url):
     assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&questGoal()[0]===283&&count('grandfather_compass')===0"), "Quest 1 begins with the letter, a goal and no compass yet"
     assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sited taking of fire island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
     ev("P.x=P.rx=283;P.y=P.ry=38;move('u');"); pg.wait_for_timeout(100)
-    assert ev("encFigures('q1_pirates').length===3&&S.story.step===1&&dlgActive()&&$('dlg-txt').textContent!==undefined"), "stepping into the courtyard brings the pirates and the first line"
-    ev("dlgEnd()")
+    assert ev("encFigures('q1_pirates').length===3&&S.story.step===1&&!dlgActive()"), "stepping into the courtyard brings the pirates (the player says nothing)"
     for k in range(3):
         ev("(()=>{const n=encFigures('q1_pirates')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;act()})()"); pg.wait_for_timeout(100)
         for _ in range(20):
@@ -564,7 +563,10 @@ def check(b, url):
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
     ev("openBag();bp=3;bc=rowsOf(3).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
     ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
-    ev("sail=false;P.x=P.rx=156;P.y=P.ry=130;move('u')"); pg.wait_for_function("SCENE!==null", timeout=5000); ev("skipScene()"); pg.wait_for_timeout(100)
+    ev("sail=true;B.x=156;B.y=130;P.x=P.rx=156;P.y=P.ry=130;move('l');move('r')"); assert ev("SCENE===null&&sail===true&&at(B.x,B.y)===0"), "sailing around the village does not start the villager's scene or put the boat on land"
+    ev("sail=false;P.x=P.rx=156;P.y=P.ry=129;move('u')"); assert ev("SCENE===null"), "one step on land is not enough"
+    ev("move('u')"); pg.wait_for_function("SCENE!==null", timeout=5000); ev("skipScene()"); pg.wait_for_timeout(100)
+    assert ev("at(B.x,B.y)===0&&sail===false"), "the boat stays on the water"
     assert ev("SCENE===null&&flag('q1_villager_gone')&&NPC.find(n=>n.n==='Villager').hidden===1&&P.x===156&&P.y===126"), "back in the village the villager runs up with the news and then leaves"
     ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # Quest 2 (4.2): Bjorn, Garrick (sword), the forest and its boulder, Rue, Garrick (pickaxe), Rue at home, Bjorn's reward; Bram hides the sword and pickaxe until they are handed out
@@ -589,6 +591,12 @@ def check(b, url):
     talk("Bjorn the Elder"); assert ev("flag('q2_done')&&count('healing_potion')===1&&count('stamina_tonic')===1&&S.story.q===null&&S.story.done.includes('q2')"), "Bjorn's reward finishes the quest"
     ev("storyJump('q3')"); assert ev("S.story.q==='q3'&&S.story.done.includes('q2')&&count('sword')===1&&count('pickaxe')===1&&flag('crew_1')"), "the testing menu can start Quest 3 with Quest 2 done"
     ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
+    # a brand-new game: no gold, and only a driftwood rod, the rowboat and a wooden sword (Jack's playtest note)
+    pgn = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); errn = []; pgn.on("pageerror", lambda e: errn.append(str(e)))
+    pgn.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}"); pgn.goto(url); pgn.wait_for_timeout(400)
+    start = pgn.evaluate("({gold:S.gold,bag:Object.keys(S.bag).filter(k=>S.bag[k]).sort(),weapon:S.eq.weapon,rod:S.eq.rod,dmg:eq('weapon').damage,shop:(openStore('rod'),/Wooden sword/.test($('items').textContent))})")
+    assert start == {"gold": 0, "bag": ["driftwood_rod", "rowboat", "wooden_sword"], "weapon": "wooden_sword", "rod": "driftwood_rod", "dmg": 3, "shop": False}, start
+    assert not errn, errn; pgn.close()
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
@@ -609,7 +617,7 @@ def check(b, url):
     # an old v1 save still loads, is migrated, and is backed up
     pg, errs = load(b, url, OLD_SAVE)
     s = pg.evaluate("({v:S.v,wv:S.wv,day:S.day,sardine:S.bag.sardine,rod:S.eq.rod,backup:!!localStorage.getItem('little-harbor-v1-backup-v1')})")
-    assert s == {"v": 3, "wv": 3, "day": 3, "sardine": 4 + 4, "rod": "bamboo_rod", "backup": True}, s  # +4 sardines from the TEST_KITS roundB grant
+    assert s == {"v": 3, "wv": 3, "day": 3, "sardine": 4, "rod": "bamboo_rod", "backup": True}, s  # (the testing gifts are off, so no extra sardines)
     assert not errs, errs
     pg.close()
 

@@ -20,7 +20,7 @@ function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd
   const go=()=>{if(done)return;done=true;s.hold=null;scNext()};const hold=fin=>{s.hold={finish:()=>{fin();go()}}};const fast=s.fast;
   if(st.wait!==undefined){if(fast)return go();const t=setTimeout(go,st.wait);hold(()=>clearTimeout(t))}
   else if(st.fade){const fl=$('flash'),ms=st.ms||600,out=st.fade==='out';fl.style.transitionDuration=ms+'ms';fl.style.opacity=out?1:0;if(fast)return go();const t=setTimeout(go,ms);hold(()=>clearTimeout(t))}
-  else if(st.walk){const[who,x,y,per]=st.walk,a=scActor(who);if(!a)return go();if(a!==P)a.busy=1;
+  else if(st.walk){const[who,x,y,per]=st.walk,a=scActor(who);if(!a)return go();if(a!==P)a.busy=1;else if(sail&&at(x,y)!==0)sail=false;   // walking the player onto land means getting out of the boat, which stays where it is
     const path=[];let cx=a.x,cy=a.y;while(cx!==x){cx+=cx<x?1:-1;path.push([cx,cy])}while(cy!==y){cy+=cy<y?1:-1;path.push([cx,cy])}
     let k=0,last=[a.x,a.y];const face=(p,q)=>p[0]<q[0]?'r':p[0]>q[0]?'l':p[1]<q[1]?'d':'u';
     const stepOnce=()=>{if(k>=path.length)return false;const p=path[k++];a.f=face(last,p);a.x=p[0];a.y=p[1];last=p;return true};
@@ -28,7 +28,7 @@ function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd
     if(fast){finish();return go()}
     const t=setInterval(()=>{if(!stepOnce()){clearInterval(t);if(a===P)reveal();go()}else if(a===P&&sail){B.x=P.x;B.y=P.y}},per||220);hold(()=>{clearInterval(t);finish()})}
   else if(st.face){const a=scActor(st.face[0]);if(a)a.f=st.face[1];go()}
-  else if(st.tp){const a=scActor(st.tp[0]);if(a){a.x=st.tp[1];a.y=st.tp[2];if(a===P){P.rx=P.x;P.ry=P.y;if(sail){B.x=P.x;B.y=P.y}reveal()}}go()}
+  else if(st.tp){const a=scActor(st.tp[0]);if(a){if(a===P&&sail&&at(st.tp[1],st.tp[2])!==0)sail=false;a.x=st.tp[1];a.y=st.tp[2];if(a===P){P.rx=P.x;P.ry=P.y;if(sail){B.x=P.x;B.y=P.y}reveal()}}go()}
   else if(st.say!==undefined||st.line){if(fast)return go();
     const end=()=>go();const ok=st.say!==undefined?runDialogue(st.say,end):(dlgSay(st.line[0],st.line[1],end),true);if(!ok)return go();
     hold(()=>{dlgDone=null;if(dlgActive())dlgEnd()})}

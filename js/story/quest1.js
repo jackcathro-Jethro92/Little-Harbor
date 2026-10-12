@@ -17,7 +17,6 @@ STORY_PEOPLE.push(
  {npc:'Villager',if:{flag:'q1_villager_here'},at:[156,121],f:'d'},
  {npc:'Villager',hide:1});
 ENCOUNTERS.push({id:'q1_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});
-DLG.q1_see_pirates={start:'a',nodes:{a:{who:'You',text:'[Placeholder] Pirates! They are attacking the temple. I have to stop them.'}}};
 DLG.q1_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!"}}};   // JACK
 DLG.q1_stranger={start:'a',nodes:{
  a:{who:'Old Stranger',text:'[Placeholder] ...Is it safe? Have they gone?',next:'b'},
@@ -36,7 +35,7 @@ SCENES.q1_village=[
  {say:'q1_villager'},
  {walk:['Villager',156,119,110]},{set:'q1_villager_gone'}];
 TRIGGERS.push(
- {id:'q1_arrive',when:{area:[279,32,287,37]},if:{quest:'q1',noflag:'q1_done'},do:[{encounter:'q1_pirates'},{step:1},{say:'q1_see_pirates'}]},
+ {id:'q1_arrive',when:{area:[279,32,287,37]},if:{quest:'q1',noflag:'q1_done'},do:[{encounter:'q1_pirates'},{step:1}]},
  {id:'q1_aftermath',when:{beaten:'q1_pirates'},do:[{step:2},{scene:'q1_aftermath'}]},
- {id:'q1_villager',when:{area:[154,122,160,129]},if:{flag:'q1_done',noflag:'q1_villager_gone'},do:[{scene:'q1_village'}]}
+ {id:'q1_villager',when:{walk:[140,105,183,135],n:2},if:{flag:'q1_done',noflag:'q1_villager_gone'},do:[{scene:'q1_village'}]}
 );

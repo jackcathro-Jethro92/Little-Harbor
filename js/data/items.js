@@ -24,6 +24,7 @@ const ITEMS={
  bamboo_rod:{n:'Bamboo rod',kind:'rod',price:80,power:1.3,wait:.85},
  fiberglass_rod:{n:'Fiberglass rod',kind:'rod',price:600,power:1.7,wait:.7},
  carbon_rod:{n:'Carbon rod',kind:'rod',price:4000,power:2.3,wait:.55},
+ wooden_sword:{n:'Wooden sword',kind:'weapon',price:0,damage:3,starter:1,desc:'A carved practice sword. Better than bare hands.'},
  sword:{n:'Sword',kind:'weapon',price:300,damage:5,desc:'A sturdy blade for dangerous islands.'},
  pickaxe:{n:'Pickaxe',kind:'tool',price:200,use:'mine',power:1,desc:'Breaks rock and digs out ore.'},
  woodcutters_axe:{n:"Woodcutter's axe",kind:'tool',price:200,use:'chop',power:1,desc:'Fells trees for timber.'},
