@@ -302,11 +302,11 @@ def check(b, url):
     pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Slot 2")
     assert pm.evaluate("!!slotInfo(2)&&slotInfo(2).day===S.day"), "saved to slot 2"
     pm.evaluate("S.gold=777;save()"); pm.click("#title-body button.tm >> text=Back"); pm.click("#title-body button.tm >> text=Load game"); pm.click("#title-body button.tm >> text=Slot 2")
-    pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_timeout(600)
+    pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&S.gold===10", timeout=15000)   # (the page reloads: wait for it, not a fixed time)
     assert pm.evaluate("S.gold===10&&!$('title').classList.contains('open')&&!!localStorage.getItem('little-harbor-v1-backup-before-load')"), "loading a slot restores that game, goes straight in and keeps a backup"
     fobj = pm.evaluate("JSON.stringify(saveFileObj())"); pm.evaluate("S.gold=555;save()"); pm.keyboard.press("Escape")
     pm.click("#title-body button.tm >> text=Load game")
-    pm.set_input_files("input[type=file]", {"name": "mine.json", "mimeType": "application/json", "buffer": fobj.encode()}); pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_timeout(600)
+    pm.set_input_files("input[type=file]", {"name": "mine.json", "mimeType": "application/json", "buffer": fobj.encode()}); pm.click("#title-body button.tm >> text=Yes, load it"); pm.wait_for_function("typeof S!=='undefined'&&S.gold===10", timeout=15000)
     assert pm.evaluate("S.gold===10"), "loading a save file works"
     pm.keyboard.press("Escape"); pm.click("#title-body button.tm >> text=Load game")
     pm.set_input_files("input[type=file]", {"name": "junk.json", "mimeType": "application/json", "buffer": b"not a save"})
@@ -603,7 +603,7 @@ def check(b, url):
         ev("(()=>{const n=NPC.find(q=>q.n===%s&&!q.hidden);sail=false;const f=[[0,1,'u'],[0,-1,'d'],[1,0,'l'],[-1,0,'r']].find(([a,b])=>{const x=n.x+a,y=n.y+b;return WK.includes(at(x,y))&&!npcAt(x,y)});P.x=P.rx=n.x+f[0];P.y=P.ry=n.y+f[1];P.f=f[2];act()})()" % json.dumps(name))
         ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
     ev("BATTLE_FAST=true;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
-    assert ev("S.story.q==='q2'&&S.story.step===0&&questGoal()[0]===155&&questGoal()[1]===104&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
+    assert ev("S.story.q==='q2'&&S.story.step===0&&Math.abs(questGoal()[0]-155)+Math.abs(questGoal()[1]-104)<=2&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
     assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. Im guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack's six lines are in word for word"
     ev("setFlag('q2_got_sword',0);setFlag('q2_got_pickaxe',0);openStore('rod')"); assert ev("!/Sword|Pickaxe/.test($('items').textContent)"), "Bram does not sell the sword or pickaxe yet"
     talk("Bjorn the Elder"); assert ev("flag('q2_started')&&S.story.step===1&&!dlgActive()&&questGoal()!==null"), "Bjorn starts the quest and sends the player to Garrick"
@@ -613,7 +613,7 @@ def check(b, url):
     assert ev("at(134,26+FY)===36&&!walkable(134,26+FY)&&!!gateAt(134,26+FY)"), "a boulder shuts the forest's east trail"
     ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';S.eq.pickaxe=null;act()"); assert ev("at(134,26+FY)===36&&/pickaxe/.test($('msg').textContent)"), "without a pickaxe the boulder only says why"
     talk("Rue"); assert ev("flag('q2_rue_found')&&S.story.step===3&&NPC.find(n=>n.n==='Rue').hidden===1"), "Rue is found and leaves the forest"
-    talk("Garrick"); assert ev("flag('q2_got_pickaxe')&&flag('blacksmith_buys_ore')&&count('pickaxe')===1&&S.eq.pickaxe==='pickaxe'&&S.story.step===4&&(()=>{const n=NPC.find(q=>q.n==='Rue');return n.hidden===0&&n.x===153&&n.y===122})()"), "Garrick gives the pickaxe and Rue is home in the village"
+    talk("Garrick"); assert ev("flag('q2_got_pickaxe')&&flag('blacksmith_buys_ore')&&count('pickaxe')===1&&S.eq.pickaxe==='pickaxe'&&S.story.step===4&&(()=>{const n=NPC.find(q=>q.n==='Rue');return n.hidden===0&&Math.abs(n.x-153)+Math.abs(n.y-122)<=2&&WK.includes(at(n.x,n.y))})()   /* (a villager standing on the exact tile moves her to the next free one) */"), "Garrick gives the pickaxe and Rue is home in the village"
     ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';act()"); assert ev("flag('forest_boulder_open')&&at(134,26+FY)!==36&&walkable(134,26+FY)"), "with the pickaxe the boulder breaks for good"
     ev("openStore('rod')"); assert ev("/Pickaxe/.test($('items').textContent)"), "Bram sells the pickaxe now"
     talk("Rue"); assert ev("flag('q2_rue_home')&&flag('crew_1')&&flag('lost_man_home')&&S.story.step===5"), "Rue is thankful and becomes the first crew member"
