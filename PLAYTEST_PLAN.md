@@ -17,7 +17,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 | P4 | Pirates trigger when you land on the island, so they do not appear out of nowhere | 3 | **Built** (the first step on foot on the island puts the pirates at their posts, so they are standing there as the player walks up) |
 | P5 | Remove the player character's spoken lines | 1 | **Built** (the player's festival and "Pirates!" lines are gone) |
 | P6 | Combat turn-based | 4 | **Built in Batch 4a.** Decided (Jack, 12 Oct): every fight is turn-based. The spirit and the giant centipede open the battle screen when touched; the creature stays on the map if the player runs away |
-| P7 | Different attacks for different weapons (sword slash, axe bash), learned as the combat skill with that weapon rises, plus blocks that buff stamina | 4 | **Decided (Jack, 12 Oct):** see "Weapon attacks" below |
+| P7 | Different attacks for different weapons (sword slash, axe bash), learned as the combat skill with that weapon rises, plus blocks that buff stamina | 4 | **Built in Batch 4b.** Decided (Jack, 12 Oct): see "Weapon attacks" below |
 | P8 | Add two more pirates on the pathway leading to the temple | 3 | **Built** (five pirates: two on the boardwalk path, three in the courtyard; they are weaker so the wooden sword can beat them) |
 | P9 | Enemies stand on the green field in the battle, not in a box above it | 4 | **Built in Batch 4a** (a painted green field; the foes stand on it with shadows, no boxes) |
 | P10 | Remove the "pirates have arrived" note when leaving the Northern Water Temple | 1 | **Built and confirmed (Jack, 12 Oct):** both the pop-up and the overnight sentence are gone; the camp fills silently at the next sleep |
@@ -31,7 +31,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 - **Batch 1: unblock the game (built).** P2, P3, P5, P10, P11, P12. Small, clear, and P11 was stopping play.
 - **Batch 2: menus (built).** P13 and P14: the button row becomes Bag, Quests, Skills, Map, Menu. Menu shows the character summary and has Save game and Load game. Quests is its own screen.
 - **Batch 3: Quest 1 and the village (built).** P4, P8, P15: the pirates stand on the island, visible from the landing (five of them: three in the courtyard and two on the pathway to the temple), and the big house for Bjorn at the village's north with Bjorn outside its door (Bjorn then stays there in every quest).
-- **Batch 4a: the field and every fight turn-based (built).** P9 and P6. **Batch 4b: the weapon attacks (P7), next.**
+- **Batch 4a: the field and every fight turn-based (built).** P9 and P6. **Batch 4b: the weapon attacks (P7), built.**
 - **Batch 4: battles (in two parts).** P9 (a green field with the foes standing on it), P6, P7. This is the biggest design change, so it waits for the answers below.
 - **Batch 5: the festival cinematic.** P1. Built with the cinematic parts already used for the title screen, once the script is agreed.
 
