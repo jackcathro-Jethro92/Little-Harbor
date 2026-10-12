@@ -630,6 +630,26 @@ def check(b, url):
     talk("Rue"); assert ev("flag('q2_rue_home')&&flag('crew_1')&&flag('lost_man_home')&&S.story.step===5"), "Rue is thankful and becomes the first crew member"
     talk("Bjorn the Elder"); assert ev("flag('q2_done')&&count('healing_potion')===1&&count('stamina_tonic')===1&&S.story.q===null&&S.story.done.includes('q2')"), "Bjorn's reward finishes the quest"
     ev("storyJump('q3')"); assert ev("S.story.q==='q3'&&S.story.done.includes('q2')&&count('sword')===1&&count('pickaxe')===1&&flag('crew_1')"), "the testing menu can start Quest 3 with Quest 2 done"
+    # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)
+    ev("S.bag.woodcutters_axe=0;S.eq.axe=null;S.gold=0;S.bag.ironwood_log=0")
+    assert ev("LAND.some(l=>l[0]==='Oak Island')&&(()=>{let n=0;for(let y=160;y<=180;y++)for(let x=135;x<=153;x++)if(at(x,y)===140)n++;return n===3})()"), "three ironwood logs lie on Oak Island"
+    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjon sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('its all yours')"), "Murl's two speeches are Jack's words"
+    ev("setFlag('q3_started',0);openStore('rod')"); assert ev("!/Woodcutter/.test($('items').textContent)"), "Bram does not sell the axe any more"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
+    talk("Murl"); assert ev("flag('q3_started')&&S.story.q==='q3'&&S.story.step===0&&!dlgActive()&&Math.abs(questGoal()[0]-144)<=2"), "Murl starts Quest 3 and the compass points at Oak Island"
+    talk("Murl"); assert ev("!flag('q3_done')&&!dlgActive()"), "without the log Murl just reminds you"
+    def log_tile():
+        return ev("(()=>{for(let y=160;y<=180;y++)for(let x=135;x<=153;x++)if(at(x,y)===140)return [x,y]})()")
+    def face_log(lx, ly):
+        ev("(()=>{sail=false;const f=[[0,1,'u'],[0,-1,'d'],[1,0,'l'],[-1,0,'r']].find(([a,b])=>WK.includes(at(%d+a,%d+b))&&!npcAt(%d+a,%d+b));P.x=P.rx=%d+f[0];P.y=P.ry=%d+f[1];P.f=f[2];act()})()" % (lx, ly, lx, ly, lx, ly)); ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
+    lx, ly = log_tile()
+    ev("setFlag('q3_started',0)"); face_log(lx, ly); assert ev("count('ironwood_log')===0&&at(%d,%d)===140" % (lx, ly)), "the log stays until Murl has asked for it"
+    ev("setFlag('q3_started')"); face_log(lx, ly)
+    assert ev("count('ironwood_log')===1&&flag('q3_got_log')&&S.story.step===1&&at(%d,%d)===1&&S.cut[%d*MW+%d].m===140&&questGoal()!==null" % (lx, ly, ly, lx)), "you pick up an ironwood log (no axe needed) and are sent back to Murl"
+    lx2, ly2 = log_tile(); face_log(lx2, ly2); assert ev("count('ironwood_log')===1"), "only one log is carried"
+    talk("Murl"); assert ev("flag('q3_done')&&flag('axe_waiting')&&S.gold===100&&count('ironwood_log')===0&&S.story.q===null&&S.story.done.includes('q3')"), "Murl pays 100 gold and takes the log"
+    talk("Hale"); assert ev("flag('has_axe')&&count('woodcutters_axe')===1&&S.eq.axe==='woodcutters_axe'"), "Hale gives the woodcutter's axe"
+    talk("Hale"); assert ev("count('woodcutters_axe')===1"), "only one axe"
     ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # a brand-new game: no gold, and only a driftwood rod, the rowboat and a wooden sword (Jack's playtest note)
     pgn = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); errn = []; pgn.on("pageerror", lambda e: errn.append(str(e)))

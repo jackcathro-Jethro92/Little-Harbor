@@ -58,7 +58,7 @@ function tile(tx,ty,sx,sy,t){
   if(m==12){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   if(m===35||m===36){const bl=m===36;R(sx,sy,T,T,bl?'#55555d':'#6f7078');R(sx,sy,T,4,bl?'#6a6a72':'#8a8b94');R(sx+(n%3)*4,sy+6,5,3,'#5a5b63');R(sx+3+n%8,sy+11,6,3,'#5a5b63');
     if(!bl&&n%4===0)R(sx+4,sy,8,2,'#f0f4f8');if(bl){R(sx+2,sy+4,12,9,'#2e2e36');R(sx+3,sy+3,10,9,'#8d8f87');R(sx+4,sy+3,5,2,'#b0b2b8')}}
-  if(m===14)objectArt(m,tx,ty,sx,sy,n,t);
+  if(m===14||m===140)objectArt(m,tx,ty,sx,sy,n,t);
   if((m>=15&&m<=17)||m===123||m===124)objectArt(m,tx,ty,sx,sy,n,t);
   if(m===18)objectArt(m,tx,ty,sx,sy,n,t);
   if(m===13)objectArt(m,tx,ty,sx,sy,n,t);

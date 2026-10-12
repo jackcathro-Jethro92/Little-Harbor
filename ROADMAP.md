@@ -37,7 +37,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Next up: Phase 4 (4.0 the festival opening, 4.1 Quest 1, 4.2 Quest 2).** Then the playtest from Saturday 24 October.
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Next: Quest 4 and the Earth Temple (5.4), then the playtest from Saturday 24 October.
 
 | Step | Status |
 | --- | --- |
@@ -436,7 +436,7 @@ Build these **completely**, with world, mechanics and placeholder text, then pla
 
 Build each quest together with the places it uses. Use the approved temple art in `art/temples/` for every temple. All text stays placeholder.
 
-### 5.3 Quest 3: Merl's Quest
+### 5.3 Quest 3: Murl's Quest *(built, 13 Oct)*
 - **Start:** Captain **Merl** Rue at the boatyard (Rue's first name is Merl) needs extra-hard timber for a ship's mast, which grows on one of the islands.
 - **Where:** **Island 6** (144, 170), with a new special hardwood tree (for example "ironwood") that only grows there.
 - **Reward:** gold. Merl also says the woodcutter has a spare **axe** to collect from the cottage.
