@@ -25,3 +25,7 @@ const SHOPS={
 };
 // Tailor and barber in the Walled Settlement: gold per look field changed (the look screen is in js/ui/look.js).
 const LOOK_PRICES={tailor:{shirt:50,jk:80,hc:40,hat:50,jon:30,pack:30},barber:{hair:40,hstyle:60}};
+
+// Things Bram's shop only shows once the story has handed them out (or the player already has one): item id -> the flag that unlocks it. Quest 2 gives the sword and pickaxe (Garrick);
+// the woodcutter's axe stays on sale until Quest 3 is built, when it gets its own lock here.
+const SHOP_LOCKS={sword:'q2_got_sword',pickaxe:'q2_got_pickaxe'};

@@ -76,6 +76,8 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Cheerful Ned | Gladiators' Arena (Mountain Town) | Villager |
 | Old Stranger | Temple of the Sea | Keeper of the Sea temple |
 | Villager | Village | Villager |
+| Bjorn the Elder | Village | Village elder |
+| Rue | The Darkwood | Sailor |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |
 | One-Eye Finn | Pirate camp (Volcano Island) | Pirate |

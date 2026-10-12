@@ -184,11 +184,13 @@ def check(b, url):
     assert pgo.evaluate("!S.cut[104*MW+142]&&at(142,104)!==18"), "old ore records elsewhere are dropped"
     pgo.close()
     # foraging: mushrooms and forest sprigs grow only in the Darkwood and only a few; all of them can be reached from its south gate; one can be picked; old records outside the wood are dropped
+    ev("setFlag('forest_boulder_open')")   # (the forest's east trail is shut by a boulder until the pickaxe opens it: open it for the reach check)
     fg = ev("(()=>{const c={},out=[];for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(t>=27&&t<=30){c[t]=(c[t]||0)+1;if(!inFZ(x,y))out.push([x,y])}}"
             "const W=new Set(WK),sx=123,sy=38+FY,s=new Set([sy*MW+sx]),q=[[sx,sy]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=(y+b)*MW+x+a;if(!s.has(i)&&W.has(at(x+a,y+b))){s.add(i);q.push([x+a,y+b])}}}"
             "let far=0;for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(t>=27&&t<=30&&!s.has(y*MW+x))far++}"
             "return {c,out:out.length,far,total:Object.values(c).reduce((a,b)=>a+b,0)}})()")
     assert fg["out"] == 0 and fg["far"] == 0 and 60 <= fg["total"] <= 100 and all(fg["c"].get(str(k), 0) >= 10 for k in (27, 28, 29, 30)), fg
+    ev("setFlag('forest_boulder_open',0)")
     ev("S.eq.knife='knife';S.bag.knife=1;S.sta=100;ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}})")   # (a Darkwood centipede wandering onto the mushroom would be struck instead of the mushroom picked; the centipede check wakes them later)
     pick = ev("(()=>{let f=null;for(let y=FZ.y0;y<=FZ.y1&&!f;y++)for(let x=FZ.x0;x<=FZ.x1;x++)if(at(x,y)===28){f=[x,y];break}sail=false;P.x=P.rx=f[0];P.y=P.ry=f[1]+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=f[1]-1;P.f='d'}else P.f='u';S.bag.red_cap=0;act();return [S.bag.red_cap>=1,at(f[0],f[1])===31]})()")
     assert pick == [True, True], "a red cap can be picked in the Darkwood"
@@ -312,6 +314,8 @@ def check(b, url):
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=9999")
     tabs = lambda: ev("[...document.querySelectorAll('#items .tabs button')].map(b=>b.textContent)")
     shown = lambda: ev("[...document.querySelectorAll('#items .it[data-cat]')].filter(r=>r.style.display!=='none').map(r=>r.dataset.cat).filter((v,i,a)=>a.indexOf(v)===i)")
+    ev("openStore('rod')"); assert tabs() == ["Rods", "Tools", "Home"] and ev("!/Pickaxe|Sword/.test($('items').textContent)"), ("Bram hides the sword and pickaxe until the story hands them out", tabs())
+    ev("setFlag('q2_got_sword');setFlag('q2_got_pickaxe')")   # (Quest 2 unlocks them; the older checks below want the full shop)
     ev("openStore('rod')"); assert tabs() == ["Rods", "Weapons", "Tools", "Home"] and shown() == ["Rods"], (tabs(), shown())
     ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
     ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
@@ -554,7 +558,7 @@ def check(b, url):
     pg.wait_for_function("SCENE!==null", timeout=5000)
     assert ev("flag('enc_q1_pirates_done')&&S.story.step===2&&SCENE.id==='q1_aftermath'"), "beating the third pirate starts the aftermath scene"
     ev("skipScene()"); pg.wait_for_timeout(100)
-    assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q===null&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given, Quest 1 finished and the stranger gone inside"
+    assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q==='q2'&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given, Quest 1 finished and the stranger gone inside"
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
     assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
@@ -562,6 +566,28 @@ def check(b, url):
     ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
     ev("sail=false;P.x=P.rx=156;P.y=P.ry=130;move('u')"); pg.wait_for_function("SCENE!==null", timeout=5000); ev("skipScene()"); pg.wait_for_timeout(100)
     assert ev("SCENE===null&&flag('q1_villager_gone')&&NPC.find(n=>n.n==='Villager').hidden===1&&P.x===156&&P.y===126"), "back in the village the villager runs up with the news and then leaves"
+    ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
+    # Quest 2 (4.2): Bjorn, Garrick (sword), the forest and its boulder, Rue, Garrick (pickaxe), Rue at home, Bjorn's reward; Bram hides the sword and pickaxe until they are handed out
+    def talk(name):
+        ev("(()=>{const n=NPC.find(q=>q.n===%s&&!q.hidden);sail=false;const f=[[0,1,'u'],[0,-1,'d'],[1,0,'l'],[-1,0,'r']].find(([a,b])=>{const x=n.x+a,y=n.y+b;return WK.includes(at(x,y))&&!npcAt(x,y)});P.x=P.rx=n.x+f[0];P.y=P.ry=n.y+f[1];P.f=f[2];act()})()" % json.dumps(name))
+        ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
+    ev("BATTLE_FAST=true;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
+    assert ev("S.story.q==='q2'&&S.story.step===0&&questGoal()[0]===159&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
+    assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. Im guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack's six lines are in word for word"
+    ev("setFlag('q2_got_sword',0);setFlag('q2_got_pickaxe',0);openStore('rod')"); assert ev("!/Sword|Pickaxe/.test($('items').textContent)"), "Bram does not sell the sword or pickaxe yet"
+    talk("Bjorn the Elder"); assert ev("flag('q2_started')&&S.story.step===1&&!dlgActive()&&questGoal()!==null"), "Bjorn starts the quest and sends the player to Garrick"
+    talk("Garrick"); assert ev("flag('q2_got_sword')&&count('sword')===1&&S.eq.weapon==='sword'&&S.story.step===2"), "Garrick gives a sword (one copy, equipped)"
+    ev("openStore('rod')"); assert ev("/Sword/.test($('items').textContent)&&!/Pickaxe/.test($('items').textContent)"), "Bram sells the sword now but still not the pickaxe"
+    assert ev("(()=>{const n=NPC.find(q=>q.n==='Rue');return n.hidden===0&&n.y>=FY&&WK.includes(at(n.x,n.y))})()"), "Rue waits by the woodcutter's cottage in the Darkwood"
+    assert ev("at(134,26+FY)===36&&!walkable(134,26+FY)&&!!gateAt(134,26+FY)"), "a boulder shuts the forest's east trail"
+    ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';S.eq.pickaxe=null;act()"); assert ev("at(134,26+FY)===36&&/pickaxe/.test($('msg').textContent)"), "without a pickaxe the boulder only says why"
+    talk("Rue"); assert ev("flag('q2_rue_found')&&S.story.step===3&&NPC.find(n=>n.n==='Rue').hidden===1"), "Rue is found and leaves the forest"
+    talk("Garrick"); assert ev("flag('q2_got_pickaxe')&&flag('blacksmith_buys_ore')&&count('pickaxe')===1&&S.eq.pickaxe==='pickaxe'&&S.story.step===4&&(()=>{const n=NPC.find(q=>q.n==='Rue');return n.hidden===0&&n.x===153&&n.y===122})()"), "Garrick gives the pickaxe and Rue is home in the village"
+    ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';act()"); assert ev("flag('forest_boulder_open')&&at(134,26+FY)!==36&&walkable(134,26+FY)"), "with the pickaxe the boulder breaks for good"
+    ev("openStore('rod')"); assert ev("/Pickaxe/.test($('items').textContent)"), "Bram sells the pickaxe now"
+    talk("Rue"); assert ev("flag('q2_rue_home')&&flag('crew_1')&&flag('lost_man_home')&&S.story.step===5"), "Rue is thankful and becomes the first crew member"
+    talk("Bjorn the Elder"); assert ev("flag('q2_done')&&count('healing_potion')===1&&count('stamina_tonic')===1&&S.story.q===null&&S.story.done.includes('q2')"), "Bjorn's reward finishes the quest"
+    ev("storyJump('q3')"); assert ev("S.story.q==='q3'&&S.story.done.includes('q2')&&count('sword')===1&&count('pickaxe')===1&&flag('crew_1')"), "the testing menu can start Quest 3 with Quest 2 done"
     ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
