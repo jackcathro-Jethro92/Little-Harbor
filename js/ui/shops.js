@@ -31,7 +31,7 @@ function openStore(k){
     else{b.textContent=it.price.toLocaleString()+'g';b.disabled=rod?!(i===own+1&&S.gold>=it.price):S.gold<it.price;
       b.onclick=()=>{S.gold-=it.price;add(id);S.eq[kind]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
-  if(rod)LIST('weapon').concat(LIST('tool')).filter(id=>!ITEMS[id].smith&&(!SHOP_LOCKS[id]||flag(SHOP_LOCKS[id])||count(id)>0)).forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),ITEMS[id].kind==='weapon'?'Weapons':'Tools');r.className='it';
+  if(rod)LIST('weapon').concat(LIST('tool')).filter(id=>!ITEMS[id].smith&&!ITEMS[id].starter&&(!SHOP_LOCKS[id]||flag(SHOP_LOCKS[id])||count(id)>0)).forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),ITEMS[id].kind==='weapon'?'Weapons':'Tools');r.className='it';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';
     const b=document.createElement('button');
     if(count(id)){b.textContent='Owned';b.disabled=true}

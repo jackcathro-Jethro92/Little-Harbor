@@ -10,7 +10,7 @@ const hasLetter=id=>myLetters().includes(id);
 function gullSpot(){if(sail)return[P.x,P.y];   // aboard the boat the gull lands on the boat
  const f=[P.f,...({u:'lrd',d:'lru',l:'udr',r:'udl'}[P.f]||'').split('')];
   for(const d of f){const x=P.x+D[d][0],y=P.y+D[d][1];if(at(x,y)!==undefined&&WK.includes(at(x,y))&&!npcAt(x,y)&&!(B.x===x&&B.y===y))return[x,y]}return[P.x,P.y-1]}
-function drawGull(cx,cy,t){const G2=GULL;if(!G2)return;const x=G2.x-cx,y=G2.y-cy-G2.h,flap=G2.fly?Math.sin(t/70)>0:0;
+function drawGull(cx,cy,t){const G2=GULL;if(!G2)return;const x=G2.x-cx,y=G2.y-cy-G2.h,flap=G2.fly?Math.sin(t/110)>0:0;
   g.fillStyle='rgba(0,0,0,.22)';g.fillRect((G2.x-cx)-3|0,(G2.y-cy)+4,7,2);
   const W='#f4f6f8',Gy='#8c97a6',Dk='#3a4250',Or='#e8a23a';
   R(x-3,y-2,7,3,W);R(x+4,y-3,3,3,W);R(x+7,y-2,2,1,Or);R(x+5,y-3,1,1,Dk);   // body, head, beak, eye
@@ -35,9 +35,9 @@ addEventListener('keydown',e=>{if(!$('letter').classList.contains('open'))return
 // ----- scene steps: {gull:'in'}, {gull:'out'}, {read:'id'} -----
 SCSTEP.gull=(mode,c)=>{const[cx,cy]=camNow();
   if(mode==='in'){const[tx,ty]=gullSpot(),to=[tx*T+8,ty*T+12];if(c.fast){GULL={x:to[0],y:to[1],h:0,fly:false};return c.go()}
-    const stop=gullTo([cx-24,cy+6],to,1700,46,0,true,()=>setTimeout(c.go,500));c.hold(()=>{stop();GULL={x:to[0],y:to[1],h:0,fly:false}})}
+    const stop=gullTo([cx-24,cy+6],to,3400,46,0,true,()=>setTimeout(c.go,500));c.hold(()=>{stop();GULL={x:to[0],y:to[1],h:0,fly:false}})}
   else{if(!GULL||c.fast){GULL=null;return c.go()}const from=[GULL.x,GULL.y],to=[cx+VW+30,cy-20];
-    const stop=gullTo(from,to,1300,0,50,true,()=>{GULL=null;c.go()});c.hold(()=>{stop();GULL=null})}};
+    const stop=gullTo(from,to,2800,0,50,true,()=>{GULL=null;c.go()});c.hold(()=>{stop();GULL=null})}};
 SCSTEP.read=(id,c)=>{if(!LETTERS[id])return c.go();if(!hasLetter(id)){myLetters().push(id);save()}
   if(c.fast)return c.go();openLetter(id,()=>c.go());c.hold(()=>{letterDone=null;$('letter').classList.remove('open')})};
 // sends a letter by a seagull (a trigger row {letter:'id'} calls this); returns false if there is nothing to do
