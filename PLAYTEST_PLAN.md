@@ -16,7 +16,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 | P3 | Slow the movement speed of walking and sailing | 1 | **Built** (walking 70 to 110 ms a step, sailing 35 to 60 ms, and the slide to the next tile is slower too) |
 | P4 | Pirates trigger when you land on the island, so they do not appear out of nowhere | 3 | Planned |
 | P5 | Remove the player character's spoken lines | 1 | **Built** (the player's festival and "Pirates!" lines are gone) |
-| P6 | Combat turn-based | 4 | Waiting for an answer (see questions) |
+| P6 | Combat turn-based | 4 | **Decided (Jack, 12 Oct): every fight is turn-based.** The spirit and the giant centipede open the battle screen when touched; the creature stays on the map if the player runs away |
 | P7 | Different attacks for different weapons (sword slash, axe bash), learned as the combat skill with that weapon rises, plus blocks that buff stamina | 4 | Planned: design below, needs a yes |
 | P8 | Add two more pirates on the pathway leading to the temple | 3 | Planned |
 | P9 | Enemies stand on the green field in the battle, not in a box above it | 4 | Planned |
@@ -35,7 +35,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 - **Batch 5: the festival cinematic.** P1. Built with the cinematic parts already used for the title screen, once the script is agreed.
 
 ## Questions for Jack
-1. **P6 "Combat turn-based":** do you want the spirit and the giant centipede to fight turn-based too (so every fight uses the battle screen)? Today only the pirates do.
+1. ~~**P6 "Combat turn-based":**~~ **Answered:** everything is turn-based; the spirit and the centipede open the battle screen when touched.
 2. **P7 attacks:** a first design to say yes or change. Each weapon type (sword, axe, and so on) has its own weapon skill level that rises as you use it. At set levels you learn a new attack for that weapon: for a sword, Slash at the start, then Quick Strike (a fast, light hit), then Power Slash (a heavy hit that costs stamina). For an axe: Chop, then Bash (stuns for a turn). **Block** is a menu choice that takes less damage that turn and gives back some stamina, so it also buffs stamina. Is that the idea?
 3. **P1 cinematic:** what should it show, beat by beat? A starting suggestion: the sun rising over the harbor, boats and lanterns, the villagers gathering, Murl on the pier giving the speech, the crowd cheering as the newest fisher steps forward and is given the rowboat, then fireworks or lanterns over the water. Anything to add or cut?
 4. **P12 the rowboat:** Murl gives the rowboat at the festival, but it is already in your bag at the start. Should a new game start without a boat in the bag and have Murl hand it over in the festival?
