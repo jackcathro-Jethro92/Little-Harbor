@@ -37,7 +37,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Next: Quest 4 and the Earth Temple (5.4), then the playtest from Saturday 24 October.
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quest 4 (5.4) is built too. Next: Quest 5 and the Sea Temple (5.5), then the playtest from Saturday 24 October.
 
 | Step | Status |
 | --- | --- |
@@ -442,7 +442,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **Reward:** gold. Merl also says the woodcutter has a spare **axe** to collect from the cottage.
 - **Sets:** `q3_done`, `axe_waiting`, then `has_axe` once collected.
 
-### 5.4 Quest 4: A Stranger's Letter, Part 2 (Earth Temple, the "Mayan Temple Design")
+### 5.4 Quest 4: A Stranger's Letter, Part 2 (Earth Temple, the "Mayan Temple Design") *(built, 13 Oct)*
 - **Start:** the next time the player is on the mainland (trigger: enter the mainland zone with `q3_done`), a seagull brings a letter from the stranger. Pirates are going to loot a temple. Hurry!
 - **Where:** the Earth Temple (Temple to the Mountains) in its dusty mountains. Use `art/temples/mayan_temple`: plaza, pyramid, summit temple, sanctum.
 - **What happens:**

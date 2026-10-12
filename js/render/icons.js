@@ -34,6 +34,7 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
   else if(K==='food'){const c=FOODC[id]||'#c9a06a';if(id.startsWith('grilled')&&FC[id.slice(8)]){r(2,6,10,5,'#2e1f10');r(3,7,8,3,c);r(11,4,3,8,'#2e1f10');r(11,5,2,6,c);r(5,7,1,3,'#7a4a1c');r(8,7,1,3,'#7a4a1c')}
     else if(/stew|soup|dinner|fry|feast|sashimi/.test(id)){r(2,8,12,5,'#2e1f10');r(3,8,10,4,'#a8743f');r(3,6,10,3,c);r(5,4,1,2,'#e8e8e8');r(9,3,1,2,'#e8e8e8')}
     else{r(2,10,12,3,'#2e1f10');r(3,9,10,3,'#e8e0d0');r(4,5,8,5,'#2e1f10');r(5,6,6,3,c)}}
+  else if(/_key$/.test(id)){r(3,6,6,6,'#2e1f10');r(4,7,4,4,'#e8c050');r(5,8,2,2,'#2e1f10');r(8,8,6,2,'#2e1f10');r(8,8,6,1,'#e8c050');r(11,10,1,2,'#e8c050');r(13,10,1,2,'#e8c050')}
   else if(K==='key'){r(3,3,10,10,'#2e1f10');r(4,4,8,8,'#c9a227');r(5,5,6,6,'#f4ecd0');r(7,5,2,3,'#c83820');r(7,8,2,3,'#383838');r(7,7,2,2,'#2e1f10')}
   else if(K==='claim'){r(3,2,10,12,'#2e1f10');r(4,3,8,10,'#f3d9a4');r(5,5,6,1,'#8a6a35');r(5,7,6,1,'#8a6a35');r(5,9,4,1,'#8a6a35');r(9,10,3,3,'#c83820')}
   else if(K==='prefab'){r(2,7,12,7,'#2e1f10');r(3,8,10,5,'#e9d9b8');r(6,10,3,4,'#6b4423');r(1,3,14,5,'#2e1f10');r(2,4,12,3,id==='house_kit'?'#5f7183':'#c9a35c')}
@@ -45,6 +46,7 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
     else{r(2,6,12,4,'#2e1f10');r(3,7,10,2,'#a8743f');r(3,10,2,4,'#6b4423');r(11,10,2,4,'#6b4423')}}
   else if(id==='knife'){for(let t=0;t<6;t++)r(3+t,12-t,2,2,'#7a5230');for(let t=0;t<5;t++)r(8+t,7-t,2,2,'#c9d2da')}
   else if(K==='jewel'){const c=ITEMS[id].gem;if(ITEMS[id].slot==='ring'){r(4,6,8,8,'#2e1f10');r(5,7,6,6,'#e8c050');r(6,8,4,4,'#2e1f10');r(6,3,4,4,'#2e1f10');r(7,4,2,2,c);r(7,4,1,1,'#fff')}
+    else if(ITEMS[id].slot==='boots'){r(4,2,5,9,'#2e1f10');r(5,3,3,7,'#9a6a3a');r(3,10,9,4,'#2e1f10');r(4,11,8,2,'#b8824a');r(5,3,3,1,'#e8d8b0');r(6,6,1,1,c)}
     else{r(3,1,1,5,'#c8a040');r(12,1,1,5,'#c8a040');r(4,5,2,2,'#c8a040');r(10,5,2,2,'#c8a040');r(6,7,4,2,'#c8a040');r(5,9,6,6,'#2e1f10');r(6,10,4,4,c);r(6,10,1,1,'#fff')}}
   else if(K==='weapon'&&ITEMS[id].wtype==='axe'){const c=ITEMS[id].blade||'#c9d2da';for(let t=0;t<10;t++)r(3+t,13-t,2,2,'#6b4423');r(8,2,6,6,'#2e1f10');r(9,3,4,4,c);r(9,3,4,1,'#f4f4f0')}
   else if(K==='weapon'){const c=ITEMS[id].blade||'#c9d2da',w=ITEMS[id].wide?3:2;for(let t=0;t<9;t++)r(5+t,9-t,w,w,c);r(3,10,5,2,'#6b4423');r(2,12,3,3,'#6b4423')}

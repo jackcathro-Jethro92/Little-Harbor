@@ -1,6 +1,6 @@
 // ---------- bag screen ----------
 const POCKETS=[{k:'fish',t:'INGREDIENTS',c:'#d8683c'},{k:'food',t:'CONSUMABLES',c:'#d8a43c'},{k:'mat',t:'MATERIALS',c:'#a8742f'},{k:'gear',t:'GEAR',c:'#4f9a5a'},{k:'letters',t:'LETTERS',c:'#b99a6a'},{k:'equip',t:'EQUIPPED',c:'#4a74c0'}];
-const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet']];
+const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet'],['boots','Boots']];
 const ownedForSlot=sl=>Object.keys(S.bag).some(id=>count(id)&&ITEMS[id]&&slotOf(id)===sl);
 let bp=0,bc=0,bpop=null;
 const describe=id=>{const i=ITEMS[id];return i.kind==='rod'?(i.wait<1?'Bites '+Math.round((1-i.wait)*100)+'% sooner.':'A plain starter rod.'):i.kind==='boat'?(i.price?'Better odds of rare fish.':'Your trusty starter boat.'):i.desc};
