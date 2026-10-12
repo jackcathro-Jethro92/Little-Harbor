@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 98 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 99 placeholder.**
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.
@@ -121,6 +121,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Salty Jo (Pirate camp (Volcano Island))
 - *placeholder:* The sea air is better than the smoke.
+
+### Mysterious Girl (Temple Tower)
+- *placeholder:* [Placeholder] The keys are safe with the old man now.
 
 ### Old Stranger (Temple of the Sea)
 - *placeholder:* [Placeholder] Thank you again, friend.
@@ -328,3 +331,10 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* `q3_murl_wait.a` Murl: [Placeholder] Still no mast timber? Look on Oak Island, the one south of here. A straight log of hardwood. You will know it when you see it.
 - *Jack's* `q3_murl_got.a` Murl: Well done! Here take this gold. But I wrote to my old friend Hale. He's that fella who cutts the timber in the darkwood. He says he had a spare axe you can have. You just gotta go get it and its all yours
 - *placeholder* `q3_hale.a` Hale: [Placeholder] Murl wrote to me. Said you would be along. Here, the old axe. Chop kindly.
+- *Jack's* `q4_grunt1.a` Pirate grunt: You sure the boss is right? I can’t see no key?
+- *Jack's* `q4_grunt2.a` Pirate grunt 2: Just quit your jabbering and keep looking!
+- *Jack's* `q4_dynamite.a` Pirate grunt 2: Fine, I guess it’s dynamite then, isn’t it!
+- *Jack's* `q4_girl1.a` Mysterious Girl: Congatrualations and thanks you.
+- *Jack's* `q4_girl2.a` Mysterious Girl: it unlocks the chamber, along with the other keys from the Air, Water, Earth and Fire temples. It sounds like the pirates already have the Fire key, which means they will probably try to get the others. They have to be stopped. Collect all four keys and take them to our friend at the temple tower, where they will be safe.
+- *Jack's* `q4_old1.a` Old Stranger: Oh Good work! I will keep this safe with the water temple key. I presume you might want to know what's going on here. Well I figured out that the pirate plans to use the keys to raise the seas. They want to drown the world. This is an ancient power. Each temple represents both life and destruction. Each Key opens its opposite. See that if why they attacked the water temple first. But we stopped them just in time. I think they have figured this out though and will no doubt be heading back to the water temple and finish what they started
+- *Jack's* `q4_old2.a` Old Stranger: By collecting all four keys and inserting all four keys into the water temple they would flood this world and rule the ocean as kings. We cant let this happen and i dont think it is by accident that we have met. You, I believe, can stop these pirates and save your home. Take these boots. They will make you swift on your feet. Go back to the sea temple and see if you can get the key from the chamber inside. Then bring it back to me and here I will keep them safe.

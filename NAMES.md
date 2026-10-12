@@ -78,6 +78,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Villager | Village | Villager |
 | Bjorn the Elder | Village | Village elder |
 | Rue | The Darkwood | Sailor |
+| Mysterious Girl | Temple Tower | Spirit of the Earth temple |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |
 | One-Eye Finn | Pirate camp (Volcano Island) | Pirate |

@@ -1,10 +1,12 @@
 // ---------- stats: health, stamina, skill levels and XP ----------
 const STEP_MS={walk:160,sail:90},GLIDE={walk:.085,sail:.14},SWIFT_MS={walk:110,sail:60},SWIFT_GLIDE={walk:.12,sail:.2}; // SWIFT_* is the old normal speed, now what a swiftness potion gives
-const swift=()=>S.buff>Date.now(),stepMs=()=>(swift()?SWIFT_MS:STEP_MS)[sail?'sail':'walk'],glideAmt=()=>(swift()?SWIFT_GLIDE:GLIDE)[sail?'sail':'walk'];
+// Enchanted boots (a Quest 4 reward) speed up walking only, between the normal and the swiftness-potion speed; the potion wins if both apply. (Jack will tune the boots' speed later.)
+const BOOT_MS=135,BOOT_GLIDE=.1,swift=()=>S.buff>Date.now(),boots=()=>!sail&&fx('speed')>0;
+const stepMs=()=>swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sail?'sail':'walk'],glideAmt=()=>swift()?SWIFT_GLIDE[sail?'sail':'walk']:boots()?BOOT_GLIDE:GLIDE[sail?'sail':'walk'];
 // // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
 const MAXHP=50,MAXSTA=100,STAM={walk:.04,sail:.04,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
-const fx=k=>['ring','amulet'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
+const fx=k=>['ring','amulet','boots'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
 const maxHp=()=>MAXHP+4*lvl('combat')+fx('hp'),maxSta=()=>MAXSTA+fx('sta');
 function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q=>q.id===id),b=lvl(id);S.xp[id]=(S.xp[id]||0)+n;const a=lvl(id);
   if(n>=1&&a===b)toast('+'+n+' '+k.n+' XP');
