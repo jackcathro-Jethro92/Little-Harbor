@@ -20,7 +20,8 @@
 <div id="status" style="display:none"></div>
 <div id="wrap"><button id="menubtn" aria-label="Menu">☰</button><canvas id="c" width="176" height="208"></canvas><div id="flash"></div><button id="scene-skip">Skip</button><div id="dlg"><canvas id="dlg-pt" width="48" height="42"></canvas><div id="dlg-main"><span id="dlg-who"></span><div id="dlg-txt"></div><div id="dlg-ch"></div></div><span id="dlg-arrow">▼</span></div><div id="toast"></div></div>
 <div id="msg"></div>
-<div class="row"><button id="deck">Deck</button><button id="sleep">Sleep</button><button id="bagbtn">Bag</button><button id="chbtn">Me</button><button id="skbtn">Skills</button><button id="mapbtn">Map</button></div>
+<div class="row" id="ctx"><button id="deck">Deck</button><button id="sleep">Sleep</button></div>
+<div class="row"><button id="bagbtn">Bag</button><button id="qsbtn">Quests</button><button id="skbtn">Skills</button><button id="mapbtn">Map</button><button id="chbtn">Menu</button></div>
 <div class="pad">
   <div class="dpad">
     <button id="up" aria-label="Move up">▲</button>
@@ -33,7 +34,7 @@
 <div id="craft"><div id="cr-title"></div><div id="cr-list"></div><div id="cr-det"></div><div id="cr-bt"><button id="cr-go">Craft</button><button id="cr-back">Back</button></div></div>
 <div id="menu"><div id="menu-card"><div id="menu-t"></div><div id="menu-o"></div></div></div>
 <div id="mapov"><div id="map-t">MAP</div><canvas id="mc"></canvas><div id="map-h">Only places you have sailed or walked near are shown.</div><button id="map-back">Back</button></div>
-<div id="ch"><div id="ch-title">YOU</div><div id="ch-body"><canvas id="ch-pt" width="96" height="96"></canvas><div id="ch-info"></div><div id="ch-more"></div></div><button id="ch-quests">Quests</button><button id="ch-save">Save game</button><button id="ch-back">Back</button></div>
+<div id="ch"><div id="ch-title">MENU</div><div id="ch-body"><canvas id="ch-pt" width="96" height="96"></canvas><div id="ch-info"></div><div id="ch-more"></div></div><button id="ch-save">Save game</button><button id="ch-load">Load game</button><button id="ch-back">Back</button></div>
 <div id="qs"><div id="qs-title">QUESTS</div><div id="qs-list"></div><button id="qs-back">Back</button></div>
 <div id="letter"><div id="letter-paper"><div id="letter-from"></div><div id="letter-title"></div><div id="letter-body"><div id="letter-text"></div></div><button id="letter-close">Close</button></div></div>
 <div id="battle"><div id="bt-foes"></div><div id="bt-mid"><div id="bt-meBox"><canvas id="bt-me" width="96" height="96"></canvas></div><div id="bt-stats"><div class="bt-bar big"><i id="bt-hp"></i></div><div id="bt-hpn"></div><div id="bt-stan"></div></div></div><div id="bt-msg"></div><div id="bt-menu"></div></div>
