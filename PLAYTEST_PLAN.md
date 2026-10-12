@@ -70,13 +70,13 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 | P17 | Quest 2 is in the quest log before talking with Bjorn: change that trigger | 6 | Planned |
 | P18 | Movement could be slowed further | 6 | **Decided (Jack, 13 Oct):** see "Movement speed" below |
 | P19 | Rename Quest 2 from "Find the Lost Man" to "Find Rue" | 6 | **Decided:** change the quest log name and Jack's story text |
-| P20 | Adjust fish values to bring the value down | 7 | Waiting for numbers (see questions) |
-| P21 | Add a tent to the camp kit that lets you sleep | 7 | Waiting for answers (see questions) |
+| P20 | Adjust fish values to bring the value down | 7 | Decided: halve every fish's sell value |
+| P21 | Add a tent to the camp kit that lets you sleep | 7 | Decided: tent is part of the camp kit, sleeping works like the boat. Still open: where it can be placed |
 | P22 | Rename the first sword from "Sword" to "Old Sword" | 6 | Planned |
 | P23 | The game does not pause in menus: show a notification that you have been attacked while distracted | 6 | **Decided (Jack, 13 Oct):** a notification for now, not a pause |
 | P24 | Centipede respawn might need to be a little slower | 6 | Planned |
 | P25 | The Map screen is too large for a computer screen: the bottom of the map cannot be seen | 6 | **Decided:** make it fit |
-| P26 | Animations for attacks on the combat screen, and for blocks | 8 | Planned |
+| P26 | Animations for attacks on the combat screen, and for blocks | 8 | Decided: swing, enemy hit, damage numbers, hit flash, shield flash on block, and foes that sometimes block |
 
 ## Decisions
 - **Movement speed (P18):** walking and sailing both become slower. **The speed the game has now becomes the speed of the swiftness potion.** The speed for the boots will be designed when the boots are added to the game.
@@ -93,3 +93,8 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 1. **P20 fish values:** by how much? A first suggestion: lower every fish's sell value by about a third (for example a 30-gold fish becomes 20), keeping the rarer fish more valuable than the common ones. Say a number or a feel ("half") and I will set it.
 2. **P21 the tent:** (a) is it part of the existing camp kit, so that placing the camp kit gives you a tent you can sleep in, or a new item? (b) Should sleeping in the tent work like sleeping on the boat (restore health and stamina and start the next day)? (c) Should it be placeable anywhere on land, or only near the camp?
 3. **P26 animations:** which are most important? A suggestion: the foe flashes and recoils when hit, the player lunges forward with the weapon, a slash arc over the foe for sword attacks and a chop arc for axes, a shield glow when blocking, and a stun spin of stars over a stunned foe.
+
+### Jack's answers (Batches 7 and 8)
+- **P20:** Fish values go down by half.
+- **P21:** The tent is part of the camp kit and works like sleeping on the boat. Not answered yet: where it can be placed. My default: anywhere on land, away from buildings.
+- **P26:** All of the animations: the player's swing, enemy hits, damage numbers, a flash when a hit lands, and a shield that flashes in front of the character when blocking. New: opponents can block too, and sometimes do.
