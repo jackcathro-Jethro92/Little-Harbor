@@ -38,7 +38,8 @@ function tmView(v){const body=tmBody();body.innerHTML='';tmNote('');
     if(TEST_STORY&&hasGame())tmButton('Test: jump to a quest',()=>tmView('story'));
     tmText(hasGame()?'Day '+S.day+'  ·  '+S.gold+' gold':'No saved game on this device yet.')}
   else if(v==='story'){tmText('Testing only. Clears the story, sets up the start of the quest you pick and keeps your bag, skills and gold.');
-    STORY_JUMPS.forEach(r=>tmButton(r.name,()=>{storyJump(r.id);tmResume()}));tmButton('Back',()=>tmView('main'))}
+    STORY_JUMPS.forEach(r=>tmButton(r.name,()=>{storyJump(r.id);tmResume()}));
+    tmText('Try a turn-based fight (testing only)','tmh');Object.keys(BATTLES).filter(k=>k.startsWith('test_')).forEach(k=>tmButton('Fight: '+BATTLES[k].foes.map(f=>FOES[f].n).join(', '),()=>{tmResume();startBattle(k)}));tmButton('Back',()=>tmView('main'))}
   else if(v==='new'){tmText('Start a new game? Your current game is kept as a backup first, but you will not see it in the menu.');tmButton('Yes, start a new game',newGame);tmButton('No, go back',()=>tmView('main'))}
   else if(v==='save'){
     tmButton('Save to a file',()=>{download('little-harbor-day'+S.day+'.json',JSON.stringify(saveFileObj()));tmNote('Your save was downloaded. Keep the file safe.')});

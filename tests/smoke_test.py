@@ -370,7 +370,7 @@ def check(b, url):
     ev("setFlag('t_scene_done',0);TRIGGERS.push({id:'t_sc_trg',when:{talk:'Murl'},do:[{scene:'t_scene'},{set:'t_after'}]})"); ev("(()=>{const n=NPC.find(q=>q.n==='Murl');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(300); ev("skipScene()")
     assert ev("flag('t_scene_done')&&flag('t_after')&&SCENE===null"), "a trigger starts a scene and carries on after it"
     # gates (2.5): a test boulder across two grass tiles blocks until its flag is set (by a trigger, or by Use with the needed tool), stays open after a reload, and never walls anyone in
-    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY");
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{n.busy=1})");   # (wandering villagers stand still so none walks onto the test boulder)
     cells = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1&&at(x,y+1)===1&&at(x-1,y)===1)return[x,y]}})()")
     ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36,msg:'A boulder blocks the way.',needs:{eq:'pickaxe'},opens:'You break the boulder.'});applyGates()" % json.dumps(cells))
     assert ev("at(__g[0],__g[1])===36&&at(__g[0]+1,__g[1])===36&&!walkable(__g[0],__g[1])"), "a closed gate blocks"
@@ -440,6 +440,43 @@ def check(b, url):
     ev("draw()"); ev("P.x=P.rx=__e1.x;P.y=P.ry=__e1.y+1;P.f='u';S.hp=50;for(let i=0;i<6&&__e1.alive;i++){S.sta=100;act()}"); assert ev("!__e1.alive&&!flag('t_imps_beaten')&&S.gold===7&&S.bag.sardine===2"), "a kill gives its gold and drops, and the group is not done while one lives"
     ev("P.x=P.rx=__e2.x;P.y=P.ry=__e2.y+1;P.f='u';for(let i=0;i<6&&__e2.alive;i++){S.sta=100;act()}"); assert ev("!__e2.alive&&flag('t_imps_beaten')"), "beating the last of a group fires its trigger"
     ev("enemiesTick()"); assert ev("!ENEMIES.includes(__e1)&&!ENEMIES.includes(__e2)&&ENEMIES.length===1"), "beaten enemies that do not respawn are cleared away"
+    # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
+    ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
+    pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
+    ev("move('u');act();sleep()"); assert ev("P.y===33+OY"), "no walking, using or sleeping during a battle"
+    bclick = lambda name: ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith(%s)).click()" % json.dumps(name))
+    for _ in range(12):
+        if ev("BATTLE===null"): break
+        pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); 
+        if ev("BATTLE!==null"): bclick("Attack")
+        pg.wait_for_timeout(30)
+    pg.wait_for_function("BATTLE===null", timeout=5000)
+    assert ev("window.__r==='won'&&flag('t_won')&&S.gold>=110&&!$('battle').classList.contains('open')&&S.hp>0"), "winning gives gold and runs the win actions"
+    ev("window.__r=null;startBattle('t_win',r=>{window.__r=r});const m=Math.random;Math.random=()=>0;window.__m=m"); pg.wait_for_timeout(50); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
+    assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works"
+    ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    assert ev("window.__r==='lost'&&flag('t_lost')&&sail===true&&S.hp>1&&S.gold===90"), "a knock-out wakes you on the boat with a tenth of your gold gone"
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
+    bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
+    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    assert ev("window.__r==='escaped'&&flag('t_escaped')&&!flag('t_bwon')"), "a boss with flee runs away at low health and the escape actions run"
+    ev("S.hp=50;S.eq.weapon='sword';BATTLES.t_three={foes:['pirate_grunt','pirate_gunner','pirate_grunt']};startBattle('t_three',()=>{})"); pg.wait_for_timeout(50)
+    assert ev("document.querySelectorAll('.bt-foe').length===3"), "up to three foes show"
+    ev("document.querySelectorAll('.bt-foe')[1].click()"); bclick("Attack"); pg.wait_for_timeout(200); assert ev("BATTLE.foes[1].hp<BATTLE.foes[1].max&&BATTLE.foes[0].hp===BATTLE.foes[0].max"), "tapping a foe chooses who you hit"
+    ev("S.hp=20;S.bag.cooked_fish=0;const fd=LIST('food')[0];add(fd,1);window.__fd=fd")
+    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Item')", timeout=5000); bclick("Item"); pg.wait_for_timeout(100)
+    assert ev("[...$('bt-menu').children].some(b=>b.textContent.startsWith(ITEMS[__fd].n))"), "the Item menu lists food and potions"
+    ev("S.hp=20"); bclick(ev("ITEMS[__fd].n")); pg.wait_for_timeout(300); assert ev("S.hp>20||count(__fd)===0"), "using an item heals"
+    ev("BATTLE.over=1;BATTLE.foes.forEach(f=>f.alive=false);bEnd('won')"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    ev("BATTLES.t_trg={foes:['pirate_grunt']};TRIGGERS.push({id:'t_btl',when:{talk:'Odo'},do:[{battle:'t_trg'},{set:'t_after_battle'}]});BATTLE=null;S.hp=50;(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&!flag('t_after_battle')"), "a trigger can start a battle and waits for it"
+    ev("BATTLE.foes[0].hp=1");
+    pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); bclick("Attack"); pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(100)
+    assert ev("flag('t_after_battle')"), "the trigger carries on after the battle"
+    ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
+    assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Fight: Pirate grunt$/.test(b.textContent))"), "the testing menu can start a fight"
+    ev("tmClose()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

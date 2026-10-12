@@ -19,7 +19,7 @@ for(const id in map){const b=$(id);
   ['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>releaseDir(map[id])))}
 $('act').addEventListener('click',act);$('sleep').addEventListener('click',sleep);
 const KEYDIR={arrowup:'u',w:'u',arrowdown:'d',s:'d',arrowleft:'l',a:'l',arrowright:'r',d:'r'};
-addEventListener('keydown',e=>{if(SCENE||document.querySelector('.open'))return;
+addEventListener('keydown',e=>{if(SCENE||BATTLE||document.querySelector('.open'))return;
   const k=e.key.toLowerCase();
   if(KEYDIR[k]){e.preventDefault();if(!e.repeat)pressDir(KEYDIR[k])}else if(k===' '||k==='enter'){e.preventDefault();act()}else if(k==='b'||k==='i'){openBag()}else if(k==='k'){openSkills()}else if(k==='m'){showMap()}});
 addEventListener('keyup',e=>{const d=KEYDIR[e.key.toLowerCase()];if(d)releaseDir(d)});

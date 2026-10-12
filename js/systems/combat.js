@@ -16,7 +16,7 @@ function enemyDie(e){const ty=ENEMY_TYPES[e.t];e.alive=false;e.resp=ty.respawn||
   (ty.drops||[]).forEach(([id,ch,n])=>{if(Math.random()<ch){add(id,n||1);msg+=' Got '+ITEMS[id].n.toLowerCase()+(n>1?' x'+n:'')+'.'}});
   say(msg);ui();if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive))enemyBeaten(e.group)}
 // one tick (about 0.6 s) for every enemy
-function enemiesTick(){
+function enemiesTick(){if(BATTLE)return;
   for(let i=ENEMIES.length-1;i>=0;i--){const e=ENEMIES[i],ty=ENEMY_TYPES[e.t];
     if(!e.alive){if(ty.respawn){if(--e.resp<=0){e.alive=true;e.hp=e.max;e.x=e.hx;e.y=e.hy}}else if(e!==G&&!e.keep)ENEMIES.splice(i,1);continue}
     const pz=e.pois>performance.now();if(pz&&Math.random()<.4)continue;

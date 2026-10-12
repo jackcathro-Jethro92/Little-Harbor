@@ -1,6 +1,6 @@
 // ---------- actions: the Use button and sleeping ----------
 function act(){
-  if(dlgActive())return dlgAdvance();if(SCENE)return;
+  if(dlgActive())return dlgAdvance();if(SCENE||BATTLE)return;
   if(placing)return placeItem(placing);
   if(fs===1)return say('Too early. Wait for the bite.');
   if(fs===2)return hook();
@@ -47,7 +47,7 @@ function act(){
   }
 }
 function sleep(){
-  if(SCENE)return;
+  if(SCENE||BATTLE)return;
   const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';if(!sail&&!inRoom(P.x,P.y)&&!inQ)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));if(ev2)toast('Pirates have arrived!',3200);ui();save();setTimeout(()=>f.style.opacity=0,700);
