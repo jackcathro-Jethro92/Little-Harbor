@@ -453,7 +453,7 @@ def check(b, url):
             pg.wait_for_timeout(20)
         pg.wait_for_function("BATTLE===null", timeout=8000)
     # creatures (3.1 and Jack's note P6): they open the turn-based battle when they touch the player (they reach you, you walk into them, or you face them and press Use); a win gives the rewards and takes them off the map, running leaves them waiting
-    ev("BATTLE_FAST=true;sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon='sword';add('sword');ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';window.__xp=S.xp.combat||0;act()"); pg.wait_for_timeout(100)
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon='sword';add('sword');ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';window.__xp=S.xp.combat||0;act()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes.length===1&&BATTLE.foes[0].t.n==='Spirit'&&BATTLE.foes[0].t.art==='ghost'&&$('battle').classList.contains('open')"), "facing the spirit and pressing Use opens the battle"
     fight_out(); assert ev("!G.alive&&G.resp>=36&&G.resp<=40&&(S.xp.combat||0)>=__xp+20"), "beating it takes it off the map with a respawn count, and gives its xp"
     ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning creature is back at home each morning"
@@ -471,7 +471,7 @@ def check(b, url):
     assert ev("!__e2.alive&&flag('t_imps_beaten')"), "beating the last of a group fires its trigger"
     ev("enemiesTick()"); assert ev("!ENEMIES.includes(__e1)&&!ENEMIES.includes(__e2)&&ENEMIES.length===1"), "beaten creatures that do not respawn are cleared away"
     # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
-    ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
     pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
     ev("move('u');act();sleep()"); assert ev("P.y===33+OY"), "no walking, using or sleeping during a battle"
@@ -487,6 +487,16 @@ def check(b, url):
     assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works"
     ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='lost'&&flag('t_lost')&&sail===true&&S.hp>1&&S.gold===90"), "a knock-out wakes you on the boat with a tenth of your gold gone"
+    # Batch 8 animations: a hit shows a slash, a flash and a number; a foe that blocks shows a shield and takes less; blocking yourself shows a shield; walking costs less stamina
+    ev("window.__r=null;S.hp=50;S.sta=100;S.eq.weapon='sword';BATTLE_BLOCKS=true;FOES.t_blocker={n:'Blocker',hp:999,hit:[1,1],xp:0,block:1,look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}};BATTLES.t_blk={foes:['t_blocker']};startBattle('t_blk',r=>{window.__r=r})"); pg.wait_for_timeout(50)
+    ev(ATTACK_JS); pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>q==='shield')&&BATTLE.fx.some(q=>q.startsWith('dmg small'))&&BATTLE.fx.includes('slash')")
+    assert ev("BATTLE.log.some(l=>/blocks!/.test(l))"), "a foe that blocks says so"
+    ev("BATTLE.foes[0].hp=999;BATTLE.fx=[]"); pg.wait_for_function("BATTLE.picking===true"); bclick("Block")
+    pg.wait_for_function("BATTLE.fx.filter(q=>q==='shield').length>=1&&BATTLE.fx.some(q=>q.startsWith('dmg'))")
+    ev("BATTLE_BLOCKS=false;BATTLES.t_blk.foes=['pirate_grunt'];BATTLE.foes[0].hp=0;BATTLE.foes[0].alive=false"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
+    ev("BATTLE_BLOCKS=false;window.__r=null;startBattle('t_win',()=>{})"); pg.wait_for_timeout(50); ev(ATTACK_JS)
+    pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
+    assert ev("STAM.walk===.04&&STAM.sail===.04"), "walking and sailing cost half the stamina"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
     bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
@@ -508,7 +518,7 @@ def check(b, url):
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Fight: Pirate grunt$/.test(b.textContent))"), "the testing menu can start a fight"
     ev("tmClose()")
     # encounters (3.3): an action starts a group of pirates standing in the world; each is fought through the battle screen; the ones beaten stay beaten through a reload; the last one sets the done flag, runs the win actions and fires {beaten}
-    ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');NPC.forEach(n=>{n.busy=1});ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});startEncounter('t_enc')")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');NPC.forEach(n=>{n.busy=1});ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});startEncounter('t_enc')")
     assert ev("encFigures('t_enc').length===2&&flag('enc_t_enc_on')&&!flag('enc_t_enc_done')&&encFigures('t_enc').every(n=>WK.includes(at(n.x,n.y)))"), "starting an encounter puts its foes in the world"
     ev("(()=>{const n=encFigures('t_enc')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes.length===1"), "facing a foe and pressing Use starts a fight with it"
@@ -520,7 +530,7 @@ def check(b, url):
     pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("encFigures('t_enc').length===1&&encDown('t_enc').length===1&&!flag('enc_t_enc_done')"), "a beaten foe is gone and the others wait"
     ev("S.hp=50;save()"); pg.reload(); pg.wait_for_timeout(500)
-    ev("ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});BATTLE_FAST=true;applyEncounters()")
+    ev("ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});BATTLE_FAST=true;BATTLE_BLOCKS=false;applyEncounters()")
     assert ev("encFigures('t_enc').length===1&&encFigures('t_enc')[0].enc.i===1"), "after a reload the beaten one stays beaten and the other is back"
     ev("S.hp=50;S.eq.weapon='sword';add('sword');NPC.forEach(n=>{n.busy=1});(()=>{const n=encFigures('t_enc')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
     for _ in range(14):
@@ -570,7 +580,7 @@ def check(b, url):
     ev("storyJump('q1')"); assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&flag('festival_done')&&P.x===156&&P.y===125"), "the testing menu can jump to the start of Quest 1"
     ev("storyReset();setFlag('festival_done',0)")
     # Quest 1 (4.1): the courtyard fires the pirate encounter; the three are fought one by one; the last one's flight and the stranger's scene give the compass and finish the quest; the village news follows; the compass draws its arrow
-    ev("BATTLE_FAST=true;sail=false;storyReset();ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});NPC.forEach(n=>{n.busy=1});S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');S.bag.grandfather_compass=0;storyJump('q1')")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;storyReset();ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});NPC.forEach(n=>{n.busy=1});S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');S.bag.grandfather_compass=0;storyJump('q1')")
     assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&questGoal()[0]===283&&count('grandfather_compass')===0"), "Quest 1 begins with the letter, a goal and no compass yet"
     assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sited taking of fire island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
     assert ev("encFigures('q1_pirates').length===0&&S.story.step===0"), "no pirates before the player lands"
@@ -603,7 +613,7 @@ def check(b, url):
     def talk(name):
         ev("(()=>{const n=NPC.find(q=>q.n===%s&&!q.hidden);sail=false;const f=[[0,1,'u'],[0,-1,'d'],[1,0,'l'],[-1,0,'r']].find(([a,b])=>{const x=n.x+a,y=n.y+b;return WK.includes(at(x,y))&&!npcAt(x,y)});P.x=P.rx=n.x+f[0];P.y=P.ry=n.y+f[1];P.f=f[2];act()})()" % json.dumps(name))
         ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
-    ev("BATTLE_FAST=true;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
     assert ev("S.story.q==='q2'&&S.story.step===0&&Math.abs(questGoal()[0]-155)+Math.abs(questGoal()[1]-104)<=2&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
     assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. Im guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack's six lines are in word for word"
     ev("setFlag('q2_got_sword',0);setFlag('q2_got_pickaxe',0);openStore('rod')"); assert ev("!/Sword|Pickaxe/.test($('items').textContent)"), "Bram does not sell the sword or pickaxe yet"
@@ -638,7 +648,7 @@ def check(b, url):
         ev("S.xp={};%s;S.eq.weapon=%s;S.sta=100;S.hp=50;FOES.t_dummy={n:'Dummy',hp:999,hit:[1,1],xp:0,look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}};BATTLES.t_dummy={foes:['t_dummy']};startBattle('t_dummy')" % (("S.xp['%s']=%d" % (xp_key, xp)) if xp_key else "0", json.dumps(weapon)))
         pg.wait_for_timeout(50); menu_ready(); ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()"); out = menu(); return out
     def end_battle(): ev("clearInterval(BATTLE.anim);$('battle').classList.remove('open');BATTLE=null")
-    ev("BATTLE_FAST=true;sail=false;S.bag.sword=1;S.bag.hand_axe=1;S.bag.wooden_sword=1;S.coat=0;NPC.forEach(n=>{n.busy=1})")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;S.bag.sword=1;S.bag.hand_axe=1;S.bag.wooden_sword=1;S.coat=0;NPC.forEach(n=>{n.busy=1})")
     assert attack_list('sword') == ["Slash (4)", "Back"]; end_battle()
     assert attack_list('wooden_sword') == ["Strike (4)", "Bash (4)", "Back"]; end_battle()
     assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
@@ -701,7 +711,7 @@ def check(b, url):
     d0 = ev("S.day"); ev("S.hp=1;sleep()"); assert ev("S.day")==d0+1 and ev("S.hp===maxHp()&&$('msg').textContent.includes('tent')"), "sleeping in the tent starts a new day and heals"
     ev("S.placed=S.placed.filter(o=>o.id!=='camp_kit');ui()"); assert ev("!atTent()&&!inRoom(P.x,P.y)?$('sleep').style.visibility==='hidden':true"), "no tent, no sleeping outdoors"
     assert ev("ITEMS.sword.n==='Old Sword'&&ENEMY_TYPES.centipede.respawn>=240"), "Old Sword, slower centipede respawn"
-    ev("BATTLE_FAST=true;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
     assert ev("$('bag').classList.contains('open')&&canBeAmbushed()"), "a creature may ambush over the bag"
     ev("enemiesTick()"); pg.wait_for_function("BATTLE!==null&&BATTLE.log&&BATTLE.log.includes('You were attacked while distracted!')")
     assert ev("!$('bag').classList.contains('open')&&$('bt-sta').style.width!==''&&$('bt-sta').style.width!=='0%'"), "the bag closed, the notice showed, the stamina bar is drawn"
