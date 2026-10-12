@@ -100,3 +100,6 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 - **P26:** All of the animations: the player's swing, enemy hits, damage numbers, a flash when a hit lands, and a shield that flashes in front of the character when blocking. New: opponents can block too, and sometimes do.
 - **P26 (added):** Characters in a battle always sway slightly from side to side, even when idle.
 - **P27 (added):** Walking and sailing use less stamina: 0.04 a step (was 0.08). Jack agreed to the number.
+
+# Playtest #3 (Jack plays Quests 1 to 5, started 13 October)
+Building is paused until Jack's notes arrive. When they do, add them here the same way as the earlier rounds: a table of notes (P28 onwards), Jack's decisions, the batches, and any questions. After those batches are merged, Quest 6 (the Sky temple, roadmap 5.6) is the next story step.
