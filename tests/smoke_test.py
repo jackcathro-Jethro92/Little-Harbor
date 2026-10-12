@@ -189,7 +189,7 @@ def check(b, url):
             "let far=0;for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(t>=27&&t<=30&&!s.has(y*MW+x))far++}"
             "return {c,out:out.length,far,total:Object.values(c).reduce((a,b)=>a+b,0)}})()")
     assert fg["out"] == 0 and fg["far"] == 0 and 60 <= fg["total"] <= 100 and all(fg["c"].get(str(k), 0) >= 10 for k in (27, 28, 29, 30)), fg
-    ev("S.eq.knife='knife';S.bag.knife=1;S.sta=100")
+    ev("S.eq.knife='knife';S.bag.knife=1;S.sta=100;ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}})")   # (a Darkwood centipede wandering onto the mushroom would be struck instead of the mushroom picked; the centipede check wakes them later)
     pick = ev("(()=>{let f=null;for(let y=FZ.y0;y<=FZ.y1&&!f;y++)for(let x=FZ.x0;x<=FZ.x1;x++)if(at(x,y)===28){f=[x,y];break}sail=false;P.x=P.rx=f[0];P.y=P.ry=f[1]+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=f[1]-1;P.f='d'}else P.f='u';S.bag.red_cap=0;act();return [S.bag.red_cap>=1,at(f[0],f[1])===31]})()")
     assert pick == [True, True], "a red cap can be picked in the Darkwood"
     pgf, errf = load(b, url, dict(SAVE, cut={str(104 * 320 + 142): {"m": 28, "d": 1}}))
@@ -508,6 +508,7 @@ def check(b, url):
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Encounter: Three pirates, one by one$/.test(b.textContent))"), "the testing menu can start an encounter"
     ev("tmClose()")
     # the giant centipede (3.2): four live in the Darkwood on walkable ground, it draws facing every way, bites, drops its fang and gold, and is back each morning
+    ev("ENEMIES.forEach(e=>{if(e.t==='centipede')e.resp=0});enemiesMorning()")
     assert ev("(()=>{const c=ENEMIES.filter(e=>e.t==='centipede');return c.length>=4&&c.every(e=>e.y>=FY&&WK.includes(at(e.x,e.y))&&e.alive)&&ENEMY_TYPES.centipede.art==='centipede'})()"), "four centipedes wait in the Darkwood on walkable ground"
     assert ev("(()=>{let bad=0;sail=false;const c=ENEMIES.find(e=>e.t==='centipede');P.x=P.rx=c.x;P.y=P.ry=c.y+3;for(const f of'lrud'){c.f=f;try{draw()}catch(e){bad++}}c.hp=5;try{draw()}catch(e){bad++}c.hp=c.max;c.pois=performance.now()+2000;try{draw()}catch(e){bad++}c.pois=0;return bad===0})()"), "it draws in every direction, hurt and poisoned"
     ev("(()=>{const c=ENEMIES.find(e=>e.t==='centipede');window.__c=c;S.hp=50;S.gold=0;S.bag.centipede_fang=0;S.sta=100;S.eq.weapon='sword';add('sword');P.x=P.rx=c.x;P.y=P.ry=c.y+1;P.f='u';c.cd=0;window.__r0=Math.random;Math.random=()=>0;enemiesTick();Math.random=__r0})()")
