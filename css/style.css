@@ -151,19 +151,26 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #letter-body{overflow-y:auto;min-height:60px}#letter-text p{margin:0 0 10px;font-size:16px;line-height:22px}
 #letter-close{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:17px;padding:8px}
 
-#battle{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(#8ec0e8 0 38%,#7fa84f 38% 100%);z-index:9;font-family:'Pixelify Sans',ui-monospace,monospace;color:#2a1a0a}
+#battle{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));background:#4a7a3a;z-index:9;font-family:'Pixelify Sans',ui-monospace,monospace;color:#2a1a0a}
 #battle.open{display:flex}
-#bt-foes{display:flex;justify-content:center;gap:10px;min-height:150px;flex:1;align-items:center}
-.bt-foe{width:104px;text-align:center;cursor:pointer;padding:4px;border:3px solid transparent;border-radius:8px}
-.bt-foe.sel{border-color:#fff6dc;background:rgba(255,246,220,.25)}.bt-foe.gone{visibility:hidden}
-.bt-foe canvas{width:96px;height:96px;image-rendering:pixelated}.bt-nm{font-size:12px;font-weight:700;text-shadow:1px 1px 0 #fff6dc}
-.bt-bar{height:9px;background:#3d2511;border-radius:5px;padding:1px;margin-top:3px}.bt-bar i{display:block;height:100%;background:#58a63b;border-radius:4px;transition:width .3s}
+#bt-arena{position:relative;flex:1;min-height:300px;border:4px solid #3d2511;border-radius:8px;overflow:hidden;background:#6aa84a}
+#bt-bg{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+#bt-foes{position:absolute;left:0;right:0;top:30%;height:36%;display:flex;justify-content:center;align-items:flex-end;gap:4px}
+.bt-foe{position:relative;text-align:center;cursor:pointer;padding:0 2px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.bt-foe.gone{visibility:hidden}
+.bt-foe canvas{width:96px;height:96px;image-rendering:pixelated;position:relative;z-index:1}.bt-foe canvas.bt-big{width:auto;height:auto;max-width:150px}
+.bt-shadow{position:absolute;bottom:-4px;left:50%;width:74px;height:14px;margin-left:-37px;background:rgba(20,50,10,.38);border-radius:50%}
+#bt-meBox .bt-shadow{width:96px;margin-left:-48px;bottom:-5px}
+.bt-tag{position:absolute;top:-34px;left:50%;transform:translateX(-50%);min-width:84px;background:rgba(243,217,164,.92);border:2px solid #3d2511;border-radius:6px;padding:2px 6px;font-size:12px;font-weight:700;white-space:nowrap;z-index:2}
+.bt-bar{height:8px;background:#3d2511;border-radius:5px;padding:1px;margin-top:2px}.bt-bar i{display:block;height:100%;background:#58a63b;border-radius:4px;transition:width .3s}
 .bt-bar.big{height:12px;margin-top:0}
-#bt-mid{display:flex;gap:14px;align-items:flex-end;padding:0 8px}
-#bt-meBox canvas{width:128px;height:128px;image-rendering:pixelated}
-#bt-stats{flex:1;background:#f3d9a4;border:4px solid #3d2511;border-radius:8px;padding:8px;font-size:15px;font-weight:700}
+.bt-mark{display:none;position:absolute;top:-52px;left:50%;margin-left:-7px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:11px solid #f6d070;filter:drop-shadow(0 1px 0 #3d2511);animation:btBob .7s ease-in-out infinite alternate;z-index:3}
+.bt-foe.sel .bt-mark{display:block}
+@keyframes btBob{from{transform:translateY(0)}to{transform:translateY(5px)}}
+#bt-meBox{position:absolute;left:14px;bottom:16px}#bt-meBox canvas{width:120px;height:120px;image-rendering:pixelated;position:relative}
+#bt-stats{position:absolute;right:10px;bottom:14px;width:46%;background:rgba(243,217,164,.95);border:4px solid #3d2511;border-radius:8px;padding:8px;font-size:15px;font-weight:700}
 #bt-hpn,#bt-stan{margin-top:4px}
-#bt-msg{flex:0 0 auto;min-height:92px;background:#f3d9a4;border:4px solid #3d2511;border-radius:8px;padding:10px;font-size:17px;line-height:1.35}
+#bt-msg{flex:0 0 auto;min-height:84px;background:#f3d9a4;border:4px solid #3d2511;border-radius:8px;padding:10px;font-size:17px;line-height:1.35}
 #bt-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #bt-menu button{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:12px 6px;font-family:inherit}
 #bt-menu button:focus{outline:3px solid #d8683c}#bt-menu button:disabled{opacity:.5}
