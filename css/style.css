@@ -176,3 +176,8 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #bt-menu button:focus{outline:3px solid #d8683c}#bt-menu button:disabled{opacity:.5}
 @keyframes btHit{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .hit{animation:btHit .3s}
+
+#cine{position:absolute;inset:0;pointer-events:none;z-index:2}
+#cine i{position:absolute;left:0;right:0;height:0;background:#000;transition:height 1.2s ease}
+#cine i:first-child{top:0}#cine i:last-child{bottom:0}
+#cine.on i{height:13%}
