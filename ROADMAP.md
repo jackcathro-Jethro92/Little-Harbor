@@ -61,7 +61,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 | 2.9b Room list | **Begun:** the ships' nine rooms come from a table (`ROOMTAB`); the ten older rooms are still made by hand and need moving into it (before 2.10) |
 | 2.10 Interior loader | Not started (after the playtest) |
 | 2.11 Story test switches | **Done:** `TEST_STORY` and `STORY_JUMPS` (`js/systems/storytest.js`); the rows for Quests 1 to 10 are empty until each quest is built |
-| 2.12 Cinematics | **Begun:** the opening title cinematic is done; the festival opening scene, the village attack and the rising island are not built |
+| 2.12 Cinematics | **Begun:** the opening title cinematic and the sea festival cinematic (12 Oct: film bars, a moving time of day, a walking crowd, speech that closes itself, floating lanterns; `js/systems/cinema.js`) are done; the village attack and the rising island are not built |
 | **Phase 3: combat and enemies** | |
 | 3.1 Enemy table | **Done:** `ENEMY_TYPES` and `ENEMIES` (`js/data/enemies.js`, `js/systems/combat.js`); the spirit moved onto it |
 | 3.2 Story enemies | **Partly:** the forest beast is done (the giant centipede, four in the Darkwood, drops a fang); the pirate grunt, gunner and captain exist as turn-based fighters (`FOES`). Still to do: temple guardians and ghosts for the Tower chamber (with the Tower, after the playtest) |

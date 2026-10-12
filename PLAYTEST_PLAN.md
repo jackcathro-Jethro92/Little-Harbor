@@ -11,7 +11,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 ## The notes
 | Id | Note | Batch | Status |
 | --- | --- | --- | --- |
-| P1 | Create a full cinematic for the sea festival | 5 | **Decided (Jack, 12 Oct):** see "The festival cinematic" below |
+| P1 | Create a full cinematic for the sea festival | 5 | **Built in Batch 5** (the seven-beat sequence Jack approved: silent, about 51 seconds, film bars, tap to skip, placeholder speech). Decided (Jack, 12 Oct): see "The festival cinematic" below |
 | P2 | Slow the seagull down as it flies in and out | 1 | **Built** (flight takes twice as long, flaps slower) |
 | P3 | Slow the movement speed of walking and sailing | 1 | **Built** (walking 70 to 110 ms a step, sailing 35 to 60 ms, and the slide to the next tile is slower too) |
 | P4 | Pirates trigger when you land on the island, so they do not appear out of nowhere | 3 | **Built** (the first step on foot on the island puts the pirates at their posts, so they are standing there as the player walks up) |
@@ -33,7 +33,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 - **Batch 3: Quest 1 and the village (built).** P4, P8, P15: the pirates stand on the island, visible from the landing (five of them: three in the courtyard and two on the pathway to the temple), and the big house for Bjorn at the village's north with Bjorn outside its door (Bjorn then stays there in every quest).
 - **Batch 4a: the field and every fight turn-based (built).** P9 and P6. **Batch 4b: the weapon attacks (P7), built.**
 - **Batch 4: battles (in two parts).** P9 (a green field with the foes standing on it), P6, P7. This is the biggest design change, so it waits for the answers below.
-- **Batch 5: the festival cinematic.** P1. Built with the cinematic parts already used for the title screen, once the script is agreed.
+- **Batch 5: the festival cinematic (built).** P1. Built with the cinematic parts already used for the title screen, once the script is agreed.
 
 ## Questions for Jack
 1. ~~**P6 "Combat turn-based":**~~ **Answered:** everything is turn-based; the spirit and the centipede open the battle screen when touched.

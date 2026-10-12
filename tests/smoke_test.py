@@ -551,12 +551,13 @@ def check(b, url):
     # the opening (4.0): a new game plays the festival scene (decorations up, Murl's lines, Skip works), the morning after takes the decorations down, and the first boarding of the boat in the village brings the stranger's letter and starts Quest 1
     ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0});sail=false;P.x=P.rx=156;P.y=P.ry=124;ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}})")
     assert ev("!flag('festival_on')&&!flag('festival_done')&&FESTIVAL_ON===false"), "no festival before a new game starts"
-    ev("fireTriggers('start')"); pg.wait_for_timeout(200)
-    assert ev("SCENE!==null&&flag('festival_on')&&FESTIVAL_ON===true"), "starting a new game plays the festival scene with the decorations up"
-    ev("(()=>{try{P.x=P.rx=156;draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "the decorations draw"
-    pg.wait_for_function("dlgActive()&&/Sea Festival/.test($('dlg-txt').textContent)", timeout=15000); assert ev("$('dlg-who').textContent==='Murl'"), "Murl welcomes everyone"
-    ev("skipScene()"); pg.wait_for_timeout(100)
-    assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&!dlgActive()&&P.x===160&&P.y===125&&S.eq.boat==='rowboat'"), "Skip ends with the festival done, the player by Murl and the rowboat equipped"
+    ev("window.__home=NPC.map(n=>[n.n,n.x,n.y]);fireTriggers('start')"); pg.wait_for_timeout(1500)
+    assert ev("SCENE!==null&&SCENE.cine===true&&flag('festival_on')&&FESTIVAL_ON===true"), "starting a new game plays the festival cinematic with the decorations switched on"
+    assert ev("$('cine').classList.contains('on')&&SCENE_LIGHT!==null&&SCENE_LIGHT<.9&&FESTIVAL_BUILD===0&&P.x===156&&P.y===108"), "film bars slide in, it starts in the dark before sunrise, no decorations yet, and the player is out of sight"
+    ev("(()=>{try{draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "the cinematic frames draw"
+    ev("$('wrap').click()"); pg.wait_for_timeout(150)   # a tap anywhere skips a cinematic
+    assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&!$('cine').classList.contains('on')&&!dlgActive()&&P.x===156&&P.y===126&&S.eq.boat==='rowboat'"), "a tap ends it with the festival done, the decorations up, normal light, the bars gone and the player at the pier with the rowboat"
+    assert ev("__home.filter(([n])=>FEST_CROWD.includes(n)||n==='Murl').every(([n,x,y])=>{const q=NPC.find(p=>p.n===n);return Math.abs(q.x-x)+Math.abs(q.y-y)<=2})"), "everyone the cinematic moved is back where they were"
     ev("fireTriggers('start')"); assert ev("SCENE===null"), "the festival plays once"
     assert ev("!flag('letter1_read')&&S.story.q===null"), "no letter until the boat"
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
@@ -675,6 +676,15 @@ def check(b, url):
     ev("openSmith('buy')"); assert ev("/Hand axe/.test($('items').textContent)"), "Garrick sells the hand axe"; ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     ev("openSkills()"); assert ev("/Sword/.test($('sk-list').textContent)&&/Axe/.test($('sk-list').textContent)&&/Quick Strike \\(level 3\\)/.test($('sk-list').textContent)"), "the Skills screen shows the Sword and Axe skills and their attacks"; ev("closeSkills()")
     ev("S.xp={};S.eq.weapon='wooden_sword';BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
+    # cinematic steps (2.12): film bars, a moving time of day, decorations rising, a crowd walking together, speech that closes by itself, cheering, floating lanterns; everyone is put back at the end
+    ev("storyReset();NPC.forEach(n=>{n.busy=0});sail=false;DLG.t_cin={start:'a',nodes:{a:{who:'Murl',text:'A short test speech.'}}};window.__pos=NPC.filter(n=>n.n==='Odo'||n.n==='Bram').map(n=>[n.n,n.x,n.y]);window.__mx=[];SCENES.t_cinema=[{bars:'on'},{build:[0,1,300]},{light:[.78,.9,300]},{walks:[['Odo',NPC.find(n=>n.n==='Odo').x+2,NPC.find(n=>n.n==='Odo').y,60],['Bram',NPC.find(n=>n.n==='Bram').x-2,NPC.find(n=>n.n==='Bram').y,60]]},{crowd:'face'},{speak:'t_cin',ms:300},{cheer:300},{lanterns:600},{wait:200}];SCENES.t_cinema.cine=true;window.__d=0;runScene('t_cinema',()=>{window.__d=1})")
+    pg.wait_for_timeout(120); assert ev("$('cine').classList.contains('on')&&SCENE.cine&&FESTIVAL_BUILD<1&&SCENE_LIGHT!==null&&SCENE_LIGHT>=.78"), "the bars, the rising decorations and the moving light start"
+    pg.wait_for_function("dlgActive()&&$('dlg-txt').textContent.length>0", timeout=8000); assert ev("$('dlg-who').textContent==='Murl'&&NPC.find(n=>n.n==='Odo').x===__pos[0][1]+2&&NPC.find(n=>n.n==='Bram').x===__pos[1][1]-2"), "the crowd walked together before the speech"
+    pg.wait_for_function("!dlgActive()", timeout=8000); assert ev("SCENE!==null||window.__d===1"), "the speech closes by itself"
+    ev("window.__lan=FLOAT_START>0&&CHEER_UNTIL>0")
+    pg.wait_for_function("window.__d===1", timeout=8000)
+    assert ev("SCENE===null&&window.__lan===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&FLOAT_START===0&&CHEER_UNTIL===0&&!$('cine').classList.contains('on')&&NPC.find(n=>n.n==='Odo').x===__pos[0][1]&&NPC.find(n=>n.n==='Odo').y===__pos[0][2]&&NPC.find(n=>n.n==='Bram').x===__pos[1][1]"), "when it ends the lanterns, cheering and light are back to normal, the bars slide out and the people are back in place"
+    ev("storyReset()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

@@ -14,7 +14,7 @@ const SCENES={},SCSTEP={};   // SCSTEP: extra step kinds added by other files (t
 let SCENE=null,SCENECAM=null;
 const scActor=n=>n==='You'?P:NPC.find(q=>q.n===n);
 function scEnd(){const s=SCENE;if(!s)return;SCENE=null;SCENECAM=null;clearInterval(s.shakeT);GULL=null;$('c').style.transform='';const fl=$('flash');fl.style.transitionDuration='';fl.style.opacity=0;
-  document.body.classList.remove('scene');NPC.forEach(n=>{n.busy=0});if(s.onEnd)s.onEnd()}
+  document.body.classList.remove('scene');NPC.forEach(n=>{n.busy=0});if(typeof cineCleanup==='function')cineCleanup(s);if(s.onEnd)s.onEnd()}
 // a step that takes time registers `hold`: finish() puts the end state in place and goes on; skipping calls it
 function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd();const st=s.steps[s.i++];let done=false;
   const go=()=>{if(done)return;done=true;s.hold=null;scNext()};const hold=fin=>{s.hold={finish:()=>{fin();go()}}};const fast=s.fast;
@@ -39,10 +39,14 @@ function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd
   else if(st.shake!==undefined){if(fast)return go();const c=$('c'),t0=performance.now();clearInterval(s.shakeT);
     s.shakeT=setInterval(()=>{const k=(performance.now()-t0)/st.shake;if(k>=1){clearInterval(s.shakeT);c.style.transform='';return}c.style.transform='translate('+((Math.random()*6-3)*(1-k)).toFixed(1)+'px,'+((Math.random()*6-3)*(1-k)).toFixed(1)+'px)'},40);
     const t=setTimeout(go,st.shake);hold(()=>{clearTimeout(t);clearInterval(s.shakeT);c.style.transform=''})}
-  else if(Object.keys(st).some(q=>SCSTEP[q])){const k=Object.keys(st).find(q=>SCSTEP[q]);SCSTEP[k](st[k],{go,hold,fast,s})}
+  else if(Object.keys(st).some(q=>SCSTEP[q])){const k=Object.keys(st).find(q=>SCSTEP[q]);SCSTEP[k](st[k],{go,hold,fast,s,st})}
   else{const k=Object.keys(st).find(q=>TACT[q]);if(k)TACT[k](st[k]);go()}}
+// (a scene array with .cine=true is a cinematic, js/systems/cinema.js: film bars, tap anywhere to skip, and everyone is put back where they were at the end)
 function runScene(id,onEnd){const steps=Array.isArray(id)?id:SCENES[id];if(!steps||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
-  SCENE={id:Array.isArray(id)?'(list)':id,steps,i:0,fast:false,hold:null,onEnd,shakeT:null};document.body.classList.add('scene');scNext();return true}
+  SCENE={id:Array.isArray(id)?'(list)':id,steps,i:0,fast:false,hold:null,onEnd,shakeT:null,cine:!!steps.cine,snap:steps.cine?NPC.map(n=>[n,n.x,n.y,n.f]):null};document.body.classList.add('scene');scNext();return true}
 function skipScene(){const s=SCENE;if(!s||s.fast)return;s.fast=true;if(s.hold){s.hold.finish()}else scNext()}
 $('scene-skip').onclick=skipScene;
 addEventListener('keydown',e=>{if(!SCENE||dlgActive()||$('letter').classList.contains('open'))return;e.stopImmediatePropagation();e.preventDefault();if(e.key==='Escape')skipScene()},true);   // (while a box is open, js/ui/dialogue.js handles Space, Enter and Escape itself)
+
+// a tap anywhere on the picture skips a cinematic (the Skip button and Escape work in every scene)
+$('wrap').addEventListener('click',e=>{if(SCENE&&SCENE.cine){e.stopPropagation();e.preventDefault();skipScene()}},true);
