@@ -29,7 +29,7 @@ SCENES.q1_aftermath=[
  {say:'q1_stranger'},
  {give:{grandfather_compass:1}},{toast:"You got Grandfather's compass!"},{wait:500},
  {walk:['Old Stranger',283,31,260]},{set:'q1_stranger_gone'},
- {set:'q1_done'},{set:'has_compass'},{set:'pirate_base_known'},{set:'pirates_called'},{done:'q1'},
+ {set:'q1_done'},{set:'has_compass'},{set:'pirate_base_known'},{set:'pirates_called'},{done:'q1'},{quest:['q2',0]},
  {msg:'The compass will show you the way. A small arrow points to your quest.'}];
 SCENES.q1_village=[
  {set:'q1_villager_here'},{tp:['Villager',156,120]},{walk:['You',156,126,150]},{face:['You','u']},{walk:['Villager',156,125,130]},{face:['Villager','d']},

@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 96 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 98 placeholder.**
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.
@@ -130,12 +130,18 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *original:* Thirty winters I have cut timber here. Something is stirring in the deep woods.
 - *original:* Mind the mushrooms. Some will cure you and some will kill you.
 
+### Rue (The Darkwood)
+- *placeholder:* [Placeholder] Good on the ropes and fast in a fight, that is me.
+
 ### Wren (The Darkwood)
 - *original:* I forage here for the alchemists. Dead ends hide the best finds.
 - *original:* Tall grass hides hornets. Do not say I did not warn you.
 
 ### Aiko (Village)
 - *original:* I keep meaning to learn to fish.
+
+### Bjorn the Elder (Village)
+- *placeholder:* [Placeholder] The harbor looks after those who look after it.
 
 ### Daichi (Village)
 - *original:* Busy morning, is it not?
@@ -314,3 +320,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* `q1_stranger.a` Old Stranger: [Placeholder] ...Is it safe? Have they gone?
 - *Jack's* `q1_stranger.b` Old Stranger: Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough
 - *Jack's* `q1_villager.a` Villager: Have you heard! Pirates have been sited taking of fire island and setting up some kind of camp! Id steer clear of those waters if i was you. They look mean alright. You should go talk to Bjorn. I think i is looking for you.
+- *Jack's* `q2_bjorn1.a` Bjorn the Elder: Ahh! Thanks for coming to see me. Im guessing you heard. Well look, I need your help. I have sent Rue to the mainland to get weapons and supplies for the village. If those Pirates show up here we don't want to be defenseless. But she should have been back by now. I need to go speak with Garrick about this and see if you can find Rue. Hurry on now.
+- *Jack's* `q2_garrick1.a` Garrick: I haven't seen Rue today. But i heard someone speaking about a ship that went down a little north of the forest. Why don't you go have a look up north. Don’t go by ship, though a storm is blowing through that ways. If you go through the forest, you’ll have better luck. But be careful, foul beasties lurk in that wood. Take this and stay safe
+- *Jack's* `q2_rue1.a` Rue: Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh
+- *Jack's* `q2_garrick2.a` Garrick: Impressive work lad. Listen, you seem to be able to handle yourself pretty well. I need materials for my work. iron , copper, tim and such. How about we make a deal. You take this pick axe here and if you collect materials bring them back to me. I'll buy them from you for a good price.
+- *Jack's* `q2_rue2.a` Rue: I sure am grateful for you showing up. Now if you be looking for Crew for a ship one day you come fine me see. Im good on the ropes and fast in a fight. I'm gonna go deliver these weapons around now but you go speak to Bjorn. Be sure to tell him im grateful for him sending you
+- *Jack's* `q2_bjorn2.a` Bjorn the Elder: Well well well. I knew I put my hopes in good hands. It's nice to know we have someone here we can rely on. Listen, take these. Helpful in a tight spot they are. If you're looking to make some extra coins I overheard Murl at the ship yard needing some help with something. Why don't you go and have a chat with him.

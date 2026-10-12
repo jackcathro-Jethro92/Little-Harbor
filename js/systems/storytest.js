@@ -9,7 +9,7 @@ const STORY_JUMPS=[
  {id:'start',name:'Start of the game (clear the story)'},
  {id:'q1',name:'Quest 1: A Stranger’s Letter, Part 1',after:'start',quest:'q1',flags:['festival_done','letter1_read'],letters:['q1_letter'],at:[156,125]},
  {id:'q2',name:'Quest 2: Find the Lost Man',after:'q1',quest:'q2',flags:['q1_done','has_compass','pirate_base_known','pirates_called','q1_stranger_gone','q1_villager_gone'],give:{grandfather_compass:1},at:[156,125]},
- {id:'q3',name:'Quest 3: Merl’s Quest',after:'q2',quest:'q3'},
+ {id:'q3',name:'Quest 3: Merl’s Quest',after:'q2',quest:'q3',flags:['q2_started','q2_garrick1','q2_got_sword','q2_rue_found','q2_garrick2','q2_got_pickaxe','blacksmith_buys_ore','q2_rue_home','lost_man_home','crew_1','q2_done'],give:{sword:1,pickaxe:1,healing_potion:1,stamina_tonic:1},at:[156,125]},
  {id:'q4',name:'Quest 4: A Stranger’s Letter, Part 2',after:'q3',quest:'q4'},
  {id:'q5',name:'Quest 5: Saviour of the Seas',after:'q4',quest:'q5'},
  {id:'q6',name:'Quest 6: At the Top of the World',after:'q5',quest:'q6'},
@@ -22,9 +22,9 @@ function storyReset(){S.flags={};S.story={q:null,step:0,seen:[],done:[]};S.lette
   if(typeof applyVariants==='function')applyVariants();if(typeof applyGates==='function')applyGates();if(typeof applyStoryPeople==='function')applyStoryPeople();if(typeof applyEncounters==='function')applyEncounters()}
 // the rows to apply, earliest first
 const jumpChain=id=>{const out=[];for(let r=STORY_JUMPS.find(q=>q.id===id);r;r=r.after&&STORY_JUMPS.find(q=>q.id===r.after))out.unshift(r);return out};
-// (key items such as the compass are never doubled by jumping twice)
+// (key items such as the compass, and single weapons and tools, are never doubled by jumping twice)
 function storyJump(id){const rows=jumpChain(id);if(!rows.length)return false;storyReset();
-  rows.forEach(r=>{(r.flags||[]).forEach(f=>setFlag(f,1));(r.letters||[]).forEach(id=>{if(!hasLetter(id))myLetters().push(id)});if(r.give)Object.entries(r.give).forEach(([k,n])=>{if(ITEMS[k]&&ITEMS[k].kind==='key')S.bag[k]=Math.max(count(k),n);else add(k,n)});if(r.gold)S.gold+=r.gold;
+  rows.forEach(r=>{(r.flags||[]).forEach(f=>setFlag(f,1));(r.letters||[]).forEach(id=>{if(!hasLetter(id))myLetters().push(id)});if(r.give)Object.entries(r.give).forEach(([k,n])=>{if(ITEMS[k]&&['key','weapon','tool'].includes(ITEMS[k].kind)){S.bag[k]=Math.max(count(k),n);const sl=slotOf(k);if(sl&&!S.eq[sl]&&ITEMS[k].kind!=='key')S.eq[sl]=k}else add(k,n)});if(r.gold)S.gold+=r.gold;
     if(r.quest)questSet(r.quest,r.step||0);
     // earlier quests count as finished once a later one starts
     if(r.quest&&r!==rows[rows.length-1])questDone(r.quest)});
