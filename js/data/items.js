@@ -91,6 +91,8 @@ const ITEMS={
  greatsword:{n:"Warrior's greatsword",kind:'weapon',price:3000,damage:15,smith:1,blade:'#9ec6e8',wide:1,desc:'A heavy two-handed blade. Damage 15.'},
  iron_pickaxe:{n:'Iron pickaxe',kind:'tool',price:600,use:'mine',power:2,smith:1,metal:'#c9d2da',desc:'Digs out ore with one swing fewer.'},
  iron_axe:{n:"Iron woodcutter's axe",kind:'tool',price:600,use:'chop',power:2,smith:1,metal:'#c9d2da',desc:'Fells trees with one swing fewer.'},
+ sea_key:{n:'Sea Key',kind:'key',desc:'A key from the Temple of the Sea. It opens its opposite. Keep it safe at the Temple Tower.'},
+ enchanted_armour:{n:'Enchanted armour',kind:'jewel',slot:'armour',gem:'#9ec6e8',fx:{ward:.2},desc:'Armour woven with old magic. You take 20% less damage. Reward from the Temple Tower. (Jack will design the real armour later.)'},
  enchanted_boots:{n:'Enchanted boots',kind:'jewel',slot:'boots',gem:'#58a8e8',fx:{speed:1},desc:'Boots that make you swift on your feet: you walk faster (not sailing). A swiftness potion is faster still. Reward from the Temple Tower.'},
  ring_vigor:{n:'Ring of Vigor',kind:'jewel',slot:'ring',price:3500,gem:'#d83828',fx:{hp:12},desc:'Enchanted gold set with a ruby. +12 max health.'},
  ring_might:{n:'Ring of Might',kind:'jewel',slot:'ring',price:4200,gem:'#f08a2a',fx:{dmg:.12},desc:'Enchanted gold set with amber. +12% weapon damage.'},

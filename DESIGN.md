@@ -310,6 +310,14 @@ Every push to `main` that passes the tests is published to GitHub Pages. The pub
 - **Enchanted boots** (`enchanted_boots`, a new **Boots** slot beside Ring and Amulet; `fx:{speed:1}`): walking is faster (`BOOT_MS` 135 ms a step, between the normal 160 and the swiftness potion's 110; sailing is not changed). The speed is only a first guess: Jack said he will tune it. `ensure` now equips jewellery too.
 - Going into a hall or shrine room now checks the story rows straight away (`enterHall`), not only on your next step.
 - Test jumps: "Quest 4" (just after the letter, at the Mountain Town's north gate) and "Quest 4: the Earth Key (at the Temple Tower)".
+
+## Quest 5: Saviour of the Seas (`js/story/quest5.js`)
+- **Start:** Quest 4 ends with the old man sending you back to the Temple of the Sea, and Quest 5 begins in the quest log.
+- **The temple:** going into the hall (zone 6) tells you the pirates went down to the vault. Going down the stairs into the vault (zone 7) shows the dynamite damage (the pedestal is buried under fallen rock, a world variant: flag `q5_vault_blasted`, row `sea_vault`) and puts three pirates in it (`q5_pirates`: one on the stepping stones, two on the platform), fought one by one.
+- **After the fight:** the pirates run (a placeholder line) and you take the **Sea Key** back (`sea_key`, a key item).
+- **The Temple Tower:** with the key in the shrine room, the Mysterious Girl appears and gives her line (Jack's words) and the **enchanted armour**. Sets `q5_done`, `sea_key_at_tower`. The Earth Key and Sea Key now rest on the Tower's first two stands (the stands, left to right, are Earth, Sea, Sky, Fire; flags `earth_key_at_tower`, `sea_key_at_tower`, `sky_key_at_tower`, `fire_key_at_tower`).
+- **Enchanted armour** (`enchanted_armour`, a new **Armour** slot; `fx:{ward:.2}`): you take 20% less damage. A first version until the real armour system (roadmap 3.4) and Jack's designs arrive.
+- Test jumps: "Quest 5" (at the Sea temple) and "Quest 5: the Sea Key (at the Temple Tower)".
 ## Playtest changes (12 October)
 - Walking is slower (a step every 110 ms while held, sailing 60 ms, and the sprite slides more gently) and the seagull flies in and out at half speed. The player never speaks in the opening or at the temple. A new game starts with no gold and only the driftwood rod, the rowboat and a **wooden sword** (damage 3, not sold anywhere); the testing gifts (`TEST_GRANTS`, `TEST_KITS`) are now behind the master switch `TEST_STARTER`, which is off. The "pirates have arrived" pop-up and overnight message are gone. A trigger row can wait for `{walk:[box], n:2}`: n steps in a row on foot inside the box (the villager's news uses it, so a boat trip never starts it), and a scene that walks or jumps the player onto land first gets them out of the boat so the boat is never dragged ashore. See `PLAYTEST_PLAN.md` for the rest of Jack's notes.
 

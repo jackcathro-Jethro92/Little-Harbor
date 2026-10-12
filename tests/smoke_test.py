@@ -653,7 +653,7 @@ def check(b, url):
     # Quest 4 (5.4): the second letter, the pirates at the Earth temple, the key, and the Temple Tower (boots)
     def fight_all(enc, n):
         for k in range(n):
-            ev("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;act()})()" % enc); pg.wait_for_timeout(100)
+            ev("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;S.sta=100;act()})()" % enc); pg.wait_for_timeout(100)
             for _ in range(20):
                 if ev("BATTLE===null"): break
                 pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
@@ -673,11 +673,24 @@ def check(b, url):
     assert ev("count('earth_key')===1&&flag('q4_key_got')&&!flag('q4_girl_here')&&S.story.step===3&&NPC.find(n=>n.n==='Mysterious Girl').hidden===1&&DLG.q4_girl2.nodes.a.text.endsWith('where they will be safe.')"), "the girl gives the Earth Key and goes"
     assert ev("S.story.q==='q4'&&Math.abs(questGoal()[0]-212)<=2"), "the compass now points at the Temple Tower"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("flag('q4_done')&&flag('earth_key_at_tower')&&count('earth_key')===0&&S.eq.boots==='enchanted_boots'&&S.story.q===null&&S.story.done.includes('q4')&&(()=>{const o=NPC.find(n=>n.n==='Old Stranger');return o.hidden===0&&o.hx===163&&o.hy===TS.y0+6&&zoneOf(o.x,o.y)===10})()"), "the old man keeps the key, gives the boots and stays in the tower"
+    assert ev("flag('q4_done')&&flag('earth_key_at_tower')&&count('earth_key')===0&&S.eq.boots==='enchanted_boots'&&S.story.q==='q5'&&S.story.step===0&&S.story.done.includes('q4')&&(()=>{const o=NPC.find(n=>n.n==='Old Stranger');return o.hidden===0&&o.hx===163&&o.hy===TS.y0+6&&zoneOf(o.x,o.y)===10})()"), "the old man keeps the key, gives the boots and stays in the tower"
     assert ev("DLG.q4_old1.nodes.a.text.startsWith('Oh Good work!')&&DLG.q4_old2.nodes.a.text.endsWith('here I will keep them safe.')"), "the old man's speech is Jack's, in two parts"
     assert ev("(S.buff=0,sail=false,stepMs()===BOOT_MS)&&(sail=true,stepMs()===STEP_MS.sail)&&(sail=false,S.buff=Date.now()+5e4,stepMs()===SWIFT_MS.walk)&&(S.buff=0,true)&&BOOT_MS<STEP_MS.walk&&BOOT_MS>SWIFT_MS.walk"), "boots walk faster than normal but not as fast as the swiftness potion; sailing is unchanged"
+    # Quest 5 (5.5): the Sea temple vault, the Sea Key and the enchanted armour at the Tower
+    assert ev("S.story.q==='q5'&&Math.abs(questGoal()[1]-40)<=2"), "Quest 4 hands over to Quest 5 and the compass points at the Sea temple"
+    ev("P.x=P.rx=283;P.y=P.ry=32;P.f='u';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===6", timeout=5000); pg.wait_for_function("S.story.step===1", timeout=5000)
+    assert ev("flag('q5_hall')&&S.story.step===1"), "going into the temple hall sends you after the pirates"
+    ev("sail=false;P.x=HZ.dx;P.y=HZ.y0+7;P.rx=P.x;P.ry=P.y;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_vault'", timeout=6000)
+    assert ev("zoneOf(P.x,P.y)===7&&encFigures('q5_pirates').length===3&&flag('q5_vault_blasted')&&at(217,VZ.y0+4)===73&&encFigures('q5_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the vault is blown open and three pirates wait in it"
+    ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    fight_all('q5_pirates', 3); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("count('sea_key')===1&&flag('q5_key_got')&&S.story.step===3&&Math.abs(questGoal()[0]-212)<=2"), "the pirates run and you take the Sea Key back"
+    ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("flag('q5_done')&&flag('sea_key_at_tower')&&count('sea_key')===0&&S.eq.armour==='enchanted_armour'&&S.story.q===null&&S.story.done.includes('q5')&&(()=>{const g=NPC.find(n=>n.n==='Mysterious Girl');return g.hidden===0&&zoneOf(g.x,g.y)===10})()&&DLG.q5_girl.nodes.a.text.startsWith(\"I'm glad I caught you.\")"), "the girl gives the enchanted armour and both keys rest at the tower"
+    assert ev("(()=>{S.hp=50;const w=fx('ward');return w===.2})()"), "the armour lowers damage by 20%"
     ev("storyJump('q4t')"); assert ev("S.story.q==='q4'&&S.story.step===3&&count('earth_key')===1&&flag('q4_key_got')"), "the testing menu can jump to the key at the tower"
-    ev("S.eq.boots=null;delete S.bag.enchanted_boots;storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
+    ev("storyJump('q5t')"); assert ev("S.story.q==='q5'&&S.story.step===3&&count('sea_key')===1"), "the testing menu can jump to the Sea Key at the tower"
+    ev("S.eq.armour=null;delete S.bag.enchanted_armour;S.eq.boots=null;delete S.bag.enchanted_boots;storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # a brand-new game: no gold, and only a driftwood rod, the rowboat and a wooden sword (Jack's playtest note)
     pgn = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); errn = []; pgn.on("pageerror", lambda e: errn.append(str(e)))
     pgn.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}"); pgn.goto(url); pgn.wait_for_timeout(400)
