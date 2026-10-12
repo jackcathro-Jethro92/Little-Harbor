@@ -9,7 +9,7 @@ const STORY_JUMPS=[
  {id:'start',name:'Start of the game (clear the story)'},
  {id:'q1',name:'Quest 1: A Stranger’s Letter, Part 1',after:'start',quest:'q1',flags:['festival_done','letter1_read'],letters:['q1_letter'],at:[156,125]},
  {id:'q2',name:'Quest 2: Find Rue',after:'q1',quest:'q2',flags:['q1_done','has_compass','pirate_base_known','pirates_called','q1_stranger_gone','q1_villager_gone'],give:{grandfather_compass:1},at:[156,125]},
- {id:'q3',name:'Quest 3: Merl’s Quest',after:'q2',quest:'q3',flags:['q2_started','q2_garrick1','q2_got_sword','q2_rue_found','q2_garrick2','q2_got_pickaxe','blacksmith_buys_ore','q2_rue_home','lost_man_home','crew_1','q2_done'],give:{sword:1,pickaxe:1,healing_potion:1,stamina_tonic:1},at:[156,125]},
+ {id:'q3',name:'Quest 3: Murl’s Quest',after:'q2',quest:'q3',flags:['q2_started','q2_garrick1','q2_got_sword','q2_rue_found','q2_garrick2','q2_got_pickaxe','blacksmith_buys_ore','q2_rue_home','lost_man_home','crew_1','q2_done'],give:{sword:1,pickaxe:1,healing_potion:1,stamina_tonic:1},at:[156,125]},
  {id:'q4',name:'Quest 4: A Stranger’s Letter, Part 2',after:'q3',quest:'q4'},
  {id:'q5',name:'Quest 5: Saviour of the Seas',after:'q4',quest:'q5'},
  {id:'q6',name:'Quest 6: At the Top of the World',after:'q5',quest:'q6'},

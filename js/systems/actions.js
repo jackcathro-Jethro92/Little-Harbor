@@ -15,7 +15,7 @@ function act(){
   if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome();
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
-  const tt=at(x,y);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
+  const tt=at(x,y);if(!sail&&PICKUPS[tt])return pickupTile(x,y,tt);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
     if(n.enc)return encFight(n);
     if(fireTriggers('talk',n.n))return;

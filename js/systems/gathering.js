@@ -10,3 +10,7 @@ function gather(x,y,tt){
   delete HITS[idx];let n=d.min+((Math.random()*(d.max-d.min+1))|0);if(Math.random()<.04*lvl(sk)+fx('yield'))n++;
   add(d.item,n);S.cut[idx]={m:tt,d:S.day};M[idx]=STUB(tt);
   say('You gathered '+ITEMS[d.item].n+' x'+n+'.');gainXp(sk,d.xp);save()}
+
+// pick up a tile that needs no tool (PICKUPS in js/data/gathering.js): a story log, say
+function pickupTile(x,y,tt){const p=PICKUPS[tt];if(p.need&&!flag(p.need))return say(p.no);if(count(p.item))return say(p.have);
+  const idx=y*MW+x;add(p.item,1);S.cut[idx]={m:tt,d:S.day};M[idx]=STUB(tt);say(p.msg);(p.do||[]).forEach(a=>{const k=Object.keys(a).find(q=>TACT[q]);if(k)TACT[k](a[k])});save()}
