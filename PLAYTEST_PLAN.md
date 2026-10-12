@@ -98,3 +98,4 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 - **P20:** Fish values go down by half.
 - **P21:** The tent is part of the camp kit and works like sleeping on the boat. Not answered yet: where it can be placed. My default: anywhere on land, away from buildings.
 - **P26:** All of the animations: the player's swing, enemy hits, damage numbers, a flash when a hit lands, and a shield that flashes in front of the character when blocking. New: opponents can block too, and sometimes do.
+- **P26 (added):** Characters in a battle always sway slightly from side to side, even when idle.
