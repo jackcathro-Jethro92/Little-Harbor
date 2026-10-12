@@ -52,3 +52,21 @@ function ghostArt(e,cx,cy,t){const x=e.x*T-cx,y=e.y*T-cy-2+Math.round(Math.sin(t
   const wv=(t/180|0)%2;pF(g,x+3,y+12,3,3,B2);pF(g,x+10,y+12,3,3,B2);pF(g,x+6,y+13,4,2,O);pF(g,x+3,y+13+wv,2,2,B2);pF(g,x+11,y+14-wv,2,1,B2);
   pF(g,x+5,y+5,2,3,'#1a1a2a');pF(g,x+9,y+5,2,3,'#1a1a2a');pP(g,x+5,y+5,'#6a7aff');pP(g,x+9,y+5,'#6a7aff');pF(g,x+7,y+10,2,2,'#1a1a2a');
   if(e.hp<e.max){pF(g,x+1,y-5,14,4,'#383838');pF(g,x+2,y-4,12*e.hp/e.max,2,'#58d058')}}
+
+// the giant centipede, about two tiles long: its head stands on the enemy's tile, facing e.f, and its body trails behind in a wave. Drawn from rectangles.
+function centipedeArt(e,cx,cy,t){const D4={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]},dir=D4[e.f]||D4.d,back=[-dir[0],-dir[1]],perp=[-dir[1],dir[0]],hx=e.x*T-cx+8,hy=e.y*T-cy+8;
+  const hit=t-e.hitAt<250&&((t/60|0)%2),pz=e.pois>t,N=5,SEG=4,fr=(t/110|0)%2;
+  const body=hit?['#ffffff','#ffffff']:pz?['#4f6e22','#6a9632']:['#4e1c12','#7a2f1d'],edge=hit?'#ffffff':pz?'#2e4414':'#2a0e08',leg=hit?'#ffffff':'#f0b030',head=hit?'#ffffff':pz?'#8fb040':'#e0561f',fang='#1c0f08';
+  R(hx-10,hy+7,20,3,'rgba(0,0,0,.22)');
+  const px0=(d,wob)=>hx+back[0]*d+perp[0]*wob,py0=(d,wob)=>hy+back[1]*d+perp[1]*wob;
+  for(let i=N;i>=0;i--){const d=i*SEG+4,wob=Math.sin(t/170+i*.85)*3*(.3+i/N),px=px0(d,wob),py=py0(d,wob),sz=i===N?5:i>N-2?7:8,o=Math.floor(sz/2);
+    for(const s of[-1,1]){const j=(i+fr)%2,sw=j?1:0;   // a pair of long legs on each plate, stepping in turn
+      if(perp[0])R(px+s*(o)+(s>0?0:-3)+0,py-1+sw,4,2,leg);else R(px-1+sw,py+s*(o)+(s>0?0:-3),2,4,leg)}
+    R(px-o,py-o,sz,sz,edge);R(px-o+1,py-o+1,sz-2,sz-2,body[i%2]);R(px-o+1,py-o+1,Math.max(1,sz-3),1,'rgba(255,255,255,.2)')}
+  R(hx-5,hy-5,10,10,fang);R(hx-4,hy-4,8,8,head);R(hx-3,hy-4,6,2,'rgba(255,255,255,.25)');
+  const E1=[hx+dir[0]*2+perp[0]*-3,hy+dir[1]*2+perp[1]*-3],E2=[hx+dir[0]*2+perp[0]*3,hy+dir[1]*2+perp[1]*3];
+  R(E1[0]-1,E1[1]-1,2,2,'#101010');R(E2[0]-1,E2[1]-1,2,2,'#101010');
+  const sn=Math.round(Math.sin(t/130)*1);   // the great curved fangs open and snap shut
+  for(const s of[-1,1]){const bx=hx+dir[0]*5+perp[0]*s*(3-sn),by=hy+dir[1]*5+perp[1]*s*(3-sn);R(bx-1,by-1,3,3,fang);R(hx+dir[0]*8+perp[0]*s*(2-sn)-1,hy+dir[1]*8+perp[1]*s*(2-sn)-1,2,2,'#c8c0b0')}
+  for(const s of[-1,1]){const wv=Math.round(Math.sin(t/200+s)*1);for(const k of[7,10])R(hx+dir[0]*k+perp[0]*(s*(k-3)+wv),hy+dir[1]*k+perp[1]*(s*(k-3)+wv),1,1,leg)}   // feelers
+  if(e.hp<e.max){pF(g,hx-8,hy-12,16,4,'#383838');pF(g,hx-7,hy-11,14*e.hp/e.max,2,'#58d058')}}

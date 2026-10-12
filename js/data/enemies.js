@@ -6,6 +6,8 @@
 //   art         the drawing in ENEMY_ART (js/render/entities.js)    xp  Combat xp for the kill    gold / drops  what it leaves behind    respawn  ticks until it returns (0 = stays dead)    die  the message
 // Enemies are created with spawnEnemy('id', x, y, {group:'name'}) (js/systems/combat.js); when every enemy of a `group` is beaten, enemyBeaten('name') fires the triggers waiting for it.
 // Turn-based fighters (pirates, the pirate boss, guild fighters) will use a battle screen instead (step 3.6) and get their own rows here for their numbers and drops.
+// The giant centipede (the Darkwood): a human-sized relative of Japan's giant centipede (the ōmukade): a long reddish-brown body of plates, a flame-orange head with big dark fangs, yellow legs and long feelers.
 const ENEMY_TYPES={
+ centipede:{n:'Giant centipede',hp:30,dmg:7,cd:2,speed:1,chase:6,leash:5,art:'centipede',xp:40,gold:[5,15],drops:[['centipede_fang',.5,1]],respawn:90,die:'The giant centipede curls up and goes still.'},
  spirit:{n:'Spirit',hp:12,dmg:6,cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };
