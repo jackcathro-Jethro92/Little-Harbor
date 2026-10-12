@@ -5,7 +5,7 @@
 //     day:1               a morning starts (sleeping)         beaten:'group'  an enemy group is beaten (the enemy table, step 3.1, calls enemyBeaten('group'))
 //   if (all must be true):  flag:'a'  noflag:'a'  has:{item:n}  gold:n  day:n (this day or later)  quest:'q' (and optional step:n)
 //   do (run one after another; a `say` waits until the box is closed):
-//     {battle:'battle_id'} (a turn-based fight, js/systems/battle.js)  {letter:'letter_id'} (a seagull brings it, js/systems/letters.js)  {scene:'scene_id'} (a cutscene, js/systems/scenes.js)  {say:'dlg_id'}  {set:'flag'}  {clear:'flag'}  {give:{item:n}}  {take:{item:n}}  {gold:n}  {toast:'text'}  {quest:['q',step]}  {step:n}  {move:['Name',x,y]}  {msg:'text'}
+//     {encounter:'encounter_id'} (foes appear; js/systems/encounters.js)  {battle:'battle_id'} (a turn-based fight, js/systems/battle.js)  {letter:'letter_id'} (a seagull brings it, js/systems/letters.js)  {scene:'scene_id'} (a cutscene, js/systems/scenes.js)  {say:'dlg_id'}  {set:'flag'}  {clear:'flag'}  {give:{item:n}}  {take:{item:n}}  {gold:n}  {toast:'text'}  {quest:['q',step]}  {step:n}  {move:['Name',x,y]}  {msg:'text'}
 //   Later steps add their own rows to TACT: gates (2.5), world variants (2.6), seagull letters (2.7).
 // A row fires once and is remembered in S.story.seen (saved), unless it has repeat:1. Only one row fires at a time; while a box is open nothing fires.
 // Story rows are added to this table by their quest's file; keep `id`s unique. Test rows for the smoke test are pushed in by the test itself.
@@ -17,7 +17,7 @@ const TACT={
  take:v=>{Object.entries(v).forEach(([id,n])=>{S.bag[id]=Math.max(0,count(id)-n);if(!S.bag[id])delete S.bag[id]});ui();save()},
  gold:v=>{S.gold=Math.max(0,S.gold+v);ui();save()},
  toast:v=>toast(v,2600), msg:v=>say(v),
- scene:()=>{}, letter:()=>{}, battle:()=>{}, quest:v=>questSet(v[0],v[1]||0), step:v=>questStep(v),
+ scene:()=>{}, letter:()=>{}, battle:()=>{}, encounter:v=>startEncounter(v), quest:v=>questSet(v[0],v[1]||0), step:v=>questStep(v),
  move:v=>{const m=storyState().moved=storyState().moved||{};m[v[0]]=[v[1],v[2]];save();placeStoryNpcs()}
 };
 // people a trigger has moved stay where they were put (saved in S.story.moved, put back at load)

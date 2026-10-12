@@ -17,6 +17,7 @@ function act(){
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
   const tt=at(x,y);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
+    if(n.enc)return encFight(n);
     if(fireTriggers('talk',n.n))return;
     if(n.dlg&&runDialogue(n.dlg))return;
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}

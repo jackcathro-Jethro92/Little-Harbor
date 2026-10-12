@@ -14,7 +14,7 @@ function swing(e){
 function enemyDie(e){const ty=ENEMY_TYPES[e.t];e.alive=false;e.resp=ty.respawn||0;e.pois=0;let msg=ty.die||'The '+ty.n.toLowerCase()+' falls.';gainXp('combat',ty.xp||0);
   if(ty.gold){const gd=ty.gold[0]+Math.floor(Math.random()*(ty.gold[1]-ty.gold[0]+1));if(gd){S.gold+=gd;msg+=' +'+gd+' gold.'}}
   (ty.drops||[]).forEach(([id,ch,n])=>{if(Math.random()<ch){add(id,n||1);msg+=' Got '+ITEMS[id].n.toLowerCase()+(n>1?' x'+n:'')+'.'}});
-  say(msg);ui();if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive))enemyBeaten(e.group)}
+  say(msg);ui();if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive)){enemyBeaten(e.group);if(typeof encounterGroupBeaten==='function')encounterGroupBeaten(e.group)}}
 // one tick (about 0.6 s) for every enemy
 function enemiesTick(){if(BATTLE)return;
   for(let i=ENEMIES.length-1;i>=0;i--){const e=ENEMIES[i],ty=ENEMY_TYPES[e.t];

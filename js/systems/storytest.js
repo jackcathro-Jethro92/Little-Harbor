@@ -19,7 +19,7 @@ const STORY_JUMPS=[
  {id:'q10',name:'Quest 10: The Returning of the Keys',after:'q9',quest:'q10'}
 ];
 function storyReset(){S.flags={};S.story={q:null,step:0,seen:[],done:[]};S.letters=[];save();
-  if(typeof applyVariants==='function')applyVariants();if(typeof applyGates==='function')applyGates();if(typeof applyStoryPeople==='function')applyStoryPeople()}
+  if(typeof applyVariants==='function')applyVariants();if(typeof applyGates==='function')applyGates();if(typeof applyStoryPeople==='function')applyStoryPeople();if(typeof applyEncounters==='function')applyEncounters()}
 // the rows to apply, earliest first
 const jumpChain=id=>{const out=[];for(let r=STORY_JUMPS.find(q=>q.id===id);r;r=r.after&&STORY_JUMPS.find(q=>q.id===r.after))out.unshift(r);return out};
 function storyJump(id){const rows=jumpChain(id);if(!rows.length)return false;storyReset();
