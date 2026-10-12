@@ -15,6 +15,7 @@ const ITEMS={
  gold_ore:{n:'Gold ore',kind:'material',desc:'Heavy and rare. Gleams in the rock.'},
  silver_ore:{n:'Silver ore',kind:'material',desc:'Pale and rare. Found high in the mountains.'},
  bronze_ore:{n:'Bronze ore',kind:'material',desc:'Golden-brown ore, hard to mine.'},
+ centipede_fang:{n:'Centipede fang',kind:'material',desc:'A curved, venom-hollow fang from a giant centipede. Nobody buys it yet.'},
  iron_bar:{n:'Iron bar',kind:'material',desc:'Forged from bronze, copper and tin at a forge.'},
  fiber:{n:'Flax fiber',kind:'material',desc:'Stringy fiber cut from flax. Twist it into rope.'},
  rope:{n:'Rope',kind:'material',desc:'Twisted from flax fiber. Needed to build ships and houses.'},

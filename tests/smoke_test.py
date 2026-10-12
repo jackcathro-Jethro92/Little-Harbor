@@ -507,6 +507,14 @@ def check(b, url):
     ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Encounter: Three pirates, one by one$/.test(b.textContent))"), "the testing menu can start an encounter"
     ev("tmClose()")
+    # the giant centipede (3.2): four live in the Darkwood on walkable ground, it draws facing every way, bites, drops its fang and gold, and is back each morning
+    assert ev("(()=>{const c=ENEMIES.filter(e=>e.t==='centipede');return c.length>=4&&c.every(e=>e.y>=FY&&WK.includes(at(e.x,e.y))&&e.alive)&&ENEMY_TYPES.centipede.art==='centipede'})()"), "four centipedes wait in the Darkwood on walkable ground"
+    assert ev("(()=>{let bad=0;sail=false;const c=ENEMIES.find(e=>e.t==='centipede');P.x=P.rx=c.x;P.y=P.ry=c.y+3;for(const f of'lrud'){c.f=f;try{draw()}catch(e){bad++}}c.hp=5;try{draw()}catch(e){bad++}c.hp=c.max;c.pois=performance.now()+2000;try{draw()}catch(e){bad++}c.pois=0;return bad===0})()"), "it draws in every direction, hurt and poisoned"
+    ev("(()=>{const c=ENEMIES.find(e=>e.t==='centipede');window.__c=c;S.hp=50;S.gold=0;S.bag.centipede_fang=0;S.sta=100;S.eq.weapon='sword';add('sword');P.x=P.rx=c.x;P.y=P.ry=c.y+1;P.f='u';c.cd=0;window.__r0=Math.random;Math.random=()=>0;enemiesTick();Math.random=__r0})()")
+    assert ev("S.hp===43"), "it bites for 7"
+    ev("(()=>{Math.random=()=>0;for(let i=0;i<12&&__c.alive;i++){S.sta=100;S.hp=50;act()}Math.random=__r0})()")
+    assert ev("!__c.alive&&S.gold>=5&&S.gold<=15&&S.bag.centipede_fang===1&&ITEMS.centipede_fang.kind==='material'"), "beating it gives gold and a fang"
+    ev("enemiesMorning()"); assert ev("__c.alive&&__c.hp===__c.max&&__c.x===__c.hx"), "it is back at home the next morning"
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
