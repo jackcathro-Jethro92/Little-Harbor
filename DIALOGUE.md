@@ -295,3 +295,11 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* (`js/ui/look.js`): Fenwick: Lovely. Very dashing.
 - *original* (`js/ui/shops.js`): Odo: Here you go.
 - *original* (`js/ui/shops.js`): Odo: Sold 
+
+## Dialogues in the DLG table (the story's text, by id)
+
+- *placeholder* `fest_welcome.a` Murl: [Placeholder] Gather round, everyone! The Little Harbor Sea Festival begins!
+- *placeholder* `fest_initiate.a` Murl: [Placeholder] And here is our newest fisher, fresh to the harbor. Come on up!
+- *placeholder* `fest_initiate.b` You: [Placeholder] Thank you, Murl. I will do my best.
+- *placeholder* `fest_initiate.c` Murl: [Placeholder] Every fisher needs a boat. This little rowboat is yours. She is tied up at the end of the pier.
+- *placeholder* `fest_initiate.d` Murl: [Placeholder] Go on, take her out. The sea is waiting.

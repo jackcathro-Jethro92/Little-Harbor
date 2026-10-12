@@ -44,6 +44,7 @@ function draw(){
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
+  if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}

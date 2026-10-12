@@ -426,7 +426,7 @@ def check(b, url):
     ev("[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
     assert ev("document.querySelectorAll('#title-body button').length>=12&&/Quest 10/.test($('title-body').textContent)&&/Quest 1:/.test($('title-body').textContent)"), "every quest start is listed"
     ev("[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test B').click()")
-    assert ev("S.story.q==='t_qb'&&S.story.done.includes('t_qa')&&flag('t_ja')&&flag('t_jb')&&!flag('t_stale')&&S.letters.length===0&&S.gold===105&&S.bag.carrot===3&&S.bag.sardine>=2&&P.x===32+OX&&P.y===33+OY&&!$('title').classList.contains('open')"), "a jump clears the story, applies earlier rows, gives items, moves the player and keeps the bag"
+    assert ev("S.story.q==='t_qb'&&S.story.done.includes('t_qa')&&flag('t_ja')&&flag('t_jb')&&!flag('t_stale')&&S.letters.join()==='q1_letter'&&S.gold===105&&S.bag.carrot===3&&S.bag.sardine>=2&&P.x===32+OX&&P.y===33+OY&&!$('title').classList.contains('open')"), "a jump clears the story, applies earlier rows, gives items, moves the player and keeps the bag"
     ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
     ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
     pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
@@ -516,6 +516,26 @@ def check(b, url):
     ev("(()=>{Math.random=()=>0;for(let i=0;i<12&&__c.alive;i++){S.sta=100;S.hp=50;act()}Math.random=__r0})()")
     assert ev("!__c.alive&&S.gold>=5&&S.gold<=15&&S.bag.centipede_fang===1&&ITEMS.centipede_fang.kind==='material'"), "beating it gives gold and a fang"
     ev("enemiesMorning()"); assert ev("__c.alive&&__c.hp===__c.max&&__c.x===__c.hx"), "it is back at home the next morning"
+    # the opening (4.0): a new game plays the festival scene (decorations up, Murl's lines, Skip works), the morning after takes the decorations down, and the first boarding of the boat in the village brings the stranger's letter and starts Quest 1
+    ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0});sail=false;P.x=P.rx=156;P.y=P.ry=124;ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}})")
+    assert ev("!flag('festival_on')&&!flag('festival_done')&&FESTIVAL_ON===false"), "no festival before a new game starts"
+    ev("fireTriggers('start')"); pg.wait_for_timeout(200)
+    assert ev("SCENE!==null&&flag('festival_on')&&FESTIVAL_ON===true"), "starting a new game plays the festival scene with the decorations up"
+    ev("(()=>{try{P.x=P.rx=156;draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "the decorations draw"
+    pg.wait_for_function("dlgActive()&&/Sea Festival/.test($('dlg-txt').textContent)", timeout=15000); assert ev("$('dlg-who').textContent==='Murl'"), "Murl welcomes everyone"
+    ev("skipScene()"); pg.wait_for_timeout(100)
+    assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&!dlgActive()&&P.x===160&&P.y===125&&S.eq.boat==='rowboat'"), "Skip ends with the festival done, the player by Murl and the rowboat equipped"
+    ev("fireTriggers('start')"); assert ev("SCENE===null"), "the festival plays once"
+    assert ev("!flag('letter1_read')&&S.story.q===null"), "no letter until the boat"
+    ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
+    ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_timeout(300)
+    assert ev("sail===true&&SCENE!==null&&GULL!==null"), "boarding the boat in the village brings a seagull"
+    pg.wait_for_timeout(3000); assert ev("$('letter').classList.contains('open')&&/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
+    pg.tap("#letter-close"); pg.wait_for_timeout(1800)
+    assert ev("SCENE===null&&flag('letter1_read')&&hasLetter('q1_letter')&&S.story.q==='q1'&&/Quest 1|Stranger/.test(QUESTS.find(q=>q.id==='q1').name)"), "the letter is kept and Quest 1 starts"
+    ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
+    ev("storyJump('q1')"); assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&flag('festival_done')&&P.x===156&&P.y===125"), "the testing menu can jump to the start of Quest 1"
+    ev("storyReset();setFlag('festival_done',0)")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
