@@ -10,9 +10,11 @@ Read `CLAUDE.md` (rules), `DESIGN.md` (what exists today) and `TEMPLES.md` (appr
 
 ---
 
-## Where we are now (updated 12 October 2026)
+## Where we are now (updated 13 October 2026)
 
-The world, the graphics upgrade and all the story machinery are built, and the fighting is in place. What is left for the playtest draft is the story itself: the festival opening and Quests 1 and 2 (Phase 4). Everything below is merged and playable (pull requests up to #61).
+The world, the graphics upgrade and all the story machinery are built, and the fighting is in place. **Quests 1 to 5 are built and merged** (the festival opening, Quest 1 at the Sea temple, Quest 2 "Find Rue", Quest 3 "Murl's Quest", Quest 4 at the Earth temple and Quest 5 at the Sea temple vault), along with playtest notes #1 and #2 (pull requests up to #77).
+
+> **Pause for playtest #3 (Jack, 13 October).** Building stops here while Jack plays through Quests 1 to 5 again. Nothing new is started until his notes arrive. The next steps, in order, are: (1) fold Jack's playtest #3 notes into `PLAYTEST_PLAN.md` and fix them in batches; (2) then **Quest 6, At the Top of the World** (5.6, the Sky temple), and the rest of Phase 5 in order.
 
 **Built and working:**
 - **World:** a 320 x 240 tile world with fog of war and the sea connected all the way round, including:
@@ -37,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 and 5 (5.4, 5.5) are built too. Next: Quest 6 and the Sky Temple (5.6), then the playtest from Saturday 24 October.
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 and 5 (5.4, 5.5) are built too. **Paused for playtest #3 of Quests 1 to 5.** After Jack's notes are fixed, the next story step is Quest 6 and the Sky Temple (5.6).
 
 | Step | Status |
 | --- | --- |
