@@ -2,6 +2,8 @@
 // QUESTS is the table the log reads: {id, name, steps:['what to do at step 0', 'what to do at step 1', ...]}. The quest files add their rows; there are no real quests yet.
 // S.story.q and S.story.step say which one is current and where (questSet / questStep in js/systems/flags.js); questDone(id) moves it to Finished.
 const QUESTS=[];
+// a quest row may also name where to go: goals:[[x,y],...] (one per step, in world tile coordinates) or goal:[x,y]; questGoal() gives the current one and the compass (js/render/compass.js) points to it
+const questGoal=()=>{const s=storyState(),q=QUESTS.find(r=>r.id===s.q);if(!q)return null;return (q.goals&&(q.goals[s.step]||q.goals[q.goals.length-1]))||q.goal||null};
 function openQuests(){const s=storyState(),el=$('qs-list'),cur=QUESTS.find(q=>q.id===s.q),fin=s.done.map(id=>QUESTS.find(q=>q.id===id)).filter(Boolean);let h='';
   h+='<h4>CURRENT</h4>'+(cur?'<div class="q"><b>'+cur.name+'</b><span>'+(cur.steps[s.step]||cur.steps[cur.steps.length-1]||'')+'</span></div>':'<div class="q"><span>No quest right now. Explore, and talk to people.</span></div>');
   if(fin.length)h+='<h4>FINISHED</h4>'+fin.map(q=>'<div class="q done"><b>'+q.name+'</b></div>').join('');

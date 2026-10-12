@@ -536,6 +536,33 @@ def check(b, url):
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
     ev("storyJump('q1')"); assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&flag('festival_done')&&P.x===156&&P.y===125"), "the testing menu can jump to the start of Quest 1"
     ev("storyReset();setFlag('festival_done',0)")
+    # Quest 1 (4.1): the courtyard fires the pirate encounter; the three are fought one by one; the last one's flight and the stranger's scene give the compass and finish the quest; the village news follows; the compass draws its arrow
+    ev("BATTLE_FAST=true;sail=false;storyReset();ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});NPC.forEach(n=>{n.busy=1});S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');S.bag.grandfather_compass=0;storyJump('q1')")
+    assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&questGoal()[0]===283&&count('grandfather_compass')===0"), "Quest 1 begins with the letter, a goal and no compass yet"
+    assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sited taking of fire island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
+    ev("P.x=P.rx=283;P.y=P.ry=38;move('u');"); pg.wait_for_timeout(100)
+    assert ev("encFigures('q1_pirates').length===3&&S.story.step===1&&dlgActive()&&$('dlg-txt').textContent!==undefined"), "stepping into the courtyard brings the pirates and the first line"
+    ev("dlgEnd()")
+    for k in range(3):
+        ev("(()=>{const n=encFigures('q1_pirates')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;act()})()"); pg.wait_for_timeout(100)
+        for _ in range(20):
+            if ev("BATTLE===null"): break
+            pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
+            if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+            pg.wait_for_timeout(30)
+        pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
+    pg.wait_for_function("SCENE!==null", timeout=5000)
+    assert ev("flag('enc_q1_pirates_done')&&S.story.step===2&&SCENE.id==='q1_aftermath'"), "beating the third pirate starts the aftermath scene"
+    ev("skipScene()"); pg.wait_for_timeout(100)
+    assert ev("SCENE===null&&flag('q1_done')&&flag('has_compass')&&flag('pirate_base_known')&&flag('pirates_called')&&count('grandfather_compass')===1&&S.story.q===null&&S.story.done.includes('q1')&&NPC.find(n=>n.n==='Old Stranger').hidden===1&&P.x===283&&P.y===33"), "Skip lands with the compass given, Quest 1 finished and the stranger gone inside"
+    ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
+    assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
+    ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
+    ev("openBag();bp=3;bc=rowsOf(3).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
+    ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
+    ev("sail=false;P.x=P.rx=156;P.y=P.ry=130;move('u')"); pg.wait_for_function("SCENE!==null", timeout=5000); ev("skipScene()"); pg.wait_for_timeout(100)
+    assert ev("SCENE===null&&flag('q1_villager_gone')&&NPC.find(n=>n.n==='Villager').hidden===1&&P.x===156&&P.y===126"), "back in the village the villager runs up with the news and then leaves"
+    ev("storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"

@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 94 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 96 placeholder.**
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.
@@ -122,6 +122,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Salty Jo (Pirate camp (Volcano Island))
 - *placeholder:* The sea air is better than the smoke.
 
+### Old Stranger (Temple of the Sea)
+- *placeholder:* [Placeholder] Thank you again, friend.
+
 ### Hale (The Darkwood)
 - *original:* Keep to the trail. The Darkwood swallows folk who wander off it.
 - *original:* Thirty winters I have cut timber here. Something is stirring in the deep woods.
@@ -185,6 +188,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Taro (Village)
 - *original:* Lovely day for it.
+
+### Villager (Village)
+- *placeholder:* [Placeholder] Mind how you go out there.
 
 ### Yuki (Village)
 - *original:* Busy morning, is it not?
@@ -303,3 +309,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* `fest_initiate.b` You: [Placeholder] Thank you, Murl. I will do my best.
 - *placeholder* `fest_initiate.c` Murl: [Placeholder] Every fisher needs a boat. This little rowboat is yours. She is tied up at the end of the pier.
 - *placeholder* `fest_initiate.d` Murl: [Placeholder] Go on, take her out. The sea is waiting.
+- *placeholder* `q1_see_pirates.a` You: [Placeholder] Pirates! They are attacking the temple. I have to stop them.
+- *Jack's* `q1_pirate.a` Pirate grunt: This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!
+- *placeholder* `q1_stranger.a` Old Stranger: [Placeholder] ...Is it safe? Have they gone?
+- *Jack's* `q1_stranger.b` Old Stranger: Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough
+- *Jack's* `q1_villager.a` Villager: Have you heard! Pirates have been sited taking of fire island and setting up some kind of camp! Id steer clear of those waters if i was you. They look mean alright. You should go talk to Bjorn. I think i is looking for you.

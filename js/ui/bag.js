@@ -10,7 +10,7 @@ function rowsOf(p){
   if(k==='mat')return LIST('material').filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].desc}));
   if(k==='fish')return [...fishIds,...LIST('ingredient'),...LIST('forage')].filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].kind==='fish'?'Worth '+ITEMS[id].value+' gold. Sell it to Odo, or cook it.':ITEMS[id].kind==='forage'?ITEMS[id].desc+' Sells for '+ITEMS[id].value+'g. You can plant it in a garden.':ITEMS[id].desc+' Cook it, or plant it in a garden.'}));
   if(k==='letters')return myLetters().filter(id=>LETTERS[id]).map(id=>({letter:id,label:LETTERS[id].title||id,right:'',desc:(LETTERS[id].from?'From '+LETTERS[id].from+'. ':'')+'Tap to read it again.'}));
-  if(k==='gear')return ['rod','weapon','tool','jewel','station','prefab','claim','garden'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
+  if(k==='gear')return ['rod','weapon','tool','jewel','station','prefab','claim','garden','key'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
   return SLOTS.filter(([sl])=>S.eq[sl]||ownedForSlot(sl)).map(([sl,n])=>({slot:sl,id:S.eq[sl],label:n,right:S.eq[sl]?ITEMS[S.eq[sl]].n+(sl==='weapon'&&S.coat?' (poison x'+S.coat+')':''):'---',desc:S.eq[sl]?describe(S.eq[sl]):'Nothing equipped.'}));
 }
 function drawBag(){
@@ -29,6 +29,7 @@ function popRender(){const p=$('bpop');p.innerHTML='';if(!bpop){p.classList.remo
   p.classList.add('open')}
 function bagPick(){
   const r=rowsOf(bp)[bc];const pk=POCKETS[bp].k;if(r&&r.letter)return openLetter(r.letter);
+  if(r&&r.id&&ITEMS[r.id]&&ITEMS[r.id].kind==='key')return;   // key items just sit in the bag: nothing to equip or use
   if(!r||pk==='fish'||pk==='mat'||(pk==='equip'&&!r.id))return;
   if(pk==='food'){const it=ITEMS[r.id];bpop={opts:[it.kind==='food'?'Eat':it.coat?'Apply to weapon':'Drink','Cancel'],i:0,row:r};return popRender()}
   if(ITEMS[r.id]&&['station','prefab','claim','garden'].includes(ITEMS[r.id].kind)){bpop={opts:['Place','Cancel'],i:0,row:r};return popRender()}
