@@ -22,7 +22,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 | P9 | Enemies stand on the green field in the battle, not in a box above it | 4 | Planned |
 | P10 | Remove the "pirates have arrived" note when leaving the Northern Water Temple | 1 | **Built** (the toast and the overnight message are gone; the camp still fills silently at the next sleep) |
 | P11 | **Major bug:** the villager's news dragged the boat onto land and trapped it. The villager should come after two steps on village land, wherever the player lands | 1 | **Built** (the scene now starts only after two steps on foot, a boat trip never counts, and a scene that walks the player onto land gets them out of the boat first) |
-| P12 | A new game starts with 0 gold and only a driftwood rod and a wooden sword | 1 | **Built** (the testing gifts are off; the rowboat is still given, see questions) |
+| P12 | A new game starts with 0 gold and only a driftwood rod and a wooden sword | 1 | **Built.** Decided (Jack, 12 Oct): the rowboat stays in the bag from the start and the festival just shows Murl presenting it |
 | P13 | Replace the "Me" menu with "Menu": character summary and save game, plus load game; remove Quests from it | 2 | Planned |
 | P14 | Add Quests as its own button beside Bag, Skills, Map and Menu | 2 | Planned |
 | P15 | A large house at the far north of the village where Bjorn lives; he is found there in every quest | 3 | Planned |
@@ -38,7 +38,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 1. ~~**P6 "Combat turn-based":**~~ **Answered:** everything is turn-based; the spirit and the centipede open the battle screen when touched.
 2. ~~**P7 attacks:**~~ **Answered, see "Weapon attacks" below.** (original question:) a first design to say yes or change. Each weapon type (sword, axe, and so on) has its own weapon skill level that rises as you use it. At set levels you learn a new attack for that weapon: for a sword, Slash at the start, then Quick Strike (a fast, light hit), then Power Slash (a heavy hit that costs stamina). For an axe: Chop, then Bash (stuns for a turn). **Block** is a menu choice that takes less damage that turn and gives back some stamina, so it also buffs stamina. Is that the idea?
 3. ~~**P1 cinematic:**~~ **Answered, see "The festival cinematic" below.** (original question:) what should it show, beat by beat? A starting suggestion: the sun rising over the harbor, boats and lanterns, the villagers gathering, Murl on the pier giving the speech, the crowd cheering as the newest fisher steps forward and is given the rowboat, then fireworks or lanterns over the water. Anything to add or cut?
-4. **P12 the rowboat:** Murl gives the rowboat at the festival, but it is already in your bag at the start. Should a new game start without a boat in the bag and have Murl hand it over in the festival?
+4. ~~**P12 the rowboat:**~~ **Answered:** keep the rowboat in the bag from the start. (original question:) Murl gives the rowboat at the festival, but it is already in your bag at the start. Should a new game start without a boat in the bag and have Murl hand it over in the festival?
 5. **P10:** I removed both the pop-up and the overnight sentence about the pirate ships. Is that what you meant, or only the pop-up?
 
 ## Weapon attacks (decided by Jack, 12 October)
