@@ -53,9 +53,9 @@ function ghostArt(e,cx,cy,t){const x=e.x*T-cx,y=e.y*T-cy-2+Math.round(Math.sin(t
   pF(g,x+5,y+5,2,3,'#1a1a2a');pF(g,x+9,y+5,2,3,'#1a1a2a');pP(g,x+5,y+5,'#6a7aff');pP(g,x+9,y+5,'#6a7aff');pF(g,x+7,y+10,2,2,'#1a1a2a');
   if(e.hp<e.max){pF(g,x+1,y-5,14,4,'#383838');pF(g,x+2,y-4,12*e.hp/e.max,2,'#58d058')}}
 
-// the giant centipede, about two tiles long and as tall as a person is wide: its head stands on the enemy's tile, facing e.f, and its body trails behind in a wave. Drawn from rectangles.
+// the giant centipede, about two tiles long: its head stands on the enemy's tile, facing e.f, and its body trails behind in a wave. Drawn from rectangles.
 function centipedeArt(e,cx,cy,t){const D4={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]},dir=D4[e.f]||D4.d,back=[-dir[0],-dir[1]],perp=[-dir[1],dir[0]],hx=e.x*T-cx+8,hy=e.y*T-cy+8;
-  const hit=t-e.hitAt<250&&((t/60|0)%2),pz=e.pois>t,N=8,SEG=5,fr=(t/110|0)%2;
+  const hit=t-e.hitAt<250&&((t/60|0)%2),pz=e.pois>t,N=5,SEG=4,fr=(t/110|0)%2;
   const body=hit?['#ffffff','#ffffff']:pz?['#4f6e22','#6a9632']:['#4e1c12','#7a2f1d'],edge=hit?'#ffffff':pz?'#2e4414':'#2a0e08',leg=hit?'#ffffff':'#f0b030',head=hit?'#ffffff':pz?'#8fb040':'#e0561f',fang='#1c0f08';
   R(hx-10,hy+7,20,3,'rgba(0,0,0,.22)');
   const px0=(d,wob)=>hx+back[0]*d+perp[0]*wob,py0=(d,wob)=>hy+back[1]*d+perp[1]*wob;
