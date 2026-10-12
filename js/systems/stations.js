@@ -2,6 +2,8 @@
 const CAMP_R=5;
 function placedAt(x,y){return S.placed.find(p=>p.x===x&&p.y===y)}
 const campOf=()=>S.placed.find(p=>p.id==='camp_kit');
+// the camp's tent: you can sleep when you stand next to the camp kit (within 2 tiles), the same as on the boat
+const atTent=()=>{const c=campOf();return !!c&&!sail&&Math.hypot(c.x-P.x,c.y-P.y)<=2};
 let placing=null; // id of the station you are currently placing
 function placeWhy(id,x,y){
   if(sail)return 'Step onto land first.';

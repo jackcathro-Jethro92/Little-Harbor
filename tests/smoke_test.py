@@ -695,6 +695,11 @@ def check(b, url):
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # Batch 6 (playtest #2): slower walking with the old speed kept for the swiftness potion, Old Sword, stamina bar, ambush over an open screen, slower centipede respawn
     assert ev("STEP_MS.walk>SWIFT_MS.walk&&STEP_MS.sail>SWIFT_MS.sail&&SWIFT_MS.walk===110&&SWIFT_MS.sail===60&&(S.buff=0,stepMs()===STEP_MS.walk)&&(sail=false,S.buff=Date.now()+5e4,stepMs()===110)&&(S.buff=0,true)"), "walking is slower; the old speed is the swiftness speed"
+    assert ev("[ITEMS.sardine.value,ITEMS.mackerel.value,ITEMS.bream.value,ITEMS.tuna.value,ITEMS.koi.value].join()==='3,6,15,60,300'"), "fish values are halved"
+    ev("sail=false;S.placed=S.placed.filter(o=>o.id!=='camp_kit');S.placed.push({id:'camp_kit',x:P.x+1,y:P.y});ui()")
+    assert ev("atTent()&&$('sleep').style.visibility==='visible'"), "the Sleep button shows beside the camp tent"
+    d0 = ev("S.day"); ev("S.hp=1;sleep()"); assert ev("S.day")==d0+1 and ev("S.hp===maxHp()&&$('msg').textContent.includes('tent')"), "sleeping in the tent starts a new day and heals"
+    ev("S.placed=S.placed.filter(o=>o.id!=='camp_kit');ui()"); assert ev("!atTent()&&!inRoom(P.x,P.y)?$('sleep').style.visibility==='hidden':true"), "no tent, no sleeping outdoors"
     assert ev("ITEMS.sword.n==='Old Sword'&&ENEMY_TYPES.centipede.respawn>=240"), "Old Sword, slower centipede respawn"
     ev("BATTLE_FAST=true;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
     assert ev("$('bag').classList.contains('open')&&canBeAmbushed()"), "a creature may ambush over the bag"

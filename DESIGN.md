@@ -111,7 +111,7 @@ XP thresholds (total XP for levels 1-10): 100, 380, 770, 1300, 2150, 3300, 4800,
 ## Fishing
 Cast costs 2 stamina. Wait 1.5-4.5 s multiplied by rod wait and (1 - 0.03 x Fishing level). Bite window about 1.1 s; press Use to catch. Boat tier gives a 30%% chance per tier of a second roll keeping the better fish; Fishing level shifts rarity weights toward rarer fish. (An earlier reel-in minigame with rod power and fish pull exists in git history/backups; the data fields `power` and `pull` are still in the item table for when fishing difficulty is reworked.)
 
-Fish: Sardine (sells 6), Mackerel (sells 12), Bream (sells 30), Tuna (sells 120), Golden koi (sells 600).
+Fish: Sardine (sells 3), Mackerel (sells 6), Bream (sells 15), Tuna (sells 60), Golden koi (sells 300). (Halved in playtest #2.)
 
 Rods: Driftwood rod (0g, power 1, wait x1), Bamboo rod (80g, power 1.3, wait x0.85), Fiberglass rod (600g, power 1.7, wait x0.7), Carbon rod (4000g, power 2.3, wait x0.55).
 
@@ -123,7 +123,7 @@ Rods: Driftwood rod (0g, power 1, wait x1), Bamboo rod (80g, power 1.3, wait x0.
 
 ## Crafting stations
 Stations are bought, then placed from the Bag. They must be within **5 tiles of a camp or your house**, or inside the house. Placement uses a blue/red grid preview (blue = fits). Face a station for a menu: Craft/Cook/Brew/Build, Move, Pick up. Picking up the camp packs every station.
-- Camp kit (tent plus campfire that cooks), workbench, forge, cooking station, alchemy station, shipwright station. Garden kit and house are separate (below).
+- Camp kit (tent plus campfire that cooks; stand within 2 tiles of it and press Sleep to start a new day, like on the boat), workbench, forge, cooking station, alchemy station, shipwright station. Garden kit and house are separate (below).
 
 ### Recipes
 | Station | Output | Needs | Extra |
