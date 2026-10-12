@@ -17,7 +17,7 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 | P4 | Pirates trigger when you land on the island, so they do not appear out of nowhere | 3 | Planned |
 | P5 | Remove the player character's spoken lines | 1 | **Built** (the player's festival and "Pirates!" lines are gone) |
 | P6 | Combat turn-based | 4 | **Decided (Jack, 12 Oct): every fight is turn-based.** The spirit and the giant centipede open the battle screen when touched; the creature stays on the map if the player runs away |
-| P7 | Different attacks for different weapons (sword slash, axe bash), learned as the combat skill with that weapon rises, plus blocks that buff stamina | 4 | Planned: design below, needs a yes |
+| P7 | Different attacks for different weapons (sword slash, axe bash), learned as the combat skill with that weapon rises, plus blocks that buff stamina | 4 | **Decided (Jack, 12 Oct):** see "Weapon attacks" below |
 | P8 | Add two more pirates on the pathway leading to the temple | 3 | Planned |
 | P9 | Enemies stand on the green field in the battle, not in a box above it | 4 | Planned |
 | P10 | Remove the "pirates have arrived" note when leaving the Northern Water Temple | 1 | **Built** (the toast and the overnight message are gone; the camp still fills silently at the next sleep) |
@@ -36,7 +36,19 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 
 ## Questions for Jack
 1. ~~**P6 "Combat turn-based":**~~ **Answered:** everything is turn-based; the spirit and the centipede open the battle screen when touched.
-2. **P7 attacks:** a first design to say yes or change. Each weapon type (sword, axe, and so on) has its own weapon skill level that rises as you use it. At set levels you learn a new attack for that weapon: for a sword, Slash at the start, then Quick Strike (a fast, light hit), then Power Slash (a heavy hit that costs stamina). For an axe: Chop, then Bash (stuns for a turn). **Block** is a menu choice that takes less damage that turn and gives back some stamina, so it also buffs stamina. Is that the idea?
+2. ~~**P7 attacks:**~~ **Answered, see "Weapon attacks" below.** (original question:) a first design to say yes or change. Each weapon type (sword, axe, and so on) has its own weapon skill level that rises as you use it. At set levels you learn a new attack for that weapon: for a sword, Slash at the start, then Quick Strike (a fast, light hit), then Power Slash (a heavy hit that costs stamina). For an axe: Chop, then Bash (stuns for a turn). **Block** is a menu choice that takes less damage that turn and gives back some stamina, so it also buffs stamina. Is that the idea?
 3. **P1 cinematic:** what should it show, beat by beat? A starting suggestion: the sun rising over the harbor, boats and lanterns, the villagers gathering, Murl on the pier giving the speech, the crowd cheering as the newest fisher steps forward and is given the rowboat, then fireworks or lanterns over the water. Anything to add or cut?
 4. **P12 the rowboat:** Murl gives the rowboat at the festival, but it is already in your bag at the start. Should a new game start without a boat in the bag and have Murl hand it over in the festival?
 5. **P10:** I removed both the pop-up and the overnight sentence about the pirate ships. Is that what you meant, or only the pop-up?
+
+## Weapon attacks (decided by Jack, 12 October)
+- **Weapons to start with:** the sword and the axe (the wooden sword and bare hands count as the starter set). Each weapon type has its own weapon skill level that rises as it is used. **Attack power depends on the weapon skill only**, not on the overall Combat level.
+- **Attacks:** the battle menu's Attack opens the list of attacks the player knows with the weapon in hand.
+  - **Sword:** Slash (normal), Quick Strike (light), Power Slash (heavy).
+  - **Axe:** Chop (normal), Bash (a normal hit that may stun), Cleave (heavy).
+  - **Bare hands and wooden sword:** Strike (normal) and **Bash**.
+  - Attacks are learned at set weapon skill levels (first design: the normal attack and, for the starter set, Bash at the start; the others at levels 3 and 6; to be tuned at the playtest).
+- **Stamina:** **every attack costs stamina.** Light hits cost the least, normal hits a medium-low amount, heavy hits a high amount (first numbers to try, out of 100 stamina: light 2, normal 4, heavy 8; tunable). With too little stamina the player can only use what they can afford.
+- **Stun:** every **Bash** has only a **15% chance** to stun the foe for a turn.
+- **Block:** a menu choice that takes much less damage that turn and gives some stamina back, so it is how stamina is recovered in a fight.
+- **Menu:** Attack (opens the attack list), Block, Item, Run (this replaces the Skill entry the roadmap planned).
