@@ -383,10 +383,10 @@ def check(b, url):
     ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36});applyGates()" % json.dumps(cells)); assert ev("flag('t_boulder_open')&&at(__g[0],__g[1])===1&&at(__g[0]+1,__g[1])===1"), "an opened gate stays open after a reload"
     # seagull letters (2.7): a trigger row sends a letter; a gull lands, the letter opens, closing it keeps it in the bag's LETTERS pocket; it is not sent twice; Skip still keeps it; saved
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;LETTERS.t_letter={from:'A stranger',title:'A plea',text:'Please come quick.\\n\\nHurry!'};LETTERS.t_l2={from:'Bjorn',title:'Second',text:'Hello.'};TRIGGERS.push({id:'t_ltr',when:{talk:'Odo'},do:[{letter:'t_letter'},{set:'t_after_letter'}]});window.__x=0;window.__sent=sendLetter('t_letter',()=>{window.__x=1})")
-    pg.wait_for_timeout(500); assert ev("window.__sent===true&&SCENE!==null&&GULL!==null&&!$('letter').classList.contains('open')"), "the gull comes first"
-    pg.wait_for_timeout(2900); assert ev("GULL!==null&&GULL.fly===false&&$('letter').classList.contains('open')&&/From A stranger/.test($('letter-from').textContent)&&document.querySelectorAll('#letter-text p').length===2&&hasLetter('t_letter')"), "it lands and the letter opens"
+    pg.wait_for_function("GULL!==null", timeout=10000); assert ev("window.__sent===true&&SCENE!==null&&GULL!==null&&!$('letter').classList.contains('open')"), "the gull comes first"
+    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("GULL!==null&&GULL.fly===false&&$('letter').classList.contains('open')&&/From A stranger/.test($('letter-from').textContent)&&document.querySelectorAll('#letter-text p').length===2&&hasLetter('t_letter')"), "it lands and the letter opens"
     ev("move('u')"); assert ev("P.y===33+OY"), "no walking while the letter is open"
-    pg.tap("#letter-close"); pg.wait_for_timeout(1700); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
+    pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
     assert ev("sendLetter('t_letter')===false"), "a letter you have is not sent twice"
     ev("openBag();bagGo(1);bagGo(1);bagGo(1);bagGo(1)"); assert ev("$('btitle').textContent==='LETTERS'&&/A plea/.test($('blist').textContent)"), "the bag has a LETTERS pocket with it"
     ev("bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
@@ -528,10 +528,10 @@ def check(b, url):
     ev("fireTriggers('start')"); assert ev("SCENE===null"), "the festival plays once"
     assert ev("!flag('letter1_read')&&S.story.q===null"), "no letter until the boat"
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
-    ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_timeout(300)
+    ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_function("GULL!==null", timeout=10000)
     assert ev("sail===true&&SCENE!==null&&GULL!==null"), "boarding the boat in the village brings a seagull"
-    pg.wait_for_timeout(3000); assert ev("$('letter').classList.contains('open')&&/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
-    pg.tap("#letter-close"); pg.wait_for_timeout(1800)
+    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
+    pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000)
     assert ev("SCENE===null&&flag('letter1_read')&&hasLetter('q1_letter')&&S.story.q==='q1'&&/Quest 1|Stranger/.test(QUESTS.find(q=>q.id==='q1').name)"), "the letter is kept and Quest 1 starts"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
     ev("storyJump('q1')"); assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&flag('festival_done')&&P.x===156&&P.y===125"), "the testing menu can jump to the start of Quest 1"
