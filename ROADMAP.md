@@ -412,7 +412,7 @@ Build these **completely**, with world, mechanics and placeholder text, then pla
 - **After:** back in the village, NPCs mention pirate ships and a pirate base (Pirate Island). Pirate Island stays gated by pirate ships (3.5) until much later.
 - **Sets:** `q1_done`, `has_compass`, `pirate_base_known`.
 
-### 4.2 Quest 2: Find the Lost Man
+### 4.2 Quest 2: Find Rue
 - **Start:** the village elder (a new NPC) says a villager went to the mainland settlement for weapons and never came back, and to ask the blacksmith.
 - **Where:** the Walled Settlement (blacksmith, a new NPC and shop), then the Darkwood forest, then the woodcutter's cottage.
 - **What happens:**

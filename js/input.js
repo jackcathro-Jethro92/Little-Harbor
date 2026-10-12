@@ -4,15 +4,15 @@
 // one tile, and holding walks. Letting go of the newest key while an older one is still held carries on in the older direction instead of stopping.
 const map={up:'u',down:'d',left:'l',right:'r'},TURN_MS=120,REPEAT_MS=170;
 const held=[];let walkTimer=null;
-const step=d=>{move(d);if(S.buff>Date.now())move(d)}; // swiftness doubles the steps
+const step=d=>move(d); // a swiftness potion speeds up the timer (stepMs in stats.js), not the step
 const turn=d=>{if(SCENE)return;if(fs)cancel();P.f=d};
 const stopTimer=()=>{clearTimeout(walkTimer);walkTimer=null};
-function schedule(d,ms){stopTimer();const tick=()=>{if(held[held.length-1]!==d)return;if(document.querySelector('.open'))return releaseAll();step(d);walkTimer=setTimeout(tick,sail?STEP_MS.sail:STEP_MS.walk)};walkTimer=setTimeout(tick,ms)}
+function schedule(d,ms){stopTimer();const tick=()=>{if(held[held.length-1]!==d)return;if(document.querySelector('.open'))return releaseAll();step(d);walkTimer=setTimeout(tick,stepMs())};walkTimer=setTimeout(tick,ms)}
 function pressDir(d){const i=held.indexOf(d);if(i>=0)held.splice(i,1);held.push(d);
   if(P.f===d){step(d);schedule(d,REPEAT_MS)}else{turn(d);schedule(d,TURN_MS)}}
 function releaseDir(d){const i=held.indexOf(d);if(i<0)return;const wasTop=i===held.length-1;held.splice(i,1);
   if(!held.length)return stopTimer();
-  if(wasTop){const n=held[held.length-1];turn(n);schedule(n,sail?STEP_MS.sail:STEP_MS.walk)}}   // the older key is still down: carry on that way
+  if(wasTop){const n=held[held.length-1];turn(n);schedule(n,stepMs())}}   // the older key is still down: carry on that way
 function releaseAll(){held.length=0;stopTimer()}
 for(const id in map){const b=$(id);
   b.addEventListener('pointerdown',e=>{e.preventDefault();pressDir(map[id])});

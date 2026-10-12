@@ -85,7 +85,7 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 - **The Map screen (P25):** the whole map must be visible on a computer screen, including its bottom edge, so it scales to fit the window.
 
 ## The batches
-- **Batch 6: quick fixes.** P16 (stamina bar), P17 (Quest 2 trigger), P18 (slower movement; the old speed becomes the swiftness potion's), P19 (Find Rue), P22 (Old Sword), P23 (the distracted notification), P24 (slower centipede respawn), P25 (the map fits).
+- **Batch 6: quick fixes.** P16 (stamina bar), P17 (Quest 2 trigger), P18 (slower movement; the old speed becomes the swiftness potion's), P19 (Find Rue), P22 (Old Sword), P23 (the distracted notification), P24 (slower centipede respawn), P25 (the map fits).  **(built)**
 - **Batch 7: items.** P20 (fish values) and P21 (the tent): both wait for Jack's answers.
 - **Batch 8: battle animations.** P26.
 

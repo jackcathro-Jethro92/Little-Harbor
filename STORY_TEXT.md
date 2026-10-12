@@ -22,7 +22,7 @@ The villager then runs away.
 you find out that more pirate ships have been seen, and that they have set up a base on one of the islands. 
 You are too weak at this stage to defeat these pirates. You will need to be a higher level and have better gear.
 
-Quest 2: Find the Lost Man
+Quest 2: Find Rue
 The village elder named “Bjorn the Elder” tells you they sent someone from the village to the mainland settlement to bring back weapons, so the village can defend itself, but he hasn’t returned. Can you find him and bring everything back safely? They tell you to speak with the blacksmith in the walled settlement.
 (Bjorn)
 “Ahh! Thanks for coming to see me. Im guessing you heard. Well look, I need your help. I have sent Rue to the mainland to get weapons and supplies for the village. If those Pirates show up here we don't want to be defenseless. But she should have been back by now. I need to go speak with Garrick about this and see if you can find Rue. Hurry on now.”  

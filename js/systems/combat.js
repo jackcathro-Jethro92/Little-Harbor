@@ -7,7 +7,8 @@ const dropEnemies=group=>{for(let i=ENEMIES.length-1;i>=0;i--)if(ENEMIES[i].grou
 // Touching a creature starts a turn-based battle (js/systems/battle.js): the creature reaches the player, the player walks into it or faces it and presses Use. The battle's foe is made from the creature's
 // ENEMY_TYPES row (health, `hit:[min,max]` or up to its `dmg`, xp, gold, drops, art), so every row can be fought without more work.
 function foeFromType(id){const ty=ENEMY_TYPES[id];return {n:ty.n,hp:ty.hp,hit:ty.hit||[Math.max(1,Math.round(ty.dmg*.5)),ty.dmg],gold:ty.gold,xp:ty.xp||0,drops:ty.drops,art:ty.art,atk:ty.atk||'attacks'}}
-function startEnemyBattle(e){if(BATTLE||SCENE||!e.alive)return false;const key='en:'+e.t;FOES[key]=foeFromType(e.t);BATTLES[key]={foes:[key]};
+function startEnemyBattle(e){if(BATTLE||SCENE||!e.alive)return false;
+  const shut=[...document.querySelectorAll('.open')];if(shut.length){shut.forEach(el=>el.classList.remove('open'));AMBUSH_NOTE=true}const key='en:'+e.t;FOES[key]=foeFromType(e.t);BATTLES[key]={foes:[key]};
   return startBattle(key,res=>{const ty=ENEMY_TYPES[e.t];
     if(res==='won'||res==='escaped')enemyDefeated(e);
     else{e.cd=6;if(res==='lost'){e.x=e.hx;e.y=e.hy}}   // run away or be knocked out: it waits a moment (and goes home if you were knocked out)
@@ -15,7 +16,10 @@ function startEnemyBattle(e){if(BATTLE||SCENE||!e.alive)return false;const key='
 // a creature that has been beaten: it falls (and returns later if its row says so), and a group that is all beaten fires its triggers. The rewards are given by the battle.
 function enemyDefeated(e){const ty=ENEMY_TYPES[e.t];e.alive=false;e.resp=ty.respawn||0;e.pois=0;if(ty.die)say(ty.die);ui();
   if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive)){enemyBeaten(e.group);if(typeof encounterGroupBeaten==='function')encounterGroupBeaten(e.group)}}
-const canBeAmbushed=()=>!BATTLE&&!SCENE&&!sail&&!dlgActive()&&S.hp>0&&!document.querySelector('.open')&&!(typeof AR!=='undefined'&&AR.on);
+// screens a creature may ambush you over (you were distracted): the map, bag, skills, shops and so on. Title menu, letters and the look editor are not on the list.
+let AMBUSH_NOTE=false; // set when a creature ambushes you over an open screen; the battle opens with a notice
+const AMBUSH_OVER=['mapov','ch','qs','store','bag','craft','skills','menu'];
+const canBeAmbushed=()=>!BATTLE&&!SCENE&&!sail&&!dlgActive()&&S.hp>0&&![...document.querySelectorAll('.open')].some(el=>!AMBUSH_OVER.includes(el.id))&&!(typeof AR!=='undefined'&&AR.on);
 // one tick (about 0.6 s) for every creature: they wander, chase when you are close, and start a battle when they reach you
 function enemiesTick(){if(BATTLE)return;
   for(let i=ENEMIES.length-1;i>=0;i--){const e=ENEMIES[i],ty=ENEMY_TYPES[e.t];
