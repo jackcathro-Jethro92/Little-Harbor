@@ -477,6 +477,36 @@ def check(b, url):
     ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
     assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Fight: Pirate grunt$/.test(b.textContent))"), "the testing menu can start a fight"
     ev("tmClose()")
+    # encounters (3.3): an action starts a group of pirates standing in the world; each is fought through the battle screen; the ones beaten stay beaten through a reload; the last one sets the done flag, runs the win actions and fires {beaten}
+    ev("BATTLE_FAST=true;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');NPC.forEach(n=>{n.busy=1});ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});startEncounter('t_enc')")
+    assert ev("encFigures('t_enc').length===2&&flag('enc_t_enc_on')&&!flag('enc_t_enc_done')&&encFigures('t_enc').every(n=>WK.includes(at(n.x,n.y)))"), "starting an encounter puts its foes in the world"
+    ev("(()=>{const n=encFigures('t_enc')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
+    assert ev("BATTLE!==null&&BATTLE.foes.length===1"), "facing a foe and pressing Use starts a fight with it"
+    for _ in range(14):
+        if ev("BATTLE===null"): break
+        pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
+        if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+        pg.wait_for_timeout(30)
+    pg.wait_for_function("BATTLE===null", timeout=5000)
+    assert ev("encFigures('t_enc').length===1&&encDown('t_enc').length===1&&!flag('enc_t_enc_done')"), "a beaten foe is gone and the others wait"
+    ev("S.hp=50;save()"); pg.reload(); pg.wait_for_timeout(500)
+    ev("ENCOUNTERS.push({id:'t_enc',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[-2,-2]},{foe:'pirate_grunt',at:[2,-2]}],win:[{set:'t_enc_won'}]});TRIGGERS.push({id:'t_enc_beaten',when:{beaten:'t_enc'},do:[{set:'t_enc_trigger'}]});BATTLE_FAST=true;applyEncounters()")
+    assert ev("encFigures('t_enc').length===1&&encFigures('t_enc')[0].enc.i===1"), "after a reload the beaten one stays beaten and the other is back"
+    ev("S.hp=50;S.eq.weapon='sword';add('sword');NPC.forEach(n=>{n.busy=1});(()=>{const n=encFigures('t_enc')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(100)
+    for _ in range(14):
+        if ev("BATTLE===null"): break
+        pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
+        if ev("BATTLE!==null"): ev("[...$('bt-menu').children].find(b=>b.textContent==='Attack').click()")
+        pg.wait_for_timeout(30)
+    pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(100)
+    assert ev("flag('enc_t_enc_done')&&flag('t_enc_won')&&flag('t_enc_trigger')&&encFigures('t_enc').length===0"), "the last foe finishes it: done flag, win actions, and the beaten trigger"
+    ev("S.hp=50;ENEMY_TYPES.t_imp2={n:'Imp',hp:6,dmg:2,cd:1,speed:1,chase:6,art:'ghost',xp:1,respawn:0};ENCOUNTERS.push({id:'t_rt',mode:'realtime',near:1,foes:[{type:'t_imp2',at:[3,-2]},{type:'t_imp2',at:[4,-2]}],win:[{set:'t_rt_won'}]});startEncounter('t_rt')")
+    assert ev("ENEMIES.filter(e=>e.group==='t_rt').length===2"), "a real-time encounter spawns its enemies as a group"
+    ev("ENEMIES.filter(e=>e.group==='t_rt').forEach(e=>{P.x=P.rx=e.x;P.y=P.ry=e.y+1;P.f='u';for(let i=0;i<8&&e.alive;i++){S.sta=100;S.hp=50;act()}})")
+    assert ev("flag('enc_t_rt_done')&&flag('t_rt_won')&&ENEMIES.filter(e=>e.group==='t_rt').length===0"), "beating the group finishes a real-time encounter"
+    ev("BATTLE_FAST=false;tmOpen('pause');[...document.querySelectorAll('#title-body button')].find(b=>b.textContent==='Test: jump to a quest').click()")
+    assert ev("[...document.querySelectorAll('#title-body button')].some(b=>/^Encounter: Three pirates, one by one$/.test(b.textContent))"), "the testing menu can start an encounter"
+    ev("tmClose()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
