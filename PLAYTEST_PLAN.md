@@ -57,3 +57,39 @@ Jack's notes from the first playthrough (12 October 2026). He played until a bug
 ## The festival cinematic (decided by Jack, 12 October)
 - **Sequence (Jack said yes to all of it):** 1 sunrise over a dark, quiet harbor with gull cries as the only life; 2 the village wakes (lanterns and bunting go up, villagers gather along the road to the pier); 3 boats bob in the harbor and the camera pans slowly down the pier; 4 Murl steps onto the pier and gives his welcome speech, the crowd cheers; 5 the crowd parts for the newest fisher, who walks down the road to Murl; 6 Murl presents the little rowboat and ties it up at the end of the pier; 7 lanterns float out over the water, the sun climbs and the screen fades to the game with the player at the pier.
 - **Silent** (no sound or music for now), about **50 seconds**, **placeholder speech** (Jack writes his own later), black film bars top and bottom, a tap anywhere skips it (the skip puts the game in the same place as the finished cinematic).
+
+---
+
+# Playtest #2 (Jack's second set of notes)
+
+Jack's handwritten notes from the second playthrough. Spelling corrected; the crossed-out note ("When you die?") is dropped. Ids continue from the first set (**P16** onwards).
+
+| Id | Note | Batch | Status |
+| --- | --- | --- | --- |
+| P16 | While in combat, show stamina as a blue bar | 6 | Planned |
+| P17 | Quest 2 is in the quest log before talking with Bjorn: change that trigger | 6 | Planned |
+| P18 | Movement could be slowed further | 6 | **Decided (Jack, 13 Oct):** see "Movement speed" below |
+| P19 | Rename Quest 2 from "Find the Lost Man" to "Find Rue" | 6 | **Decided:** change the quest log name and Jack's story text |
+| P20 | Adjust fish values to bring the value down | 7 | Waiting for numbers (see questions) |
+| P21 | Add a tent to the camp kit that lets you sleep | 7 | Waiting for answers (see questions) |
+| P22 | Rename the first sword from "Sword" to "Old Sword" | 6 | Planned |
+| P23 | The game does not pause in menus: show a notification that you have been attacked while distracted | 6 | **Decided (Jack, 13 Oct):** a notification for now, not a pause |
+| P24 | Centipede respawn might need to be a little slower | 6 | Planned |
+| P25 | The Map screen is too large for a computer screen: the bottom of the map cannot be seen | 6 | **Decided:** make it fit |
+| P26 | Animations for attacks on the combat screen, and for blocks | 8 | Planned |
+
+## Decisions
+- **Movement speed (P18):** walking and sailing both become slower. **The speed the game has now becomes the speed of the swiftness potion.** The speed for the boots will be designed when the boots are added to the game.
+- **Quest 2's name (P19):** it becomes "Find Rue" in the quest log and in `STORY_TEXT.md`. (The story text is Jack's own words, so this change is made at his request.)
+- **Attacked while distracted (P23):** while a menu, the bag or a screen is open the game keeps running. For this version, if a creature ambushes the player while a screen is open, the screen closes into the battle and a notification says the player was attacked while distracted. A pause may be considered later.
+- **The Map screen (P25):** the whole map must be visible on a computer screen, including its bottom edge, so it scales to fit the window.
+
+## The batches
+- **Batch 6: quick fixes.** P16 (stamina bar), P17 (Quest 2 trigger), P18 (slower movement; the old speed becomes the swiftness potion's), P19 (Find Rue), P22 (Old Sword), P23 (the distracted notification), P24 (slower centipede respawn), P25 (the map fits).
+- **Batch 7: items.** P20 (fish values) and P21 (the tent): both wait for Jack's answers.
+- **Batch 8: battle animations.** P26.
+
+## Questions for Jack
+1. **P20 fish values:** by how much? A first suggestion: lower every fish's sell value by about a third (for example a 30-gold fish becomes 20), keeping the rarer fish more valuable than the common ones. Say a number or a feel ("half") and I will set it.
+2. **P21 the tent:** (a) is it part of the existing camp kit, so that placing the camp kit gives you a tent you can sleep in, or a new item? (b) Should sleeping in the tent work like sleeping on the boat (restore health and stamina and start the next day)? (c) Should it be placeable anywhere on land, or only near the camp?
+3. **P26 animations:** which are most important? A suggestion: the foe flashes and recoils when hit, the player lunges forward with the weapon, a slash arc over the foe for sword attacks and a chop arc for axes, a shield glow when blocking, and a stun spin of stars over a stunned foe.
