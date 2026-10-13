@@ -6,3 +6,4 @@
     if(![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>at(xx+a,yy+b)===1))continue;
     const d=dx*dx+dy*dy;if(!best||d<best[0])best=[d,xx,yy]}
   if(best)setT(best[1],best[2],140)});
+

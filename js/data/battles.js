@@ -9,6 +9,13 @@
 const FOES={
  pirate_grunt:{n:'Pirate grunt',hp:10,hit:[1,3],gold:[10,25],xp:25,drops:[['rope',.3,1]],atk:'swings a cutlass',look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}},
  pirate_gunner:{n:'Pirate gunner',hp:8,hit:[2,4],gold:[12,30],xp:30,drops:[['iron_bar',.15,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
+ // the temple pirates (playtest #3): tougher than the Sea temple's first five. The Earth temple's (a little tougher per head than a Darkwood centipede, 30 health and 3-6 a hit, and five of them in a row) need the Old Sword or better and a potion or
+ // two; the Sea vault's six hit harder, have more health and include a first mate. Each temple has more pirates and harder ones (Jack's note). Simulated with the real damage rules, healing at 18 health: with the Old Sword (damage 5, Sword skill 2) the Earth five cost about two healing potions and the Sea six about five; the bronze sword needs about one and two to three; the wooden sword needs about six for the Earth five, so it is not realistic. First guesses for the next playtest.
+ earth_grunt:{n:'Pirate grunt',hp:20,hit:[4,6],gold:[15,30],xp:35,drops:[['rope',.3,1]],atk:'swings a cutlass',look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}},
+ earth_gunner:{n:'Pirate gunner',hp:15,hit:[5,7],gold:[18,35],xp:40,drops:[['iron_bar',.2,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
+ sea_cutthroat:{n:'Pirate cutthroat',hp:24,hit:[5,7],gold:[25,45],xp:50,drops:[['rope',.4,1]],atk:'slashes with a cutlass',look:{skin:1,hair:3,shirt:2,jk:2,hat:'cap',hc:1,pack:false}},
+ sea_gunner:{n:'Pirate gunner',hp:18,hit:[5,8],gold:[28,50],xp:55,drops:[['iron_bar',.25,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
+ sea_mate:{n:'First mate',hp:32,hit:[6,9],gold:[50,80],xp:80,drops:[['iron_bar',.4,1]],atk:'swings a heavy cutlass',look:{skin:3,hair:2,shirt:1,jk:0,hat:'cap',hc:2,hstyle:'short',pack:false}},
  pirate_captain:{n:'Pirate captain',hp:60,hit:[6,10],gold:[60,100],xp:120,drops:[],atk:'slashes with a heavy sabre',flee:{at:.35,msg:'The captain shouts a curse and escapes!'},look:{skin:1,hair:4,shirt:0,jk:0,hat:'cap',hc:1,hstyle:'long',pack:false}}
 };
 const BATTLES={

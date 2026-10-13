@@ -17,3 +17,7 @@ TRIGGERS.push(
  {id:'q3_murl_wait',when:{talk:'Murl'},if:{flag:'q3_started',noflag:'q3_done'},do:[{say:'q3_murl_wait'}]},
  {id:'q3_hale',when:{talk:'Hale'},if:{flag:'axe_waiting',noflag:'has_axe'},do:[{say:'q3_hale'},{ensure:{woodcutters_axe:1}},{set:'has_axe'},{toast:'Hale gave you a woodcutter\'s axe!'}]}
 );
+
+// Restless spirits haunt the island (playtest #3: Quest 3 needed some challenge; spawned here because this file loads after the creature code). Four of them drift near the logs and the middle of the island on plain grass, chase you within 6 tiles, stay within 6 tiles of home and are back every
+// morning. Touching one starts a battle like the Darkwood's centipedes. The `oak_ghost` row is in js/data/enemies.js.
+[[142,170],[147,171],[140,164],[146,176]].forEach(([x,y])=>{const h=nearestTile(x,y,(a,b)=>at(a,b)===1&&!npcAt(a,b));if(h)spawnEnemy('oak_ghost',h[0],h[1])});

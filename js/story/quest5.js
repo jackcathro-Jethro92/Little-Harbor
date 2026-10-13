@@ -9,7 +9,7 @@ QUESTS.push({id:'q5',name:'Saviour of the Seas',
  goals:[[283,40],[283,32],[283,32],[212,196]]});
 VARIANTS.push({id:'sea_vault',flag:'q5_vault_blasted',tiles:[[217,VZ.y0+4,73],[218,VZ.y0+4,73]]});applyVariants(true);   // the pedestal is blown apart and buried under fallen rock
 STORY_PEOPLE.unshift({npc:'Mysterious Girl',if:{flag:'q5_girl_here'},at:[158,TS.y0+8],f:'r',say:['[Placeholder] Both keys are safe here. The Tower will keep them.']});
-ENCOUNTERS.push({id:'q5_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[217,VZ.y0+8]},{foe:'pirate_grunt',at:[216,VZ.y0+5]},{foe:'pirate_gunner',at:[219,VZ.y0+5]}]});
+ENCOUNTERS.push({id:'q5_pirates',mode:'battle',foes:[{foe:'sea_cutthroat',at:[217,VZ.y0+8]},{foe:'sea_cutthroat',at:[216,VZ.y0+5]},{foe:'sea_gunner',at:[219,VZ.y0+5]},{foe:'sea_gunner',at:[216,VZ.y0+3]},{foe:'sea_mate',at:[217,VZ.y0+3]},{foe:'sea_cutthroat',at:[219,VZ.y0+3]}]});
 DLG.q5_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:'[Placeholder] Run! The captain will hear of this! Leave the rest, we have what we came for!'}}};
 DLG.q5_girl={start:'a',nodes:{a:{who:'Mysterious Girl',text:"I'm glad I caught you. I've brought you something to help in your quest! Take this with you."}}};   // JACK
 SCENES.q5_vault=[

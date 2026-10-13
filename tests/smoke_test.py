@@ -38,6 +38,8 @@ def load(b, url, save):
 def check(b, url):
     pg, errs = load(b, url, SAVE)
     ev = pg.evaluate
+    # playtest #3: Oak Island is haunted by four restless spirits standing on grass near the island's middle
+    assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.x,e.y)===1&&Math.hypot(e.x-144,e.y-170)<14)})()"), "four restless spirits haunt Oak Island"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
@@ -653,9 +655,9 @@ def check(b, url):
     talk("Hale"); assert ev("flag('has_axe')&&count('woodcutters_axe')===1&&S.eq.axe==='woodcutters_axe'"), "Hale gives the woodcutter's axe"
     talk("Hale"); assert ev("count('woodcutters_axe')===1"), "only one axe"
     # Quest 4 (5.4): the second letter, the pirates at the Earth temple, the key, and the Temple Tower (boots)
-    def fight_all(enc, n):
+    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with an iron sword and plenty of health
         for k in range(n):
-            ev("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;S.sta=100;act()})()" % enc); pg.wait_for_timeout(100)
+            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("add('iron_sword');S.eq.weapon='iron_sword';S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
             for _ in range(20):
                 if ev("BATTLE===null"): break
                 pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
@@ -667,11 +669,11 @@ def check(b, url):
     assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('Iv just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
     ev("P.x=P.rx=12;P.y=P.ry=40;P.f='u';fireTriggers('step')")
     assert ev("flag('q4_gate_started')&&S.story.step===1&&encFigures('q4_gate').length===3&&encFigures('q4_gate').every(n=>WK.includes(at(n.x,n.y)))"), "three pirates hold the temple path"
-    fight_all('q4_gate', 3); assert ev("flag('enc_q4_gate_done')&&S.story.step===2"), "beating them lets you in"
+    fight_all('q4_gate', 3, True); assert ev("flag('enc_q4_gate_done')&&S.story.step===2"), "beating them lets you in"
     ev("P.x=P.rx=6;P.y=P.ry=15;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_overhear'", timeout=6000)
     assert ev("zoneOf(P.x,P.y)===5&&encFigures('q4_grunts').length===2&&DLG.q4_grunt1.nodes.a.text.startsWith('You sure the boss is right?')"), "going into the sanctum starts the overheard scene with two grunts"
     ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    fight_all('q4_grunts', 2); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    fight_all('q4_grunts', 2, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("count('earth_key')===1&&flag('q4_key_got')&&!flag('q4_girl_here')&&S.story.step===3&&NPC.find(n=>n.n==='Mysterious Girl').hidden===1&&DLG.q4_girl2.nodes.a.text.endsWith('where they will be safe.')"), "the girl gives the Earth Key and goes"
     assert ev("S.story.q==='q4'&&Math.abs(questGoal()[0]-212)<=2"), "the compass now points at the Temple Tower"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
@@ -683,9 +685,9 @@ def check(b, url):
     ev("P.x=P.rx=283;P.y=P.ry=32;P.f='u';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===6", timeout=5000); pg.wait_for_function("S.story.step===1", timeout=5000)
     assert ev("flag('q5_hall')&&S.story.step===1"), "going into the temple hall sends you after the pirates"
     ev("sail=false;P.x=HZ.dx;P.y=HZ.y0+7;P.rx=P.x;P.ry=P.y;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_vault'", timeout=6000)
-    assert ev("zoneOf(P.x,P.y)===7&&encFigures('q5_pirates').length===3&&flag('q5_vault_blasted')&&at(217,VZ.y0+4)===73&&encFigures('q5_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the vault is blown open and three pirates wait in it"
+    assert ev("zoneOf(P.x,P.y)===7&&encFigures('q5_pirates').length===6&&flag('q5_vault_blasted')&&at(217,VZ.y0+4)===73&&encFigures('q5_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the vault is blown open and three pirates wait in it"
     ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    fight_all('q5_pirates', 3); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    fight_all('q5_pirates', 6, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("count('sea_key')===1&&flag('q5_key_got')&&S.story.step===3&&Math.abs(questGoal()[0]-212)<=2"), "the pirates run and you take the Sea Key back"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("flag('q5_done')&&flag('sea_key_at_tower')&&count('sea_key')===0&&S.eq.armour==='enchanted_armour'&&S.story.q===null&&S.story.done.includes('q5')&&(()=>{const g=NPC.find(n=>n.n==='Mysterious Girl');return g.hidden===0&&zoneOf(g.x,g.y)===10})()&&DLG.q5_girl.nodes.a.text.startsWith(\"I'm glad I caught you.\")"), "the girl gives the enchanted armour and both keys rest at the tower"
