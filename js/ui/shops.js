@@ -54,7 +54,7 @@ function openTrader(key,mode){
   let n=0;
   sh.list.forEach(([title,list])=>{
     if(buy&&(sh.noBuy||[]).includes(title))return;
-    if(buy){cat=title;list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
+    if(buy){cat=title;list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel','armour'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
       row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')})})}
     else if(sh.sell.includes(title)){cat=title;list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price/2);
       row(it.n+' x'+count(id),'Sells for '+pr.toLocaleString()+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id]){delete S.bag[id];if(S.eq[slotOf(id)]===id)S.eq[slotOf(id)]=null}ui();save();say(sh.who+': Sold '+it.n.toLowerCase()+' for '+pr.toLocaleString()+'g.');openTrader(key,'sell')})})}});

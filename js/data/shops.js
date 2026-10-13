@@ -1,10 +1,11 @@
 // ---------- shop stock (data table: add rows, not code) ----------
 // Garrick's Forge in the Walled Settlement. [section, [[item id, price], ...]]. He buys materials at half price.
 const SMITH=[
- ['Materials',[['copper_ore',30],['tin_ore',30],['bronze_ore',50],['iron_bar',160],['rope',25],['softwood_plank',15],['medium_plank',30],['hardwood_plank',55]]],
+ ['Materials',[['cloth',40],['leather',70],['copper_ore',30],['tin_ore',30],['bronze_ore',50],['iron_bar',160],['rope',25],['softwood_plank',15],['medium_plank',30],['hardwood_plank',55]]],
  ['Rare ore',[['silver_ore',220],['gold_ore',400]]],
  ['Weapons',[['hand_axe',400],['bronze_sword',450],['iron_sword',1100],['greatsword',3000]]],
  ['Tools',[['iron_pickaxe',600],['iron_axe',600]]],
+ ['Armour',[['cloth_hood',500],['cloth_tunic',1200],['cloth_shoes',450],['leather_cap',1500],['leather_jerkin',3500],['leather_boots',1300],['chain_coif',4500],['chain_hauberk',10000],['chain_boots',4000]]],
  ['Objects',[['standard_bench',100],['forge',400],['camp_kit',150]]]
 ];
 // Lucie's Gold & Gems in the Mountain Town (enchanted jewellery: effects are the `fx` field on each item)
@@ -19,7 +20,7 @@ const APOTHECARY=[
 ];
 // Every trader the generic shop screen (openTrader in js/ui/shops.js) can show. sell = sections the trader buys back at half price.
 const SHOPS={
- smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Metal, blades and tools.',sellTag:'Garrick buys metal and timber at half price.',none:'Bring ore, iron bars, planks or rope.',thanks:'A fine choice.',list:SMITH,sell:['Materials','Rare ore'],noBuy:['Rare ore']},
+ smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Metal, blades, tools and armour.',sellTag:'Garrick buys metal, timber and armour at half price.',none:'Bring ore, iron bars, planks or rope.',thanks:'A fine choice.',list:SMITH,sell:['Materials','Rare ore','Armour'],noBuy:['Rare ore']},
  apothecary:{name:"Astrid's Apothecary",who:'Astrid',buyTag:'Potions to heal and quicken, and poisons for your blade.',sellTag:'Astrid buys potions and poisons back at half price.',none:'Astrid only buys potions and poisons.',thanks:'Use it wisely.',list:APOTHECARY,sell:['Potions','Poisons']},
  jeweller:{name:"Lucie's Gold & Gems",who:'Lucie',buyTag:'Enchanted rings and amulets. Wear one ring and one amulet.',sellTag:'Lucie buys jewellery back at half price.',none:'Lucie only buys rings and amulets.',thanks:'May it serve you well.',list:JEWELLER,sell:['Rings','Amulets']}
 };

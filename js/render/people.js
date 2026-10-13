@@ -19,7 +19,7 @@ function shadePerson(o){poc.clearRect(0,0,24,24);CSdraw(poc,2,2,o);const im=poc.
   if((o.view||'f')==='f'){const dy=(!o.fishing&&(o.frame===1||o.frame===3))?1:0;k.fillStyle='rgba(230,120,110,.55)';k.fillRect(2+5,2+9+dy,1,1);k.fillRect(2+10,2+9+dy,1,1)}
   return cv}
 CharacterSprite.draw=function(ctx,x,y,o){if(ctx!==g)return CSdraw(ctx,x,y,o);
-  const key=JSON.stringify([o.view,o.frame,o.fishing,o.bite,o.jacket,o.pack,o.hat,o.style,o.colors,o.fishing?((o.t||0)>>5)&1:0]);
+  const key=JSON.stringify([o.view,o.frame,o.fishing,o.bite,o.jacket,o.pack,o.hat,o.style,o.colors,o.armour,o.fishing?((o.t||0)>>5)&1:0]);
   let cv=PCACHE.get(key);if(!cv){cv=shadePerson(o);if(PCACHE.size>500)PCACHE.clear();PCACHE.set(key,cv)}
   if(!o.noShadow)pShadow(g,Math.round(x)+8,Math.round(y)+19,6,2,.22);
   g.drawImage(cv,Math.round(x)-2,Math.round(y)-2)};

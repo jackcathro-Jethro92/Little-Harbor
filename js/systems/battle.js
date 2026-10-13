@@ -37,7 +37,7 @@ function bDraw(){const B=BATTLE;if(!B)return;
     const tag=document.createElement('div');tag.className='bt-tag';const nm=document.createElement('span');nm.textContent=f.t.n+(f.pois>0?' (poisoned)':'');tag.appendChild(nm);
     const bar=document.createElement('div');bar.className='bt-bar';const fill=document.createElement('i');fill.style.width=Math.max(0,Math.round(100*f.hp/f.max))+'%';bar.appendChild(fill);tag.appendChild(bar);d.appendChild(tag);
     d.onclick=()=>{if(f.alive&&B.picking){B.sel=i;bDraw()}};f.el=d;$('bt-foes').appendChild(d)});
-  const cv=$('bt-me'),c=cv.getContext('2d');cv.style.animationDelay=swayDelay();c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.drawImage(shadePerson({...lo({...S.look}),view:'b',frame:0}),0,0,24,24,0,0,cv.width,cv.height);
+  const cv=$('bt-me'),c=cv.getContext('2d');cv.style.animationDelay=swayDelay();c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.drawImage(shadePerson({...playerLook(),view:'b',frame:0}),0,0,24,24,0,0,cv.width,cv.height);
   $('bt-hp').style.width=Math.max(0,Math.round(100*S.hp/maxHp()))+'%';$('bt-hpn').textContent=Math.ceil(S.hp)+' / '+maxHp()+' HP';$('bt-sta').style.width=Math.max(0,Math.min(100,Math.round(100*S.sta/maxSta())))+'%';$('bt-stan').textContent=Math.ceil(S.sta)+' STA'}
 // ---------- battle animations: a gentle sway for everyone, lunges, a slash or chop over the foe, a flash and a floating number on every hit, a shield flash for blocks ----------
 // BATTLE.fx keeps a note of each effect (the tests read it). BATTLE_BLOCKS=false (tests) stops foes blocking so old checks stay predictable.

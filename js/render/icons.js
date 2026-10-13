@@ -45,7 +45,11 @@ function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=
     else if(id==='forge'){r(2,4,12,10,'#2e2e36');r(3,5,10,8,'#8d8f87');r(5,8,6,5,'#2e1f10');r(6,10,4,3,'#e8632e')}
     else{r(2,6,12,4,'#2e1f10');r(3,7,10,2,'#a8743f');r(3,10,2,4,'#6b4423');r(11,10,2,4,'#6b4423')}}
   else if(id==='knife'){for(let t=0;t<6;t++)r(3+t,12-t,2,2,'#7a5230');for(let t=0;t<5;t++)r(8+t,7-t,2,2,'#c9d2da')}
-  else if(K==='jewel'){const c=ITEMS[id].gem;if(ITEMS[id].slot==='ring'){r(4,6,8,8,'#2e1f10');r(5,7,6,6,'#e8c050');r(6,8,4,4,'#2e1f10');r(6,3,4,4,'#2e1f10');r(7,4,2,2,c);r(7,4,1,1,'#fff')}
+  else if(K==='armour'&&ITEMS[id].look!=='enchanted'){const [m,d,h]=ARM_PAL[ITEMS[id].look],sl=ITEMS[id].slot,O='#2e1f10';
+    if(sl==='helmet'){r(5,2,6,1,O);r(4,3,8,1,O);r(3,4,10,8,O);r(5,3,6,1,m);r(4,4,8,7,m);r(5,3,4,1,h);r(4,4,8,1,h);r(4,6,8,1,d);r(4,7,2,4,d);r(10,7,2,4,d);r(6,7,4,4,O);r(7,8,2,3,'#d8b890');if(ITEMS[id].look==='chain')for(let i=0;i<6;i++)r(4+(i%3)*3,4+((i/3)|0)*3+(i%2),1,1,h);if(ITEMS[id].look==='leather')r(3,10,10,1,d)}
+    else if(sl==='boots'){r(4,2,5,9,O);r(5,3,3,7,m);r(5,3,3,1,h);r(3,10,9,4,O);r(4,11,8,2,d);if(ITEMS[id].look==='chain')for(let i=0;i<4;i++)r(5+(i%2)*2,4+i*2,1,1,h)}
+    else{r(3,2,10,3,O);r(2,3,3,4,O);r(11,3,3,4,O);r(4,3,8,11,O);r(5,4,6,9,m);r(5,4,6,2,h);r(7,6,2,6,d);if(ITEMS[id].look==='chain')for(let i=0;i<8;i++)r(5+(i%4)*2,6+((i/4)|0)*3,1,1,h)}}
+  else if(K==='jewel'||K==='armour'){const c=ITEMS[id].gem;if(ITEMS[id].slot==='ring'){r(4,6,8,8,'#2e1f10');r(5,7,6,6,'#e8c050');r(6,8,4,4,'#2e1f10');r(6,3,4,4,'#2e1f10');r(7,4,2,2,c);r(7,4,1,1,'#fff')}
     else if(ITEMS[id].slot==='armour'){r(3,2,10,3,'#2e1f10');r(2,3,3,4,'#2e1f10');r(11,3,3,4,'#2e1f10');r(4,3,8,11,'#2e1f10');r(5,4,6,9,'#8fb4d8');r(5,4,6,2,'#c4def2');r(7,6,2,6,'#5f86ac');r(7,7,2,2,c)}
     else if(ITEMS[id].slot==='boots'){r(4,2,5,9,'#2e1f10');r(5,3,3,7,'#9a6a3a');r(3,10,9,4,'#2e1f10');r(4,11,8,2,'#b8824a');r(5,3,3,1,'#e8d8b0');r(6,6,1,1,c)}
     else{r(3,1,1,5,'#c8a040');r(12,1,1,5,'#c8a040');r(4,5,2,2,'#c8a040');r(10,5,2,2,'#c8a040');r(6,7,4,2,'#c8a040');r(5,9,6,6,'#2e1f10');r(6,10,4,4,c);r(6,10,1,1,'#fff')}}

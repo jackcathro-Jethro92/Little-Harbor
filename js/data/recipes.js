@@ -4,6 +4,17 @@ const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
  {out:'softwood_plank',n:2,needs:{softwood:1},station:'bench',xp:3},
  {out:'medium_plank',n:2,needs:{medium_wood:1},station:'bench',xp:4},
  {out:'hardwood_plank',n:2,needs:{hardwood:1},station:'bench',xp:6},
+ {out:'cloth',n:1,needs:{fiber:4},station:'bench',xp:4},
+ // armour (playtest #3): crafted only at Crafting level 10 (`level`); cloth and leather at the workbench, chainmail at the forge
+ {out:'cloth_hood',n:1,needs:{cloth:3},level:10,station:'bench',xp:60},
+ {out:'cloth_tunic',n:1,needs:{cloth:6,rope:1},level:10,station:'bench',xp:90},
+ {out:'cloth_shoes',n:1,needs:{cloth:3},level:10,station:'bench',xp:60},
+ {out:'leather_cap',n:1,needs:{leather:3,rope:1},level:10,station:'bench',xp:80},
+ {out:'leather_jerkin',n:1,needs:{leather:6,rope:2},level:10,station:'bench',xp:120},
+ {out:'leather_boots',n:1,needs:{leather:3,rope:1},level:10,station:'bench',xp:80},
+ {out:'chain_coif',n:1,needs:{iron_bar:3},level:10,station:'forge',xp:120},
+ {out:'chain_hauberk',n:1,needs:{iron_bar:8},level:10,station:'forge',xp:200},
+ {out:'chain_boots',n:1,needs:{iron_bar:3},level:10,station:'forge',xp:120},
  {out:'iron_bar',n:1,needs:{bronze_ore:1,copper_ore:1,tin_ore:1},station:'forge',xp:20},
  // food: 'fire' = the camp's campfire; 'cooking' = cooking station (which also does fire recipes)
  {out:'grilled_sardine',n:1,needs:{sardine:1},station:'fire',xp:3,skill:'cooking'},

@@ -329,7 +329,7 @@ def check(b, url):
     ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
     ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
     ev("openStore('boat')"); assert tabs() == ["Boats", "Yard"], tabs()
-    ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Objects"], tabs()
+    ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Armour", "Objects"], tabs()
     ev("openTrader('jeweller','buy')"); assert tabs() == ["Rings", "Amulets"], tabs()
     ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons"], tabs()
     ev("S.bag.sardine=3;S.bag.carrot=2;openGeneral('sell')"); assert tabs()[0] == "Fish" and "Ingredients" in tabs(), tabs()
@@ -810,6 +810,23 @@ def check(b, url):
     assert ev("WORK.kind==='axe'&&performance.now()-WORK.at<300"), "chopping starts an axe swing"
     ev("for(let i=0;i<4;i++){WORK.at=performance.now()-i*110-5;draw()}"); ev("add('pickaxe');S.eq.pickaxe='pickaxe';M[60*MW+60]=15;gather(60,60,15)")
     assert ev("WORK.kind==='pick'"), "mining starts a pickaxe swing"; ev("M[60*MW+60]=1")
+    # playtest #3: armour. Three kinds in three pieces, bought at Garrick's (dearer as it gets better), crafted at Crafting level 10, worn from the equipment screen, drawn on the character, and the quest items share the slots
+    arm = ev("(()=>{const ids=Object.keys(ITEMS).filter(i=>ITEMS[i].kind==='armour'&&ITEMS[i].look!=='enchanted'),sets=['cloth','leather','chain'],cost=m=>ids.filter(i=>ITEMS[i].look===m).reduce((a,i)=>a+ITEMS[i].price,0),sold=SMITH.find(r=>r[0]==='Armour')[1].map(r=>r[0]);return {n:ids.length,slots:ids.every(i=>['helmet','armour','boots'].includes(ITEMS[i].slot)&&slotOf(i)===ITEMS[i].slot&&ITEMS[i].fx.ward>0),sold:ids.every(i=>sold.includes(i)&&SMITH.find(r=>r[0]==='Armour')[1].find(r=>r[0]===i)[1]===ITEMS[i].price),order:cost('cloth')<cost('leather')&&cost('leather')<cost('chain'),recipes:ids.every(i=>{const r=RECIPES.find(q=>q.out===i);return r&&r.level===10}),quest:slotOf('enchanted_boots')==='boots'&&slotOf('enchanted_armour')==='armour'}})()")
+    assert arm == {"n": 9, "slots": True, "sold": True, "order": True, "recipes": True, "quest": True}, arm
+    ev("S.xp={};S.bag={};S.bag.cloth=3;S.bag.hand_axe=0;recipes0=0")
+    assert ev("(()=>{const r=RECIPES.find(q=>q.out==='cloth_hood');return !canMake(r)})()"), "cloth armour cannot be crafted below Crafting level 10"
+    ev("S.xp.crafting=15000"); assert ev("canMake(RECIPES.find(q=>q.out==='cloth_hood'))&&lvl('crafting')===10"), "and can at level 10"
+    ev("S.bag={};['cloth_hood','leather_jerkin','chain_boots','leather_cap','sword','enchanted_boots'].forEach(i=>add(i));S.eq.helmet=null;S.eq.armour=null;S.eq.boots=null;S.eq.weapon=null;ui();openEquip()")
+    pg.click('#eq-helmet'); pg.click('#eqs-pick .eqrow'); assert ev("S.eq.helmet==='cloth_hood'"), "tapping a helmet wears it from the equipment screen"
+    pg.click('#eq-armour'); pg.click('#eqs-pick .eqrow'); pg.click('#eq-boots'); pg.click('#eqs-pick .eqrow')
+    assert ev("S.eq.armour==='leather_jerkin'&&S.eq.boots==='enchanted_boots'"), "the armour and boots squares wear the first thing in their list (the quest boots have no price, so they come first)"
+    ev("S.eq.boots='chain_boots'"); assert ev("Math.abs(fx('ward')-(.03+.1+.08))<1e-9"), "cloth hood 3% + jerkin 10% + chain boots 8% stop 21%"
+    assert ev("(()=>{const bad=[];['cloth','leather','chain'].forEach(m=>['f','b','r','l'].forEach(v=>[0,1,2,3].forEach(f=>{try{shadePerson({...lo(S.look),armour:{helm:m,body:m,boots:m},view:v,frame:f})}catch(e){bad.push(m+v+f+e.message)}})));['enchanted'].forEach(m=>['f','b','r'].forEach(v=>{try{shadePerson({...lo(S.look),armour:{body:m,boots:m},view:v,frame:0})}catch(e){bad.push(m+v+e.message)}}));return bad.length?bad:true})()"), "every armour look draws in every view"
+    assert ev("playerLook().armour.helm==='cloth'&&playerLook().armour.body==='leather'&&playerLook().armour.boots==='chain'"), "what you wear is drawn on you"
+    ev("S.eq.boots='enchanted_boots';ui()"); assert ev("fx('speed')===1&&slotOf('enchanted_boots')==='boots'"), "the quest boots take the Boots slot like any other"
+    pg.click('#eq-helmet'); pg.click('#eqs-pick .eqrow:last-child'); assert ev("S.eq.helmet===null"), "Take off removes it"
+    pg.click('#eqs-back'); assert ev("!$('eqs').classList.contains('open')"), "Back closes the equipment screen"
+    ev("S.eq={};S.bag={}")
     # playtest #3: the rockslide outside the Darkwood's north gate seals the way until it is broken with a pickaxe, then Dell thanks you
     reach = "(()=>{const seen=new Set([109*MW+31]),q=[[31,109]];while(q.length){const[x,y]=q.shift();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(79*MW+26)})()"
     ev("S.flags={};applyGates();applyStoryPeople();SCENE=null;BATTLE=null;sail=false;P.x=P.rx=31;P.y=P.ry=109;P.f='u';S.eq.pickaxe=null")
