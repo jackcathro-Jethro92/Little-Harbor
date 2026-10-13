@@ -33,7 +33,20 @@ function objectBgArt(m,tx,ty,sx,sy,n,t){   // whole-tile objects: pond, crop plo
       for(let k=0;k<3;k++){const x=1+k*5,cc=GH(tx*3+k,ty+ry)%4;pShadow(c,x+2.5,ry+4,2.5,1,.25);pF(c,x,ry,4,3,'#3f8a34');pF(c,x+1,ry-1,2,1,'#78c257');pP(c,x,ry,'#5aa83c');if(cc===0){pF(c,x+1,ry+2,2,2,'#e0762f');pP(c,x+1,ry+2,'#f8a050')}}}}),sx|0,sy|0);
   else if(m===12)g.drawImage(sprite('wall'+((tx+ty)&3),16,16,c=>{pF(c,0,0,16,16,'#5e5a52');for(let r=0;r<4;r++){const off=(r%2)*4;for(let cc=-1;cc<4;cc++){const x=cc*5+off,h=GH(tx*9+cc,ty*4+r)%3;pF(c,x+1,r*4+1,4,3,['#9a968c','#a8a498','#8a867c'][h]);pF(c,x+1,r*4+1,4,1,'#c4c0b4')}}pF(c,0,14,16,2,'#3a3630')}),sx|0,sy|0)}
 // ---- crafting stations and the camp kit (drawn once; flames, bubbles and steam move) ----
-function stationArt(p,cx,cy,t){const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;
+// the camp since playtest #3: a blue canvas tent two tiles wide and two tall (to the left of the fire) and a campfire of stones and logs on one tile; the flames move
+function campArt(p,cx,cy,t){const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3;
+  g.drawImage(sprite('camptent',32,32,c=>{const O='#2e1f10',L='#6f9be0',M='#5a85cc',D='#3f66aa',W='#7a4d26',WL='#b07a42';pShadow(c,16,28,15,3,.3);
+    for(let r=0;r<=23;r++){const hw=1+Math.round(r*13/23);pF(c,16-hw-1,4+r,2*hw+2,1,O)}
+    for(let r=0;r<=22;r++){const hw=1+Math.round(r*13/23);pF(c,16-hw,4+r,hw,1,L);pF(c,16,4+r,hw,1,M)}
+    pF(c,15,4,2,23,D);pF(c,7,19,4,3,'#e8c07a');pF(c,7,19,4,1,'#f4dca0');pF(c,21,14,3,3,'#e8c07a');
+    for(let r=8;r<=22;r++){const hw=Math.round((r-8)*5.5/14)+1;pF(c,16-hw,4+r,2*hw,1,'#1f1812')}
+    for(let r=14;r<=22;r++){const hw=Math.round((r-14)*3/8)+1;pF(c,16-hw,4+r,2*hw,1,'#120e0a')}
+    pF(c,15,0,2,5,W);pF(c,15,0,2,1,WL);pF(c,1,26,3,3,W);pF(c,28,26,3,3,W);pF(c,1,26,3,1,WL);pF(c,28,26,3,1,WL)}),(x-2*T)|0,(y-T)|0);
+  g.drawImage(sprite('campfire',16,16,c=>{const O='#2e1f10';pShadow(c,8,13,7,2,.3);
+    [[1,9],[4,11],[8,11],[11,9],[2,6],[11,6]].forEach(([sx,sy])=>{pF(c,sx,sy,4,3,O);pF(c,sx+1,sy,2,2,'#9a9c94');pP(c,sx+1,sy,'#c4c6bd')});
+    pF(c,3,8,10,3,O);pF(c,4,8,8,2,'#6b4423');pF(c,4,8,8,1,'#8a5a30');pF(c,6,5,3,5,O);pF(c,7,5,1,5,'#7a5230')}),x|0,y|0);
+  g.fillStyle='#e8632e';g.fillRect(x+5,y+3+(fl%2),6,6);g.fillStyle='#f2a22e';g.fillRect(x+6,y+4+(fl%2),4,5);g.fillStyle='#ffe27a';g.fillRect(x+7+(fl===1?1:0),y+6,2,3)}
+function stationArt(p,cx,cy,t){if(p.big&&p.id==='camp_kit')return campArt(p,cx,cy,t);const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;
   g.drawImage(sprite('s'+id,16,16,c=>{const O='#2e1f10';pShadow(c,8,14,7,2,.3);
     if(id==='camp_kit'){pF(c,3,1,2,2,O);pF(c,1,3,6,2,O);pF(c,0,5,8,3,O);pF(c,3,2,1,1,'#e8d09a');pF(c,2,4,4,1,'#d8b878');pF(c,1,6,6,2,'#d8b878');pF(c,3,6,2,2,'#3d2a14');pF(c,2,3,2,1,'#f4e8c4');
       pF(c,7,10,8,5,'#6e7068');pF(c,7,10,8,1,'#a8a8a0');pF(c,8,11,6,3,O);pF(c,8,12,6,1,'#7a5230')}

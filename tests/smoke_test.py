@@ -788,6 +788,14 @@ def check(b, url):
     ev("ENEMIES.length=0")
     ev("add('grandfather_compass');S.story.q='q4';S.story.step=0;P.x=P.rx=124;P.y=P.ry=20+FY")
     assert ev("(()=>{const g=compassGoal();return !!g&&g[0]===136&&g[1]===5+FY})()"), "inside the Darkwood the compass points to the gate towards a northern goal"
+    # playtest #3: the camp is a 2x2 tent plus a fire, placeable on open ground, solid, and packs up again
+    ev("S.placed=[];S.bag.camp_kit=1;sail=false;let o=null;for(let y=60;y<230&&!o;y++)for(let x=30;x<300&&!o;x++){let ok=true;for(let j=-3;j<=3&&ok;j++)for(let i=-3;i<=3;i++)if(at(x+i,y+j)!==1){ok=false;break}if(ok&&zoneOf(x,y)===0)o=[x,y]}P.x=P.rx=o[0];P.y=P.ry=o[1];P.f='u';placing='camp_kit';act()")
+    assert ev("S.placed.length===1&&S.placed[0].big===1&&!S.bag.camp_kit"), "the camp kit is placed in front of you"
+    assert ev("(()=>{const c=S.placed[0];return !walkable(c.x-1,c.y-1)&&!walkable(c.x-2,c.y)&&!walkable(c.x,c.y)&&walkable(c.x+1,c.y)})()"), "the tent and the fire are solid"
+    ev("S.bag.camp_kit=1;placing='camp_kit'"); assert ev("campPlan().glob==='You already have a camp set up.'"), "only one camp"
+    ev("placing=null;S.bag.camp_kit=0;pickUp(S.placed[0])"); assert ev("S.placed.length===0&&S.bag.camp_kit===1"), "the camp packs up into the kit"
+    ev("S.bag.camp_kit=1;P.x=P.rx=156;P.y=P.ry=118;P.f='u';placing='camp_kit'"); assert ev("campPlan().tiles.some(t=>t[2])"), "a camp cannot go over a building"
+    ev("placing=null;S.bag.camp_kit=0")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

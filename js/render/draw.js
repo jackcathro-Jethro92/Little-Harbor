@@ -25,7 +25,7 @@ function draw(){
   // entities by y
   S.gardens.forEach(gd=>gd.cells.forEach((cell,i)=>gardenCellArt(cell,(gd.x+i%3)*T-cx,(gd.y+(i/3|0))*T-cy)));
   if(placing){const k0=ITEMS[placing].kind,cell=(x,y,bad)=>R(x*T-cx+1,y*T-cy+1,T-2,T-2,bad?'rgba(220,70,60,.42)':'rgba(70,130,235,.5)');let m;
-    if(k0==='claim'||k0==='prefab'||k0==='garden'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
+    if(k0==='claim'||k0==='prefab'||k0==='garden'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);
       m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Tap Use to place it.'}
     else{const[fx,fy]=front(),w=placeWhy(placing,fx,fy);
