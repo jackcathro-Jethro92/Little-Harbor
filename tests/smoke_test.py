@@ -69,8 +69,10 @@ def check(b, url):
     ev("openTrader('jeweller','buy')"); assert ev("/Ring of Vigor/.test($('items').textContent)"), "jeweller shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # the stone barrier: no walkable shore north of the forest can be reached from the sea or the south coast, but the town, temple and Darkwood gate stay connected
+    ev("setFlag('rockslide_cleared')")   # the road from the Darkwood's north gate is open for this check (the rockslide has its own test)
     seal = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],sea=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&at(x,y)===0,flood=st=>{const s=new Set(st.map(([x,y])=>y*MW+x)),q=st.slice();for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=MH||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}return s},mtn=flood([[26,77]]),seeds=[];for(let y=0;y<MH;y++)for(let x=0;x<=110;x++)if(ok.has(at(x,y))&&!mtn.has(y*MW+x)&&D4.some(([a,b])=>sea(x+a,y+b)))seeds.push([x,y]);const out=flood(seeds);let landing=0,leak=0;mtn.forEach(i=>{const x=i%MW,y=(i/MW)|0;if(D4.some(([a,b])=>sea(x+a,y+b)))landing++;if(out.has(i))leak++});return{landing,leak,temple:mtn.has(29*MW+9),gate:mtn.has(109*MW+31)}})()")
     assert seal == {"landing": 0, "leak": 0, "temple": True, "gate": True}, seal
+    ev("setFlag('rockslide_cleared',0)")
     # phone D-pad and keyboard move at the same speed: holding either for 1 s gives about the same number of steps
     def held(start, stop):
         ev("(()=>{window.__n=0;const mv=window.__mv||(window.__mv=move);window.move=d=>{window.__n++;return mv(d)}})()")
@@ -794,8 +796,18 @@ def check(b, url):
     assert ev("(()=>{const c=S.placed[0];return !walkable(c.x-1,c.y-1)&&!walkable(c.x-2,c.y)&&!walkable(c.x,c.y)&&walkable(c.x+1,c.y)})()"), "the tent and the fire are solid"
     ev("S.bag.camp_kit=1;placing='camp_kit'"); assert ev("campPlan().glob==='You already have a camp set up.'"), "only one camp"
     ev("placing=null;S.bag.camp_kit=0;pickUp(S.placed[0])"); assert ev("S.placed.length===0&&S.bag.camp_kit===1"), "the camp packs up into the kit"
-    ev("S.bag.camp_kit=1;P.x=P.rx=156;P.y=P.ry=118;P.f='u';placing='camp_kit'"); assert ev("campPlan().tiles.some(t=>t[2])"), "a camp cannot go over a building"
+    ev("S.bag.camp_kit=1;P.f='u';placing='camp_kit';window.__f=front();window.__t=at(__f[0],__f[1]);M[__f[1]*MW+__f[0]]=5"); assert ev("campPlan().tiles.some(t=>t[2])"), "a camp cannot go over a building"
+    ev("M[__f[1]*MW+__f[0]]=__t")
     ev("placing=null;S.bag.camp_kit=0")
+    # playtest #3: the rockslide outside the Darkwood's north gate seals the way until it is broken with a pickaxe, then Dell thanks you
+    reach = "(()=>{const seen=new Set([109*MW+31]),q=[[31,109]];while(q.length){const[x,y]=q.shift();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(79*MW+26)})()"
+    ev("S.flags={};applyGates();applyStoryPeople();SCENE=null;BATTLE=null;sail=false;P.x=P.rx=31;P.y=P.ry=109;P.f='u';S.eq.pickaxe=null")
+    assert not ev(reach), "the rockslide seals the way from the Darkwood's north gate to the Mountain Town"
+    assert ev("NPC.some(n=>n.n==='Miner Dell'&&n.work==='pick')"), "a miner is digging at the rocks"
+    ev("act()"); assert ev("!flag('rockslide_cleared')"), "no pickaxe, the rocks stay"
+    ev("TRIGGERS.forEach(t=>{if(t.id!=='rockslide_thanks')markSeen('trg:'+t.id)});add('pickaxe');S.eq.pickaxe='pickaxe';act()"); assert ev("flag('rockslide_cleared')") and ev(reach), "a pickaxe breaks the rockslide and opens the road"
+    pg.wait_for_function("dlgActive()&&/this rock slide was going take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
+    ev("dlgEnd();trgRunning=false")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

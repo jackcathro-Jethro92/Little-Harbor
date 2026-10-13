@@ -70,3 +70,10 @@ function centipedeArt(e,cx,cy,t){const D4={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]},di
   for(const s of[-1,1]){const bx=hx+dir[0]*5+perp[0]*s*(3-sn),by=hy+dir[1]*5+perp[1]*s*(3-sn);R(bx-1,by-1,3,3,fang);R(hx+dir[0]*8+perp[0]*s*(2-sn)-1,hy+dir[1]*8+perp[1]*s*(2-sn)-1,2,2,'#c8c0b0')}
   for(const s of[-1,1]){const wv=Math.round(Math.sin(t/200+s)*1);for(const k of[7,10])R(hx+dir[0]*k+perp[0]*(s*(k-3)+wv),hy+dir[1]*k+perp[1]*(s*(k-3)+wv),1,1,leg)}   // feelers
   if(e.hp<e.max){pF(g,hx-8,hy-12,16,4,'#383838');pF(g,hx-7,hy-11,14*e.hp/e.max,2,'#58d058')}}
+
+// a person swinging a pickaxe at the tile in front of them (playtest #3): the handle and head are drawn pixel by pixel in four beats (raised, raised, struck, rebound), with a spark on the strike. Used by Miner Dell (`work:'pick'`)
+function pickSwing(sx,sy,t,f){const ph=((t/260)|0)%4,a=[.35,.2,2.9,2.1][ph]*(f==='l'?-1:1),px=sx+(f==='l'?4:12),py=sy+11,len=9;
+  g.fillStyle='#7a5230';for(let k=0;k<=len;k++)g.fillRect(Math.round(px+k*Math.sin(a)),Math.round(py-k*Math.cos(a)),1,1);
+  const hx=px+len*Math.sin(a),hy=py-len*Math.cos(a),nx=Math.cos(a),ny=Math.sin(a);g.fillStyle='#c4c6bd';
+  for(let k=-4;k<=4;k++)g.fillRect(Math.round(hx+k*nx),Math.round(hy+k*ny),1,2);
+  if(ph===2){g.fillStyle='#ffe27a';g.fillRect(Math.round(hx)-1,Math.round(hy)+2,1,1);g.fillRect(Math.round(hx)+2,Math.round(hy)+3,1,1)}}
