@@ -779,6 +779,15 @@ def check(b, url):
     ev("$('look').classList.add('open')"); assert ev("!canBeAmbushed()"), "no ambush over the look editor"
     ev("$('look').classList.remove('open');showMap()"); assert ev("(()=>{const r=$('mc').getBoundingClientRect();return $('map-back').getBoundingClientRect().bottom<=innerHeight&&r.height>50})()"), "the map fits the window"
     ev("$('mapov').classList.remove('open')")
+    # playtest #3: creatures chase round obstacles (a wall with one gap), and the compass works inside the Darkwood
+    ev("BATTLE=null;SCENE=null;sail=false;ENEMIES.length=0")
+    ev("(()=>{const x0=60,y0=60;for(let y=y0-4;y<=y0+4;y++)for(let x=x0-6;x<=x0+6;x++)M[y*MW+x]=1;for(let y=y0-4;y<=y0+4;y++)if(y!==y0+3)M[y*MW+x0]=12;\
+      ENEMY_TYPES.t_chaser={n:'Chaser',hp:5,dmg:1,cd:99,speed:1,chase:12,leash:12,art:'ghost',xp:0,gold:[0,0],drops:[],respawn:0,die:'x'};P.x=P.rx=x0+3;P.y=P.ry=y0;window.__ch=spawnEnemy('t_chaser',x0-3,y0);__ch.cd=99})()")
+    ev("for(let i=0;i<30;i++)enemiesTick()")
+    assert ev("Math.abs(__ch.x-P.x)+Math.abs(__ch.y-P.y)<=1"), "a creature walks round a wall to reach you (it used to get stuck behind it)"
+    ev("ENEMIES.length=0")
+    ev("add('grandfather_compass');S.story.q='q4';S.story.step=0;P.x=P.rx=124;P.y=P.ry=20+FY")
+    assert ev("(()=>{const g=compassGoal();return !!g&&g[0]===136&&g[1]===5+FY})()"), "inside the Darkwood the compass points to the gate towards a northern goal"
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

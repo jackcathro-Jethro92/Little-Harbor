@@ -356,3 +356,7 @@ Every push to `main` that passes the tests is published to GitHub Pages. The pub
 
 ## Battle animations (playtest #2, batch 8)
 Everyone on the battle screen sways a little from side to side (CSS `btSway`, kept smooth when the screen redraws). Your attack lunges forward and draws a slash over the foe (a chop for axes) with a white flash and a floating damage number. A foe's attack lunges down at you with a flash and a number. Blocking shows a shield in front of whoever blocks. Foes block some of your attacks (`block` chance, 0.2 for people and 0.1 for the centipede by default; blocked hits do about a third of the damage and cannot stun). The code is in `js/systems/battle.js` (`bFx`, `foeBlockChance`) and the look is in `css/style.css`. `BATTLE_BLOCKS=false` (tests) stops foes blocking.
+
+## Playtest #3 fixes (batch 1)
+- **Creatures chase round obstacles** (`chaseStep` in `js/systems/combat.js`): when you are within a creature's chase range it takes the first step of the shortest walkable way to you (a small search), so trees, walls and people no longer trap it. Leash and island rules are unchanged. You can still outrun it.
+- **The compass works in the Darkwood** (`compassGoal` in `js/render/compass.js`): inside the forest the arrow points to the north gate for a northern goal and the south gate otherwise (or straight at a goal inside the forest). It is drawn after the forest's darkness, which used to cover it.
