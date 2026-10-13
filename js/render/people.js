@@ -71,9 +71,14 @@ function centipedeArt(e,cx,cy,t){const D4={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]},di
   for(const s of[-1,1]){const wv=Math.round(Math.sin(t/200+s)*1);for(const k of[7,10])R(hx+dir[0]*k+perp[0]*(s*(k-3)+wv),hy+dir[1]*k+perp[1]*(s*(k-3)+wv),1,1,leg)}   // feelers
   if(e.hp<e.max){pF(g,hx-8,hy-12,16,4,'#383838');pF(g,hx-7,hy-11,14*e.hp/e.max,2,'#58d058')}}
 
-// a person swinging a pickaxe at the tile in front of them (playtest #3): the handle and head are drawn pixel by pixel in four beats (raised, raised, struck, rebound), with a spark on the strike. Used by Miner Dell (`work:'pick'`)
-function pickSwing(sx,sy,t,f){const ph=((t/260)|0)%4,a=[.35,.2,2.9,2.1][ph]*(f==='l'?-1:1),px=sx+(f==='l'?4:12),py=sy+11,len=9;
-  g.fillStyle='#7a5230';for(let k=0;k<=len;k++)g.fillRect(Math.round(px+k*Math.sin(a)),Math.round(py-k*Math.cos(a)),1,1);
-  const hx=px+len*Math.sin(a),hy=py-len*Math.cos(a),nx=Math.cos(a),ny=Math.sin(a);g.fillStyle='#c4c6bd';
-  for(let k=-4;k<=4;k++)g.fillRect(Math.round(hx+k*nx),Math.round(hy+k*ny),1,2);
-  if(ph===2){g.fillStyle='#ffe27a';g.fillRect(Math.round(hx)-1,Math.round(hy)+2,1,1);g.fillRect(Math.round(hx)+2,Math.round(hy)+3,1,1)}}
+// a person swinging a pickaxe or an axe at the tile in front of them (playtest #3). The handle and head are drawn pixel by pixel in four beats (raised, raised, struck, rebound) towards the way they face,
+// with a spark (pickaxe) or chips (axe) on the strike. `ph` is the beat 0-3. Used by Miner Dell (`work:'pick'`, on a timer) and by the player while mining or chopping (WORK in js/systems/gathering.js).
+function toolSwing(kind,sx,sy,f,ph){const th={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[f]??Math.PI,a=[th+Math.PI+.35,th+Math.PI+.2,th-.25,th-1.05][ph],
+    px=sx+(f==='l'||f==='u'?4:12),py=sy+(f==='u'?9:11),len=kind==='axe'?9:10,sn=Math.sin(a),cs=Math.cos(a),hx=px+len*sn,hy=py-len*cs,nx=cs,ny=sn;
+  const px_=[],dot=(x,y,c,w=1,h=1)=>px_.push([Math.round(x),Math.round(y),c,w,h]);   // collect the pixels, then draw every dark outline first and the colours on top
+  for(let k=0;k<=len;k++)dot(px+k*sn,py-k*cs,'#a8743f');
+  if(kind==='axe'){for(let k=-1;k<=4;k++)for(let j=0;j<=(k<0?1:3);j++)dot(hx+k*nx-j*sn,hy+k*ny+j*cs,k===4?'#e6eaee':'#aab0b8')}
+  else{for(let k=-5;k<=5;k++)dot(hx+k*nx,hy+k*ny,Math.abs(k)>3?'#e6eaee':'#b4b8c0',1,2)}
+  g.fillStyle='#2a1a0c';px_.forEach(([x,y,,w,h])=>{g.fillRect(x-1,y,w+2,h);g.fillRect(x,y-1,w,h+2)});px_.forEach(([x,y,c,w,h])=>{g.fillStyle=c;g.fillRect(x,y,w,h)});
+  if(ph===2){const[dx,dy]=D[f]||[0,1],cx=Math.round(hx+dx*4),cy=Math.round(hy+dy*4);g.fillStyle=kind==='axe'?'#f2d9a0':'#fff2a0';g.fillRect(cx,cy,2,2);g.fillRect(cx+2,cy-2,1,1);g.fillRect(cx-2,cy+2,1,1)}}
+const pickSwing=(sx,sy,t,f)=>toolSwing('pick',sx,sy,f||'d',((t/260)|0)%4);   // Miner Dell keeps swinging on a timer

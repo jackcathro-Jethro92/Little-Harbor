@@ -41,6 +41,7 @@ function draw(){
   E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;
         if(!shipHidesPlayer())CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...lo(S.look),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});
+    if(!sail&&WORK.kind&&t-WORK.at<440&&t>=WORK.at)toolSwing(WORK.kind,sx,sy-3,P.f,Math.min(3,((t-WORK.at)/110)|0));   // swinging the axe or pickaxe (each Use restarts it)
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());

@@ -717,8 +717,9 @@ def check(b, url):
     assert attack_list('wooden_sword') == ["Strike (4)", "Bash (4)", "Back"]; end_battle()
     assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
     assert attack_list('hand_axe') == ["Chop (4)", "Back"]; end_battle()
-    assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
-    assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
+    assert attack_list('sword', 'sword', 380) == ["Slash (4)", "Lunge (5)", "Back"], "Lunge is learned at sword level 2"; end_battle()
+    assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
+    assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
     assert attack_list('hand_axe', 'axe', 3300) == ["Chop (4)", "Bash (4)", "Cleave (8)", "Back"], "the axe learns Bash at 3 and Cleave at 6"; end_battle()
     # damage and stamina: with the dice fixed at 1.0, light 0.6, normal 1, heavy 1.6 of the weapon's damage (5) times the skill bonus (+8% a level)
     attack_list('sword', 'sword', 3300); ev("window.__r0=Math.random;Math.random=()=>0.5;ev0=0"); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()")
@@ -726,11 +727,14 @@ def check(b, url):
     pick("Power Slash"); menu_ready(); assert ev("__f.hp===999-12&&S.sta===__s0-8"), "Power Slash: 5 x 1.48 x 1.6 = 12 damage for 8 stamina"
     pick("Quick Strike"); menu_ready(); assert ev("__f.hp===999-12-4&&S.sta===__s0-10"), "Quick Strike: a light hit of 4 for 2 stamina"
     pick("Slash"); menu_ready(); assert ev("__f.hp===999-12-4-7&&S.sta===__s0-14"), "Slash: a normal hit of 7 for 4 stamina"
-    assert ev("(S.xp.sword||0)>=3300+16+6+10"), "using sword attacks trains the sword skill"
+    pick("Lunge"); menu_ready(); assert ev("__f.hp===999-12-4-7-8&&S.sta===__s0-19"), "Lunge: 5 x 1.48 x 1.1 = 8 damage (a little more than Slash's 7) for 5 stamina"
+    assert ev("(S.xp.sword||0)>=3300+16+6+10+12"), "using sword attacks trains the sword skill"
     ev("Math.random=__r0"); end_battle()
     # learning an attack announces it
     attack_list('sword', 'sword', 765); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
     assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
+    attack_list('sword', 'sword', 375); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2! You learned Lunge!/.test(t))"), "reaching level 2 teaches Lunge"; end_battle()
     # the axe trains the axe, not the sword
     attack_list('hand_axe'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Chop"); menu_ready(); assert ev("(S.xp.axe||0)===10&&!(S.xp.sword)"), "the axe trains the axe skill"; end_battle()
     # Bash: a 15% chance to stun
@@ -801,6 +805,11 @@ def check(b, url):
     ev("S.bag.camp_kit=1;P.f='u';placing='camp_kit';window.__f=front();window.__t=at(__f[0],__f[1]);M[__f[1]*MW+__f[0]]=5"); assert ev("campPlan().tiles.some(t=>t[2])"), "a camp cannot go over a building"
     ev("M[__f[1]*MW+__f[0]]=__t")
     ev("placing=null;S.bag.camp_kit=0")
+    # playtest #3: chopping and mining start a tool swing that is drawn on the player (and drawing it raises no error)
+    ev("sail=false;SCENE=null;BATTLE=null;add('woodcutters_axe');S.eq.axe='woodcutters_axe';S.sta=100;P.x=P.rx=60;P.y=P.ry=61;P.f='u';M[60*MW+60]=4;gather(60,60,4)")
+    assert ev("WORK.kind==='axe'&&performance.now()-WORK.at<300"), "chopping starts an axe swing"
+    ev("for(let i=0;i<4;i++){WORK.at=performance.now()-i*110-5;draw()}"); ev("add('pickaxe');S.eq.pickaxe='pickaxe';M[60*MW+60]=15;gather(60,60,15)")
+    assert ev("WORK.kind==='pick'"), "mining starts a pickaxe swing"; ev("M[60*MW+60]=1")
     # playtest #3: the rockslide outside the Darkwood's north gate seals the way until it is broken with a pickaxe, then Dell thanks you
     reach = "(()=>{const seen=new Set([109*MW+31]),q=[[31,109]];while(q.length){const[x,y]=q.shift();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(79*MW+26)})()"
     ev("S.flags={};applyGates();applyStoryPeople();SCENE=null;BATTLE=null;sail=false;P.x=P.rx=31;P.y=P.ry=109;P.f='u';S.eq.pickaxe=null")
