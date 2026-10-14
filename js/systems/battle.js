@@ -80,7 +80,9 @@ async function bAttack(id){const B=BATTLE,A=ATTACKS[id];B.picking=false;bMenu([]
   if(A.stun&&f.hp>0&&!blocked&&Math.random()<A.stun){f.stun=1;await bSay(f.t.n+' is stunned!')}
   if(w&&S.coat>0){S.coat--;f.pois=3;ui();await bSay(f.t.n+' is poisoned!')}
   if(f.hp<=0){f.alive=false;bDraw();await bSay(f.t.n+' is beaten!')}else bDraw();
-  if(!bAlive().length)return bEnd('won');bFoes()}
+  if(!bAlive().length)return bEnd('won');
+  if(fx('haste')&&Math.random()<fx('haste')){await bSay('You are quick! You get another turn at once.');return bTurn()}   // the Sky Helm: sometimes the foes lose their turn
+  bFoes()}
 // Block: much less damage this turn, and some stamina back
 async function bBlock(){const B=BATTLE;B.picking=false;bMenu([]);S.sta=Math.min(maxSta(),S.sta+BLOCK_STAMINA);B.blocking=true;bDraw();bFx('shield',$('bt-meBox'));await bSay('You raise your guard and catch your breath. +'+BLOCK_STAMINA+' stamina.');bFoes()}
 function bItems(){const B=BATTLE;B.picking=false;const ids=[...LIST('food'),...LIST('potion')].filter(count);

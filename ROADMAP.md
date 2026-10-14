@@ -39,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 and 5 (5.4, 5.5) are built too. **Paused for playtest #3 of Quests 1 to 5.** After Jack's notes are fixed, the next story step is Quest 6 and the Sky Temple (5.6).
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4, 5 and 6 (5.4 to 5.6) are built too; playtest #3's notes are fixed. The next story step is Quest 7, Under Attack (5.7).
 
 | Step | Status |
 | --- | --- |
@@ -461,7 +461,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **Reward:** at the Tower, the Earth spirit (the young girl) gives **enchanted armour**. She sends you to the Sky Temple.
 - **Sets:** `q5_done`, `sea_key_at_tower`.
 
-### 5.6 Quest 6: At the Top of the World (Sky Temple, the "Sky Stonehenge Temple")
+### 5.6 Quest 6: At the Top of the World (Sky Temple, the "Sky Stonehenge Temple") **(built)**
 - **Where:** the Sky Temple on its plateau above the clouds (Island 3). Use `art/temples/sky_stonehenge_temple`.
 - **What happens:**
   - Halfway up the cliff path, the player hears an explosion (screen shake and a sound).

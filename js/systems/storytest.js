@@ -14,7 +14,7 @@ const STORY_JUMPS=[
  {id:'q4t',name:'Quest 4: the Earth Key (at the Temple Tower)',after:'q4',quest:'q4',step:3,flags:['q4_gate_started','enc_q4_gate_done','q4_sanctum_seen','enc_q4_grunts_done','q4_key_got'],give:{earth_key:1},at:[212,206]},
  {id:'q5',name:'Quest 5: Saviour of the Seas',after:'q4',quest:'q5',flags:['q4_gate_started','enc_q4_gate_done','q4_sanctum_seen','enc_q4_grunts_done','q4_key_got','q4_old_man','earth_key_at_tower','q4_done'],at:[283,41]},
  {id:'q5t',name:'Quest 5: the Sea Key (at the Temple Tower)',after:'q5',quest:'q5',step:3,flags:['q5_hall','q5_vault_blasted','enc_q5_pirates_done','q5_key_got'],give:{sea_key:1},at:[212,206]},
- {id:'q6',name:'Quest 6: At the Top of the World',after:'q5',quest:'q6'},
+ {id:'q6',name:'Quest 6: At the Top of the World',after:'q5',quest:'q6',flags:['q5_hall','q5_vault_blasted','enc_q5_pirates_done','q5_key_got','sea_key_at_tower','q5_done'],give:{enchanted_armour:1},at:[222,158]},
  {id:'q7',name:'Quest 7: Under Attack',after:'q6',quest:'q7'},
  {id:'q8',name:'Quest 8: Into the Depths',after:'q7',quest:'q8'},
  {id:'q9',name:'Quest 9: The Final Fight',after:'q8',quest:'q9'},
@@ -26,7 +26,7 @@ function storyReset(){S.flags={};S.story={q:null,step:0,seen:[],done:[]};S.lette
 const jumpChain=id=>{const out=[];for(let r=STORY_JUMPS.find(q=>q.id===id);r;r=r.after&&STORY_JUMPS.find(q=>q.id===r.after))out.unshift(r);return out};
 // (key items such as the compass, and single weapons and tools, are never doubled by jumping twice)
 function storyJump(id){const rows=jumpChain(id);if(!rows.length)return false;storyReset();
-  rows.forEach(r=>{(r.flags||[]).forEach(f=>setFlag(f,1));(r.letters||[]).forEach(id=>{if(!hasLetter(id))myLetters().push(id)});if(r.give)Object.entries(r.give).forEach(([k,n])=>{if(ITEMS[k]&&['key','weapon','tool'].includes(ITEMS[k].kind)){S.bag[k]=Math.max(count(k),n);const sl=slotOf(k);if(sl&&!S.eq[sl]&&ITEMS[k].kind!=='key')S.eq[sl]=k}else add(k,n)});if(r.gold)S.gold+=r.gold;
+  rows.forEach(r=>{(r.flags||[]).forEach(f=>setFlag(f,1));(r.letters||[]).forEach(id=>{if(!hasLetter(id))myLetters().push(id)});if(r.give)Object.entries(r.give).forEach(([k,n])=>{if(ITEMS[k]&&['key','weapon','tool','armour'].includes(ITEMS[k].kind)){S.bag[k]=Math.max(count(k),n);const sl=slotOf(k);if(sl&&!S.eq[sl]&&ITEMS[k].kind!=='key')S.eq[sl]=k}else add(k,n)});if(r.gold)S.gold+=r.gold;
     if(r.quest)questSet(r.quest,r.step||0);
     // earlier quests count as finished once a later one starts
     if(r.quest&&r!==rows[rows.length-1])questDone(r.quest)});

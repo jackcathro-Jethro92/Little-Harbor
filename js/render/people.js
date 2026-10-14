@@ -21,8 +21,8 @@ function shadePerson(o){poc.clearRect(0,0,24,24);CSdraw(poc,2,2,o);const im=poc.
 CharacterSprite.draw=function(ctx,x,y,o){if(ctx!==g)return CSdraw(ctx,x,y,o);
   const key=JSON.stringify([o.view,o.frame,o.fishing,o.bite,o.jacket,o.pack,o.hat,o.style,o.colors,o.armour,o.fishing?((o.t||0)>>5)&1:0]);
   let cv=PCACHE.get(key);if(!cv){cv=shadePerson(o);if(PCACHE.size>500)PCACHE.clear();PCACHE.set(key,cv)}
-  if(!o.noShadow)pShadow(g,Math.round(x)+8,Math.round(y)+19,6,2,.22);
-  g.drawImage(cv,Math.round(x)-2,Math.round(y)-2)};
+  const sc=o.scale||1;if(!o.noShadow)pShadow(g,Math.round(x)+8,Math.round(y)+19,6*sc,2*sc,.22);
+  if(sc===1)g.drawImage(cv,Math.round(x)-2,Math.round(y)-2);else g.drawImage(cv,Math.round(x)+8-10*sc,Math.round(y)+19-21*sc,24*sc,24*sc)};   // `scale`: a taller or smaller person, feet on the same spot (Captain Barron, the boy)
 // ---- chickens ----
 function chickArt(c,cx,cy,t){const bob=((t/260+c.x)%6<.6?1:0),x=c.x*T-cx+3,y=c.y*T-cy+5+bob,q=(a,b,w,h,col)=>pF(g,c.f?x+10-a-w:x+a,y+b,w,h,col),O='#5a4636';
   pShadow(g,c.x*T-cx+8,c.y*T-cy+15,6,2,.25);
