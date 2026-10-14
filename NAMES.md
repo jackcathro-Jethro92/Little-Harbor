@@ -91,6 +91,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Fighting pirate 4 | Village | Pirate |
 | Fighting villager 5 | Village | Villager |
 | Fighting pirate 5 | Village | Pirate |
+| Fire Spirit | Settlement Docks | Spirit of the Fire temple |
 | Miner Dell | Darkwood north gate | Miner |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |

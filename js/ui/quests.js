@@ -4,6 +4,7 @@
 const QUESTS=[];
 // a quest row may also name where to go: goals:[[x,y],...] (one per step, in world tile coordinates) or goal:[x,y]; questGoal() gives the current one and the compass (js/render/compass.js) points to it
 const questGoal=()=>{const s=storyState(),q=QUESTS.find(r=>r.id===s.q);if(!q)return null;let g=(q.goals&&(q.goals[s.step]||q.goals[q.goals.length-1]))||q.goal||null;
+  if(typeof g==='function')g=g();   // a goal may be worked out when asked (Quest 10 points at whichever key is still to be returned)
   if(typeof g==='string'){const n=NPC.find(p=>p.n===g&&!p.hidden);g=n?[n.x,n.y]:null}   // a goal can be a person's name: the arrow follows them
   return g};
 function openQuests(){const s=storyState(),el=$('qs-list'),cur=QUESTS.find(q=>q.id===s.q),fin=s.done.map(id=>QUESTS.find(q=>q.id===id)).filter(Boolean);let h='';
