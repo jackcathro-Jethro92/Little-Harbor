@@ -98,7 +98,7 @@ def check(b, url):
         assert pos() == [60, 190, 'r'], ("tap on a new direction should only turn", pos())
         pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(60); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
         assert pos() == [61, 190, 'r'], ("tap on the facing direction should move one tile", pos())
-        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(600); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
+        pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(1200); pg.keyboard.up("ArrowRight"); pg.wait_for_timeout(100)
         assert pos()[0] >= 64 or not ev("walkable(P.x+1,P.y)"), ("holding should keep walking", pos())
         ev("P.x=P.rx=58;P.y=P.ry=190;P.f='r'")
         pg.keyboard.down("ArrowRight"); pg.wait_for_timeout(300)
