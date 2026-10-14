@@ -101,5 +101,29 @@ Jack's handwritten notes from the second playthrough. Spelling corrected; the cr
 - **P26 (added):** Characters in a battle always sway slightly from side to side, even when idle.
 - **P27 (added):** Walking and sailing use less stamina: 0.04 a step (was 0.08). Jack agreed to the number.
 
-# Playtest #3 (Jack plays Quests 1 to 5, started 13 October)
-Building is paused until Jack's notes arrive. When they do, add them here the same way as the earlier rounds: a table of notes (P28 onwards), Jack's decisions, the batches, and any questions. After those batches are merged, Quest 6 (the Sky temple, roadmap 5.6) is the next story step.
+# Playtest #3 (Jack's second playthrough, up to Quest 5, 13 to 14 October)
+Jack's handwritten notes, transcribed with spelling corrected. Ids continue from the second set (**P28** onwards). One line was disregarded at Jack's request ("But not in a way that is enjoyable or challenging", a carry-over from the previous page). All of it is built on the branches `feature/playtest-3-batch-1`, `-batch-2`, `-batch-3` and `-armour` (stacked, one pull request).
+
+| Id | Note | Status |
+| --- | --- | --- |
+| P28 | The tent in the camp kit is far too small, same as the campfire; the camp kit needs to be placed more easily | **Built.** Decided (Jack, 14 Oct): bigger-looking art but placeable almost anywhere; the tent is about 4 tiles (2 x 2) and the fire 1 tile; as long as the tent and fire do not clip onto an object the kit can go over any open ground |
+| P29 | Add some challenge to Quest 3: Oak Island needs ghosts, or something at least | **Built** (four restless spirits on the grass near the logs; they fight like the Darkwood centipedes) |
+| P30 | Getting the old axe from the woodcutter: the centipede could be avoided and got stuck on Hale | **Built.** Decided (Jack): you can still run past them as now, but they home in on your position and go round obstacles to reach you |
+| P31 | No rocks block the entrance to the mountain settlement, so the pickaxe is never needed | **Built.** Decided (Jack): breakable rocks block the way, broken with the pickaxe, and a worker is animated hitting them without clearing them. When they are destroyed he says Jack's line "Thanks! this rock slide was going take all day to clear". Placed at the Darkwood's north exit (Jack chose this over rocks on the road, which could be walked round) |
+| P32 | Animation for mining and woodchopping | **Built** (the axe or pickaxe swings towards what you face, with a spark or chips on the strike) |
+| P33 | A new sword attack learned at level 2: "Swipe" or "Lunge" | **Built.** Decided (Jack): it is **Lunge**, learned at **Sword skill 2**; it does 10% more damage than Slash and costs more stamina; the earlier attacks stay |
+| P34 | Pirates at the Earth temple are too easy to beat | **Built.** Decided (Jack): notably tougher, so you need the Old Sword or better and might need a potion or two for the whole group; a little tougher than the centipedes at the least |
+| P35 | Movement is a good speed now | No change |
+| P36 | The compass point disappears in the Darkwood | **Built** (the Darkwood's darkness was covering it; it now points to the gate towards the goal) |
+| P37 | Water temple pirates are much too easy to beat | **Built.** Decided (Jack): each temple has more pirates and harder ones than the last, so the Sea vault has six (with a first mate) |
+| P38 | Primary mechanics are working functionally | No change |
+| P39 | Armour and weapons equip menu needs revamping: a visible section with a helmet, armour, weapon and boots square around a character picture; wearing them changes your appearance in the game | **Built.** Decided (Jack): armour is not drawn over the picture but off to the side; cloth, leather and chainmail to start (plate later); all armour is sold at Garrick's Forge (the tailor only changes clothes); it can also be crafted at Crafting level 10; the Quest 4 boots and Quest 5 armour are special, cannot be bought, and take the Boots and Armour slots like normal pieces |
+
+## What was built and how it was tuned
+- Details of each change are in `DESIGN.md`, under "Playtest #3 fixes (batch 1)" and "Armour and the equipment screen".
+- **Pirates:** worked out with a small simulation of the real damage rules (a player who heals at 18 health). With the Old Sword at Sword skill 2 the Earth temple's five cost about two healing potions and the Sea vault's six about five; with the bronze sword about one and two to three. The wooden sword cannot win. These numbers are first guesses for the next playtest.
+- **Armour prices and percentages** (cloth 12%, leather 20%, chainmail 32% for a full set; about 2,150g, 6,300g and 18,500g) are also first guesses.
+
+## Next
+- Plate armour, and Quest 6 (the Sky temple, roadmap 5.6), once these branches are merged and Jack has played them.
+- Not done yet from earlier rounds: picking flax and herbs with the knife has no swing animation.
