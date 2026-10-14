@@ -81,6 +81,16 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Mysterious Girl | Temple Tower | Spirit of the Earth temple |
 | Captain Barron | Temple to the Sky | Pirate boss |
 | Mysterious Boy | Temple to the Sky | Spirit of the Sky temple |
+| Fighting villager 1 | Village | Villager |
+| Fighting pirate 1 | Village | Pirate |
+| Fighting villager 2 | Village | Villager |
+| Fighting pirate 2 | Village | Pirate |
+| Fighting villager 3 | Village | Villager |
+| Fighting pirate 3 | Village | Pirate |
+| Fighting villager 4 | Village | Villager |
+| Fighting pirate 4 | Village | Pirate |
+| Fighting villager 5 | Village | Villager |
+| Fighting pirate 5 | Village | Pirate |
 | Miner Dell | Darkwood north gate | Miner |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |

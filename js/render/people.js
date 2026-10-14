@@ -74,11 +74,16 @@ function centipedeArt(e,cx,cy,t){const D4={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]},di
 // a person swinging a pickaxe or an axe at the tile in front of them (playtest #3). The handle and head are drawn pixel by pixel in four beats (raised, raised, struck, rebound) towards the way they face,
 // with a spark (pickaxe) or chips (axe) on the strike. `ph` is the beat 0-3. Used by Miner Dell (`work:'pick'`, on a timer) and by the player while mining or chopping (WORK in js/systems/gathering.js).
 function toolSwing(kind,sx,sy,f,ph){const th={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[f]??Math.PI,a=[th+Math.PI+.35,th+Math.PI+.2,th-.25,th-1.05][ph],
-    px=sx+(f==='l'||f==='u'?4:12),py=sy+(f==='u'?9:11),len=kind==='axe'?9:10,sn=Math.sin(a),cs=Math.cos(a),hx=px+len*sn,hy=py-len*cs,nx=cs,ny=sn;
+    px=sx+(f==='l'||f==='u'?4:12),py=sy+(f==='u'?9:11),len=kind==='axe'?9:kind==='sword'?4:10,sn=Math.sin(a),cs=Math.cos(a),hx=px+len*sn,hy=py-len*cs,nx=cs,ny=sn;
   const px_=[],dot=(x,y,c,w=1,h=1)=>px_.push([Math.round(x),Math.round(y),c,w,h]);   // collect the pixels, then draw every dark outline first and the colours on top
   for(let k=0;k<=len;k++)dot(px+k*sn,py-k*cs,'#a8743f');
-  if(kind==='axe'){for(let k=-1;k<=4;k++)for(let j=0;j<=(k<0?1:3);j++)dot(hx+k*nx-j*sn,hy+k*ny+j*cs,k===4?'#e6eaee':'#aab0b8')}
+  if(kind==='sword'){for(let k=0;k<=6;k++)dot(hx+k*sn*.9,hy-k*cs*.9,k<1?'#c8a040':'#e6eaee');for(let k=-2;k<=2;k++)dot(hx+k*nx,hy+k*ny,'#c8a040')}
+  else if(kind==='axe'){for(let k=-1;k<=4;k++)for(let j=0;j<=(k<0?1:3);j++)dot(hx+k*nx-j*sn,hy+k*ny+j*cs,k===4?'#e6eaee':'#aab0b8')}
   else{for(let k=-5;k<=5;k++)dot(hx+k*nx,hy+k*ny,Math.abs(k)>3?'#e6eaee':'#b4b8c0',1,2)}
   g.fillStyle='#2a1a0c';px_.forEach(([x,y,,w,h])=>{g.fillRect(x-1,y,w+2,h);g.fillRect(x,y-1,w,h+2)});px_.forEach(([x,y,c,w,h])=>{g.fillStyle=c;g.fillRect(x,y,w,h)});
   if(ph===2){const[dx,dy]=D[f]||[0,1],cx=Math.round(hx+dx*4),cy=Math.round(hy+dy*4);g.fillStyle=kind==='axe'?'#f2d9a0':'#fff2a0';g.fillRect(cx,cy,2,2);g.fillRect(cx+2,cy-2,1,1);g.fillRect(cx-2,cy+2,1,1)}}
 const pickSwing=(sx,sy,t,f)=>toolSwing('pick',sx,sy,f||'d',((t/260)|0)%4);   // Miner Dell keeps swinging on a timer
+// a person with `work:'pick'|'axe'|'sword'` swings that tool on a timer (until the flag in `workOff` is set); `fight:1` people (the skirmishes in the raid on the village) lunge a little towards their opponent on the strike. `fo` offsets the beat so a pair take turns.
+const workPhase=(n,t)=>((t/(n.fight?210:260)+(n.fo||0))|0)%4;
+const fightLunge=(n,t)=>n.fight&&workPhase(n,t)===2?(n.f==='r'?2:n.f==='l'?-2:0):0;
+const npcSwing=(n,cx,cy,t)=>{const ph=workPhase(n,t);toolSwing(n.work,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3,n.f||'d',ph);if(n.fight&&ph===2){g.fillStyle='#fff6c0';const ex=n.x*T-cx+(n.f==='r'?17:-1),ey=n.y*T-cy+6;g.fillRect(ex,ey,2,2);g.fillRect(ex+(n.f==='r'?2:-2),ey-2,1,1);g.fillRect(ex+(n.f==='r'?2:-2),ey+3,1,1)}}

@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 103 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 113 placeholder.**
 
 ### Miner Dell (Darkwood north gate)
 - *placeholder:* [Placeholder] This slide came down in the night. I will be at it all week.
@@ -161,6 +161,36 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Emi (Village)
 - *original:* I keep meaning to learn to fish.
+
+### Fighting pirate 1 (Village)
+- *placeholder:* [Placeholder] Out of my way, farmer!
+
+### Fighting pirate 2 (Village)
+- *placeholder:* [Placeholder] Out of my way, farmer!
+
+### Fighting pirate 3 (Village)
+- *placeholder:* [Placeholder] Out of my way, farmer!
+
+### Fighting pirate 4 (Village)
+- *placeholder:* [Placeholder] Out of my way, farmer!
+
+### Fighting pirate 5 (Village)
+- *placeholder:* [Placeholder] Out of my way, farmer!
+
+### Fighting villager 1 (Village)
+- *placeholder:* [Placeholder] Not now! I am busy with this one!
+
+### Fighting villager 2 (Village)
+- *placeholder:* [Placeholder] Not now! I am busy with this one!
+
+### Fighting villager 3 (Village)
+- *placeholder:* [Placeholder] Not now! I am busy with this one!
+
+### Fighting villager 4 (Village)
+- *placeholder:* [Placeholder] Not now! I am busy with this one!
+
+### Fighting villager 5 (Village)
+- *placeholder:* [Placeholder] Not now! I am busy with this one!
 
 ### Goro (Village)
 - *original:* Lovely day for it.
@@ -353,4 +383,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *Jack's* `q6_barron1.a` Captain Barron: Who is this little dog that blocks my way! Prepare yourself for your end!
 - *placeholder* `q6_barron2.a` Captain Barron: [Placeholder] What? All my lads beaten by a fisher? Hmph. We will meet again, little dog!
 - *Jack's* `q6_boy1.a` Mysterious Boy: Did the old man send you? I tried to stop them. But they blew it up. They have taken my key. Please tell him I'm sorry I couldn't stop them. Here take this. If it's true that the old man said and you are helping us then I want you to have this. Please stop those awful pirates and get my key back.
+- *placeholder* `raid_closed_Odo.a` Odo: [Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.
+- *placeholder* `raid_closed_Bram.a` Bram: [Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.
+- *placeholder* `raid_closed_Murl.a` Murl: [Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.
+- *Jack's* `q7_flee.a` Pirate grunt: Let’s get out of here! The boss will be finished at the tower! Meet up back at the base and we will finish this!
 - *Jack's* `rockslide_thanks.a` Miner Dell: Thanks! this rock slide was going take all day to clear

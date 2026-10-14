@@ -32,7 +32,7 @@ function draw(){
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,T-2,T-2);m=w||'It fits! Tap Use to place it.'}
     if($('msg').textContent!==m)say(m)}
-  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.work==='pick'&&!flag(n.workOff))pickSwing(n.x*T-cx,n.y*T-cy-3,t,n.f)}}));
+  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
@@ -45,7 +45,8 @@ function draw(){
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
-  if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
+  if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);
+  if(RAID_ON&&zoneOf(P.x,P.y)===0)drawRaid(cx,cy,t);   // the burning village and the pirate ships' cannon fire (js/render/raid.js)   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);

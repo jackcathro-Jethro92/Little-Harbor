@@ -39,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4, 5 and 6 (5.4 to 5.6) are built too; playtest #3's notes are fixed. The next story step is Quest 7, Under Attack (5.7).
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 7 (5.4 to 5.7) are built too; playtest #3's notes are fixed. The next story step is Quest 8, Into the Depths (5.8).
 
 | Step | Status |
 | --- | --- |
@@ -470,7 +470,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **Reward:** **Sky Helm** (helmet slot, speed bonus).
 - **Sets:** `q6_done`, `sky_temple_destroyed` (stays destroyed until the Sky Key is returned in Quest 10).
 
-### 5.7 Quest 7: Under Attack
+### 5.7 Quest 7: Under Attack **(built)**
 - **Start:** a seagull letter arrives as the player is about to leave the Sky island. The village is under attack!
 - **Where:** the village, in its attack variant (2.6): pirate ships offshore firing cannons, houses on fire, villagers fighting.
 - **What happens:** a large encounter in waves. The pirates flee, and the player overhears that the boss "will be finished at the tower".
