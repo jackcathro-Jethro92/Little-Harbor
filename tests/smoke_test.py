@@ -76,9 +76,12 @@ def check(b, url):
     assert seal == {"landing": 0, "leak": 0, "temple": True, "gate": True}, seal
     ev("setFlag('rockslide_cleared',0)")
     # phone D-pad and keyboard move at the same speed: holding either for 1 s gives about the same number of steps
+    # (always start from a long clear stretch of open land, not wherever the earlier checks left the player, which could be a wall or the water)
+    ev("(()=>{sail=false;SCENE=null;BATTLE=null;ENEMIES.forEach(e=>{e.cd=1e9});window.__p0=null;outer:for(let y=60;y<230;y++)for(let x=30;x<250;x++){for(let i=0;i<30;i++)if(!walkable(x+i,y)||zoneOf(x+i,y)!==0)continue outer;window.__p0=[x,y];break outer}})()")
+    assert ev("!!window.__p0"), "there is a long clear stretch of land to walk along"
     def held(start, stop):
         ev("(()=>{window.__n=0;const mv=window.__mv||(window.__mv=move);window.move=d=>{window.__n++;return mv(d)}})()")
-        ev("window.__p0=window.__p0||[P.x,P.y]");  # both runs start on the same tile, so a wall or wanderer further along cannot skew the second one
+        # both runs start on the same tile, so a wall or wanderer further along cannot skew the second one
         ev("P.x=P.rx=window.__p0[0];P.y=P.ry=window.__p0[1];P.f='r'")
         start(); pg.wait_for_timeout(1000); stop()
         n = ev("window.__n"); ev("(()=>{window.move=window.__mv})()"); return n
