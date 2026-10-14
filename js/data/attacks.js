@@ -15,7 +15,8 @@ const ATTACKS={
  quick:{n:'Quick Strike',power:.6,cost:2,xp:6},
  power_slash:{n:'Power Slash',power:1.6,cost:8,xp:16},
  chop:{n:'Chop',power:1,cost:4,xp:10},
- cleave:{n:'Cleave',power:1.6,cost:8,xp:16}
+ cleave:{n:'Cleave',power:1.6,cost:8,xp:16},
+ divine_strike:{n:'Divine Strike',power:2.2,cost:10,xp:20,stun:.25,pierce:1}   // the Divine Blade's own attack (Quest 8): a heavy blow that cannot be blocked and sometimes stuns. An item lists its own extra attacks in `moves`
 };
 const WEAPON_MOVES={
  starter:[['strike',0],['bash',0]],
@@ -25,5 +26,5 @@ const WEAPON_MOVES={
 const BLOCK_STAMINA=10,BLOCK_TAKES=.35;   // Block gives this much stamina back and takes this share of the damage
 const weaponType=()=>{const w=eq('weapon');return w?(w.wtype||'sword'):'starter'};
 const weaponSkillLevel=()=>{const t=weaponType();return t==='starter'?0:lvl(t)};
-const knownAttacks=()=>WEAPON_MOVES[weaponType()].filter(([,req])=>weaponSkillLevel()>=req).map(([id])=>id);
+const knownAttacks=()=>[...WEAPON_MOVES[weaponType()].filter(([,req])=>weaponSkillLevel()>=req).map(([id])=>id),...((eq('weapon')||{}).moves||[])];
 const weaponPerk=(t,l)=>'+'+8*l+'% damage with the '+t+'. Attacks: '+WEAPON_MOVES[t].map(([id,req])=>ATTACKS[id].n+(req?' (level '+req+')':'')).join(', ')+'.';

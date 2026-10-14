@@ -107,6 +107,7 @@ const ITEMS={
  chain_coif:{n:'Chainmail coif',kind:'armour',slot:'helmet',look:'chain',price:4500,smith:1,fx:{ward:.08},desc:'A hood of linked iron rings. Stops 8% of damage.'},
  chain_hauberk:{n:'Chainmail hauberk',kind:'armour',slot:'armour',look:'chain',price:10000,smith:1,fx:{ward:.16},desc:'A shirt of linked iron rings. Stops 16% of damage.'},
  chain_boots:{n:'Chainmail boots',kind:'armour',slot:'boots',look:'chain',price:4000,smith:1,fx:{ward:.08},desc:'Boots covered in iron rings. Stops 8% of damage.'},
+ divine_blade:{n:'Divine Blade',kind:'weapon',reward:1,damage:18,blade:'#f6e08a',moves:['divine_strike'],desc:'A shining blade given by the temple spirits. Damage 18, the best sword. Its own attack, Divine Strike, cannot be blocked. It cannot be bought.'},
  sky_helm:{n:'Sky Helm',kind:'armour',slot:'helmet',look:'sky',gem:'#7ec8f0',fx:{ward:.05,haste:.2},desc:'A winged helm from the Sky spirit. Stops 5% of damage, and in a fight you sometimes get another turn at once. A reward; it cannot be bought.'},
  ring_vigor:{n:'Ring of Vigor',kind:'jewel',slot:'ring',price:3500,gem:'#d83828',fx:{hp:12},desc:'Enchanted gold set with a ruby. +12 max health.'},
  ring_might:{n:'Ring of Might',kind:'jewel',slot:'ring',price:4200,gem:'#f08a2a',fx:{dmg:.12},desc:'Enchanted gold set with amber. +12% weapon damage.'},

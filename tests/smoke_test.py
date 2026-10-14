@@ -76,9 +76,12 @@ def check(b, url):
     assert seal == {"landing": 0, "leak": 0, "temple": True, "gate": True}, seal
     ev("setFlag('rockslide_cleared',0)")
     # phone D-pad and keyboard move at the same speed: holding either for 1 s gives about the same number of steps
+    # (always start from a long clear stretch of open land, not wherever the earlier checks left the player, which could be a wall or the water)
+    ev("(()=>{sail=false;SCENE=null;BATTLE=null;ENEMIES.forEach(e=>{e.cd=1e9});window.__p0=null;outer:for(let y=60;y<230;y++)for(let x=30;x<250;x++){for(let i=0;i<30;i++)if(!walkable(x+i,y)||zoneOf(x+i,y)!==0)continue outer;window.__p0=[x,y];break outer}})()")
+    assert ev("!!window.__p0"), "there is a long clear stretch of land to walk along"
     def held(start, stop):
         ev("(()=>{window.__n=0;const mv=window.__mv||(window.__mv=move);window.move=d=>{window.__n++;return mv(d)}})()")
-        ev("window.__p0=window.__p0||[P.x,P.y]");  # both runs start on the same tile, so a wall or wanderer further along cannot skew the second one
+        # both runs start on the same tile, so a wall or wanderer further along cannot skew the second one
         ev("P.x=P.rx=window.__p0[0];P.y=P.ry=window.__p0[1];P.f='r'")
         start(); pg.wait_for_timeout(1000); stop()
         n = ev("window.__n"); ev("(()=>{window.move=window.__mv})()"); return n
@@ -447,7 +450,7 @@ def check(b, url):
     assert ev("S.story.q==='t_qb'&&S.story.done.includes('t_qa')&&flag('t_ja')&&flag('t_jb')&&!flag('t_stale')&&S.letters.join()==='q1_letter'&&S.gold===105&&S.bag.carrot===3&&S.bag.sardine>=2&&P.x===32+OX&&P.y===33+OY&&!$('title').classList.contains('open')"), "a jump clears the story, applies earlier rows, gives items, moves the player and keeps the bag"
     ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
     ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
-    ev("delete S.bag.sea_key;delete S.bag.enchanted_armour;delete S.bag.sky_helm;S.eq.armour=null;S.eq.helmet=null;ui()")   # (the Quest 10 jump above passes through Quest 5's tower step and hands these out)
+    ev("delete S.bag.sea_key;delete S.bag.enchanted_armour;delete S.bag.sky_helm;delete S.bag.divine_blade;if(S.eq.weapon==='divine_blade')S.eq.weapon=null;S.eq.armour=null;S.eq.helmet=null;ui()")   # (the Quest 10 jump above passes through Quest 5's tower step and hands these out)
     pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
     def fight_out():   # click Attack until the battle is over
         for _ in range(60):
@@ -717,9 +720,25 @@ def check(b, url):
     fight_all('q7_w2', 4, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q7_between2'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("S.story.step===3&&count('healing_potion')===2&&encFigures('q7_w3').length===5&&encFigures('q7_w3').every(n=>WK.includes(at(n.x,n.y)))"), "and the last five come"
     fight_all('q7_w3', 5, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q7_flee'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("flag('q7_done')&&S.story.done.includes('q7')&&S.story.q===null&&DLG.q7_flee.nodes.a.text.startsWith('Let’s get out of here!')&&flag('village_attack')"), "the pirates flee with Jack's words; the village is still wrecked that night"
+    assert ev("flag('q7_done')&&S.story.done.includes('q7')&&S.story.q==='q8'&&flag('tower_raided')&&DLG.q7_flee.nodes.a.text.startsWith('Let’s get out of here!')&&flag('village_attack')"), "the pirates flee with Jack's words; the village is still wrecked that night"
     ev("fireTriggers('day')"); assert ev("!flag('village_attack')&&flag('village_repaired')&&!RAID_ON&&BL.filter(b=>b.raid).length===0&&at(136,107)===0"), "the next morning the village is mended and the ships are gone"
     assert ev("NPC.filter(n=>(n.store||n.shop)&&n.x>=140&&n.x<=176&&n.y>=99&&n.y<=127).every(n=>!n.dlg)&&RAID_FIGHTERS.every(n=>n.hidden===1)"), "and the shops open again and the fighting is over"
+    # Quest 8 (5.8): the ransacked Tower, the letter, the hatch, the long dark Depths with ghosts and zombies, and the chamber where the spirits give the Divine Blade
+    assert ev("S.story.step===0&&flag('tower_raided')&&at(TS.dx-4,TS.y1-2)===152&&!flag('q8_hatch')&&at(TS.dx,TS.y0+5)!==144"), "after Quest 7 the Tower is ransacked (stands toppled) and Quest 8 begins"
+    ev("ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;BATTLE=null;sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===10", timeout=6000)
+    for _ in range(25):
+        if ev("flag('q8_hatch')&&SCENE===null&&!$('letter').classList.contains('open')&&!dlgActive()"): break
+        ev("if(SCENE)skipScene()"); pg.wait_for_timeout(300)
+    assert ev("hasLetter('q8_letter')&&flag('q8_hatch')&&S.story.step===1&&at(TS.dx,TS.y0+5)===144&&LETTERS.q8_letter.text==='Meet us in the chamber'&&NPC.find(n=>n.n==='Old Stranger').x===CZ.dx"), "going in finds the keys gone, brings the old man's note and opens the hatch"
+    assert ev("(()=>{const seen=new Set([DEPTH_START[0]+','+DEPTH_START[1]]),q=[DEPTH_START],D4=[[1,0],[-1,0],[0,1],[0,-1]];let n=0;while(q.length){const[x,y]=q.shift();n++;for(const[a,b]of D4){const k=(x+a)+','+(y+b);if(!seen.has(k)&&WK.includes(at(x+a,y+b))&&zoneOf(x+a,y+b)===20){seen.add(k);q.push([x+a,y+b])}}}return seen.has(DEPTH_EXIT[0]+','+DEPTH_EXIT[1])&&n>350&&DEPTH_SPOTS.filter(s=>s.t==='depths_ghost').length===5&&DEPTH_SPOTS.filter(s=>s.t==='zombie').length===4&&DEPTH_SPOTS.every(s=>WK.includes(at(s.x,s.y))&&zoneOf(s.x,s.y)===20)&&ENEMIES.filter(e=>e.t==='zombie'||e.t==='depths_ghost').length===9})()"), "the Depths are one big connected maze from the stairs to the door, with five ghosts and four zombies on its floor"
+    ev("P.x=P.rx=TS.dx-1;P.y=P.ry=TS.y0+5;P.f='r';sail=false;act()"); pg.wait_for_function("zoneOf(P.x,P.y)===20", timeout=5000); pg.wait_for_function("S.story.step===2", timeout=5000)
+    assert ev("P.x===DEPTH_START[0]&&P.y===DEPTH_START[1]"), "the hatch leads down to the foot of the stairs in the Depths"
+    ev("P.x=P.rx=DEPTH_STAIRS[0][0];P.y=P.ry=DEPTH_STAIRS[0][1]-1;P.f='d';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===10", timeout=5000); assert ev("P.x===TS.dx-1&&P.y===TS.y0+5"), "the stairs lead back up to the shrine room"
+    ev("P.x=P.rx=TS.dx-1;P.y=P.ry=TS.y0+5;P.f='r';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===20", timeout=5000)
+    ev("P.x=P.rx=DEPTH_EXIT[0];P.y=P.ry=DEPTH_EXIT[1];P.f='u';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===21", timeout=5000); pg.wait_for_function("SCENE!==null&&SCENE.id==='q8_meeting'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null&&!dlgActive()", timeout=8000)
+    assert ev("count('divine_blade')===1&&S.eq.weapon==='divine_blade'&&flag('q8_done')&&flag('final_battle_open')&&S.story.done.includes('q8')&&S.story.q===null&&DLG.q8_old1.nodes.a.text.startsWith('I knew you would make it here.')&&DLG.q8_old3.nodes.a.text.startsWith('Take this. This sword')"), "the old man's speech (Jack's words) ends with the Divine Blade in your hand, ready to wear"
+    ev("P.x=P.rx=CZ.dx;P.y=P.ry=CZ.y1-1;P.f='d';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===20", timeout=5000); assert ev("P.x===DEPTH_EXIT[0]&&P.y===DEPTH_EXIT[1]"), "the chamber door leads back into the Depths"
+    ev("S.eq.weapon=null;delete S.bag.divine_blade;ENEMIES.forEach(e=>{e.cd=1e9})")
     ev("storyJump('q6')"); assert ev("S.story.q==='q6'&&S.story.step===0&&count('sea_key')===0&&flag('q5_done')&&!flag('q6_done')"), "the testing menu can jump to Quest 6"
     ev("storyJump('q7')"); assert ev("S.story.q==='q7'&&S.story.step===0&&flag('village_attack')&&RAID_ON&&P.x===156&&P.y===126"), "the testing menu can jump to Quest 7, with the village under attack"
     ev("storyJump('q8')"); assert ev("S.story.q==='q8'&&!flag('village_attack')&&!RAID_ON&&flag('village_repaired')"), "later jumps find the village mended"
@@ -766,6 +785,12 @@ def check(b, url):
     assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
     attack_list('sword', 'sword', 375); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
     assert ev("BATTLE.log.some(t=>/Sword skill reached level 2! You learned Lunge!/.test(t))"), "reaching level 2 teaches Lunge"; end_battle()
+    # the Divine Blade: its own attack, Divine Strike, on top of the sword's (Quest 8)
+    ev("S.bag.divine_blade=1")
+    assert attack_list('divine_blade') == ["Slash (4)", "Divine Strike (10)", "Back"], "the Divine Blade adds Divine Strike to the sword's attacks"; end_battle()
+    attack_list('divine_blade'); ev("window.__r0=Math.random;Math.random=()=>0.5;[...$('bt-menu').children].find(b=>b.textContent==='Back').click();window.__f=BATTLE.foes[0];window.__s0=S.sta;window.__f.t.block=1;BATTLE_BLOCKS=true")
+    pick("Divine Strike"); menu_ready(); assert ev("__f.hp===999-40&&S.sta===__s0-10"), "Divine Strike: 18 x 2.2 = 40 damage for 10 stamina, even against a foe that always blocks"
+    ev("Math.random=__r0;BATTLE_BLOCKS=false"); end_battle(); ev("S.eq.weapon=null;delete S.bag.divine_blade")
     # the axe trains the axe, not the sword
     attack_list('hand_axe'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Chop"); menu_ready(); assert ev("(S.xp.axe||0)===10&&!(S.xp.sword)"), "the axe trains the axe skill"; end_battle()
     # Bash: a 15% chance to stun

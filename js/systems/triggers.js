@@ -21,6 +21,7 @@ const TACT={
  toast:v=>toast(v,2600), msg:v=>say(v),
  scene:()=>{}, letter:()=>{}, battle:()=>{}, encounter:v=>startEncounter(v), quest:v=>questSet(v[0],v[1]||0), step:v=>questStep(v), done:v=>questDone(v),
  ensure:v=>Object.entries(v).forEach(([id,n])=>{S.bag[id]=Math.max(count(id),n);const sl=slotOf(id);if(sl&&!S.eq[sl]&&['weapon','tool','jewel','armour'].includes(ITEMS[id].kind))S.eq[sl]=id;ui();save()}),   // gives a single item (a sword, a pickaxe) once: never a second copy, and equips it if the slot is empty
+ equip:v=>{const sl=slotOf(v);if(sl){S.eq[sl]=v;ui();save()}},   // wear an item you hold (the Divine Blade)
  move:v=>{const m=storyState().moved=storyState().moved||{};m[v[0]]=[v[1],v[2]];save();placeStoryNpcs()}
 };
 // people a trigger has moved stay where they were put (saved in S.story.moved, put back at load)

@@ -218,7 +218,9 @@ function towerInside(m,sx,sy,tx,ty,n,t){const{O,gold,wood,wood2,glow}=TW,r=ty-TS
     if(tx===TS.dx){R(sx+5,sy-4,6,9,O);R(sx+6,sy-3,4,7,'#b87a3a');R(sx+9,sy-6,3,3,'#b87a3a');R(sx+11,sy-5,3,1,'#b87a3a');R(sx+6,sy+4,4,2,'#b87a3a')}else R(sx+4+n%5,sy+2,6,3,tx<TS.dx?'#e8d8a0':'#c8402a')}
   else if(m===114){floor();R(sx+3,sy+12,10,3,'#00000030');R(sx+4,sy+7,8,6,O);R(sx+5,sy+8,6,4,wood);R(sx+3,sy+4,10,4,O);R(sx+4,sy+5,8,2,'#7a5230');
     const kf={[TS.dx-4]:'earth_key_at_tower',[TS.dx-2]:'sea_key_at_tower',[TS.dx+2]:'sky_key_at_tower',[TS.dx+4]:'fire_key_at_tower'}[tx];   // a key rests on its stand once it is kept here
-    if(kf&&ty===TS.y1-2&&flag(kf)){R(sx+5,sy-2,5,5,O);R(sx+6,sy-1,3,3,gold);R(sx+7,sy,1,1,O);R(sx+7,sy+3,2,7,O);R(sx+8,sy+3,1,6,gold);R(sx+9,sy+7,2,2,gold)}}
+    if(kf&&ty===TS.y1-2&&flag(kf)&&!flag('tower_raided')){R(sx+5,sy-2,5,5,O);R(sx+6,sy-1,3,3,gold);R(sx+7,sy,1,1,O);R(sx+7,sy+3,2,7,O);R(sx+8,sy+3,1,6,gold);R(sx+9,sy+7,2,2,gold)}}
+  else if(m===144){floor();R(sx,sy+1,T,T-2,O);R(sx+1,sy+2,T-2,T-4,'#3a2a1a');R(sx+2,sy+3,T-4,T-6,'#0a0810');for(let i=0;i<4;i++){R(sx+2,sy+4+i*2,T-4,1,i%2?'#4a3a2a':'#2a2030')}R(sx+3,sy+3,T-6,1,fl?'#e8b030':'#b88a20');R(sx-3,sy-2,22,22,'rgba(232,176,48,.10)')}
+  else if(m===152){floor();R(sx+2,sy+11,12,3,'#00000030');R(sx+2,sy+8,10,5,O);R(sx+3,sy+9,8,3,wood);R(sx+9,sy+3,5,5,O);R(sx+10,sy+4,3,3,'#7a5230');R(sx+1,sy+5,2,2,'#a89a7a');R(sx+12,sy+11,2,1,'#a89a7a')}
   else if(m===115){floor();R(sx+7,sy-12,2,12,O);R(sx+4,sy-1,8,3,O);R(sx+5,sy,6,6,'#e8b030');R(sx+6,sy+1,4,4,fl?'#fff2a8':glow);R(sx+4,sy+6,8,2,O)}}
 // ---------- the damaged Temple to the Sky (js/world/skydamage.js; art/temples/sky_stonehenge_temple/5_circle_damaged and 6_temple_stone_damaged) ----------
 // Tiles (all on grass): 117 and 118 the left and right halves of the split temple stone (blocked), 119 dark stairs going down between them (blocked), 120 scorched ground (walkable),
