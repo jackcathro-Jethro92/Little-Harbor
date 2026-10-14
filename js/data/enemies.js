@@ -10,6 +10,8 @@
 // The giant centipede (the Darkwood): a human-sized relative of Japan's giant centipede (the ōmukade): a long reddish-brown body of plates, a flame-orange head with big dark fangs, yellow legs and long feelers.
 const ENEMY_TYPES={
  centipede:{n:'Giant centipede',hp:30,dmg:7,hit:[3,6],cd:2,speed:1,chase:6,leash:5,art:'centipede',xp:40,gold:[5,15],drops:[['centipede_fang',.5,1]],block:.1,respawn:240,die:'The giant centipede curls up and goes still.'},
+ depths_ghost:{n:'Wailing ghost',hp:26,dmg:10,hit:[7,10],cd:2,speed:1,chase:6,leash:6,art:'ghost',xp:60,gold:[10,25],drops:[],respawn:240,die:'The ghost wails and fades... until tomorrow.'},   // the Depths under the Temple Tower (Quest 8)
+ zombie:{n:'Zombie',hp:46,dmg:11,hit:[8,11],cd:2,speed:2,chase:5,leash:6,art:'zombie',xp:80,gold:[15,35],drops:[['rope',.3,1]],block:.1,respawn:240,die:'The zombie falls apart... until tomorrow.'},   // slow (it moves every other tick), tough and hard-hitting
  oak_ghost:{n:'Restless spirit',hp:15,dmg:5,hit:[2,5],cd:2,speed:1,chase:6,leash:6,art:'ghost',xp:25,gold:[3,9],drops:[],respawn:240,die:'The restless spirit fades away... until tomorrow.'},   // the ghosts of Oak Island (Quest 3, playtest #3)
  spirit:{n:'Spirit',hp:12,dmg:6,hit:[2,5],cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };

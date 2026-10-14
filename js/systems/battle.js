@@ -12,7 +12,7 @@ function bSay(t){$('bt-msg').textContent=t;if(BATTLE)(BATTLE.log=BATTLE.log||[])
 function bMenu(buttons){const m=$('bt-menu');m.innerHTML='';buttons.forEach(([t,fn,dis])=>{const b=document.createElement('button');b.textContent=t;b.disabled=!!dis;b.onclick=fn;m.appendChild(b)});const f=m.querySelector('button:not(:disabled)');if(f&&!BATTLE_FAST)f.focus()}
 // A creature (the spirit, the centipede) is drawn by its map art, once per frame onto a small spare canvas by borrowing the game's drawing surface for a moment (`g`), then scaled up on the battle screen.
 // ART_SHOT says how big the picture is and where on the spare canvas the creature stands (tile coordinates) and which way it faces.
-const ART_SHOT={ghost:{w:48,h:48,x:1,y:1,f:'d',k:3},centipede:{w:48,h:30,x:.5,y:.55,f:'l',k:4}},artOff=document.createElement('canvas');
+const ART_SHOT={ghost:{w:48,h:48,x:1,y:1,f:'d',k:3},zombie:{w:48,h:48,x:1,y:1,f:'d',k:3},centipede:{w:48,h:30,x:.5,y:.55,f:'l',k:4}},artOff=document.createElement('canvas');
 function paintCreature(f,cv){const A=ART_SHOT[f.t.art]||ART_SHOT.ghost;artOff.width=A.w;artOff.height=A.h;const keep=g;g=artOff.getContext('2d');g.clearRect(0,0,A.w,A.h);
   try{ENEMY_ART[f.t.art]({x:A.x,y:A.y,f:A.f,hp:f.t.hp,max:f.t.hp,hitAt:0,pois:f.pois>0?performance.now()+1e4:0},0,0,performance.now())}finally{g=keep}
   const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.drawImage(artOff,0,0,A.w*A.k,A.h*A.k)}
@@ -70,7 +70,8 @@ async function bAttack(id){const B=BATTLE,A=ATTACKS[id];B.picking=false;bMenu([]
   const w=eq('weapon'),t=weaponType(),sk=t==='starter'?null:t,lv0=sk?lvl(sk):0;
   S.sta=Math.max(0,S.sta-A.cost);
   const base=w?w.damage:2;let d=Math.max(1,Math.round(base*(1+.08*lv0+fx('dmg'))*A.power*(.85+Math.random()*.3)));
-  const blocked=Math.random()<foeBlockChance(f);if(blocked)d=Math.max(1,Math.round(d*BLOCK_TAKES));
+  const blocked=A.pierce?false:Math.random()<foeBlockChance(f);   // `pierce` (Divine Strike) cannot be blocked
+  if(blocked)d=Math.max(1,Math.round(d*BLOCK_TAKES));
   f.hp-=d;gainXp('combat',1);if(sk&&A.xp)gainXp(sk,A.xp);
   bShake($('bt-meBox'),'lunge');await bwait(230);
   bFx(t==='axe'?'chop':'slash',f.el);if(blocked){bFx('shield',f.el);bFx('dmg small',f.el,'-'+d)}else{bShake(f.el,'hit');bFlash(f.cv);bFx('dmg',f.el,'-'+d)}

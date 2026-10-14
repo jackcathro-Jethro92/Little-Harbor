@@ -87,3 +87,9 @@ const pickSwing=(sx,sy,t,f)=>toolSwing('pick',sx,sy,f||'d',((t/260)|0)%4);   // 
 const workPhase=(n,t)=>((t/(n.fight?210:260)+(n.fo||0))|0)%4;
 const fightLunge=(n,t)=>n.fight&&workPhase(n,t)===2?(n.f==='r'?2:n.f==='l'?-2:0):0;
 const npcSwing=(n,cx,cy,t)=>{const ph=workPhase(n,t);toolSwing(n.work,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3,n.f||'d',ph);if(n.fight&&ph===2){g.fillStyle='#fff6c0';const ex=n.x*T-cx+(n.f==='r'?17:-1),ey=n.y*T-cy+6;g.fillRect(ex,ey,2,2);g.fillRect(ex+(n.f==='r'?2:-2),ey-2,1,1);g.fillRect(ex+(n.f==='r'?2:-2),ey+3,1,1)}}
+
+// the zombie of the Depths (Quest 8): a townsperson with grey-green skin, ragged dark clothes and a slow shuffle, drawn from the same character sprite as everyone else (facing the way it moves); flashes white when hit, green when poisoned
+function zombieArt(e,cx,cy,t){const x=e.x*T-cx,y=e.y*T-cy,w=t-e.hitAt<250&&((t/60|0)%2);
+  CharacterSprite.draw(g,x,y-3+Math.round(Math.sin(t/380+e.x)*.6),{view:vw(e.f||'d'),frame:[1,0,3,0][(t/340|0)%4],jacket:true,pack:false,hat:'none',style:'bald',colors:{skin:'#86a874',hair:'#3a3a30',shirt:'#6a6a58',jacket:'#4a4a42',pants:'#34343a',boots:'#26262a'}});
+  g.fillStyle='rgba(70,90,50,.35)';g.fillRect(x+4,y+1,8,5);g.fillStyle='#5a3030';g.fillRect(x+6,y+9,2,1);g.fillRect(x+9,y+12,2,2);
+  if(w){g.fillStyle='rgba(255,255,255,.55)';g.fillRect(x,y-3,16,18)}else if(e.pois>t){g.fillStyle='rgba(150,235,120,.4)';g.fillRect(x,y-3,16,18)}}

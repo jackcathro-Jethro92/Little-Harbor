@@ -25,3 +25,8 @@ function drawRaid(cx,cy,t){const hs=raidHouses();BL.forEach(b=>{if(b.sign&&b.x>=
     else if(ph<.18){const k=(ph-.04)/.14,bx=sx+(ex-sx)*k,by=sy+(ey-sy)*k-Math.sin(k*Math.PI)*34;g.fillStyle='#1a1a1e';g.beginPath();g.arc(bx,by,2.2,0,7);g.fill();g.fillStyle='rgba(255,255,255,.4)';g.fillRect(bx-1,by-1,1,1)}
     else{const k=(ph-.18)/.12;if(k<1){g.fillStyle='rgba(255,170,60,'+(1-k).toFixed(2)+')';g.beginPath();g.arc(ex,ey,5+k*13,0,7);g.fill();g.fillStyle='rgba(255,240,170,'+(1-k).toFixed(2)+')';g.beginPath();g.arc(ex,ey,2+k*6,0,7);g.fill();
       g.fillStyle='rgba(70,60,50,'+(.8*(1-k)).toFixed(2)+')';for(let d=0;d<6;d++){const a=d*1.05+n;g.fillRect(ex+Math.cos(a)*k*18,ey+Math.sin(a)*k*14-k*8,2,2)}}}})}
+
+// the Temple Tower after the raid (flag tower_raided, Quest 8): smoke rising from the pagoda and a few small fires in the courtyard
+function drawTowerRaid(cx,cy,t){const px=212*T-cx,py=200*T-cy;if(px<-120||px>VW+120||py<-120||py>VH+80)return;
+  [[-34,10],[34,18],[0,-6]].forEach(([dx,dy],i)=>raidSmoke(px+8+dx,py+dy,t,i+3));
+  [[-60,40],[52,46],[-20,66]].forEach(([dx,dy],i)=>raidFlames(px+8+dx,py+dy,20,t,i+5))}

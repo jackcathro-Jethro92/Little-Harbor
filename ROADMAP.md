@@ -39,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 7 (5.4 to 5.7) are built too; playtest #3's notes are fixed. The next story step is Quest 8, Into the Depths (5.8).
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 8 (5.4 to 5.8) are built too; playtest #3's notes are fixed. The next story step is Quest 9, The Final Fight (5.9).
 
 | Step | Status |
 | --- | --- |
@@ -476,7 +476,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **What happens:** a large encounter in waves. The pirates flee, and the player overhears that the boss "will be finished at the tower".
 - **Sets:** `q7_done`, `village_repaired` the next day (switch back from the attack variant).
 
-### 5.8 Quest 8: Into the Depths (Temple Tower)
+### 5.8 Quest 8: Into the Depths (Temple Tower) **(built)**
 - **Where:** the Temple Tower, now attacked: the key stands are empty and toppled (a ransacked variant). A secret hatch has opened in the shrine-room floor.
 - **What happens:**
   - A seagull letter from the old man says to come down.
