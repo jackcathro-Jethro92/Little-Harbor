@@ -12,14 +12,23 @@ ITEMS.house_key={n:'House key',kind:'key',desc:'The key to your new home on Have
 TACT.giveletter=v=>{if(!hasLetter(v))myLetters().push(v);save()};   // a letter goes straight into the bag's LETTERS pocket
 // ---- the new island: Haven Isle, an oval of sand and grass in the open sea north of the village, with a pier, a path, lanterns and a house ----
 const ISLE={cx:166,cy:82,rx:12,ry:9.5,hx:165,hy:78},ISLE_ORIG=new Map(),ISLE_LAND=['Haven Isle',166,82];
-function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,y1=cy+16;
+function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,y1=cy+16,gy=hy+8;   // gy: the row of the garden gate
+  BL.filter(b=>b.haven).forEach(b=>BL.splice(BL.indexOf(b),1));
   if(!on){ISLE_ORIG.forEach((t,k)=>{M[k]=t});ISLE_ORIG.clear();const i=LAND.indexOf(ISLE_LAND);if(i>=0)LAND.splice(i,1);if(typeof groundDirty==='function')groundDirty();return}
   if(!ISLE_ORIG.size)for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)ISLE_ORIG.set(y*MW+x,M[y*MW+x]);
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const d=Math.hypot((x-cx)/rx,(y-cy)/ry);if(d<=1)setT(x,y,d>.82?2:1)}
-  [[-8,-3],[-6,3],[7,-2],[8,3],[-4,-6],[4,-7],[-9,0],[9,0]].forEach(([dx,dy])=>{if(at(cx+dx,cy+dy)===1)setT(cx+dx,cy+dy,4)});
+  [[-8,-3],[-6,3],[7,-2],[8,3],[-4,-6],[4,-7],[-9,0],[9,0]].forEach(([dx,dy])=>{const x=cx+dx,y=cy+dy;if(at(x,y)===1&&!(y>=hy+3&&y<=gy&&Math.abs(dx)<=9))setT(x,y,4)});
   for(let y=hy+2;y<=Math.round(cy+ry)+1;y++)if(at(cx,y)!==0)setT(cx,y,6);                                  // the path from the door down to the beach
   for(let y=Math.round(cy+ry);y<=Math.round(cy+ry)+3;y++)if(at(cx,y)===0||at(cx,y)===2)setT(cx,y,3);        // a short pier into the sea
-  [hy+4,hy+7].forEach(y=>[cx-1,cx+1].forEach(x=>{if(at(x,y)===1)setT(x,y,7)}));                              // lanterns along the path
+  [gy+3,gy+6].forEach(y=>[cx-1,cx+1].forEach(x=>{if(at(x,y)===1)setT(x,y,7)}));                              // lanterns along the path outside the gate
+  // the Japanese garden in front of the house: a raked-gravel court with a line of stepping stones, a koi pond either side, pines, stone lanterns, a bamboo fence and a wooden gate
+  rect(cx-8,hy+3,cx+8,gy-1,(x,y)=>{if(at(x,y)===1||at(x,y)===2||at(x,y)===4)setT(x,y,103)});
+  for(let y=hy+2;y<gy;y++)setT(cx,y,104);setT(cx,gy,104);[cx-1,cx+1].forEach(x=>setT(x,gy,103));
+  [[-6,4],[-5,4],[-6,5],[-5,5],[5,4],[6,4],[5,5],[6,5]].forEach(([dx,dy])=>setT(cx+dx,hy+dy,9));              // two small koi ponds
+  [[cx-8,hy+3],[cx+8,hy+3],[cx-8,gy-1],[cx+8,gy-1],[cx-3,hy+3],[cx+3,hy+3]].forEach(([x,y])=>setT(x,y,102));   // pines at the corners and either side of the door
+  [[-2,hy+3],[2,hy+3],[-2,gy-1],[2,gy-1],[-2,hy+6],[2,hy+6]].forEach(([dx,y])=>setT(cx+dx,y,7));          // stone lanterns
+  for(let x=cx-9;x<=cx+9;x++)if(Math.abs(x-cx)>=3)setT(x,gy,8);for(let y=hy+3;y<gy;y++){setT(cx-9,y,8);setT(cx+9,y,8)}   // a bamboo fence round the garden
+  setT(cx-2,gy,107);setT(cx+2,gy,107);BL.push({x:cx-2,y:gy,w:5,towergate:1,haven:1});                        // the gate (posts, and the wooden roof drawn by towerGate)
   if(S.home&&S.home.x===hx&&S.home.y===hy)for(let j=-2;j<2;j++)for(let i=-3;i<=5;i++)M[(hy+j)*MW+hx+i]=5;       // the grand house fills 9 x 4 tiles (js/render/grandhouse.js); the door is the home system's (home.x+1, home.y+1)
   if(!LAND.includes(ISLE_LAND))LAND.push(ISLE_LAND);
   for(let y=y0;y<=y1;y+=2)for(let x=x0;x<=x1;x+=2)FOG[(y>>2)*FW+(x>>2)]=1;                                   // it appears on the map

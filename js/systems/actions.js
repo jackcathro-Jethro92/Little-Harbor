@@ -8,7 +8,7 @@ function act(){
   {const en=enemyAt(x,y);if(en&&!sail)return startEnemyBattle(en)}
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(useGate(x,y))return;
-  if(at(x,y)===23||at(x,y)===144||at(x,y)===145){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
+  if(at(x,y)===23||at(x,y)===144||at(x,y)===145||at(x,y)===169){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();
   {const en=!sail&&ENTR.find(q=>q.x===x&&q.y===y);if(en)return enterHall(en)}
   {const t2=at(x,y);if(!sail){if(t2===44||(t2===51&&!inFZ(P.x,P.y)))return enterForest(y<130);if((t2===43||t2===51)&&inFZ(P.x,P.y))return exitForest(y<FZ.y0+16);if(t2===46)return pickup(x,y)}}

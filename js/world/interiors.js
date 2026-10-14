@@ -2,7 +2,7 @@ const ROOMTAB=[];   // rooms made from a table (the ships' decks and cabins, js/
 const roomZone=(x,y)=>{for(const r of ROOMTAB)if(x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1)return r.z;return 0};
 const FY=258,FOREST_PLAN=[[27,20],[28,22],[29,14],[30,24]]; // the Darkwood's foraging: forest sprigs, red caps, death caps, blue caps // the Darkwood is drawn FY rows below where its own coordinates say (see below)
 // ---------- home interior: a hidden room in the south-east sea, shown only when you are inside ----------
-const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},inRoom=(x,y)=>x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1;
+const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},HG={x0:286,y0:264,x1:317,y1:287,dx:301,dy:286},inRoom=(x,y)=>(x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1)||(x>=HG.x0&&x<=HG.x1&&y>=HG.y0&&y<=HG.y1);   // HG: the grand house's six rooms (js/world/granthome.js) count as home too
 if(!S.wv){S.wv=2; // saves from the small world used old coordinates: move them into the big map
   const mv=o=>{const ir=o.x>=50&&o.x<=61&&o.y>=41&&o.y<=50;o.x+=ir?IR.x0-50:OX;o.y+=ir?IR.y0-41:OY};
   S.placed.forEach(mv);S.gardens.forEach(g=>{g.x+=OX;g.y+=OY});if(S.claim){S.claim.x+=OX;S.claim.y+=OY}if(S.home){S.home.x+=OX;S.home.y+=OY}

@@ -11,7 +11,8 @@ function tile(tx,ty,sx,sy,t){
   if(mm>=78&&mm<=81){skyTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=82&&mm<=101){fireTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=125&&mm<=139){shipTile(mm,sx,sy,tx,ty,n,t);return}
-  if((mm>=142&&mm<=151)){depthTile(mm,sx,sy,tx,ty,n,t);return}   // the Depths and the chamber (js/render/depths.js)
+  if((mm>=142&&mm<=151)){depthTile(mm,sx,sy,tx,ty,n,t);return}
+  if(mm>=153&&mm<=171){grandHomeTile(mm,sx,sy,tx,ty,n,t);return}   // the grand house's rooms (js/render/granthome.js)   // the Depths and the chamber (js/render/depths.js)
   if(mm===144||mm===152){towerTile(mm,sx,sy,tx,ty,n,t);return}   // the open hatch and the toppled stands in the shrine room
   if(mm>=117&&mm<=122){skyDamagedTile(mm,sx,sy,tx,ty,n,t);return}
   if(mm>=102&&mm<=116){towerTile(mm,sx,sy,tx,ty,n,t);return}
