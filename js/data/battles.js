@@ -24,10 +24,17 @@ const FOES={
  raid_raider:{n:'Pirate raider',hp:26,hit:[6,8],gold:[25,45],xp:50,drops:[['rope',.4,1]],atk:'swings a cutlass',look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}},
  raid_gunner:{n:'Pirate gunner',hp:20,hit:[6,9],gold:[28,50],xp:55,drops:[['iron_bar',.25,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
  raid_brute:{n:'Pirate brute',hp:36,hit:[7,10],gold:[50,80],xp:80,drops:[['iron_bar',.5,1]],atk:'swings a boarding axe',look:{skin:3,hair:2,shirt:0,jk:0,hat:'none',hstyle:'bald',pack:false,armour:{body:'leather',boots:'leather'}}},
+ // the final fight at the Temple of the Sea (Quest 9): eight pirates, tougher again, then Captain Barron himself, who does not retreat this time and uses his full pattern: two sabre cuts, a wind-up (a Block on the turn after it takes the heavy blow that follows) and a crashing downward blow
+ final_raider:{n:'Pirate raider',hp:30,hit:[7,9],gold:[40,70],xp:70,drops:[['rope',.4,1]],atk:'swings a cutlass',look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}},
+ final_gunner:{n:'Pirate gunner',hp:24,hit:[7,10],gold:[45,75],xp:75,drops:[['iron_bar',.3,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
+ final_brute:{n:'Pirate brute',hp:40,hit:[8,11],gold:[70,110],xp:100,drops:[['iron_bar',.5,1]],atk:'swings a boarding axe',look:{skin:3,hair:2,shirt:0,jk:0,hat:'none',hstyle:'bald',pack:false,armour:{body:'leather',boots:'leather'}}},
+ barron:{n:'Captain Barron',hp:170,hit:[9,12],gold:[300,400],xp:400,drops:[],look:{skin:1,hair:4,shirt:0,jk:5,hat:'none',hstyle:'long',pack:false,armour:{helm:'gold',body:'gold',boots:'gold'}},
+  pattern:[{atk:'slashes with his sabre',hit:[9,12]},{atk:'slashes with his sabre',hit:[9,12]},{wind:'raises his sabre high above his head...'},{atk:'brings the sabre crashing down',hit:[22,28]}]},
  pirate_captain:{n:'Pirate captain',hp:60,hit:[6,10],gold:[60,100],xp:120,drops:[],atk:'slashes with a heavy sabre',flee:{at:.35,msg:'The captain shouts a curse and escapes!'},look:{skin:1,hair:4,shirt:0,jk:0,hat:'cap',hc:1,hstyle:'long',pack:false}}
 };
 const BATTLES={
  test_pirate:{foes:['pirate_grunt']},
  test_pirates:{foes:['pirate_grunt','pirate_gunner','pirate_grunt']},
- test_captain:{foes:['pirate_captain'],noRun:1}
+ test_captain:{foes:['pirate_captain'],noRun:1},
+ q9_boss:{foes:['barron'],noRun:1,win:[],winScene:'q9_victory'}
 };

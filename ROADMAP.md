@@ -39,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 8 (5.4 to 5.8) are built too; playtest #3's notes are fixed. The next story step is Quest 9, The Final Fight (5.9).
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 9 (5.4 to 5.9) are built too; playtest #3's notes are fixed. The next story step is Quest 10, The Returning of the Keys (5.10).
 
 | Step | Status |
 | --- | --- |
@@ -485,7 +485,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **Reward:** the **Divine Blade** (best sword).
 - **Sets:** `q8_done`, `final_battle_open` (removes the pirate-ship gates around the Sea Temple).
 
-### 5.9 Quest 9: The Final Fight
+### 5.9 Quest 9: The Final Fight **(built)**
 - **Where:** the Sea Temple in a **storm** (a world variant plus weather: rain, lightning, rough sea).
 - **What happens:** the player fights through the pirates to the boss, who uses his full pattern and does not retreat this time. The sky clears and the pirates flee for good: remove the pirate ship patrols and clear Pirate Island. The old man takes the Sea Key, seals it back in the temple, asks you to return the other keys, and fades away.
 - **Sets:** `q9_done`, `pirates_defeated`, `keys_to_return = [earth, sky, fire]`.

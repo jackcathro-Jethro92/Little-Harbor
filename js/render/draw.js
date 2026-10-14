@@ -51,6 +51,7 @@ function draw(){
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);
+  if(STORM_ON&&zoneOf(P.x,P.y)===0)drawStorm(cx,cy,t);   // the storm over the Temple of the Sea (js/render/storm.js)
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7||zoneOf(P.x,P.y)===20){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
   if(zoneOf(P.x,P.y)===2){fireflies(cx,cy,t);drawCompass(cx,cy,t)}
   // fishing line
