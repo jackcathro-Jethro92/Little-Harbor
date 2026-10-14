@@ -1,6 +1,6 @@
 // ---------- sprites (CharacterSprite module) ----------
 // armour colours [main, dark, light] by look (items.js `look`); the sprite module below draws worn armour from them (playtest #3)
-var ARM_PAL={cloth:['#7f93b8','#5d7096','#a9b9d6'],leather:['#9a6a3a','#6d4624','#c08a52'],chain:['#aeb4bd','#7b828c','#e2e7ec'],enchanted:['#9ec6e8','#6b9cc4','#e6f4ff'],enchanted_boots:['#58a8e8','#3a78b8','#a8d8ff']};
+var ARM_PAL={cloth:['#7f93b8','#5d7096','#a9b9d6'],leather:['#9a6a3a','#6d4624','#c08a52'],chain:['#aeb4bd','#7b828c','#e2e7ec'],enchanted:['#9ec6e8','#6b9cc4','#e6f4ff'],enchanted_boots:['#58a8e8','#3a78b8','#a8d8ff'],sky:['#7ec8f0','#4a98c8','#e8f6ff'],gold:['#d9a93a','#a8791c','#f6dc7a']};
 var CharacterSprite=(function(){
 var FB=["................","................","......KKKKKK....",".....KHHHHHHK...","....KHHHHHHHHK..","....KHHHHHHHHK..","....KHSSSSSSHK..","....KSSSSSSSSK..","....KSESSSSESK..","....KSSSSSSSSK..",".....KSSSSSSK...","......KKSSKK....","....KKTTTTTTKK..","...KSKTTTTTTKSK.","...KSKTTTTTTKSK.","....KKTTTTTTKK..","......KPPPPK....","......KPPKPPK...","......KBBKBBK...","................"];
 var BB=["................","................","......KKKKKK....",".....KHHHHHHK...","....KHHHHHHHHK..","....KHHHHHHHHK..","....KHHHHHHHHK..","....KHHHHHHHHK..","....KHHHHHHHHK..","....KHHHHHHHHK..",".....KHHHHHHK...","......KKSSKK....","....KKTTTTTTKK..","...KSKTTTTTTKSK.","...KSKTTTTTTKSK.","....KKTTTTTTKK..","......KPPPPK....","......KPPKPPK...","......KBBKBBK...","................"];
@@ -31,19 +31,21 @@ function put(g,o){for(var y in o){var s=o[y],row=g[y].split("");for(var x=0;x<16
 var HELM={
  cloth:{f:{3:".....KXXXXXXK...",4:"....KXXXXXXXXK..",5:"....KYYYYYYYYK..",6:"....KXSSSSSSXK.."},b:{3:".....KXXXXXXK...",4:"....KXXXXXXXXK..",5:"....KYYYYYYYYK..",6:"....KXXXXXXXXK..",7:"....KXXXXXXXXK.."},s:{3:"....KXXXXXXK....",4:"...KXXXXXXXXK...",5:"...KYYYYYYYYK...",6:"...KXXXXSSSSK...",7:"...KXXXSSSESK..."}},
  leather:{f:{3:".....KXXXXXXK...",4:"....KXXXXXXXXK..",5:"....KYYYYYYYYK..",6:"....KXSSSSSSXK..",7:"....KXSSSSSSXK..",8:"....KXESSSSEXK.."},b:{3:".....KXXXXXXK...",4:"....KXXXXXXXXK..",5:"....KYYYYYYYYK..",6:"....KXXXXXXXXK..",7:"....KXXXXXXXXK..",8:"....KXXXXXXXXK.."},s:{3:"....KXXXXXXK....",4:"...KXXXXXXXXK...",5:"...KYYYYYYYYK...",6:"...KXXXXSSSSK...",7:"...KXXXSSSESK...",8:"...KXXSSSSSSSK.."}},
+ sky:{f:{3:".....KXXXXXXK...",4:"...YKXXXXXXXXKY.",5:"..YYKYYYYYYYYKYY",6:"....KXSSSSSSXK.."},b:{3:".....KXXXXXXK...",4:"...YKXXXXXXXXKY.",5:"..YYKYYYYYYYYKYY",6:"....KXXXXXXXXK..",7:"....KXXXXXXXXK.."},s:{3:"....KXXXXXXK....",4:"..YKXXXXXXXXK...",5:".YYKYYYYYYYYK...",6:"...KXXXXSSSSK...",7:"...KXXXSSSESK..."}},
  chain:{f:{3:".....KXYXYXK....",4:"....KXYXYXYXXK..",5:"....KYXYXYXYYK..",6:"....KXSSSSSSXK..",7:"....KXSSSSSSXK..",8:"....KXESSSSEXK..",9:"....KXSSSSSSXK..",10:".....KXSSSSXK..."},b:{3:".....KXYXYXK....",4:"....KXYXYXYXXK..",5:"....KYXYXYXYYK..",6:"....KXYXYXYXXK..",7:"....KYXYXYXYYK..",8:"....KXYXYXYXXK..",9:"....KYXYXYXYYK..",10:".....KXYXYXK...."},s:{3:"....KXYXYXK.....",4:"...KXYXYXYXXK...",5:"...KYXYXYXYYK...",6:"...KXYXYSSSSK...",7:"...KYXYSSSESK...",8:"...KXYSSSSSSSK..",9:"....KXSSSSSSK..."}}};
+HELM.gold=HELM.chain;
 function recolor(g,rows,map){rows.forEach(function(y){g[y]=g[y].split("").map(function(ch){return map[ch]||ch}).join("")})}
 function setc(g,y,x,ch){g[y]=g[y].substring(0,x)+ch+g[y].substring(x+1)}
 function wearBody(g,k,mat){recolor(g,[12,13,14,15],{T:"M",t:"m",J:"M",j:"m"});
  if(k!=="s"){if(g[13][4]==="S")setc(g,13,4,"M");if(g[13][13]==="S")setc(g,13,13,"M")}
  for(var y=12;y<=15;y++)for(var x=5;x<=12;x++)if(g[y][x]==="M"||g[y][x]==="m"){
-  if(mat==="chain"&&(x+y)%2===0&&g[y][x]==="M")setc(g,y,x,"N");
+  if((mat==="chain"||mat==="gold")&&(x+y)%2===0&&g[y][x]==="M")setc(g,y,x,"N");
   if(mat==="cloth"&&y<15&&k==="f"&&(x===7||x===8))setc(g,y,x,"m");
   if(mat==="leather"&&y<15&&(x===6||x===11)&&k!=="s")setc(g,y,x,"m")}
- if(mat!=="chain")for(var x2=5;x2<=12;x2++)if(g[15][x2]==="M"||g[15][x2]==="m")setc(g,15,x2,mat==="cloth"?"N":"m");
+ if(mat!=="chain"&&mat!=="gold")for(var x2=5;x2<=12;x2++)if(g[15][x2]==="M"||g[15][x2]==="m")setc(g,15,x2,mat==="cloth"?"N":"m");
  if(mat==="leather"&&k==="f")setc(g,15,7,"N")}
 function wearBoots(g,mat){recolor(g,[17,18],{P:"O",B:"o"});if(mat==="cloth"){recolor(g,[17],{O:"P"})}
- if(mat==="chain"){for(var x=5;x<=12;x++)if(g[17][x]==="O"&&x%2===0)setc(g,17,x,"Q")}
+ if(mat==="chain"||mat==="gold"){for(var x=5;x<=12;x++)if(g[17][x]==="O"&&x%2===0)setc(g,17,x,"Q")}
  if(mat==="leather")for(var x3=5;x3<=12;x3++)if(g[17][x3]==="O"&&g[16][x3]!==".")setc(g,16,x3,g[16][x3]==="P"?"Q":g[16][x3])}
 function buildGrid(k,f,fish,o){var g=(k==="f"?FB:k==="b"?BB:SB).slice();var side=k==="s",step=!fish&&(f===1||f===3);
 if(side&&fish)put(g,FISHB);

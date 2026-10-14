@@ -16,6 +16,10 @@ const FOES={
  sea_cutthroat:{n:'Pirate cutthroat',hp:24,hit:[5,7],gold:[25,45],xp:50,drops:[['rope',.4,1]],atk:'slashes with a cutlass',look:{skin:1,hair:3,shirt:2,jk:2,hat:'cap',hc:1,pack:false}},
  sea_gunner:{n:'Pirate gunner',hp:18,hit:[5,8],gold:[28,50],xp:55,drops:[['iron_bar',.25,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
  sea_mate:{n:'First mate',hp:32,hit:[6,9],gold:[50,80],xp:80,drops:[['iron_bar',.4,1]],atk:'swings a heavy cutlass',look:{skin:3,hair:2,shirt:1,jk:0,hat:'cap',hc:2,hstyle:'short',pack:false}},
+ // the pirates on the Sky temple's path (Quest 6): seven, harder again (iron sword and a little armour: about two potions; the bronze sword about five)
+ sky_grunt:{n:'Pirate grunt',hp:28,hit:[6,8],gold:[30,55],xp:60,drops:[['rope',.4,1]],atk:'swings a cutlass',look:{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:1,pack:false}},
+ sky_gunner:{n:'Pirate gunner',hp:22,hit:[6,9],gold:[35,60],xp:65,drops:[['iron_bar',.3,1]],atk:'fires a pistol',look:{skin:2,hair:0,shirt:4,jk:5,hat:'cap',hc:0,pack:false}},
+ sky_bruiser:{n:'Pirate bruiser',hp:38,hit:[7,10],gold:[55,90],xp:90,drops:[['iron_bar',.5,1]],atk:'swings a boarding axe',look:{skin:3,hair:2,shirt:0,jk:0,hat:'none',hstyle:'bald',pack:false,armour:{body:'leather',boots:'leather'}}},
  pirate_captain:{n:'Pirate captain',hp:60,hit:[6,10],gold:[60,100],xp:120,drops:[],atk:'slashes with a heavy sabre',flee:{at:.35,msg:'The captain shouts a curse and escapes!'},look:{skin:1,hair:4,shirt:0,jk:0,hat:'cap',hc:1,hstyle:'long',pack:false}}
 };
 const BATTLES={

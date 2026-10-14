@@ -22,7 +22,7 @@ SCENES.q5_tower=[
  {wait:300},{fade:'out',ms:300},{set:'q5_girl_here'},{fade:'in',ms:700},{say:'q5_girl'},
  {take:{sea_key:1}},{set:'sea_key_at_tower'},{toast:'The Sea Key rests on its stand.'},
  {ensure:{enchanted_armour:1}},{toast:'You got enchanted armour!'},{set:'q5_done'},{done:'q5'},
- {msg:'[Placeholder] The pirates will go for the Sky temple next.'}];
+ {quest:['q6',0]},{msg:'[Placeholder] The pirates will go for the Sky temple next. Take the hill path up to the Temple to the Sky on Island 3.'}];
 TRIGGERS.push(
  {id:'q5_hall',when:{zone:6},if:{quest:'q5',step:0},do:[{set:'q5_hall'},{step:1},{msg:'Dark wet footprints lead to the stairs. The pirates went down to the vault!'}]},
  {id:'q5_vault',when:{zone:7},if:{quest:'q5',step:1},do:[{step:2},{scene:'q5_vault'}]},

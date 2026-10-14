@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 101 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 103 placeholder.**
 
 ### Miner Dell (Darkwood north gate)
 - *placeholder:* [Placeholder] This slide came down in the night. I will be at it all week.
@@ -131,6 +131,12 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Old Stranger (Temple of the Sea)
 - *placeholder:* [Placeholder] Thank you again, friend.
+
+### Captain Barron (Temple to the Sky)
+- *placeholder:* [Placeholder] Out of my way, little dog.
+
+### Mysterious Boy (Temple to the Sky)
+- *placeholder:* [Placeholder] Please get my key back.
 
 ### Hale (The Darkwood)
 - *original:* Keep to the trail. The Darkwood swallows folk who wander off it.
@@ -344,4 +350,7 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *Jack's* `q4_old2.a` Old Stranger: By collecting all four keys and inserting all four keys into the water temple they would flood this world and rule the ocean as kings. We cant let this happen and i dont think it is by accident that we have met. You, I believe, can stop these pirates and save your home. Take these boots. They will make you swift on your feet. Go back to the sea temple and see if you can get the key from the chamber inside. Then bring it back to me and here I will keep them safe.
 - *placeholder* `q5_pirate.a` Pirate grunt: [Placeholder] Run! The captain will hear of this! Leave the rest, we have what we came for!
 - *Jack's* `q5_girl.a` Mysterious Girl: I'm glad I caught you. I've brought you something to help in your quest! Take this with you.
+- *Jack's* `q6_barron1.a` Captain Barron: Who is this little dog that blocks my way! Prepare yourself for your end!
+- *placeholder* `q6_barron2.a` Captain Barron: [Placeholder] What? All my lads beaten by a fisher? Hmph. We will meet again, little dog!
+- *Jack's* `q6_boy1.a` Mysterious Boy: Did the old man send you? I tried to stop them. But they blew it up. They have taken my key. Please tell him I'm sorry I couldn't stop them. Here take this. If it's true that the old man said and you are helping us then I want you to have this. Please stop those awful pirates and get my key back.
 - *Jack's* `rockslide_thanks.a` Miner Dell: Thanks! this rock slide was going take all day to clear

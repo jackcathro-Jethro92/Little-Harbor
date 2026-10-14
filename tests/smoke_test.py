@@ -447,6 +447,7 @@ def check(b, url):
     assert ev("S.story.q==='t_qb'&&S.story.done.includes('t_qa')&&flag('t_ja')&&flag('t_jb')&&!flag('t_stale')&&S.letters.join()==='q1_letter'&&S.gold===105&&S.bag.carrot===3&&S.bag.sardine>=2&&P.x===32+OX&&P.y===33+OY&&!$('title').classList.contains('open')"), "a jump clears the story, applies earlier rows, gives items, moves the player and keeps the bag"
     ev("storyJump('q10')"); assert ev("S.story.q==='q10'&&S.story.done.length===9&&!flag('t_ja')"), "Quest 10 starts with nine quests finished"
     ev("storyJump('start')"); assert ev("S.story.q===null&&S.story.done.length===0"), "the start row clears the story"
+    ev("delete S.bag.sea_key;delete S.bag.enchanted_armour;S.eq.armour=null;ui()")   # (the Quest 10 jump above passes through Quest 5's tower step and hands these out)
     pgs, errs_s = load(b, url + "?story=q2", SAVE); assert pgs.evaluate("S.story.q==='q2'&&S.story.done.includes('q1')"), "a ?story= link jumps on load"; assert not errs_s, errs_s; pgs.close()
     def fight_out():   # click Attack until the battle is over
         for _ in range(60):
@@ -690,11 +691,24 @@ def check(b, url):
     fight_all('q5_pirates', 6, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("count('sea_key')===1&&flag('q5_key_got')&&S.story.step===3&&Math.abs(questGoal()[0]-212)<=2"), "the pirates run and you take the Sea Key back"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("flag('q5_done')&&flag('sea_key_at_tower')&&count('sea_key')===0&&S.eq.armour==='enchanted_armour'&&S.story.q===null&&S.story.done.includes('q5')&&(()=>{const g=NPC.find(n=>n.n==='Mysterious Girl');return g.hidden===0&&zoneOf(g.x,g.y)===10})()&&DLG.q5_girl.nodes.a.text.startsWith(\"I'm glad I caught you.\")"), "the girl gives the enchanted armour and both keys rest at the tower"
+    assert ev("flag('q5_done')&&flag('sea_key_at_tower')&&count('sea_key')===0&&S.eq.armour==='enchanted_armour'&&S.story.q==='q6'&&S.story.step===0&&S.story.done.includes('q5')&&(()=>{const g=NPC.find(n=>n.n==='Mysterious Girl');return g.hidden===0&&zoneOf(g.x,g.y)===10})()&&DLG.q5_girl.nodes.a.text.startsWith(\"I'm glad I caught you.\")"), "the girl gives the enchanted armour and both keys rest at the tower"
     assert ev("(()=>{S.hp=50;const w=fx('ward');return w===.2})()"), "the armour lowers damage by 20%"
+    # Quest 6 (5.6): the Sky temple path, the explosion, seven pirates and their boss, the crying boy and the Sky Helm
+    assert ev("Math.abs(questGoal()[0]-222)<=2&&!flag('sky_damaged')"), "Quest 5 hands over to Quest 6 and the compass points at the Sky temple's beach"
+    ev("sail=false;P.x=P.rx=225;P.y=P.ry=142;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_boom'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("flag('sky_damaged')&&flag('q6_boom')&&S.story.step===1&&at(236,108)!==80"), "halfway up an explosion ruins the temple on the plateau"
+    ev("P.x=P.rx=236;P.y=P.ry=130;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_ambush'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("S.story.step===2&&encFigures('q6_pirates').length===7&&encFigures('q6_pirates').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const b=NPC.find(n=>n.n==='Captain Barron');return b.hidden===0&&b.scale>1&&WK.includes(at(b.x,b.y))})()&&DLG.q6_barron1.nodes.a.text.startsWith('Who is this little dog')"), "seven pirates and Captain Barron stand on the path"
+    fight_all('q6_pirates', 7, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_escape'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("S.story.step===3&&flag('q6_barron_gone')&&NPC.find(n=>n.n==='Captain Barron').hidden===1&&flag('q6_boy_here')&&NPC.find(n=>n.n==='Mysterious Boy').hidden===0"), "the boss kicks dirt in your eyes and is gone; a boy is crying at the temple"
+    ev("(()=>{const b=NPC.find(n=>n.n==='Mysterious Boy');P.x=P.rx=b.x;P.y=P.ry=b.y+1;P.f='u';sail=false;act()})()"); pg.wait_for_function("dlgActive()", timeout=5000)
+    ev("dlgEnd();trgRunning=false"); pg.wait_for_timeout(200)
+    assert ev("flag('q6_done')&&S.eq.helmet==='sky_helm'&&S.story.q===null&&S.story.done.includes('q6')&&DLG.q6_boy1.nodes.a.text.startsWith('Did the old man send you?')"), "the boy gives the Sky Helm"
+    assert ev("fx('haste')===.2&&Math.abs(fx('ward')-.25)<1e-9&&playerLook().armour.helm==='sky'"), "the Sky Helm gives haste and is drawn on you"
+    ev("storyJump('q6')"); assert ev("S.story.q==='q6'&&S.story.step===0&&count('sea_key')===0&&flag('q5_done')&&!flag('q6_done')"), "the testing menu can jump to Quest 6"
     ev("storyJump('q4t')"); assert ev("S.story.q==='q4'&&S.story.step===3&&count('earth_key')===1&&flag('q4_key_got')"), "the testing menu can jump to the key at the tower"
     ev("storyJump('q5t')"); assert ev("S.story.q==='q5'&&S.story.step===3&&count('sea_key')===1"), "the testing menu can jump to the Sea Key at the tower"
-    ev("S.eq.armour=null;delete S.bag.enchanted_armour;S.eq.boots=null;delete S.bag.enchanted_boots;storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
+    ev("S.eq.helmet=null;delete S.bag.sky_helm;S.eq.armour=null;delete S.bag.enchanted_armour;S.eq.boots=null;delete S.bag.enchanted_boots;storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
     # a brand-new game: no gold, and only a driftwood rod, the rowboat and a wooden sword (Jack's playtest note)
     pgn = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); errn = []; pgn.on("pageerror", lambda e: errn.append(str(e)))
     pgn.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}"); pgn.goto(url); pgn.wait_for_timeout(400)
@@ -811,7 +825,7 @@ def check(b, url):
     ev("for(let i=0;i<4;i++){WORK.at=performance.now()-i*110-5;draw()}"); ev("add('pickaxe');S.eq.pickaxe='pickaxe';M[60*MW+60]=15;gather(60,60,15)")
     assert ev("WORK.kind==='pick'"), "mining starts a pickaxe swing"; ev("M[60*MW+60]=1")
     # playtest #3: armour. Three kinds in three pieces, bought at Garrick's (dearer as it gets better), crafted at Crafting level 10, worn from the equipment screen, drawn on the character, and the quest items share the slots
-    arm = ev("(()=>{const ids=Object.keys(ITEMS).filter(i=>ITEMS[i].kind==='armour'&&ITEMS[i].look!=='enchanted'),sets=['cloth','leather','chain'],cost=m=>ids.filter(i=>ITEMS[i].look===m).reduce((a,i)=>a+ITEMS[i].price,0),sold=SMITH.find(r=>r[0]==='Armour')[1].map(r=>r[0]);return {n:ids.length,slots:ids.every(i=>['helmet','armour','boots'].includes(ITEMS[i].slot)&&slotOf(i)===ITEMS[i].slot&&ITEMS[i].fx.ward>0),sold:ids.every(i=>sold.includes(i)&&SMITH.find(r=>r[0]==='Armour')[1].find(r=>r[0]===i)[1]===ITEMS[i].price),order:cost('cloth')<cost('leather')&&cost('leather')<cost('chain'),recipes:ids.every(i=>{const r=RECIPES.find(q=>q.out===i);return r&&r.level===10}),quest:slotOf('enchanted_boots')==='boots'&&slotOf('enchanted_armour')==='armour'}})()")
+    arm = ev("(()=>{const ids=Object.keys(ITEMS).filter(i=>ITEMS[i].kind==='armour'&&ITEMS[i].price),sets=['cloth','leather','chain'],cost=m=>ids.filter(i=>ITEMS[i].look===m).reduce((a,i)=>a+ITEMS[i].price,0),sold=SMITH.find(r=>r[0]==='Armour')[1].map(r=>r[0]);return {n:ids.length,slots:ids.every(i=>['helmet','armour','boots'].includes(ITEMS[i].slot)&&slotOf(i)===ITEMS[i].slot&&ITEMS[i].fx.ward>0),sold:ids.every(i=>sold.includes(i)&&SMITH.find(r=>r[0]==='Armour')[1].find(r=>r[0]===i)[1]===ITEMS[i].price),order:cost('cloth')<cost('leather')&&cost('leather')<cost('chain'),recipes:ids.every(i=>{const r=RECIPES.find(q=>q.out===i);return r&&r.level===10}),quest:slotOf('enchanted_boots')==='boots'&&slotOf('enchanted_armour')==='armour'}})()")
     assert arm == {"n": 9, "slots": True, "sold": True, "order": True, "recipes": True, "quest": True}, arm
     ev("S.xp={};S.bag={};S.bag.cloth=3;S.bag.hand_axe=0;recipes0=0")
     assert ev("(()=>{const r=RECIPES.find(q=>q.out==='cloth_hood');return !canMake(r)})()"), "cloth armour cannot be crafted below Crafting level 10"

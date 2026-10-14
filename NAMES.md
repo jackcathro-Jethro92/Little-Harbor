@@ -79,6 +79,8 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Bjorn the Elder | Village | Village elder |
 | Rue | The Darkwood | Sailor |
 | Mysterious Girl | Temple Tower | Spirit of the Earth temple |
+| Captain Barron | Temple to the Sky | Pirate boss |
+| Mysterious Boy | Temple to the Sky | Spirit of the Sky temple |
 | Miner Dell | Darkwood north gate | Miner |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |
