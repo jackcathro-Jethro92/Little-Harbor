@@ -25,8 +25,10 @@ function placeWhy(id,x,y){
   if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(x===IR.dx&&y===IR.dy))return 'Keep the doorway clear.';
   if(inRoom(x,y))return '';
   const c=campOf(),nearHome=S.home&&Math.hypot(x-(S.home.x+1),y-(S.home.y+1))<=CAMP_R,nearCamp=c&&Math.hypot(c.x-x,c.y-y)<=CAMP_R;
-  if(nearHome||nearCamp)return '';
+  if(nearHome||nearCamp||onIsle(x,y))return '';   // (on Haven Isle stations go anywhere on the island, not only near the house)
   return c||S.home?'Too far from camp or home. Stations go within '+CAMP_R+' tiles.':'Stations need a camp (or a home) nearby. Set up a camp kit first.'}
+// Haven Isle (Quest 10, js/story/quest10.js): once the island is risen the whole of it is yours, so stations can stand anywhere on it
+const onIsle=(x,y)=>typeof ISLE!=='undefined'&&flag('island_risen')&&Math.hypot((x-ISLE.cx)/ISLE.rx,(y-ISLE.cy)/ISLE.ry)<=1;
 const inClaim=(x,y)=>S.claim&&x>=S.claim.x&&x<S.claim.x+S.claim.w&&y>=S.claim.y&&y<S.claim.y+S.claim.h;
 const okGround=(x,y,l)=>l.includes(at(x,y))&&!placedAt(x,y)&&!(B.x===x&&B.y===y)&&!inRoom(x,y)&&zoneOf(x,y)<3;
 // the camp kit (playtest #3): a 3 x 2 footprint (tent 2 x 2, fire 1) that can go over almost any open ground, as long as no tile of it touches a building, tree, plant, water, person, station or door. It extends away from you so you are never inside it.

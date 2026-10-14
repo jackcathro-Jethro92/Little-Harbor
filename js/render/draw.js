@@ -11,11 +11,11 @@ function draw(){
     if(at(tx,ty)===4)tree(tx,ty,tx*T-cx,ty*T-cy);
   const cp=campOf();if(cp&&Math.hypot(P.rx-cp.x,P.ry-cp.y)<10){g.strokeStyle='rgba(255,255,255,.4)';g.setLineDash([3,3]);g.beginPath();g.arc(cp.x*T+8-cx,cp.y*T+8-cy,CAMP_R*T,0,7);g.stroke();g.setLineDash([])}
   BL.forEach(b=>{if(zoneOf(b.x,b.y)===zoneOf(P.x,P.y))(b.hall?hall:b.skysmoke?skySmoke:b.towergate?towerGate:b.pagoda?towerPagoda:b.firegate?fireGate:b.firehall?fireHall:b.tent?tent:b.decor?campDecor:b.ship?pirateShip:b.skygate?skyGate:b.knossos?seaTemple:b.mayan?mayanB:b.col||b.tower?tmp:bld)(b,b.x*T-cx,b.y*T-cy,t)});
-  if(S.claim){const c0=S.claim,X=c0.x*T-cx,Y=c0.y*T-cy,W=c0.w*T,H=c0.h*T,rc='#d8b878';
+  if(S.claim&&!S.claim.isle){const c0=S.claim,X=c0.x*T-cx,Y=c0.y*T-cy,W=c0.w*T,H=c0.h*T,rc='#d8b878';
     R(X,Y+2,W,1,rc);R(X,Y+H-3,W,1,rc);R(X+2,Y,1,H,rc);R(X+W-3,Y,1,H,rc);
     for(let i=0;i<=c0.w;i+=2)for(const yy of[Y,Y+H-6])R(X+Math.min(i*T,W-4),yy,3,6,'#7a5230');
     for(let j=0;j<=c0.h;j+=2)for(const xx of[X,X+W-4])R(xx,Y+Math.min(j*T,H-6),3,6,'#7a5230')}
-  if(S.home)bld({x:S.home.x,y:S.home.y,w:3,roof:S.home.roof},S.home.x*T-cx,S.home.y*T-cy,t);
+  if(S.home&&!S.home.grand)bld({x:S.home.x,y:S.home.y,w:3,roof:S.home.roof},S.home.x*T-cx,S.home.y*T-cy,t);
   if(placing&&ITEMS[placing].kind==='station'&&S.home&&!inRoom(P.x,P.y)&&Math.hypot(P.rx-S.home.x,P.ry-S.home.y)<10){g.strokeStyle='rgba(255,255,255,.4)';g.setLineDash([3,3]);g.beginPath();g.arc((S.home.x+1)*T+8-cx,(S.home.y+1)*T+8-cy,CAMP_R*T,0,7);g.stroke();g.setLineDash([])}
   // boat
   const bx=(sail?P.rx:B.x)*T-cx,by=(sail?P.ry:B.y)*T-cy,bob=Math.round(Math.sin(t/400));
@@ -34,6 +34,7 @@ function draw(){
     if($('msg').textContent!==m)say(m)}
   const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
+  if(S.home&&S.home.grand&&zoneOf(P.x,P.y)===0)E.push({y:S.home.y+1.9,f:()=>grandHouse(S.home.x*T-cx,S.home.y*T-cy,t)});   // the grand house on Haven Isle (js/render/grandhouse.js): sorted with the people so you can walk behind its upper floors
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
   S.placed.forEach(p=>E.push({y:p.y,f:()=>obj(p,cx,cy,t)}));

@@ -20,7 +20,7 @@ function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,
   for(let y=hy+2;y<=Math.round(cy+ry)+1;y++)if(at(cx,y)!==0)setT(cx,y,6);                                  // the path from the door down to the beach
   for(let y=Math.round(cy+ry);y<=Math.round(cy+ry)+3;y++)if(at(cx,y)===0||at(cx,y)===2)setT(cx,y,3);        // a short pier into the sea
   [hy+4,hy+7].forEach(y=>[cx-1,cx+1].forEach(x=>{if(at(x,y)===1)setT(x,y,7)}));                              // lanterns along the path
-  if(S.home&&S.home.x===hx&&S.home.y===hy)for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(hy+j)*MW+hx+i]=5;        // the house stands where the home system says
+  if(S.home&&S.home.x===hx&&S.home.y===hy)for(let j=-2;j<2;j++)for(let i=-3;i<=5;i++)M[(hy+j)*MW+hx+i]=5;       // the grand house fills 9 x 4 tiles (js/render/grandhouse.js); the door is the home system's (home.x+1, home.y+1)
   if(!LAND.includes(ISLE_LAND))LAND.push(ISLE_LAND);
   for(let y=y0;y<=y1;y+=2)for(let x=x0;x<=x1;x+=2)FOG[(y>>2)*FW+(x>>2)]=1;                                   // it appears on the map
   if(typeof groundDirty==='function')groundDirty()}
@@ -28,7 +28,7 @@ VARIANTS.push({id:'haven_isle',flag:'island_risen',apply:on=>applyIsle(on)});app
 // the key to the new home: this house becomes your home (an older house is packed back into its kit and the old claim goes), on a claim round it
 TACT.islandhome=()=>{const h=S.home;if(h&&!(h.x===ISLE.hx&&h.y===ISLE.hy)){for(let j=0;j<2;j++)for(let i=0;i<3;i++){const k=(h.y+j)*MW+h.x+i;if(M[k]===5)M[k]=1;delete S.cut[k]}
     const kit=Object.keys(ITEMS).find(id=>ITEMS[id].kind==='prefab'&&ITEMS[id].roof===h.roof);if(kit)add(kit,1)}
-  S.home={x:ISLE.hx,y:ISLE.hy,roof:'slate'};S.claim={x:ISLE.hx-2,y:ISLE.hy-2,w:7,h:5};ui();save()};
+  S.home={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};S.claim={x:ISLE.cx-14,y:ISLE.cy-11,w:29,h:22,isle:1};ui();save()};   // the claim is the whole island (not fenced); stations and gardens can go anywhere on it
 // ---- where the spirits stand (the girl in the Earth sanctum, the boy on the Sky plateau, the Fire Spirit in her hall) ----
 NPC.push({n:'Fire Spirit',x:PH.dx,y:PH.y0+6,hx:PH.dx,hy:PH.y0+6,f:'d',skin:2,hair:3,shirt:0,jk:0,hat:'none',hstyle:'bun',pack:false,fixed:1,say:['[Placeholder] The flame burns steadily now. Thank you.'],bio:{age:null,job:'Spirit of the Fire temple',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.unshift(
