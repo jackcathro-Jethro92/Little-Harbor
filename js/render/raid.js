@@ -11,7 +11,11 @@ function raidFlames(x,y,w,t,seed){for(let i=0;i<5;i++){const fx=x+4+i*(w-8)/4,ph
     g.fillStyle='#ffe27a';g.fillRect(fx-1,y-h*.35,2,h*.35)}}
 function raidSmoke(x,y,t,seed){for(let k=0;k<6;k++){const a=((t/90+seed*17+k*11)%66)/66,px=x+Math.sin(a*5+k)*3+a*14,py=y-4-a*52,r=3+a*7;
     g.fillStyle='rgba(60,56,60,'+(.5*(1-a)).toFixed(2)+')';g.beginPath();g.arc(px,py,r,0,7);g.fill()}}
-function drawRaid(cx,cy,t){const hs=raidHouses();
+// the shops are shut: two planks nailed across each shop's door and a small CLOSED board hanging from them
+function raidBoards(b,cx,cy){const x=(b.x+1)*T-cx,y=(b.y+1)*T-cy;if(x<-20||x>VW+20||y<-20||y>VH+20)return;const O='#2a1a0c';
+  g.fillStyle=O;g.fillRect(x-1,y+2,18,4);g.fillRect(x-1,y+9,18,4);g.fillStyle='#a8743f';g.fillRect(x,y+3,16,2);g.fillRect(x,y+10,16,2);g.fillStyle='#d8b27a';g.fillRect(x,y+3,16,1);g.fillRect(x,y+10,16,1);
+  g.fillStyle=O;g.fillRect(x+3,y+5,10,5);g.fillStyle='#f0e6c8';g.fillRect(x+4,y+6,8,3);g.fillStyle='#c8321a';g.fillRect(x+5,y+7,6,1)}
+function drawRaid(cx,cy,t){const hs=raidHouses();BL.forEach(b=>{if(b.sign&&b.x>=140&&b.x<=176&&b.y>=99&&b.y<=125)raidBoards(b,cx,cy)});
   RAID_BURN.forEach((k,i)=>{const b=hs[k%Math.max(1,hs.length)];if(!b)return;const x=b.x*T-cx,y=b.y*T-cy;if(x<-60||x>VW+20||y<-70||y>VH+30)return;
     raidSmoke(x+24,y-10,t,i);raidFlames(x+2,y-4,44,t,i);raidFlames(x+6,y+14,36,t,i+7)});
   const ships=BL.filter(b=>b.raid);
