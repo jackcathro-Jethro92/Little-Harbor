@@ -31,7 +31,7 @@ function bDraw(){const B=BATTLE;if(!B)return;
     const sh=document.createElement('div');sh.className='bt-shadow';d.appendChild(sh);
     const cv=document.createElement('canvas');
     if(f.t.art){const A=ART_SHOT[f.t.art]||ART_SHOT.ghost;cv.width=A.w*A.k;cv.height=A.h*A.k;paintCreature(f,cv);cv.className='bt-big'}
-    else{cv.width=96;cv.height=96;cv.getContext('2d').imageSmoothingEnabled=false;cv.getContext('2d').drawImage(shadePerson({...lo(f.t.look),view:'f',frame:0}),0,0,24,24,0,0,96,96)}
+    else{cv.width=96;cv.height=96;cv.getContext('2d').imageSmoothingEnabled=false;cv.getContext('2d').drawImage(shadePerson({...lo(f.t.look),armour:f.t.look.armour,view:'f',frame:0}),0,0,24,24,0,0,96,96)}
     cv.style.animationDelay=swayDelay();if(i%2)cv.style.animationDirection='reverse';
     f.cv=cv;d.appendChild(cv);const mk=document.createElement('div');mk.className='bt-mark';d.appendChild(mk);
     const tag=document.createElement('div');tag.className='bt-tag';const nm=document.createElement('span');nm.textContent=f.t.n+(f.pois>0?' (poisoned)':'');tag.appendChild(nm);
@@ -101,9 +101,11 @@ async function bFoes(){const B=BATTLE;
     if(f.pois>0){f.pois--;f.hp-=2;bDraw();if(f.hp<=0){f.alive=false;bDraw();await bSay(f.t.n+' succumbs to the poison!');if(!bAlive().length)return bEnd('won');continue}}
     if(f.stun>0){f.stun--;await bSay(f.t.n+' is stunned and loses its turn!');continue}
     if(f.t.flee&&f.hp<=f.max*f.t.flee.at){f.alive=false;f.fled=true;bDraw();await bSay(f.t.flee.msg||f.t.n+' runs away!');if(!bAlive().length)return bEnd('escaped');continue}
-    const raw=rnd(f.t.hit[0],f.t.hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))*(B.blocking?BLOCK_TAKES:1)));bShake(f.el,'foelunge');await bwait(230);
+    // a foe with a `pattern` (the pirate boss) cycles through its steps: a plain hit, or `wind` (it winds up, no damage this turn, so a Block next turn takes the heavy blow that follows)
+    let atk=f.t.atk,hit=f.t.hit;if(f.t.pattern){const st=f.t.pattern[((f.turns=(f.turns||0)+1)-1)%f.t.pattern.length];if(st.wind){await bSay(f.t.n+' '+st.wind);continue}atk=st.atk;hit=st.hit}
+    const raw=rnd(hit[0],hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))*(B.blocking?BLOCK_TAKES:1)));bShake(f.el,'foelunge');await bwait(230);
     S.hp=Math.max(0,S.hp-d);ui();flashHit();if(B.blocking){bFx('shield',$('bt-meBox'));bFx('dmg small',$('bt-meBox'),'-'+d)}else{bShake($('bt-meBox'),'hit');bFlash($('bt-me'));bFx('dmg player',$('bt-meBox'),'-'+d)}bDraw();
-    await bSay(f.t.n+' '+(f.t.atk||'attacks')+'! -'+d+' health.');if(S.hp<=0)return bEnd('lost')}
+    await bSay(f.t.n+' '+(atk||'attacks')+'! -'+d+' health.');if(S.hp<=0)return bEnd('lost')}
   B.blocking=false;bTurn()}
 function bActions(list){(list||[]).forEach(a=>{const k=Object.keys(a).find(q=>TACT[q]&&!['say','scene','letter','battle'].includes(q));if(k)TACT[k](a[k])})}
 async function bEnd(result){const B=BATTLE;let msg='';
@@ -112,7 +114,7 @@ async function bEnd(result){const B=BATTLE;let msg='';
   if(msg)await bSay(msg);
   clearInterval(B.anim);$('battle').classList.remove('open');BATTLE=null;
   if(result==='lost')faint();
-  bActions(B.row[result==='won'?'win':result==='lost'?'lose':result==='ran'?'ran':'escaped']);save();ui();if(B.onEnd)B.onEnd(result)}
+  bActions(B.row[result==='won'?'win':result==='lost'?'lose':result==='ran'?'ran':'escaped']);save();ui();if(B.onEnd)B.onEnd(result);if(result==='won'&&B.row.winScene)setTimeout(()=>runScene(B.row.winScene),500)}   // `winScene`: a cutscene that plays after a win (the final battle)
 // arrows move between the menu buttons
 addEventListener('keydown',e=>{if(!BATTLE)return;const bs=[...$('bt-menu').querySelectorAll('button:not(:disabled)')];if(!bs.length)return;const i=bs.indexOf(document.activeElement);
   if(['ArrowDown','ArrowRight','s','d'].includes(e.key)){e.preventDefault();bs[(i+1)%bs.length].focus()}else if(['ArrowUp','ArrowLeft','w','a'].includes(e.key)){e.preventDefault();bs[(i+bs.length-1+bs.length)%bs.length].focus()}},true);

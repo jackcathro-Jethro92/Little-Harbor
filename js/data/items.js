@@ -15,6 +15,8 @@ const ITEMS={
  gold_ore:{n:'Gold ore',kind:'material',desc:'Heavy and rare. Gleams in the rock.'},
  silver_ore:{n:'Silver ore',kind:'material',desc:'Pale and rare. Found high in the mountains.'},
  bronze_ore:{n:'Bronze ore',kind:'material',desc:'Golden-brown ore, hard to mine.'},
+ sky_key:{n:'Sky Key',kind:'key',desc:'A golden key from the Temple to the Sky. It opens its opposite. Take it back to the spirit of its temple.'},
+ fire_key:{n:'Fire Key',kind:'key',desc:'A golden key from the Temple of Fire. It opens its opposite. Take it back to the spirit of its temple.'},
  earth_key:{n:'Earth Key',kind:'key',desc:'A golden key from the Temple to the Mountains. It opens its opposite. Keep it safe at the Temple Tower.'},
  ironwood_log:{n:'Ironwood log',kind:'key',desc:'A straight, extra-hard log from Oak Island. Murl wants one for a ship\'s mast.'},
  grandfather_compass:{n:"Grandfather's compass",kind:'key',desc:'An old brass compass. While you carry it, a small arrow shows the way to your quest.'},

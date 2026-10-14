@@ -26,8 +26,8 @@ SCENES.q8_found=[{wait:200},{msg:'The shrine room is a wreck! The stands are top
 SCENES.q8_meeting=[
  {wait:300},{msg:'[Placeholder] The old man, the boy and the girl are waiting for you.'},{wait:500},
  {say:'q8_old1'},{say:'q8_old2'},{give:{divine_blade:1}},{equip:'divine_blade'},{toast:'You got the Divine Blade!'},{wait:300},{say:'q8_old3'},
- {set:'q8_done'},{set:'final_battle_open'},{done:'q8'},
- {msg:'[Placeholder] The Divine Blade is in your hand. Go to the Fire temple and save the fire spirit. Its attack, Divine Strike, is in the Attack list.'}];
+ {set:'q8_done'},{set:'final_battle_open'},{done:'q8'},{set:'storm_on'},{quest:['q9',0]},
+ {msg:'[Placeholder] The Divine Blade is in your hand. Its attack, Divine Strike, is in the Attack list. A storm is rising over the Temple of the Sea: the pirates have gone there!'}];
 TRIGGERS.push(
  {id:'q8_found',when:{zone:10},if:{quest:'q8',step:0},do:[{scene:'q8_found'},{letter:'q8_letter'},{set:'q8_hatch'},{step:1},{msg:'A hatch has opened in the shrine room floor. Face it and tap Use to go down.'}]},
  {id:'q8_depths',when:{zone:20},if:{quest:'q8',step:1},do:[{step:2},{msg:'Dark halls. Something moans in the dark... Find the door at the far end.'}]},
