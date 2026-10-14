@@ -45,7 +45,8 @@ function draw(){
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
-  if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
+  if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);
+  if(RAID_ON&&zoneOf(P.x,P.y)===0)drawRaid(cx,cy,t);   // the burning village and the pirate ships' cannon fire (js/render/raid.js)   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);

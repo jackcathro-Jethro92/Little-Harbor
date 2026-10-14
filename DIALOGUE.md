@@ -353,4 +353,5 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *Jack's* `q6_barron1.a` Captain Barron: Who is this little dog that blocks my way! Prepare yourself for your end!
 - *placeholder* `q6_barron2.a` Captain Barron: [Placeholder] What? All my lads beaten by a fisher? Hmph. We will meet again, little dog!
 - *Jack's* `q6_boy1.a` Mysterious Boy: Did the old man send you? I tried to stop them. But they blew it up. They have taken my key. Please tell him I'm sorry I couldn't stop them. Here take this. If it's true that the old man said and you are helping us then I want you to have this. Please stop those awful pirates and get my key back.
+- *Jack's* `q7_flee.a` Pirate grunt: Let’s get out of here! The boss will be finished at the tower! Meet up back at the base and we will finish this!
 - *Jack's* `rockslide_thanks.a` Miner Dell: Thanks! this rock slide was going take all day to clear
