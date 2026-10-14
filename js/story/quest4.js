@@ -15,8 +15,8 @@ STORY_PEOPLE.push(
 // the old man's tower row goes first: Quest 1's rows (further up the table) hide him once he has left the Sea temple
 STORY_PEOPLE.unshift({npc:'Old Stranger',if:{flag:'q4_old_man'},at:[163,TS.y0+6],f:'l',say:['[Placeholder] The keys are safe with me. Go carefully.']});
 ENCOUNTERS.push(
- {id:'q4_gate',mode:'battle',foes:[{foe:'pirate_grunt',at:[10,31]},{foe:'pirate_grunt',at:[8,29]},{foe:'pirate_gunner',at:[6,26]}]},   // three pirates on the path up to the stairs
- {id:'q4_grunts',mode:'battle',foes:[{foe:'pirate_grunt',at:[255,SZ.y0+8]},{foe:'pirate_grunt',at:[259,SZ.y0+8]}]});   // two grunts hunting for the key in the sanctum
+ {id:'q4_gate',mode:'battle',foes:[{foe:'earth_grunt',at:[10,31]},{foe:'earth_grunt',at:[8,29]},{foe:'earth_gunner',at:[6,26]}]},   // three pirates on the path up to the stairs
+ {id:'q4_grunts',mode:'battle',foes:[{foe:'earth_grunt',at:[255,SZ.y0+8]},{foe:'earth_grunt',at:[259,SZ.y0+8]}]});   // two grunts hunting for the key in the sanctum
 DLG.q4_grunt1={start:'a',nodes:{a:{who:'Pirate grunt',text:"You sure the boss is right? I can’t see no key?"}}};   // JACK
 DLG.q4_grunt2={start:'a',nodes:{a:{who:'Pirate grunt 2',text:"Just quit your jabbering and keep looking!"}}};   // JACK
 DLG.q4_dynamite={start:'a',nodes:{a:{who:'Pirate grunt 2',text:"Fine, I guess it’s dynamite then, isn’t it!"}}};   // JACK

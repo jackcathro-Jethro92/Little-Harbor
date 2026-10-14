@@ -38,6 +38,8 @@ def load(b, url, save):
 def check(b, url):
     pg, errs = load(b, url, SAVE)
     ev = pg.evaluate
+    # playtest #3: Oak Island is haunted by four restless spirits standing on grass near the island's middle
+    assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.x,e.y)===1&&Math.hypot(e.x-144,e.y-170)<14)})()"), "four restless spirits haunt Oak Island"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
@@ -69,8 +71,10 @@ def check(b, url):
     ev("openTrader('jeweller','buy')"); assert ev("/Ring of Vigor/.test($('items').textContent)"), "jeweller shop"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # the stone barrier: no walkable shore north of the forest can be reached from the sea or the south coast, but the town, temple and Darkwood gate stay connected
+    ev("setFlag('rockslide_cleared')")   # the road from the Darkwood's north gate is open for this check (the rockslide has its own test)
     seal = ev("(()=>{const ok=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],sea=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&at(x,y)===0,flood=st=>{const s=new Set(st.map(([x,y])=>y*MW+x)),q=st.slice();for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=MH||s.has(i)||!ok.has(at(nx,ny)))continue;s.add(i);q.push([nx,ny])}}return s},mtn=flood([[26,77]]),seeds=[];for(let y=0;y<MH;y++)for(let x=0;x<=110;x++)if(ok.has(at(x,y))&&!mtn.has(y*MW+x)&&D4.some(([a,b])=>sea(x+a,y+b)))seeds.push([x,y]);const out=flood(seeds);let landing=0,leak=0;mtn.forEach(i=>{const x=i%MW,y=(i/MW)|0;if(D4.some(([a,b])=>sea(x+a,y+b)))landing++;if(out.has(i))leak++});return{landing,leak,temple:mtn.has(29*MW+9),gate:mtn.has(109*MW+31)}})()")
     assert seal == {"landing": 0, "leak": 0, "temple": True, "gate": True}, seal
+    ev("setFlag('rockslide_cleared',0)")
     # phone D-pad and keyboard move at the same speed: holding either for 1 s gives about the same number of steps
     def held(start, stop):
         ev("(()=>{window.__n=0;const mv=window.__mv||(window.__mv=move);window.move=d=>{window.__n++;return mv(d)}})()")
@@ -325,7 +329,7 @@ def check(b, url):
     ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
     ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
     ev("openStore('boat')"); assert tabs() == ["Boats", "Yard"], tabs()
-    ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Objects"], tabs()
+    ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Armour", "Objects"], tabs()
     ev("openTrader('jeweller','buy')"); assert tabs() == ["Rings", "Amulets"], tabs()
     ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons"], tabs()
     ev("S.bag.sardine=3;S.bag.carrot=2;openGeneral('sell')"); assert tabs()[0] == "Fish" and "Ingredients" in tabs(), tabs()
@@ -651,9 +655,9 @@ def check(b, url):
     talk("Hale"); assert ev("flag('has_axe')&&count('woodcutters_axe')===1&&S.eq.axe==='woodcutters_axe'"), "Hale gives the woodcutter's axe"
     talk("Hale"); assert ev("count('woodcutters_axe')===1"), "only one axe"
     # Quest 4 (5.4): the second letter, the pirates at the Earth temple, the key, and the Temple Tower (boots)
-    def fight_all(enc, n):
+    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with an iron sword and plenty of health
         for k in range(n):
-            ev("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';S.hp=50;S.sta=100;act()})()" % enc); pg.wait_for_timeout(100)
+            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("add('iron_sword');S.eq.weapon='iron_sword';S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
             for _ in range(20):
                 if ev("BATTLE===null"): break
                 pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
@@ -665,11 +669,11 @@ def check(b, url):
     assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('Iv just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
     ev("P.x=P.rx=12;P.y=P.ry=40;P.f='u';fireTriggers('step')")
     assert ev("flag('q4_gate_started')&&S.story.step===1&&encFigures('q4_gate').length===3&&encFigures('q4_gate').every(n=>WK.includes(at(n.x,n.y)))"), "three pirates hold the temple path"
-    fight_all('q4_gate', 3); assert ev("flag('enc_q4_gate_done')&&S.story.step===2"), "beating them lets you in"
+    fight_all('q4_gate', 3, True); assert ev("flag('enc_q4_gate_done')&&S.story.step===2"), "beating them lets you in"
     ev("P.x=P.rx=6;P.y=P.ry=15;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_overhear'", timeout=6000)
     assert ev("zoneOf(P.x,P.y)===5&&encFigures('q4_grunts').length===2&&DLG.q4_grunt1.nodes.a.text.startsWith('You sure the boss is right?')"), "going into the sanctum starts the overheard scene with two grunts"
     ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    fight_all('q4_grunts', 2); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    fight_all('q4_grunts', 2, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("count('earth_key')===1&&flag('q4_key_got')&&!flag('q4_girl_here')&&S.story.step===3&&NPC.find(n=>n.n==='Mysterious Girl').hidden===1&&DLG.q4_girl2.nodes.a.text.endsWith('where they will be safe.')"), "the girl gives the Earth Key and goes"
     assert ev("S.story.q==='q4'&&Math.abs(questGoal()[0]-212)<=2"), "the compass now points at the Temple Tower"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q4_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
@@ -681,9 +685,9 @@ def check(b, url):
     ev("P.x=P.rx=283;P.y=P.ry=32;P.f='u';act()"); pg.wait_for_function("zoneOf(P.x,P.y)===6", timeout=5000); pg.wait_for_function("S.story.step===1", timeout=5000)
     assert ev("flag('q5_hall')&&S.story.step===1"), "going into the temple hall sends you after the pirates"
     ev("sail=false;P.x=HZ.dx;P.y=HZ.y0+7;P.rx=P.x;P.ry=P.y;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_vault'", timeout=6000)
-    assert ev("zoneOf(P.x,P.y)===7&&encFigures('q5_pirates').length===3&&flag('q5_vault_blasted')&&at(217,VZ.y0+4)===73&&encFigures('q5_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the vault is blown open and three pirates wait in it"
+    assert ev("zoneOf(P.x,P.y)===7&&encFigures('q5_pirates').length===6&&flag('q5_vault_blasted')&&at(217,VZ.y0+4)===73&&encFigures('q5_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the vault is blown open and three pirates wait in it"
     ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    fight_all('q5_pirates', 3); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    fight_all('q5_pirates', 6, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_aftermath'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("count('sea_key')===1&&flag('q5_key_got')&&S.story.step===3&&Math.abs(questGoal()[0]-212)<=2"), "the pirates run and you take the Sea Key back"
     ev("sail=false;P.x=P.rx=212;P.y=P.ry=205;P.f='u';act()"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q5_tower'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("flag('q5_done')&&flag('sea_key_at_tower')&&count('sea_key')===0&&S.eq.armour==='enchanted_armour'&&S.story.q===null&&S.story.done.includes('q5')&&(()=>{const g=NPC.find(n=>n.n==='Mysterious Girl');return g.hidden===0&&zoneOf(g.x,g.y)===10})()&&DLG.q5_girl.nodes.a.text.startsWith(\"I'm glad I caught you.\")"), "the girl gives the enchanted armour and both keys rest at the tower"
@@ -713,8 +717,9 @@ def check(b, url):
     assert attack_list('wooden_sword') == ["Strike (4)", "Bash (4)", "Back"]; end_battle()
     assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
     assert attack_list('hand_axe') == ["Chop (4)", "Back"]; end_battle()
-    assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
-    assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
+    assert attack_list('sword', 'sword', 380) == ["Slash (4)", "Lunge (5)", "Back"], "Lunge is learned at sword level 2"; end_battle()
+    assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
+    assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
     assert attack_list('hand_axe', 'axe', 3300) == ["Chop (4)", "Bash (4)", "Cleave (8)", "Back"], "the axe learns Bash at 3 and Cleave at 6"; end_battle()
     # damage and stamina: with the dice fixed at 1.0, light 0.6, normal 1, heavy 1.6 of the weapon's damage (5) times the skill bonus (+8% a level)
     attack_list('sword', 'sword', 3300); ev("window.__r0=Math.random;Math.random=()=>0.5;ev0=0"); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()")
@@ -722,11 +727,14 @@ def check(b, url):
     pick("Power Slash"); menu_ready(); assert ev("__f.hp===999-12&&S.sta===__s0-8"), "Power Slash: 5 x 1.48 x 1.6 = 12 damage for 8 stamina"
     pick("Quick Strike"); menu_ready(); assert ev("__f.hp===999-12-4&&S.sta===__s0-10"), "Quick Strike: a light hit of 4 for 2 stamina"
     pick("Slash"); menu_ready(); assert ev("__f.hp===999-12-4-7&&S.sta===__s0-14"), "Slash: a normal hit of 7 for 4 stamina"
-    assert ev("(S.xp.sword||0)>=3300+16+6+10"), "using sword attacks trains the sword skill"
+    pick("Lunge"); menu_ready(); assert ev("__f.hp===999-12-4-7-8&&S.sta===__s0-19"), "Lunge: 5 x 1.48 x 1.1 = 8 damage (a little more than Slash's 7) for 5 stamina"
+    assert ev("(S.xp.sword||0)>=3300+16+6+10+12"), "using sword attacks trains the sword skill"
     ev("Math.random=__r0"); end_battle()
     # learning an attack announces it
     attack_list('sword', 'sword', 765); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
     assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
+    attack_list('sword', 'sword', 375); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2! You learned Lunge!/.test(t))"), "reaching level 2 teaches Lunge"; end_battle()
     # the axe trains the axe, not the sword
     attack_list('hand_axe'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Chop"); menu_ready(); assert ev("(S.xp.axe||0)===10&&!(S.xp.sword)"), "the axe trains the axe skill"; end_battle()
     # Bash: a 15% chance to stun
@@ -779,6 +787,55 @@ def check(b, url):
     ev("$('look').classList.add('open')"); assert ev("!canBeAmbushed()"), "no ambush over the look editor"
     ev("$('look').classList.remove('open');showMap()"); assert ev("(()=>{const r=$('mc').getBoundingClientRect();return $('map-back').getBoundingClientRect().bottom<=innerHeight&&r.height>50})()"), "the map fits the window"
     ev("$('mapov').classList.remove('open')")
+    # playtest #3: creatures chase round obstacles (a wall with one gap), and the compass works inside the Darkwood
+    ev("BATTLE=null;SCENE=null;sail=false;ENEMIES.length=0")
+    ev("(()=>{const x0=60,y0=60;for(let y=y0-4;y<=y0+4;y++)for(let x=x0-6;x<=x0+6;x++)M[y*MW+x]=1;for(let y=y0-4;y<=y0+4;y++)if(y!==y0+3)M[y*MW+x0]=12;\
+      ENEMY_TYPES.t_chaser={n:'Chaser',hp:5,dmg:1,cd:99,speed:1,chase:12,leash:12,art:'ghost',xp:0,gold:[0,0],drops:[],respawn:0,die:'x'};P.x=P.rx=x0+3;P.y=P.ry=y0;window.__ch=spawnEnemy('t_chaser',x0-3,y0);__ch.cd=99})()")
+    ev("for(let i=0;i<30;i++)enemiesTick()")
+    assert ev("Math.abs(__ch.x-P.x)+Math.abs(__ch.y-P.y)<=1"), "a creature walks round a wall to reach you (it used to get stuck behind it)"
+    ev("ENEMIES.length=0")
+    ev("add('grandfather_compass');S.story.q='q4';S.story.step=0;P.x=P.rx=124;P.y=P.ry=20+FY")
+    assert ev("(()=>{const g=compassGoal();return !!g&&g[0]===136&&g[1]===5+FY})()"), "inside the Darkwood the compass points to the gate towards a northern goal"
+    # playtest #3: the camp is a 2x2 tent plus a fire, placeable on open ground, solid, and packs up again
+    ev("S.placed=[];S.bag.camp_kit=1;sail=false;let o=null;for(let y=60;y<230&&!o;y++)for(let x=30;x<300&&!o;x++){let ok=true;for(let j=-3;j<=3&&ok;j++)for(let i=-3;i<=3;i++)if(at(x+i,y+j)!==1){ok=false;break}if(ok&&zoneOf(x,y)===0)o=[x,y]}P.x=P.rx=o[0];P.y=P.ry=o[1];P.f='u';placing='camp_kit';act()")
+    assert ev("S.placed.length===1&&S.placed[0].big===1&&!S.bag.camp_kit"), "the camp kit is placed in front of you"
+    assert ev("(()=>{const c=S.placed[0];return !walkable(c.x-1,c.y-1)&&!walkable(c.x-2,c.y)&&!walkable(c.x,c.y)&&walkable(c.x+1,c.y)})()"), "the tent and the fire are solid"
+    ev("S.bag.camp_kit=1;placing='camp_kit'"); assert ev("campPlan().glob==='You already have a camp set up.'"), "only one camp"
+    ev("placing=null;S.bag.camp_kit=0;pickUp(S.placed[0])"); assert ev("S.placed.length===0&&S.bag.camp_kit===1"), "the camp packs up into the kit"
+    ev("S.bag.camp_kit=1;P.f='u';placing='camp_kit';window.__f=front();window.__t=at(__f[0],__f[1]);M[__f[1]*MW+__f[0]]=5"); assert ev("campPlan().tiles.some(t=>t[2])"), "a camp cannot go over a building"
+    ev("M[__f[1]*MW+__f[0]]=__t")
+    ev("placing=null;S.bag.camp_kit=0")
+    # playtest #3: chopping and mining start a tool swing that is drawn on the player (and drawing it raises no error)
+    ev("sail=false;SCENE=null;BATTLE=null;add('woodcutters_axe');S.eq.axe='woodcutters_axe';S.sta=100;P.x=P.rx=60;P.y=P.ry=61;P.f='u';M[60*MW+60]=4;gather(60,60,4)")
+    assert ev("WORK.kind==='axe'&&performance.now()-WORK.at<300"), "chopping starts an axe swing"
+    ev("for(let i=0;i<4;i++){WORK.at=performance.now()-i*110-5;draw()}"); ev("add('pickaxe');S.eq.pickaxe='pickaxe';M[60*MW+60]=15;gather(60,60,15)")
+    assert ev("WORK.kind==='pick'"), "mining starts a pickaxe swing"; ev("M[60*MW+60]=1")
+    # playtest #3: armour. Three kinds in three pieces, bought at Garrick's (dearer as it gets better), crafted at Crafting level 10, worn from the equipment screen, drawn on the character, and the quest items share the slots
+    arm = ev("(()=>{const ids=Object.keys(ITEMS).filter(i=>ITEMS[i].kind==='armour'&&ITEMS[i].look!=='enchanted'),sets=['cloth','leather','chain'],cost=m=>ids.filter(i=>ITEMS[i].look===m).reduce((a,i)=>a+ITEMS[i].price,0),sold=SMITH.find(r=>r[0]==='Armour')[1].map(r=>r[0]);return {n:ids.length,slots:ids.every(i=>['helmet','armour','boots'].includes(ITEMS[i].slot)&&slotOf(i)===ITEMS[i].slot&&ITEMS[i].fx.ward>0),sold:ids.every(i=>sold.includes(i)&&SMITH.find(r=>r[0]==='Armour')[1].find(r=>r[0]===i)[1]===ITEMS[i].price),order:cost('cloth')<cost('leather')&&cost('leather')<cost('chain'),recipes:ids.every(i=>{const r=RECIPES.find(q=>q.out===i);return r&&r.level===10}),quest:slotOf('enchanted_boots')==='boots'&&slotOf('enchanted_armour')==='armour'}})()")
+    assert arm == {"n": 9, "slots": True, "sold": True, "order": True, "recipes": True, "quest": True}, arm
+    ev("S.xp={};S.bag={};S.bag.cloth=3;S.bag.hand_axe=0;recipes0=0")
+    assert ev("(()=>{const r=RECIPES.find(q=>q.out==='cloth_hood');return !canMake(r)})()"), "cloth armour cannot be crafted below Crafting level 10"
+    ev("S.xp.crafting=15000"); assert ev("canMake(RECIPES.find(q=>q.out==='cloth_hood'))&&lvl('crafting')===10"), "and can at level 10"
+    ev("S.bag={};['cloth_hood','leather_jerkin','chain_boots','leather_cap','sword','enchanted_boots'].forEach(i=>add(i));S.eq.helmet=null;S.eq.armour=null;S.eq.boots=null;S.eq.weapon=null;ui();openEquip()")
+    pg.click('#eq-helmet'); pg.click('#eqs-pick .eqrow'); assert ev("S.eq.helmet==='cloth_hood'"), "tapping a helmet wears it from the equipment screen"
+    pg.click('#eq-armour'); pg.click('#eqs-pick .eqrow'); pg.click('#eq-boots'); pg.click('#eqs-pick .eqrow')
+    assert ev("S.eq.armour==='leather_jerkin'&&S.eq.boots==='enchanted_boots'"), "the armour and boots squares wear the first thing in their list (the quest boots have no price, so they come first)"
+    ev("S.eq.boots='chain_boots'"); assert ev("Math.abs(fx('ward')-(.03+.1+.08))<1e-9"), "cloth hood 3% + jerkin 10% + chain boots 8% stop 21%"
+    assert ev("(()=>{const bad=[];['cloth','leather','chain'].forEach(m=>['f','b','r','l'].forEach(v=>[0,1,2,3].forEach(f=>{try{shadePerson({...lo(S.look),armour:{helm:m,body:m,boots:m},view:v,frame:f})}catch(e){bad.push(m+v+f+e.message)}})));['enchanted'].forEach(m=>['f','b','r'].forEach(v=>{try{shadePerson({...lo(S.look),armour:{body:m,boots:m},view:v,frame:0})}catch(e){bad.push(m+v+e.message)}}));return bad.length?bad:true})()"), "every armour look draws in every view"
+    assert ev("playerLook().armour.helm==='cloth'&&playerLook().armour.body==='leather'&&playerLook().armour.boots==='chain'"), "what you wear is drawn on you"
+    ev("S.eq.boots='enchanted_boots';ui()"); assert ev("fx('speed')===1&&slotOf('enchanted_boots')==='boots'"), "the quest boots take the Boots slot like any other"
+    pg.click('#eq-helmet'); pg.click('#eqs-pick .eqrow:last-child'); assert ev("S.eq.helmet===null"), "Take off removes it"
+    pg.click('#eqs-back'); assert ev("!$('eqs').classList.contains('open')"), "Back closes the equipment screen"
+    ev("S.eq={};S.bag={}")
+    # playtest #3: the rockslide outside the Darkwood's north gate seals the way until it is broken with a pickaxe, then Dell thanks you
+    reach = "(()=>{const seen=new Set([109*MW+31]),q=[[31,109]];while(q.length){const[x,y]=q.shift();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}return seen.has(79*MW+26)})()"
+    ev("S.flags={};applyGates();applyStoryPeople();SCENE=null;BATTLE=null;sail=false;P.x=P.rx=31;P.y=P.ry=109;P.f='u';S.eq.pickaxe=null")
+    assert not ev(reach), "the rockslide seals the way from the Darkwood's north gate to the Mountain Town"
+    assert ev("NPC.some(n=>n.n==='Miner Dell'&&n.work==='pick')"), "a miner is digging at the rocks"
+    ev("act()"); assert ev("!flag('rockslide_cleared')"), "no pickaxe, the rocks stay"
+    ev("TRIGGERS.forEach(t=>{if(t.id!=='rockslide_thanks')markSeen('trg:'+t.id)});add('pickaxe');S.eq.pickaxe='pickaxe';act()"); assert ev("flag('rockslide_cleared')") and ev(reach), "a pickaxe breaks the rockslide and opens the road"
+    pg.wait_for_function("dlgActive()&&/this rock slide was going take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
+    ev("dlgEnd();trgRunning=false")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

@@ -21,6 +21,18 @@ let AMBUSH_NOTE=false; // set when a creature ambushes you over an open screen; 
 const AMBUSH_OVER=['mapov','ch','qs','store','bag','craft','skills','menu'];
 const canBeAmbushed=()=>!BATTLE&&!SCENE&&!sail&&!dlgActive()&&S.hp>0&&![...document.querySelectorAll('.open')].some(el=>!AMBUSH_OVER.includes(el.id))&&!(typeof AR!=='undefined'&&AR.on);
 // one tick (about 0.6 s) for every creature: they wander, chase when you are close, and start a battle when they reach you
+// a tile this creature may walk on (an island creature stays on its island; others stay near home, within `leash` tiles)
+function enemyCanStand(e,ty,nx,ny){const j=ny*MW+nx;if(nx<0||ny<0||nx>=MW||ny>=MH)return false;
+  return ty.region==='island'?ISL.has(j)&&WK.includes(M[j]):WK.includes(M[j])&&Math.abs(nx-e.hx)<=(ty.leash||8)&&Math.abs(ny-e.hy)<=(ty.leash||8)&&!npcAt(nx,ny)&&!enemyAt(nx,ny)}
+// chasing (playtest #3): the first step of the shortest walkable way to the player (a small breadth-first search, never wider than the chase range plus a few tiles). If there is no way, it does nothing.
+function chaseStep(e,ty){const R=ty.chase+6,par=new Map(),q=[[e.x,e.y]];par.set(e.y*MW+e.x,null);
+  while(q.length){const[x,y]=q.shift();
+    for(const[dx,dy]of Object.values(D)){const nx=x+dx,ny=y+dy,k=ny*MW+nx;if(par.has(k)||Math.abs(nx-e.x)>R||Math.abs(ny-e.y)>R)continue;
+      if(nx===P.x&&ny===P.y){let c=[x,y];if(c[0]===e.x&&c[1]===e.y)return null;   // already beside the player
+        for(let p=par.get(c[1]*MW+c[0]);p&&!(p[0]===e.x&&p[1]===e.y);p=par.get(c[1]*MW+c[0]))c=p;   // walk back to the first step
+        const sx=c[0]-e.x,sy=c[1]-e.y;return [c[0],c[1],sx?(sx>0?'r':'l'):(sy>0?'d':'u')]}
+      if(!enemyCanStand(e,ty,nx,ny))continue;par.set(k,[x,y]);q.push([nx,ny])}}
+  return null}
 function enemiesTick(){if(BATTLE)return;
   for(let i=ENEMIES.length-1;i>=0;i--){const e=ENEMIES[i],ty=ENEMY_TYPES[e.t];
     if(!e.alive){if(ty.respawn){if(--e.resp<=0){e.alive=true;e.hp=e.max;e.x=e.hx;e.y=e.hy}}else if(e!==G&&!e.keep)ENEMIES.splice(i,1);continue}
@@ -28,10 +40,9 @@ function enemiesTick(){if(BATTLE)return;
     if(dist===1){if(e.cd<=0){if(canBeAmbushed())startEnemyBattle(e)}else e.cd--;continue}
     if(e.cd>0)e.cd--;
     if(ty.speed>1&&(e.mv=(e.mv||0)+1)%ty.speed)continue;
-    const hx=Math.abs(dx)>=Math.abs(dy),c=dist<=ty.chase?[hx?[Math.sign(dx),0]:[0,Math.sign(dy)],hx?[0,Math.sign(dy)]:[Math.sign(dx),0]]:[Object.values(D)[Math.random()*4|0]];
-    for(const[a,b]of c){if(!a&&!b)continue;const nx=e.x+a,ny=e.y+b,j=ny*MW+nx;
-      const ok=ty.region==='island'?ISL.has(j)&&WK.includes(M[j]):WK.includes(M[j])&&Math.abs(nx-e.hx)<=(ty.leash||8)&&Math.abs(ny-e.hy)<=(ty.leash||8)&&!npcAt(nx,ny)&&!enemyAt(nx,ny);
-      if(ok&&!(P.x===nx&&P.y===ny)){e.x=nx;e.y=ny;e.f=a?(a>0?'r':'l'):(b>0?'d':'u');break}}}}
+    if(dist<=ty.chase){const st=chaseStep(e,ty);if(st){e.x=st[0];e.y=st[1];e.f=st[2]}continue}   // chasing: walk the shortest way round trees, walls and people
+    const [a,b]=Object.values(D)[Math.random()*4|0];if(!a&&!b)continue;const nx=e.x+a,ny=e.y+b;
+    if(enemyCanStand(e,ty,nx,ny)&&!(P.x===nx&&P.y===ny)){e.x=nx;e.y=ny;e.f=a?(a>0?'r':'l'):(b>0?'d':'u')}}}
 // morning: every enemy that comes back (respawn) is back at home with full health; a dead one that never respawns stays gone
 function enemiesMorning(){ENEMIES.forEach(e=>{if(ENEMY_TYPES[e.t].respawn){e.alive=true;e.hp=e.max;e.x=e.hx;e.y=e.hy;e.pois=0}})}
 function faint(){cancel();const loss=Math.floor(S.gold*.1);S.gold-=loss;S.hp=Math.ceil(maxHp()/2);S.sta=Math.ceil(maxSta()/2);

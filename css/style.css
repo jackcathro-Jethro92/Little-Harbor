@@ -74,7 +74,7 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 .fill{height:100%;border-radius:4px;background:#58d058;transition:width .45s steps(12)}
 .num{text-align:right;font-weight:700;font-size:13px}
 #skills{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'Pixelify Sans',ui-monospace,monospace}
-#skills.open,#ch.open,#qs.open{display:flex}
+#skills.open,#ch.open,#qs.open,#eqs.open{display:flex}
 #ch{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'Pixelify Sans',ui-monospace,monospace}
 #ch-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
 #ch-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14;text-align:center}
@@ -203,3 +203,21 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 .bt-fx.shield img{width:48px;height:56px;image-rendering:pixelated;animation:btShield .6s ease-out forwards}
 @keyframes btShield{0%{opacity:0;transform:scale(.5)}25%{opacity:1;transform:scale(1.15)}60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.bt-foe canvas,#bt-meBox canvas{animation:none}}
+
+/* equipment screen: helmet, armour and boots down the left, your picture in the middle, the weapon on the right */
+#eqs{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'Pixelify Sans',ui-monospace,monospace}
+#eqs-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
+#eqs-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14}
+#eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-rows:auto auto auto;gap:8px;align-items:center}
+#eqs-pt{grid-column:2;grid-row:1 / span 3;width:112px;height:112px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
+#eq-helmet{grid-column:1;grid-row:1}#eq-armour{grid-column:1;grid-row:2}#eq-boots{grid-column:1;grid-row:3}#eq-weapon{grid-column:3;grid-row:2}
+.eqslot{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:#e8c98c;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-family:inherit;min-height:84px}
+.eqslot canvas{width:40px;height:40px;image-rendering:pixelated;background:#f6e6bf;border:2px solid #b98e55;border-radius:4px}
+.eqslot b{font-size:13px}.eqslot span{font-size:11px;line-height:1.1;text-align:center;min-height:24px}
+.eqslot.sel{background:#fff1c9;outline:3px solid #4a74c0}
+#eqs-stats{margin:12px 0 6px;font-size:15px;line-height:1.5;text-align:center}
+#eqs-stats div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:2px dotted #b98e55}
+#eqs-pick{margin-top:8px}#eqs-pick h4{margin:6px 0;font-size:15px}
+.eqrow{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 6px;border-bottom:2px dotted #b98e55;font-size:15px;cursor:pointer}
+.eqrow small{display:block;font-size:12px;opacity:.8}.eqrow.on{background:#fff1c9}.eqrow em{font-style:normal;font-weight:700;white-space:nowrap}
+#eqs-back,#ch-eq{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:8px}

@@ -1,6 +1,6 @@
 // ---------- bag screen ----------
 const POCKETS=[{k:'fish',t:'INGREDIENTS',c:'#d8683c'},{k:'food',t:'CONSUMABLES',c:'#d8a43c'},{k:'mat',t:'MATERIALS',c:'#a8742f'},{k:'gear',t:'GEAR',c:'#4f9a5a'},{k:'letters',t:'LETTERS',c:'#b99a6a'},{k:'equip',t:'EQUIPPED',c:'#4a74c0'}];
-const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet'],['boots','Boots'],['armour','Armour']];
+const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet'],['helmet','Helmet'],['armour','Armour'],['boots','Boots']];
 const ownedForSlot=sl=>Object.keys(S.bag).some(id=>count(id)&&ITEMS[id]&&slotOf(id)===sl);
 let bp=0,bc=0,bpop=null;
 const describe=id=>{const i=ITEMS[id];return i.kind==='rod'?(i.wait<1?'Bites '+Math.round((1-i.wait)*100)+'% sooner.':'A plain starter rod.'):i.kind==='boat'?(i.price?'Better odds of rare fish.':'Your trusty starter boat.'):i.desc};
@@ -10,8 +10,8 @@ function rowsOf(p){
   if(k==='mat')return LIST('material').filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].desc}));
   if(k==='fish')return [...fishIds,...LIST('ingredient'),...LIST('forage')].filter(count).map(id=>({id,label:ITEMS[id].n,right:'x'+count(id),desc:ITEMS[id].kind==='fish'?'Worth '+ITEMS[id].value+' gold. Sell it to Odo, or cook it.':ITEMS[id].kind==='forage'?ITEMS[id].desc+' Sells for '+ITEMS[id].value+'g. You can plant it in a garden.':ITEMS[id].desc+' Cook it, or plant it in a garden.'}));
   if(k==='letters')return myLetters().filter(id=>LETTERS[id]).map(id=>({letter:id,label:LETTERS[id].title||id,right:'',desc:(LETTERS[id].from?'From '+LETTERS[id].from+'. ':'')+'Tap to read it again.'}));
-  if(k==='gear')return ['rod','weapon','tool','jewel','station','prefab','claim','garden','key'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
-  return SLOTS.filter(([sl])=>S.eq[sl]||ownedForSlot(sl)).map(([sl,n])=>({slot:sl,id:S.eq[sl],label:n,right:S.eq[sl]?ITEMS[S.eq[sl]].n+(sl==='weapon'&&S.coat?' (poison x'+S.coat+')':''):'---',desc:S.eq[sl]?describe(S.eq[sl]):'Nothing equipped.'}));
+  if(k==='gear')return ['rod','weapon','tool','jewel','armour','station','prefab','claim','garden','key'].flatMap(LIST).filter(count).map(id=>({id,label:ITEMS[id].n,right:S.eq[slotOf(id)]===id?'E':'',desc:describe(id)}));
+  return [{open:'eq',label:'Equipment screen',right:'\u25B6',desc:'See your helmet, armour, boots and weapon next to your picture and change them.'},SLOTS.filter(([sl])=>S.eq[sl]||ownedForSlot(sl)).map(([sl,n])=>({slot:sl,id:S.eq[sl],label:n,right:S.eq[sl]?ITEMS[S.eq[sl]].n+(sl==='weapon'&&S.coat?' (poison x'+S.coat+')':''):'---',desc:S.eq[sl]?describe(S.eq[sl]):'Nothing equipped.'}))];
 }
 function drawBag(){
   const P=POCKETS[bp],rows=rowsOf(bp),L=$('blist');bc=Math.max(0,Math.min(bc,rows.length-1));
@@ -28,7 +28,7 @@ function popRender(){const p=$('bpop');p.innerHTML='';if(!bpop){p.classList.remo
   bpop.opts.forEach((o,i)=>{const d=document.createElement('div');d.className='brow'+(i===bpop.i?' cur':'');d.innerHTML='<span class="bcur">▶</span><span class="bn">'+o+'</span>';d.onclick=()=>{bpop.i=i;popChoose()};p.appendChild(d)});
   p.classList.add('open')}
 function bagPick(){
-  const r=rowsOf(bp)[bc];const pk=POCKETS[bp].k;if(r&&r.letter)return openLetter(r.letter);
+  const r=rowsOf(bp)[bc];const pk=POCKETS[bp].k;if(r&&r.letter)return openLetter(r.letter);if(r&&r.open==='eq'){closeBag();return openEquip()}
   if(r&&r.id&&ITEMS[r.id]&&ITEMS[r.id].kind==='key')return;   // key items just sit in the bag: nothing to equip or use
   if(!r||pk==='fish'||pk==='mat'||(pk==='equip'&&!r.id))return;
   if(pk==='food'){const it=ITEMS[r.id];bpop={opts:[it.kind==='food'?'Eat':it.coat?'Apply to weapon':'Drink','Cancel'],i:0,row:r};return popRender()}

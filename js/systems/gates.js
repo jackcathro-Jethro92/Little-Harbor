@@ -18,5 +18,5 @@ const gateAt=(x,y)=>GATES.find(g=>!flag(g.flag)&&g.cells.some(c=>c[0]===x&&c[1]=
 // facing a closed gate and pressing Use: it opens if the player has what it needs, otherwise it says why not. Returns true if it handled the press.
 function useGate(x,y){const g=gateAt(x,y);if(!g||npcAt(x,y))return false;
   const n=g.needs,ok=n&&((n.eq&&S.eq[n.eq])||(n.item&&count(n.item)>0));
-  if(ok){setFlag(g.flag,1);if(g.opens)say(g.opens);toast(g.opens||'It opens.',2200)}else say(g.msg||'It is blocked.');return true}
+  if(ok){setFlag(g.flag,1);if(g.opens)say(g.opens);toast(g.opens||'It opens.',2200);if(g.fire)setTimeout(()=>fireTriggers('step'),1200)}else say(g.msg||'It is blocked.');return true}
 applyGates();

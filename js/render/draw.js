@@ -25,14 +25,14 @@ function draw(){
   // entities by y
   S.gardens.forEach(gd=>gd.cells.forEach((cell,i)=>gardenCellArt(cell,(gd.x+i%3)*T-cx,(gd.y+(i/3|0))*T-cy)));
   if(placing){const k0=ITEMS[placing].kind,cell=(x,y,bad)=>R(x*T-cx+1,y*T-cy+1,T-2,T-2,bad?'rgba(220,70,60,.42)':'rgba(70,130,235,.5)');let m;
-    if(k0==='claim'||k0==='prefab'||k0==='garden'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
+    if(k0==='claim'||k0==='prefab'||k0==='garden'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);
       m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Tap Use to place it.'}
     else{const[fx,fy]=front(),w=placeWhy(placing,fx,fy);
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,T-2,T-2);m=w||'It fits! Tap Use to place it.'}
     if($('msg').textContent!==m)say(m)}
-  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0})}}));
+  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx,n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),view:vw(n.f),frame:0});if(n.work==='pick'&&!flag(n.workOff))pickSwing(n.x*T-cx,n.y*T-cy-3,t,n.f)}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
@@ -40,16 +40,17 @@ function draw(){
   ENEMIES.forEach(e=>{if(e.alive)E.push({y:e.y,f:()=>enemyDraw(e,cx,cy,t)})});
   E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;
-        if(!shipHidesPlayer())CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...lo(S.look),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});
+        if(!shipHidesPlayer())CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...playerLook(),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});
+    if(!sail&&WORK.kind&&t-WORK.at<440&&t>=WORK.at)toolSwing(WORK.kind,sx,sy-3,P.f,Math.min(3,((t-WORK.at)/110)|0));   // swinging the axe or pickaxe (each Use restarts it)
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
-  drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js)
+  if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
-  if(zoneOf(P.x,P.y)===2)fireflies(cx,cy,t);
+  if(zoneOf(P.x,P.y)===2){fireflies(cx,cy,t);drawCompass(cx,cy,t)}
   // fishing line
   if(fs){const [fx,fy]=front(),px=P.rx*T+(P.f==='l'?-1:18)-cx,py=P.ry*T+2-cy,ex=fx*T+8-cx,ey=fy*T+8-cy+(Math.sin(t/200)*(fs===2?3:1))|0;
     g.strokeStyle='#fff';g.lineWidth=1;g.beginPath();g.moveTo(px,py);g.lineTo(ex,ey);g.stroke();

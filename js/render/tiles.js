@@ -38,6 +38,7 @@ function tile(tx,ty,sx,sy,t){
   if(m===6&&tx<100&&ty<fTop(tx)-1){R(sx,sy,T,T,n%3?'#b08f6c':'#b99a78');if(n<50)R(sx+n%11,sy+(n*5)%12,4,3,'#9e7e5d');if(n>75)R(sx+n%12,sy+(n*3)%13,2,1,'#cdb08c');if(n%17===0)R(sx+n%10+2,sy+9,2,2,'#7b7d86');return}
   if(m===6){pathTile(tx,ty,sx,sy);return}
   if(m==9){objectBgArt(m,tx,ty,sx,sy,n,t);return}
+  if(m===141){rockFloor(tx,ty,sx,sy);rockslideArt(sx,sy,n);return}   // the rockslide: a heap of fallen rocks on the rock floor (see js/story/rockslide.js)
   if(m>=48&&m<=50){rockTile(tx,ty,sx,sy,m,n);return}
   if(m==10){objectBgArt(m,tx,ty,sx,sy,n,t);return}
   const rk=TLV[i]>0&&(m===5||(m>=14&&m<=18));
@@ -100,3 +101,9 @@ function rockTile(tx,ty,sx,sy,m,n){const i=ty*MW+tx,P=rockPal(i);
   R(sx+(n%4)*4,sy+3,2,5,c[0]);R(sx,sy+12,T,1,c[2]);R(sx,sy+13,T,3,c[3])}
 function blob(cx,cy,r,c0,c1,c2,ol){for(let p=0;p<2;p++){const rr=p?r:r+1;for(let d=-rr;d<=rr;d++){const w=Math.round(Math.sqrt(rr*rr-d*d+.25));R(cx-w,cy+d,2*w+1,1,p?(d<-r*.35?c1:d>r*.3?c2:c0):ol)}}}
 function tree(tx,ty,sx,sy){treeArt(tx,ty,sx,sy)}   // the art is in js/render/plants.js
+
+// a heap of broken rocks that fills the tile; `n` varies the look from tile to tile so a row of them reads as one rockslide
+function rockslideArt(sx,sy,n){const O='#2e2e36',a=n%3,b=(n>>2)%3;
+  R(sx,sy+13,T,3,'#3a3a44aa');
+  [[0,7,9,8,'#7d7f88','#a4a6ae'],[7,5,9,10,'#6e7078','#9a9ca4'],[3+a,1+b,8,8,'#8d8f87','#b9bbc2']].forEach(([x,y,w,h,c,hi])=>{R(sx+x,sy+y,w,h,O);R(sx+x+1,sy+y+1,w-2,h-2,c);R(sx+x+1,sy+y+1,w-3,2,hi);R(sx+x+w-3,sy+y+h-3,2,2,'#55555d')});
+  R(sx+1+a,sy+12,2,2,'#9a9ca4');R(sx+12,sy+13,2,1,'#8d8f87')}
