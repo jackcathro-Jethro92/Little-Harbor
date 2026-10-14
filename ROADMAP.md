@@ -39,7 +39,7 @@ The world, the graphics upgrade and all the story machinery are built, and the f
 
 ### Progress at a glance
 
-**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** Quests 4 to 9 (5.4 to 5.9) are built too; playtest #3's notes are fixed. The next story step is Quest 10, The Returning of the Keys (5.10).
+**Phase 4 and Quest 3 (5.3) are built; playtest notes #1 and #2 are done.** **The main story is complete: Quests 1 to 10 are all built (Phase 5 done).** Playtest #3's notes are fixed. Next is Phase 6, side content and the living world, after Jack plays the whole story through.
 
 | Step | Status |
 | --- | --- |
@@ -490,7 +490,7 @@ Build each quest together with the places it uses. Use the approved temple art i
 - **What happens:** the player fights through the pirates to the boss, who uses his full pattern and does not retreat this time. The sky clears and the pirates flee for good: remove the pirate ship patrols and clear Pirate Island. The old man takes the Sea Key, seals it back in the temple, asks you to return the other keys, and fades away.
 - **Sets:** `q9_done`, `pirates_defeated`, `keys_to_return = [earth, sky, fire]`.
 
-### 5.10 Quest 10: The Returning of the Keys
+### 5.10 Quest 10: The Returning of the Keys **(built)**
 - **What happens:** the player visits the Earth, Sky and Fire temples to return each key. When the Sky Key is returned, **the Sky Temple is restored** (switch back to the intact variant). The **Fire Temple** (`art/temples/fire_temple`) is last. There an old woman (the Fire spirit) gives the old man's final letter: he has raised an island from the sea for you, with a key to a house on it.
 - **World change:** the new island appears on the map and is reachable (variant 2.6). It has a ready house, using the home system.
 - **Sets:** `q10_done`, `story_complete`. The game continues as free play afterwards.

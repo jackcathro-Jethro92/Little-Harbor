@@ -1,5 +1,5 @@
 // ---------- home and garden ----------
-function enterHome(){P.x=P.rx=IR.dx;P.y=P.ry=IR.dy;P.f='u';say('You step inside your home.');toast('Home sweet home');ui()}
+function enterHome(){const gr=S.home&&S.home.grand;P.x=P.rx=gr?HG.dx:IR.dx;P.y=P.ry=gr?HG.dy:IR.dy;P.f='u';say('You step inside your home.');toast('Home sweet home');ui()}
 function exitHome(){P.x=P.rx=S.home.x+1;P.y=P.ry=S.home.y+2;P.f='d';say('You step back outside.');ui()}
 function gardenAt(x,y){for(const g of S.gardens)if(x>=g.x&&x<g.x+3&&y>=g.y&&y<g.y+2)return{g,i:(y-g.y)*3+(x-g.x)};return null}
 function useGarden(c){const cell=c.g.cells[c.i];

@@ -32,7 +32,7 @@ SCENES.q9_victory=[
  {set:'q9_barron_gone'},{clear:'storm_on'},{set:'pirates_defeated'},{clear:'pirates_here'},{toast:'The sky clears and the pirates flee!'},{pan:['back',500]},{wait:700},
  {fade:'out',ms:300},{set:'q9_old_here'},{fade:'in',ms:700},{say:'q9_old'},{take:{sea_key:1}},{set:'sea_key_sealed'},{toast:'The old man seals the Sea Key in the vault.'},
  {fade:'out',ms:400},{clear:'q9_old_here'},{fade:'in',ms:700},
- {set:'keys_to_return'},{set:'q9_done'},{done:'q9'},{msg:'[Placeholder] Take the Earth, Sky and Fire keys back to the spirits of their temples.'}];
+ {set:'keys_to_return'},{set:'q9_done'},{done:'q9'},{quest:['q10',0]},{msg:'[Placeholder] Take the Earth, Sky and Fire keys back to the spirits of their temples. The Fire temple is last.'}];
 TRIGGERS.push(
  {id:'q9_land',when:{walk:[254,12,312,60],n:1},if:{quest:'q9',step:0},do:[{scene:'q9_land'}]},
  {id:'q9_guards_beaten',when:{beaten:'q9_guards'},do:[{scene:'q9_taunt'},{battle:'q9_boss'}]},

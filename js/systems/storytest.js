@@ -18,7 +18,7 @@ const STORY_JUMPS=[
  {id:'q7',name:'Quest 7: Under Attack',after:'q6',quest:'q7',flags:['q6_boom','sky_damaged','q6_barron_here','q6_barron_gone','q6_boy_here','enc_q6_pirates_done','q6_done','q7_started','village_attack'],give:{sky_helm:1},at:[156,126]},
  {id:'q8',name:'Quest 8: Into the Depths',after:'q7',quest:'q8',flags:['q7_done','village_repaired','tower_raided'],clear:['village_attack'],at:[212,206]},
  {id:'q9',name:'Quest 9: The Final Fight',after:'q8',quest:'q9',flags:['q8_hatch','q8_done','final_battle_open','storm_on'],give:{divine_blade:1},at:[283,43]},
- {id:'q10',name:'Quest 10: The Returning of the Keys',after:'q9',quest:'q10',flags:['q9_barron_here','q9_barron_gone','enc_q9_guards_done','sea_key_sealed','pirates_defeated','keys_to_return','q9_done'],clear:['storm_on'],give:{earth_key:1,sky_key:1,fire_key:1}}
+ {id:'q10',name:'Quest 10: The Returning of the Keys',after:'q9',quest:'q10',flags:['q9_barron_here','q9_barron_gone','enc_q9_guards_done','sea_key_sealed','pirates_defeated','keys_to_return','q9_done'],clear:['storm_on'],give:{earth_key:1,sky_key:1,fire_key:1},at:[257,SZ.y0+8]}
 ];
 function storyReset(){S.flags={};S.story={q:null,step:0,seen:[],done:[]};S.letters=[];save();
   if(typeof applyVariants==='function')applyVariants();if(typeof applyGates==='function')applyGates();if(typeof applyStoryPeople==='function')applyStoryPeople();if(typeof applyEncounters==='function')applyEncounters()}

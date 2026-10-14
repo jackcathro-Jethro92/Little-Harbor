@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 113 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 114 placeholder.**
 
 ### Miner Dell (Darkwood north gate)
 - *placeholder:* [Placeholder] This slide came down in the night. I will be at it all week.
@@ -125,6 +125,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Salty Jo (Pirate camp (Volcano Island))
 - *placeholder:* The sea air is better than the smoke.
+
+### Fire Spirit (Settlement Docks)
+- *placeholder:* [Placeholder] The flame burns steadily now. Thank you.
 
 ### Mysterious Girl (Temple Tower)
 - *placeholder:* [Placeholder] The keys are safe with the old man now.
@@ -393,4 +396,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *Jack's* `q9_barron1.a` Captain Barron: You! The dog! Every step my warriors have been talking about some little beast that won't stop hounding us. Well this is it for you. We won't be having a third battle. Prepare yourself this time you will die. Let's go!
 - *Jack's* `q9_barron2.a` Captain Barron: I was wrong! You're greater than I… I don't know how this is possible.. Unless… Of course. I was a food you are the fifth aren't you. I should have read the legends more closely. It seems so obvious now. Let my Lads go will you. I give you my word that we won't come back.
 - *Jack's* `q9_old.a` Old Stranger: I knew our faith was well placed. Give me the water Key and I will seal this in the vault. Take the others to our brother and sisters at the other temples. I can't express my gratitude. You have done well and have earned your place among us. I'm sure I'll be seeing you again some time soon. Thank you.
+- *Jack's* `q10_boy.a` Mysterious Boy: The water was right all along. Thank you, I'll repair my temple now. Im sure this world will be safe with you among us to defend us
+- *Jack's* `q10_girl.a` Mysterious Girl: From the moment i layed eyes on you i knew you were special. Im glad to call you my brother. I will seal the key so it is safe. I pray we don't have to fight again but always feel free to come back to this temple. Im sure we will meet again soon
+- *Jack's* `q10_fire.a` Fire Spirit: So it is true. Our long lost brother has returned. Thank you. Water has raised an island up from the sea just for you, so that you might find peace and a home to build your new life. Inside the letter is a key to a home on your new island. Keep this safe. You have done a great service to everyone on this land. Though they might not know it. This world owes you a great debt. Go well brother.
+- *placeholder* `q10_fire_wait.a` Fire Spirit: [Placeholder] You carry my key, but the others are still waiting for theirs. Take them home first. Mine can wait.
 - *Jack's* `rockslide_thanks.a` Miner Dell: Thanks! this rock slide was going take all day to clear
