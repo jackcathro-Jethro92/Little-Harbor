@@ -244,9 +244,22 @@ def check(b, url):
     shp = pgs.evaluate("({schooner:S.bag.schooner===1,noTrawler:S.bag.trawler===undefined,eq:S.eq.boat==='schooner',tier:tier('boat')===2,recipes:['schooner','brig'].every(id=>RECIPES.some(r=>r.out===id&&r.station==='shipwright')),crew:ITEMS.brig.crew[0]===3&&ITEMS.rowboat.crew[1]===1})")
     assert all(shp.values()) and not errs2, (shp, errs2)
     pgs.close()
-    # testing prices: while BOAT_TEST is on, all three bought boats cost 100 gold at Murl's boatyard
-    ev("S.gold=1000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;openStore('boat')")
-    assert ev("['sloop','schooner','brig'].every(id=>ITEMS[id].price===100)||!BOAT_TEST"), "boats cost 100 while testing"
+    # prices and crew: the testing prices are off (sloop 20,000, schooner 40,000, brig 80,000); each ship needs crew (you count as one); Murl hires sailors; a ship you lack crew for can't be used or boarded
+    ev("S.gold=1000000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;S.eq.boat='rowboat';S.flags={};openStore('boat')")
+    assert ev("!BOAT_TEST&&ITEMS.sloop.price===20000&&ITEMS.schooner.price===40000&&ITEMS.brig.price===80000"), "boat prices"
+    assert ev("crewHave()===1&&crewOk('rowboat')&&crewOk('sloop')&&!crewOk('schooner')&&!crewOk('brig')"), "alone you can sail the rowboat and sloop only"
+    ev("document.querySelectorAll('#items .it button').forEach(b=>{if(/^40,000g$/.test(b.textContent))b.click()})")
+    assert ev("S.bag.schooner===1&&S.gold===960000&&S.eq.boat==='rowboat'"), "buying a ship you lack crew for keeps the old boat"
+    ev("openStore('boat')")
+    assert ev("(()=>{const r=[...document.querySelectorAll('#items .it')].find(x=>/^Schooner/.test(x.innerText));return /Need 2 crew/.test(r.innerText)&&r.querySelector('button').disabled})()"), "Use is blocked with no crew"
+    ev("sail=false;S.eq.boat='schooner';B.x=P.x+1;B.y=P.y;P.f='r';act()")
+    assert ev("!sail"), "can't board without enough crew"
+    ev("S.eq.boat='rowboat';openStore('boat');[...document.querySelectorAll('#items .it')].filter(x=>/^Finn/.test(x.innerText)).forEach(x=>x.querySelector('button').click())")
+    assert ev("flag('crew_finn')&&crewHave()===2&&S.gold===957500&&crewOk('schooner')&&!crewOk('brig')"), "hiring Finn at the boatyard"
+    ev("document.querySelectorAll('#items .it').forEach(x=>{if(/^(Marta|Ollie|Nell)/.test(x.innerText))x.querySelector('button').click()});S.eq.boat='schooner';sail=false;B.x=P.x+1;B.y=P.y;P.f='r';act()")
+    assert ev("crewHave()===5&&crewOk('brig')&&sail"), "with enough crew you can board"
+    ev("openCharacter()"); assert ev("/Crew/.test($('ch-info').innerText)"), "the summary shows the crew"
+    ev("closeCharacter();S.flags={};S.eq.boat='rowboat';sail=false")
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # ships' insides: 9 rooms (deck, quarters, storage for the sloop, schooner and brig) with every door, crate, bed and wheel reachable; bigger ships have more room, crates and storage; the helm, the doors, sleeping and the storage work
     sh = ev("(()=>{const W=new Set(WK),D4=[[1,0],[-1,0],[0,1],[0,-1]],r={};const reach=(R,sx,sy)=>{const s=new Set([sy*MW+sx]),q=[[sx,sy]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of D4){const nx=x+a,ny=y+b,i=ny*MW+nx;if(!s.has(i)&&nx>=R.x0&&nx<=R.x1&&ny>=R.y0&&ny<=R.y1&&W.has(at(nx,ny))){s.add(i);q.push([nx,ny])}}}return s};"
@@ -331,7 +344,7 @@ def check(b, url):
     ev("openStore('rod')"); assert tabs() == ["Rods", "Weapons", "Tools", "Home"] and shown() == ["Rods"], (tabs(), shown())
     ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
     ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
-    ev("openStore('boat')"); assert tabs() == ["Boats", "Yard"], tabs()
+    ev("openStore('boat')"); assert tabs() == ["Boats", "Crew", "Yard"], tabs()
     ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Armour", "Objects"], tabs()
     ev("openTrader('jeweller','buy')"); assert tabs() == ["Rings", "Amulets"], tabs()
     ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons"], tabs()
@@ -636,6 +649,12 @@ def check(b, url):
     ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';act()"); assert ev("flag('forest_boulder_open')&&at(134,26+FY)!==36&&walkable(134,26+FY)"), "with the pickaxe the boulder breaks for good"
     ev("openStore('rod')"); assert ev("/Pickaxe/.test($('items').textContent)"), "Bram sells the pickaxe now"
     talk("Rue"); assert ev("flag('q2_rue_home')&&flag('crew_1')&&flag('lost_man_home')&&S.story.step===5"), "Rue is thankful and becomes the first crew member"
+    # Rue can be hired after the quest (crew_1) but does not join until you find him and pay 2,500
+    assert ev("!flag('crew_rue')&&crewHave()===1"), "Rue does not join the crew by himself"
+    ev("S.gold=100");talk("Rue"); assert ev("!!mn&&/2,500g/.test($('menu-t').textContent)"), "talking to Rue offers to hire him for 2,500"
+    ev("mn.i=0;menuPick()"); assert ev("!flag('crew_rue')&&S.gold===100"), "too poor to hire Rue"
+    ev("S.gold=3000");talk("Rue"); ev("mn.i=0;menuPick()"); assert ev("flag('crew_rue')&&S.gold===500&&crewHave()===2"), "paying 2,500 puts Rue on the crew"
+    ev("S.flags.crew_rue=0;S.gold=0")
     talk("Bjorn the Elder"); assert ev("flag('q2_done')&&count('healing_potion')===1&&count('stamina_tonic')===1&&S.story.q===null&&S.story.done.includes('q2')"), "Bjorn's reward finishes the quest"
     ev("storyJump('q3')"); assert ev("S.story.q==='q3'&&S.story.done.includes('q2')&&count('sword')===1&&count('pickaxe')===1&&flag('crew_1')"), "the testing menu can start Quest 3 with Quest 2 done"
     # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)

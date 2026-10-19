@@ -25,6 +25,7 @@ function act(){
     if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
     if(n.store==='guild')return guildMenu();
     if(n.store==='arena')return arenaMenu();
+    if(n.crew){const c=CREW.find(c=>c.id===n.crew);if(c&&flag(c.avail)&&!flag(c.flag)){menu(c.n+': Want me on your crew? It is '+c.price.toLocaleString()+'g.',['Hire '+c.n,'Not now'],o=>{if(o==='Not now')return;if(S.gold<c.price){say(c.n+': Come back when you have '+c.price.toLocaleString()+' gold.');return}S.gold-=c.price;setFlag(c.flag);ui();save();say(c.n+': Aye! I am aboard. Crew: '+crewHave()+'.')});return}if(c&&flag(c.flag)){say(c.n+': Ready when you are, Captain.');return}}
     if(n.store==='smith'){menu("Garrick's Forge",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openSmith('buy');else if(o==='Sell')openSmith('sell')});return}
     if(n.store){openStore(n.store);return}
     if(n.shop){menu("Odo's General Store",['Buy food','Sell','Cancel'],o=>{if(o==='Buy food')openGeneral('buy');else if(o==='Sell')openGeneral('sell')});return}
@@ -32,7 +33,7 @@ function act(){
   }
   {const an=animalAt(x,y);if(an&&!sail)return ANIMALS[an.k].use?ANIMALS[an.k].use(an):say(ANIMALS[an.k].say)}
   if(!sail){
-    if(B.x===x&&B.y===y){P.x=x;P.y=y;sail=true;say('Aboard! Face open water and tap Use to cast.');ui();fireTriggers('board');return}
+    if(B.x===x&&B.y===y){if(!crewOk(S.eq.boat)){say(crewNote(S.eq.boat)+' Hire sailors at Murl\'s boatyard, or switch boats there.');return}P.x=x;P.y=y;sail=true;say('Aboard! Face open water and tap Use to cast.');ui();fireTriggers('board');return}
     if(at(x,y)===55)say('Jagged rocks block the way.');
     else if(at(x,y)===0)say('You need the boat to fish. It is at the end of the pier.');
     return;

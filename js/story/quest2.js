@@ -1,7 +1,7 @@
 // ---------- Quest 2: Find Rue (roadmap 4.2) ----------
 // The story: Bjorn the Elder sent Rue to the mainland settlement for weapons and she has not come back. Garrick, the blacksmith, has heard a ship went down north of the forest and gives the player a sword;
 // the way is through the Darkwood (beasts, and a forked trail where one branch is shut by a boulder that needs a pickaxe); Rue is found by the woodcutter's cottage; Garrick is impressed and gives a pickaxe and
-// says he will buy metal; Rue is taken home and offers to crew a ship one day; Bjorn rewards the player with a healing potion and a stamina tonic and points them to Murl at the boatyard.
+// says he will buy metal; Rue is taken home and says he could crew a ship one day (crew_1 only makes him hireable: find him in the village and pay 2,500, see js/data/crew.js); Bjorn rewards the player with a healing potion and a stamina tonic and points them to Murl at the boatyard.
 // The six spoken lines marked JACK are Jack's own words from STORY_TEXT.md, word for word (also in JACKS_LINES.txt). Everything else is a PLACEHOLDER until he writes his own.
 // Switches: q2_started, q2_garrick1 (+ q2_got_sword), q2_rue_found, q2_garrick2 (+ q2_got_pickaxe, blacksmith_buys_ore), q2_rue_home (+ lost_man_home, crew_1), q2_done, forest_boulder_open.
 // Places are world tile coordinates; the Darkwood's rows are its own y (4-39) plus FY, like the rest of the forest. Bjorn and Rue are story-only people (hidden until their moment).
@@ -10,7 +10,7 @@ QUESTS.push({id:'q2',name:'Find Rue',
  steps:['[Placeholder] The village elder is looking for you. Talk to Bjorn the Elder.','[Placeholder] Rue went to the mainland for weapons and has not come back. Ask Garrick the blacksmith in the Walled Settlement.','[Placeholder] Garrick says a ship went down north of the forest. Go through the Darkwood and find Rue by the woodcutter\u2019s cottage.','[Placeholder] You found Rue. Tell Garrick.','[Placeholder] Take Rue home to the village.','[Placeholder] Tell Bjorn the Elder that Rue is safe.'],
  goals:['Bjorn the Elder','Garrick',[36,146],'Garrick','Rue','Bjorn the Elder']});
 NPC.push({n:'Bjorn the Elder',x:155,y:104,hx:155,hy:104,f:'d',skin:0,hair:3,shirt:4,jk:3,hat:'none',hstyle:'bald',pack:false,fixed:1,say:['[Placeholder] The harbor looks after those who look after it.'],bio:{age:null,job:'Village elder',backstory:null,likes:[],q:null}});
-NPC.push({n:'Rue',x:124,y:9+FY,hx:124,hy:9+FY,f:'l',skin:2,hair:5,shirt:3,jk:5,hat:'cap',hc:2,hstyle:'ponytail',pack:false,fixed:1,say:['[Placeholder] Good on the ropes and fast in a fight, that is me.'],bio:{age:null,job:'Sailor',backstory:null,likes:[],q:null}});
+NPC.push({n:'Rue',x:124,y:9+FY,hx:124,hy:9+FY,f:'l',skin:2,hair:5,shirt:3,jk:5,hat:'cap',hc:2,hstyle:'ponytail',pack:false,fixed:1,crew:'rue',say:['[Placeholder] Good on the ropes and fast in a fight, that is me.'],bio:{age:null,job:'Sailor',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.push(
  {npc:'Bjorn the Elder',if:{flag:'q1_done'},at:[155,104],f:'d'},{npc:'Bjorn the Elder',hide:1},
  {npc:'Rue',if:{flag:'q2_garrick2'},at:[153,122],f:'r'},

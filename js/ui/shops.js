@@ -24,13 +24,17 @@ function openStore(k){
   $('st').textContent=(rod?"Bram's Tackle & Tools":"Murl's Boatyard")+' · '+S.gold.toLocaleString()+'g';el.innerHTML='';
   if(!rod&&L.filter(count).length===1){const n=tag(document.createElement('div'),'Boats');n.className='it';n.innerHTML='<div>Murl: You only own the one boat, friend. Nothing to switch yet.</div>';el.appendChild(n)}
   L.forEach((id,i)=>{const it=ITEMS[id],r=tag(document.createElement('div'),rod?'Rods':'Boats');r.className='it';
-    const d=i?(rod?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'Better odds of rare fish'):'Your starter gear';
+    const d=i?(rod?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'Better odds of rare fish. Needs '+crewNeed(id)+' crew (you count).'):'Your starter gear';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+d+'</div>';
     const b=document.createElement('button');
-    if(rod?i<=own:count(id)>0){if(rod){b.textContent='Owned';b.disabled=true}else if(S.eq.boat===id){b.textContent='In use';b.disabled=true}else{b.textContent='Use';b.onclick=()=>{S.eq.boat=id;ui();save();say('Murl: Now sailing the '+it.n.toLowerCase()+'.');openStore(k)}}}
+    if(rod?i<=own:count(id)>0){if(rod){b.textContent='Owned';b.disabled=true}else if(S.eq.boat===id){b.textContent='In use';b.disabled=true}else if(!crewOk(id)){b.textContent='Need '+crewNeed(id)+' crew';b.disabled=true}else{b.textContent='Use';b.onclick=()=>{S.eq.boat=id;ui();save();say('Murl: Now sailing the '+it.n.toLowerCase()+'.');openStore(k)}}}
     else{b.textContent=it.price.toLocaleString()+'g';b.disabled=rod?!(i===own+1&&S.gold>=it.price):S.gold<it.price;
-      b.onclick=()=>{S.gold-=it.price;add(id);S.eq[kind]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
+      b.onclick=()=>{S.gold-=it.price;add(id);const ok=rod||crewOk(id);if(ok)S.eq[kind]=id;ui();save();say(ok?'Bought the '+it.n.toLowerCase()+'!':'Bought the '+it.n.toLowerCase()+'. '+crewNote(id)+' Hire sailors here first.');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
+  if(!rod){const h=document.createElement('div');h.className='it';h.dataset.cat='Crew';h.innerHTML='<div>Murl: Bigger ships need more hands. You count as one. Right now your crew is '+crewHave()+(crewList().length?' ('+crewList().map(c=>c.n).join(', ')+')':'')+'.</div>';el.appendChild(h);
+    CREW.filter(c=>c.where==='boatyard').forEach(c=>{const r=document.createElement('div');r.className='it';r.dataset.cat='Crew';r.innerHTML='<div><b>'+c.n+'</b> · '+c.job+'<br>'+c.desc+'</div>';const b=document.createElement('button');
+      if(flag(c.flag)){b.textContent='Aboard';b.disabled=true}else{b.textContent=c.price.toLocaleString()+'g';b.disabled=S.gold<c.price;b.onclick=()=>{S.gold-=c.price;setFlag(c.flag);ui();save();say('Murl: '+c.n+' will sail with you. Crew: '+crewHave()+'.');openStore(k)}}
+      r.appendChild(b);el.appendChild(r)})}
   if(rod)LIST('weapon').concat(LIST('tool')).filter(id=>!ITEMS[id].smith&&!ITEMS[id].starter&&!ITEMS[id].reward&&(!SHOP_LOCKS[id]||flag(SHOP_LOCKS[id])||count(id)>0)).forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),ITEMS[id].kind==='weapon'?'Weapons':'Tools');r.className='it';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';
     const b=document.createElement('button');
