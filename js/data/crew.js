@@ -1,8 +1,8 @@
 // ---------- crew: who can sail with you, and what each ship needs ----------
 // A ship's `crew:[least,most]` row in ITEMS says how many people it needs to sail (you count as one). Each CREW row below is one person who can be aboard; `flag` is the story switch that says they have joined.
-// `where:'boatyard'` rows can be hired from Murl for `price` gold (taverns will use `where:'tavern'` later). Rows with no `where` join through the story (Rue, Quest 2).
+// `where:'boatyard'` rows can be hired from Murl for `price` gold (taverns will use `where:'tavern'` later). `where:'find'` rows are people you have to go and talk to (the NPC has `crew:'<id>'`): they can be hired once the story switch `avail` is set (Rue after Quest 2, `crew_1`), but they do not join until you pay.
 const CREW=[
- {id:'rue',n:'Rue',job:'Deckhand',flag:'crew_1',desc:'Good on the ropes and fast in a fight.'},
+ {id:'rue',n:'Rue',job:'Deckhand',flag:'crew_rue',avail:'crew_1',where:'find',price:2500,desc:'Good on the ropes and fast in a fight.'},
  {id:'finn',n:'Finn',job:'Deckhand',flag:'crew_finn',where:'boatyard',price:2500,desc:'Young, strong and not afraid of the sea.'},
  {id:'marta',n:'Marta',job:'Rigger',flag:'crew_marta',where:'boatyard',price:4000,desc:'Knows every knot and every sail.'},
  {id:'ollie',n:'Ollie',job:'Gunner',flag:'crew_ollie',where:'boatyard',price:6000,desc:'Steady hands and a loud voice.'},

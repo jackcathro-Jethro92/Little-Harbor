@@ -25,6 +25,7 @@ function act(){
     if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
     if(n.store==='guild')return guildMenu();
     if(n.store==='arena')return arenaMenu();
+    if(n.crew){const c=CREW.find(c=>c.id===n.crew);if(c&&flag(c.avail)&&!flag(c.flag)){menu(c.n+': Want me on your crew? It is '+c.price.toLocaleString()+'g.',['Hire '+c.n,'Not now'],o=>{if(o==='Not now')return;if(S.gold<c.price){say(c.n+': Come back when you have '+c.price.toLocaleString()+' gold.');return}S.gold-=c.price;setFlag(c.flag);ui();save();say(c.n+': Aye! I am aboard. Crew: '+crewHave()+'.')});return}if(c&&flag(c.flag)){say(c.n+': Ready when you are, Captain.');return}}
     if(n.store==='smith'){menu("Garrick's Forge",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openSmith('buy');else if(o==='Sell')openSmith('sell')});return}
     if(n.store){openStore(n.store);return}
     if(n.shop){menu("Odo's General Store",['Buy food','Sell','Cancel'],o=>{if(o==='Buy food')openGeneral('buy');else if(o==='Sell')openGeneral('sell')});return}

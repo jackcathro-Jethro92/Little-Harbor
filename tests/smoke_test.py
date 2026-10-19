@@ -649,6 +649,12 @@ def check(b, url):
     ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';act()"); assert ev("flag('forest_boulder_open')&&at(134,26+FY)!==36&&walkable(134,26+FY)"), "with the pickaxe the boulder breaks for good"
     ev("openStore('rod')"); assert ev("/Pickaxe/.test($('items').textContent)"), "Bram sells the pickaxe now"
     talk("Rue"); assert ev("flag('q2_rue_home')&&flag('crew_1')&&flag('lost_man_home')&&S.story.step===5"), "Rue is thankful and becomes the first crew member"
+    # Rue can be hired after the quest (crew_1) but does not join until you find him and pay 2,500
+    assert ev("!flag('crew_rue')&&crewHave()===1"), "Rue does not join the crew by himself"
+    ev("S.gold=100");talk("Rue"); assert ev("!!mn&&/2,500g/.test($('menu-t').textContent)"), "talking to Rue offers to hire him for 2,500"
+    ev("mn.i=0;menuPick()"); assert ev("!flag('crew_rue')&&S.gold===100"), "too poor to hire Rue"
+    ev("S.gold=3000");talk("Rue"); ev("mn.i=0;menuPick()"); assert ev("flag('crew_rue')&&S.gold===500&&crewHave()===2"), "paying 2,500 puts Rue on the crew"
+    ev("S.flags.crew_rue=0;S.gold=0")
     talk("Bjorn the Elder"); assert ev("flag('q2_done')&&count('healing_potion')===1&&count('stamina_tonic')===1&&S.story.q===null&&S.story.done.includes('q2')"), "Bjorn's reward finishes the quest"
     ev("storyJump('q3')"); assert ev("S.story.q==='q3'&&S.story.done.includes('q2')&&count('sword')===1&&count('pickaxe')===1&&flag('crew_1')"), "the testing menu can start Quest 3 with Quest 2 done"
     # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)
