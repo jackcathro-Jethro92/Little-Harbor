@@ -244,9 +244,9 @@ def check(b, url):
     shp = pgs.evaluate("({schooner:S.bag.schooner===1,noTrawler:S.bag.trawler===undefined,eq:S.eq.boat==='schooner',tier:tier('boat')===2,recipes:['schooner','brig'].every(id=>RECIPES.some(r=>r.out===id&&r.station==='shipwright')),crew:ITEMS.brig.crew[0]===3&&ITEMS.rowboat.crew[1]===1})")
     assert all(shp.values()) and not errs2, (shp, errs2)
     pgs.close()
-    # prices and crew: the testing prices are off (sloop 20,000, schooner 40,000, brig 80,000); each ship needs crew (you count as one); Murl hires sailors; a ship you lack crew for can't be used or boarded
+    # prices and crew: the testing prices are off (sloop 25,000, schooner 40,000, brig 80,000); each ship needs crew (you count as one); Murl hires sailors; a ship you lack crew for can't be used or boarded
     ev("S.gold=1000000;S.bag.sloop=0;S.bag.schooner=0;S.bag.brig=0;S.eq.boat='rowboat';S.flags={};openStore('boat')")
-    assert ev("!BOAT_TEST&&ITEMS.sloop.price===20000&&ITEMS.schooner.price===40000&&ITEMS.brig.price===80000"), "boat prices"
+    assert ev("!BOAT_TEST&&ITEMS.sloop.price===25000&&ITEMS.schooner.price===40000&&ITEMS.brig.price===80000"), "boat prices"
     assert ev("crewHave()===1&&crewOk('rowboat')&&crewOk('sloop')&&!crewOk('schooner')&&!crewOk('brig')"), "alone you can sail the rowboat and sloop only"
     ev("document.querySelectorAll('#items .it button').forEach(b=>{if(/^40,000g$/.test(b.textContent))b.click()})")
     assert ev("S.bag.schooner===1&&S.gold===960000&&S.eq.boat==='rowboat'"), "buying a ship you lack crew for keeps the old boat"
