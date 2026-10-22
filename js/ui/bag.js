@@ -22,7 +22,7 @@ function cellDesc(id){const it=ITEMS[id];
   if(it.kind==='potion')return potionDesc(id);
   return describe(id)}
 // the squares of a section: {id, label, n, eq, desc} (or {letter, label, desc} for a letter)
-function cellsOf(si){const s=SECTIONS[si],eqd=id=>S.eq[slotOf(id)]===id;
+function cellsOf(si){const s=SECTIONS[si],eqd=isWorn;
   const cells=s.list().filter(count).map(id=>({id,label:ITEMS[id].n,n:count(id),eq:eqd(id),desc:cellDesc(id)+(eqd(id)?' (Equipped)':'')}));
   if(s.letters)myLetters().filter(id=>LETTERS[id]).forEach(id=>cells.push({letter:id,label:LETTERS[id].title||id,n:1,desc:(LETTERS[id].from?'From '+LETTERS[id].from+'. ':'')+'Tap to read it again.'}));
   return cells}
@@ -52,14 +52,14 @@ function bagPick(){
   if(['station','prefab','claim','garden','furniture'].includes(it.kind)){bpop={opts:['Place','Cancel'],i:0,row:r};return popRender()}
   if(!['rod','weapon','tool','jewel','armour'].includes(it.kind))return;   // fish, materials and the like: nothing to do
   const sl=slotOf(r.id);
-  const on=S.eq[sl]===r.id,opts=[];
-  if(!on)opts.push('Equip');else if(sl!=='rod'&&sl!=='boat')opts.push('Unequip');
+  const on=isWorn(r.id),opts=[];
+  if(!on)opts.push('Equip');else opts.push('Unequip');
   opts.push('Cancel');bpop={opts,i:0,row:r};popRender()}
 function popChoose(){const o=bpop.opts[bpop.i],r=bpop.row,sl=slotOf(r.id);
   if(o==='Eat'){bpop=null;popRender();return eat(r.id)}
   if(o==='Drink'||o==='Apply to weapon'){bpop=null;popRender();return drink(r.id)}
   if(o==='Place'){bpop=null;popRender();closeBag();placing=r.id;return say('Face a clear tile and tap Use to place it. Open the Bag to cancel.')}
-  if(o==='Equip')S.eq[sl]=r.id;if(o==='Unequip')S.eq[sl]=null;
+  if(o==='Equip')equipItem(r.id);if(o==='Unequip')unequipItem(r.id);
   bpop=null;popRender();ui();save();drawBag()}
 function openBag(){placing=null;bs=0;bc=0;bpop=null;popRender();drawBag();$('bag').classList.add('open')}
 function closeBag(){bpop=null;popRender();$('bag').classList.remove('open')}

@@ -3,7 +3,7 @@
 function chPortrait(){const cv=$('ch-pt'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);
   c.fillStyle='#8ec0e8';c.fillRect(0,0,cv.width,cv.height);const s=shadePerson({...playerLook(),view:'f',frame:0});c.drawImage(s,0,0,24,24,0,0,cv.width,cv.height)}
 function openCharacter(){chPortrait();
-  const L=S.look||{},eq=SLOTS.filter(([sl])=>S.eq[sl]).map(([sl,n])=>n+': '+ITEMS[S.eq[sl]].n);
+  const L=S.look||{},eq=SLOTS.filter(([sl])=>S.eq[sl]&&(!TOOLSLOTS.includes(sl)||S.eq.tool===sl)).map(([sl,n])=>n+': '+ITEMS[S.eq[sl]].n);
   const boat=S.eq.boat&&ITEMS[S.eq.boat]?ITEMS[S.eq.boat].n:'None';
   const rows=[['Day',S.day],['Gold',S.gold.toLocaleString()+'g'],['Health',Math.ceil(S.hp)+' / '+maxHp()],['Stamina',Math.ceil(S.sta)+' / '+maxSta()],['Boat',boat],['Crew',crewHave()+(crewList().length?' ('+crewList().map(c=>c.n).join(', ')+')':' (just you)')]];
   $('ch-info').innerHTML=rows.map(r=>'<div><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('');
