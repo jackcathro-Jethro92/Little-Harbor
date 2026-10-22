@@ -16,7 +16,7 @@ def status(s):
     return "jack" if s in JACK else "original" if s in ORIG else "placeholder"
 LABEL = {"jack": "Jack's", "original": "original", "placeholder": "placeholder"}
 
-JS = """(()=>{const area=n=>{const z=zoneOf(n.x,n.y);if(z===2)return 'The Darkwood';if(z===3)return 'Fighters Guild hall (Mountain Town)';if(z===4)return "Gladiators' Arena (Mountain Town)";
+JS = """(()=>{const area=n=>{const z=zoneOf(n.x,n.y);if(z===2)return 'The Darkwood';if(z>=30){const r=intrOf(n.x,n.y);if(r)return r.name}if(z===3)return 'Fighters Guild hall (Mountain Town)';if(z===4)return "Gladiators' Arena (Mountain Town)";
  let best=null,bd=1e9;LAND.forEach(l=>{const d=Math.hypot(l[1]-n.x,l[2]-n.y);if(d<bd){bd=d;best=l[0]}});return best};
  return NPC.map(n=>({n:n.n,area:n.pirate?'Pirate camp (Volcano Island)':area({x:n.hx!==undefined?n.hx:n.x,y:n.hy!==undefined?n.hy:n.y}),job:(n.bio&&n.bio.job)||null,store:n.store||null,pirate:!!n.pirate,say:n.say||[]}))})()"""
 JS_DLG = "Object.entries(DLG).flatMap(([id,d])=>Object.entries(d.nodes).map(([k,n])=>({id:id+'.'+k,who:n.who||'',text:n.text||'',choices:(n.choices||[]).map(c=>c.t)})))"

@@ -234,3 +234,6 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **P58:** blacksmith: ore, weapons, armour; carpenter: planks and rope (he also buys logs and flax fiber); tailor: cloth and leather; apothecary: potions, herbs and mushrooms (and buys centipede fangs for 12); goldsmith: jewellery, and buys gold and silver ore; general store: food and ingredients, no longer herbs.
 - **The carpenter** is built now, with the placeholder name Carpenter Alder, at the door of a Woodcutters' Shack outside the Darkwood's south gate. **Please give him a name** and say if you want him in a different shack. Furniture is batch G.
 - **Please check:** do the prices feel right? Planks and rope are now bought from the carpenter near the Darkwood, not from Garrick in the Walled Settlement.
+
+## Batch G1 (22 Oct): shop interiors, step 1 of 3
+Built from the designer's starter rooms. Garrick, Alder, Astrid, Wynn and Fenwick now work behind counters inside their own shop rooms. G2: village shops, taverns. G3: carpenter furniture.

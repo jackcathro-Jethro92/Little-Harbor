@@ -9,6 +9,8 @@ function draw(){
     if(tx<MW&&ty<MH)tile(tx,ty,tx*T-cx,ty*T-cy,t);
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0)+1;ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
     if(at(tx,ty)===4)tree(tx,ty,tx*T-cx,ty*T-cy);
+  const ir=zoneOf(P.x,P.y)>=30?intrOf(P.x,P.y):null,tick=(t/250)|0;   // inside a shop room (js/systems/shoprooms.js): its rugs and mats lie on the floor, under everything
+  if(ir)ir.props.forEach(p=>{if(p.flat)drawProp(p,p.ax*T-cx,p.ay*T-cy,tick)});
   const cp=campOf();if(cp&&Math.hypot(P.rx-cp.x,P.ry-cp.y)<10){g.strokeStyle='rgba(255,255,255,.4)';g.setLineDash([3,3]);g.beginPath();g.arc(cp.x*T+8-cx,cp.y*T+8-cy,CAMP_R*T,0,7);g.stroke();g.setLineDash([])}
   BL.forEach(b=>{if(zoneOf(b.x,b.y)===zoneOf(P.x,P.y)&&!b.towergate&&!b.pagoda)(b.hall?hall:b.skysmoke?skySmoke:b.firegate?fireGate:b.firehall?fireHall:b.tent?tent:b.decor?campDecor:b.ship?pirateShip:b.skygate?skyGate:b.knossos?seaTemple:b.mayan?mayanB:b.col||b.tower?tmp:bld)(b,b.x*T-cx,b.y*T-cy,t)});
   if(S.claim&&!S.claim.isle){const c0=S.claim,X=c0.x*T-cx,Y=c0.y*T-cy,W=c0.w*T,H=c0.h*T,rc='#d8b878';
@@ -36,6 +38,7 @@ function draw(){
   // the Temple Tower's gate (and the Haven Isle garden's) and its pagoda are tall: they are sorted with the people, so you walk behind a roof and under a gate's roof instead of over it (playtest #4)
   BL.forEach(b=>{if((b.towergate||b.pagoda)&&zoneOf(b.x,b.y)===zoneOf(P.x,P.y))E.push({y:b.pagoda?b.y+4.9:b.y+.5,f:()=>(b.pagoda?towerPagoda:towerGate)(b,b.x*T-cx,b.y*T-cy,t)})});
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
+  if(ir)ir.props.forEach(p=>{if(!p.flat)E.push({y:p.ay+p.h-.5,f:()=>drawProp(p,p.ax*T-cx,p.ay*T-cy,tick)})});   // furniture is sorted with the people, so the shopkeeper stands behind the counter
   if(S.isle&&zoneOf(P.x,P.y)===0)E.push({y:S.isle.y+1.9,f:()=>grandHouse(S.isle.x*T-cx,S.isle.y*T-cy,t)});   // the grand house on Haven Isle (js/render/grandhouse.js): sorted with the people so you can walk behind its upper floors
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
@@ -57,6 +60,7 @@ function draw(){
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)
   applyLight(cx,cy,t);
+  if(ir)roomLight(ir,cx,cy,t);   // the room's mood: daylight, dusk, night with glowing lamps, or firelight
   if(STORM_ON&&zoneOf(P.x,P.y)===0)drawStorm(cx,cy,t);   // the storm over the Temple of the Sea (js/render/storm.js)
   if(zoneOf(P.x,P.y)===2||zoneOf(P.x,P.y)===7||zoneOf(P.x,P.y)===20){const px=P.rx*T+8-cx,py=P.ry*T+4-cy,gr=g.createRadialGradient(px,py,26,px,py,92);gr.addColorStop(0,'rgba(2,6,14,0)');gr.addColorStop(1,'rgba(2,6,14,.93)');g.fillStyle=gr;g.fillRect(0,0,VW,VH)}
   if(zoneOf(P.x,P.y)===2){fireflies(cx,cy,t);drawCompass(cx,cy,t)}
