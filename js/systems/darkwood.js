@@ -5,7 +5,7 @@ function pickup(x,y){const li=Math.max(0,FB.findIndex(p=>p[0]===x&&p[1]===y)),L=
   if(L.g){S.gold+=L.g;got.push(L.g+' gold')}L.i.forEach(([id,n])=>{add(id,n);got.push(ITEMS[id].n.toLowerCase()+(n>1?' x'+n:''))});
   S.cut[k]={m:46,d:S.day};M[k]=31;say('You found '+got.join(', ')+'!');toast('Treasure!');ui();save()}
 function grassEvent(){const r=Math.random();
-  if(r<.07){const id=['basil','moss','forest_sprig','red_cap','blue_cap','death_cap','holly'][Math.random()*7|0];add(id);toast('Found '+ITEMS[id].n.toLowerCase()+' in the grass');ui()}
+  if(r<.07){const id=['basil','moss','forest_sprig','red_cap','blue_cap','death_cap','holly'][Math.random()*7|0];if(!room(id))return;add(id);toast('Found '+ITEMS[id].n.toLowerCase()+' in the grass');ui()}
   else if(r<.10){S.hp=Math.max(1,S.hp-4);flashHit();say('Hornets sting you! -4 health.');ui()}}
 
 // giant centipedes live in the Darkwood: homes in the forest's own coordinates (y 4-39), placed FY rows lower like the rest of the forest. They stay within 5 tiles of home, come back every morning

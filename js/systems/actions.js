@@ -50,6 +50,7 @@ function act(){
   if(WK.includes(t)){if(!npcAt(x,y)&&!placedAt(x,y)){P.x=x;P.y=y;sail=false;say('Back on land.');ui()}return}
   if(t===0&&x>=0&&y>=0&&x<MW&&y<WH){
     if(!eq('rod'))return say(S.eq.rod?'Equip your '+ITEMS[S.eq.rod].n.toLowerCase()+' in the Equipment menu first.':'You need a fishing rod.');
+    if(slotsUsed()>=bagSlots()&&!fishIds.some(i=>count(i)&&count(i)%STACK))return bagFull();
     if(S.sta<STAM.cast)return say('Too tired to fish. Sleep on the boat to rest.');
     spend(STAM.cast);fs=1;say('Line cast. Wait for the bite...');
     ft.push(setTimeout(()=>{fs=2;say('Bite! Tap Use now!');

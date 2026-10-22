@@ -12,7 +12,7 @@ function openMannequin(x,y){const i=mannIndex(x),m=mannOf(i),has=MANN_SLOTS.some
       MANN_SLOTS.forEach(k=>{if(!m[k])return;const theirs=m[k],mine=S.eq[k];add(theirs,1);S.eq[k]=theirs;m[k]=null;
         if(mine){S.bag[mine]--;if(!S.bag[mine])delete S.bag[mine];m[k]=mine}});
       mannDone('You change into the set. Your own pieces are on the mannequin now.')}
-    else if(o==='Take it all to my bag'){if(!has)return say('There is nothing on it.');MANN_SLOTS.forEach(k=>{if(m[k]){add(m[k],1);m[k]=null}});mannDone('You take everything off the mannequin.')}
+    else if(o==='Take it all to my bag'){if(!has)return say('There is nothing on it.');if(!MANN_SLOTS.every(k=>!m[k]||room(m[k])))return bagFull();MANN_SLOTS.forEach(k=>{if(m[k]){add(m[k],1);m[k]=null}});mannDone('You take everything off the mannequin.')}
     else if(o==='Dress it from my bag')mannDress(i)})}
 function mannDress(i){const m=mannOf(i),ids=Object.keys(S.bag).filter(id=>ITEMS[id]&&ITEMS[id].kind==='armour'&&MANN_SLOTS.includes(ITEMS[id].slot)&&S.bag[id]>0);
   if(!ids.length)return say('You have no armour to put on it.');

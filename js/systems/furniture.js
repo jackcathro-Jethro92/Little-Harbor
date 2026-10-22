@@ -32,7 +32,7 @@ function useFurn(p){const it=ITEMS[p.id],f=it.furn,opts=[];
   menu(it.n,opts,o=>{
     if(o==='Open')openFurn(p);
     else if(o==='Sleep'){if(!atBed()&&!inRoom(P.x,P.y))return say('Stand next to the bed to sleep.');sleep()}
-    else if(o==='Pick up'||o==='Move'){if(furnHeld(p))return say('Take everything out of it first.');S.placed=S.placed.filter(q=>q!==p);add(p.id);
+    else if(o==='Pick up'||o==='Move'){if(furnHeld(p))return say('Take everything out of it first.');if(!room(p.id))return bagFull();S.placed=S.placed.filter(q=>q!==p);add(p.id);
       if(o==='Move'){placing=p.id;ui();say('Choose a new spot, then tap Use.')}else{say(it.n+' picked up.');ui()}save()}})}
 function openFurn(p){const s=ITEMS[p.id].furn.store;p.st=p.st||{};openStash(s.title||ITEMS[p.id].n,p.st,s.cap,()=>openFurn(p),s.only)}
 // the picture: the prop, and on a rack the things it holds (up to three kinds, small)
