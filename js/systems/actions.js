@@ -23,6 +23,7 @@ function act(){
     if(n.enc)return encFight(n);
     if(fireTriggers('talk',n.n))return;
     if(n.dlg&&runDialogue(n.dlg))return;
+    if(n.inn)return innMenu(n);
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}
     if(n.store==='tailor'){menu("Seamstress Wynn's Tailor",['Try on clothes','Buy cloth and leather','Sell cloth and leather','Cancel'],o=>{if(o==='Try on clothes')openLook('tailor');else if(o==='Buy cloth and leather')openTrader('tailor','buy');else if(o==='Sell cloth and leather')openTrader('tailor','sell')});return}
     if(n.store==='barber'){menu("Barber Fenwick's",['Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook('barber')});return}
@@ -55,7 +56,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
-  const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
+  const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inN?'You sleep soundly at the tavern.':inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

@@ -237,3 +237,6 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 
 ## Batch G1 (22 Oct): shop interiors, step 1 of 3
 Built from the designer's starter rooms. Garrick, Alder, Astrid, Wynn and Fenwick now work behind counters inside their own shop rooms. G2: village shops, taverns. G3: carpenter furniture.
+
+## Batch G2 (22 Oct): village shops and taverns
+Odo, Bram, Murl and Lucie now work inside their own shop rooms. A tavern was added to the Walled Settlement and the Mountain Town: 100 gold rents a single or double room, and sleeping there works like sleeping at home. Next, G3: the carpenter's furniture.

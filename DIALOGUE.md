@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 115 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 119 placeholder.**
 
 ### Astrid (Astrid's Apothecary)
 - *placeholder:* Potions to heal, poisons to harm. Mind which is which.
@@ -56,6 +56,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Rowdy fan (Gladiators' Arena (Mountain Town))
 - *placeholder:* Blood and glory!
 
+### Lucie (Lucie's Gold & Gems)
+- *placeholder:* Gold, gems and a little magic.
+
 ### Bergit (Mountain Town)
 - *placeholder:* The mountain air keeps you young.
 - *placeholder:* Have you seen the guild fighters train? Loud lot.
@@ -71,9 +74,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Leif (Mountain Town)
 - *placeholder:* I wanted to be a gladiator once. Then I saw them.
 - *placeholder:* Mind the steps, they are steep.
-
-### Lucie (Mountain Town)
-- *placeholder:* Gold, gems and a little magic.
 
 ### Miner Gudrun (Mountain Town)
 - *placeholder:* Copper again today. Always copper.
@@ -106,6 +106,10 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Warden Orrin (Mountain Town)
 - *placeholder:* Welcome to the Mountain Town. Keep your blade sheathed in the streets.
 - *placeholder:* The arena is for fighting. The streets are not.
+
+### Odo (Odo's General Store)
+- *original:* Fresh fish, fair prices. Hand them over and I will pay.
+- *original:* Tuna fetch the best coin around here.
 
 ### Barnaby (Pirate camp (Volcano Island))
 - *placeholder:* Best tent on the island, this one.
@@ -164,6 +168,14 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Wren (The Darkwood)
 - *original:* I forage here for the alchemists. Dead ends hide the best finds.
 - *original:* Tall grass hides hornets. Do not say I did not warn you.
+
+### Innkeeper Ragna (The Frosty Tankard)
+- *placeholder:* Rooms are 100 gold a night. Clean sheets, I promise.
+- *placeholder:* Mind the stairs after a few mugs.
+
+### Innkeeper Hobb (The Salty Anchor)
+- *placeholder:* Rooms are 100 gold a night. Clean sheets, I promise.
+- *placeholder:* The stew is on the house. Well, not really.
 
 ### Aiko (Village)
 - *original:* I keep meaning to learn to fish.
@@ -231,10 +243,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ### Nao (Village)
 - *original:* Welcome to the harbor!
-
-### Odo (Village)
-- *original:* Fresh fish, fair prices. Hand them over and I will pay.
-- *original:* Tuna fetch the best coin around here.
 
 ### Old Tess (Village)
 - *original:* Forty years on these waters, and the sea still surprises me.

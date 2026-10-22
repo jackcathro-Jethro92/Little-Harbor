@@ -4,9 +4,9 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 
 | Name | Where they live | Job or role |
 | --- | --- | --- |
-| Odo | Village | General store keeper |
-| Bram | Village | Fishing and boat shop |
-| Murl | Village | Boat seller (boatyard) |
+| Odo | Odo's General Store | General store keeper |
+| Bram | Bram's Tackle Shop | Fishing and boat shop |
+| Murl | Murl's Boatyard | Boat seller (boatyard) |
 | Mara | Village | Villager |
 | Pip | Village | Villager |
 | Old Tess | Village | Villager |
@@ -41,6 +41,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Joss | Walled Settlement | Villager |
 | Garrick | Garrick's Forge | Blacksmith |
 | Tilda | Walled Settlement | Blacksmith's apprentice |
+| Innkeeper Hobb | The Salty Anchor | Innkeeper |
 | Gate Guard Bors | Walled Settlement | Gate guard |
 | Astrid | Astrid's Apothecary | Apothecary |
 | Seamstress Wynn | Wynn's Tailor | Tailor |
@@ -59,7 +60,8 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Tormund | Mountain Town | Villager |
 | Solveig | Mountain Town | Villager |
 | Leif | Mountain Town | Villager |
-| Lucie | Mountain Town | Goldsmith |
+| Lucie | Lucie's Gold & Gems | Goldsmith |
+| Innkeeper Ragna | The Frosty Tankard | Innkeeper |
 | Warden Orrin | Mountain Town | Mountain Town warden |
 | Warden Brann | Mountain Town | Mountain Town warden |
 | Miner Gudrun | Mountain Town | Miner |

@@ -28,6 +28,15 @@ SHOP_ROOMS.forEach(sr=>{const base=INTERIOR_DESIGNS[sr.design],ed=sr.edit||{},pr
     for(const dx of[0,-1,1,-2,2,-3,3,-4,4])for(const dy of[-1,-2])if(!spot&&tb.ax<=cx+dx&&cx+dx<tb.ax+tb.w&&free(cx+dx,tb.ay+dy))spot=[cx+dx,tb.ay+dy];
     if(!spot)for(let y=tb.ay-1;y>room.y0+2&&!spot;y--)for(let x=room.x0;x<=room.x1&&!spot;x++)if(free(x,y))spot=[x,y];
     if(spot){n.x=n.hx=spot[0];n.y=n.hy=spot[1];n.f='d';n.shopRoom=sr.id}}});
+// taverns: the innkeeper rents out rooms (INN_PRICE gold a night). Each guest room is built after all the shops (so no shop's room ever moves); its door leads back down into the tavern
+const INN_PRICE=100;
+SHOP_ROOMS.filter(sr=>sr.inn).forEach(sr=>{const n=NPC.find(q=>q.n===sr.npc),tav=sr.room;if(!n)return;n.inn=sr.inn.map(([label,design])=>{const key='inn_'+sr.id+'_'+design,g=buildRoom(key,INTERIOR_DESIGNS[design],label+' ('+sr.name+')');g.guest=true;
+  HALLS[key]={z:g,id:g.z,msg:'The innkeeper shows you up to your room. Sleep in the bed to rest.',name:label};ENTR.push({x:-1,y:-1,to:key,out:[tav.dx,tav.y1-1],back:'You step back down into the tavern.'});return{label,key}})});
+const inInn=()=>{const r=!sail&&zoneOf(P.x,P.y)>=30?intrOf(P.x,P.y):null;return!!(r&&r.guest)};
+function innMenu(n){const sr=SHOP_ROOMS.find(s=>s.id===n.shopRoom);
+  menu(sr.name,[...n.inn.map(r=>r.label+' ('+INN_PRICE+'g)'),'Talk','Cancel'],o=>{const r=n.inn.find(q=>o===q.label+' ('+INN_PRICE+'g)');
+    if(r){if(S.gold<INN_PRICE)return say('A night costs '+INN_PRICE+' gold, friend.');S.gold-=INN_PRICE;fade();const z=HALLS[r.key].z;P.x=P.rx=z.dx;P.y=P.ry=z.y1-1;P.f='u';say(HALLS[r.key].msg);toast(r.label);ui();save()}
+    else if(o==='Talk'){n.i=((n.i||0)+1)%n.say.length;dlgSay(n.n,n.say[n.i])}})}
 // talking across the counter: when the tile you face is in the way (a counter or table) and the shopkeeper stands just beyond it (or beside the spot straight beyond it), you talk to them
 function counterNpc(x,y){if(!INTBLK[y*MW+x]||sail)return null;const[dx,dy]=D[P.f],bx=x+dx,by=y+dy;
   return npcAt(bx,by)||(dx?npcAt(bx,by-1)||npcAt(bx,by+1):npcAt(bx-1,by)||npcAt(bx+1,by))||null}
