@@ -45,8 +45,8 @@ STORY_PEOPLE.unshift(
  {npc:'Mysterious Boy',if:{flag:'keys_to_return'},at:[236,113],f:'d',say:['[Placeholder] The stones are standing again. Thank you.']},
  {npc:'Fire Spirit',if:{flag:'keys_to_return'},at:[PH.dx,PH.y0+6],f:'d'},
  {npc:'Fire Spirit',hide:1});
-DLG.q10_boy={start:'a',nodes:{a:{who:'Mysterious Boy',text:"The water was right all along. Thank you, I'll repair my temple now. Im sure this world will be safe with you among us to defend us"}}};   // JACK
-DLG.q10_girl={start:'a',nodes:{a:{who:'Mysterious Girl',text:"From the moment i layed eyes on you i knew you were special. Im glad to call you my brother. I will seal the key so it is safe. I pray we don't have to fight again but always feel free to come back to this temple. Im sure we will meet again soon"}}};   // JACK
+DLG.q10_boy={start:'a',nodes:{a:{who:'Mysterious Boy',text:"The water was right all along. Thank you, I'll repair my temple now. I'm sure this world will be safe with you among us to defend us"}}};   // JACK
+DLG.q10_girl={start:'a',nodes:{a:{who:'Mysterious Girl',text:"From the moment I laid eyes on you I knew you were special. I'm glad to call you my brother. I will seal the key so it is safe. I pray we don't have to fight again but always feel free to come back to this temple. I'm sure we will meet again soon"}}};   // JACK
 DLG.q10_fire={start:'a',nodes:{a:{who:'Fire Spirit',text:"So it is true. Our long lost brother has returned. Thank you. Water has raised an island up from the sea just for you, so that you might find peace and a home to build your new life. Inside the letter is a key to a home on your new island. Keep this safe. You have done a great service to everyone on this land. Though they might not know it. This world owes you a great debt. Go well brother."}}};   // JACK
 DLG.q10_fire_wait={start:'a',nodes:{a:{who:'Fire Spirit',text:'[Placeholder] You carry my key, but the others are still waiting for theirs. Take them home first. Mine can wait.'}}};
 SCENES.q10_earth=[{wait:200},{say:'q10_girl'},{take:{earth_key:1}},{set:'earth_key_returned'},{toast:'The Earth spirit seals the Earth Key.'}];

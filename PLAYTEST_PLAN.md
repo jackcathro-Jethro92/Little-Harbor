@@ -129,48 +129,48 @@ Jack's handwritten notes, transcribed with spelling corrected. Ids continue from
 - Not done yet from earlier rounds: picking flax and herbs with the knife has no swing animation.
 
 # Playtest #4 (Jack's full playthrough, handwritten notes, 22 October 2026)
-Transcribed from six notebook pages, spelling corrected, in the order Jack wrote them. Ids continue from the third set (**P40** onwards). Three notes say "screenshot" (P55, P65, P77): the pictures have not arrived yet, so those wait for them. Nothing is built yet; the batches below are a proposal for Jack to reorder.
+Transcribed from six notebook pages, spelling corrected, in the order Jack wrote them. Ids continue from the third set (**P40** onwards). Three notes say "screenshot" (P55, P65, P77): the pictures have not arrived yet, so those wait for them. Batch A is built (below); the other batches are a proposal for Jack to reorder.
 
-| Id | Note | Batch |
-| --- | --- | --- |
-| P40 | Menus are very messy; some things could be condensed. A complete overhaul of the Pack and item equipping, more like Stardew | F |
-| P41 | Carry capacity might be worth adding, together with "Drive the character to make a base" (unclear: see questions), which means we also need a storage system (more like Stardew) | F |
-| P42 | Running out of stamina has a negative effect: a much slower walking speed. The swiftness potion could then help the player move faster again, but nothing regains stamina except sleep | A |
-| P43 | Taverns offer a place to sleep | G |
-| P44 | Run should have a chance to fail against wild creatures, and is not an option against pirates (combat) | C |
-| P45 | The font for numbers is hard to read | A |
-| P46 | Bram sells weapons; remove this, only the blacksmith sells weapons | A |
-| P47 | Island names brought into continuity across the map and the story text | A |
-| P48 | Story text: revise spelling mistakes | A |
-| P49 | Equipment menu: a section for the equipped tool, depending on what you need to do | F |
-| P50 | Clearing the rockpile outside the mountain settlement: the pickaxe only breaks one stone. Change the dialogue; if you break all the stones the NPC gives you a gold reward | A |
-| P51 | Remove the stamina penalty for movement | A |
-| P52 | When the character is hit by an attack make it more obvious: a flash or an animation showing the hit | C |
-| P53 | Announce when you have learned a new attack | C |
-| P54 | The carpenter: who sells furniture? | G (question) |
-| P55 | The character walks over the top of the Temple Tower (screenshot to come) | D |
-| P56 | Workbench art: twice the size | A |
-| P57 | Should be able to sell unwanted weapons | E |
-| P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E |
-| P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B |
-| P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B |
-| P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B |
-| P62 | Weapon strength needs to be developed and nerfed | C |
-| P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C |
-| P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B |
-| P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |
-| P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |
-| P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |
-| P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C |
-| P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B |
-| P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |
-| P71 | A limited number of uses for each attack | C |
-| P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |
-| P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |
-| P74 | Haven Isle should be further north than where it is now | D |
-| P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D |
-| P76 | The house on Haven Isle needs work on its interior | D |
-| P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D |
+| Id | Note | Batch | Status |
+| --- | --- | --- | --- |
+| P40 | Menus are very messy; some things could be condensed. A complete overhaul of the Pack and item equipping, more like Stardew | F |  |
+| P41 | Carry capacity might be worth adding, together with "Drive the character to make a base" (unclear: see questions), which means we also need a storage system (more like Stardew) | F |  |
+| P42 | Running out of stamina has a negative effect: a much slower walking speed. The swiftness potion could then help the player move faster again, but nothing regains stamina except sleep | A | **Built** (batch A) |
+| P43 | Taverns offer a place to sleep | G |  |
+| P44 | Run should have a chance to fail against wild creatures, and is not an option against pirates (combat) | C |  |
+| P45 | The font for numbers is hard to read | A | **Built** (batch A): digits use a clearer device font |
+| P46 | Bram sells weapons; remove this, only the blacksmith sells weapons | A | **Built** (batch A): the Old Sword moved to Garrick |
+| P47 | Island names brought into continuity across the map and the story text | A | Waiting for Jack to pick the names (see questions) |
+| P48 | Story text: revise spelling mistakes | A | **Built** (batch A): spelling and grammar only, meaning unchanged |
+| P49 | Equipment menu: a section for the equipped tool, depending on what you need to do | F |  |
+| P50 | Clearing the rockpile outside the mountain settlement: the pickaxe only breaks one stone. Change the dialogue; if you break all the stones the NPC gives you a gold reward | A | **Built** (batch A): each rock breaks on its own, 150 gold from Dell when all six are gone |
+| P51 | Remove the stamina penalty for movement | A | **Built** (batch A) |
+| P52 | When the character is hit by an attack make it more obvious: a flash or an animation showing the hit | C |  |
+| P53 | Announce when you have learned a new attack | C |  |
+| P54 | The carpenter: who sells furniture? | G (question) |  |
+| P55 | The character walks over the top of the Temple Tower (screenshot to come) | D |  |
+| P56 | Workbench art: twice the size | A | **Built** (batch A): two tiles wide, vice and tools |
+| P57 | Should be able to sell unwanted weapons | E |  |
+| P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E |  |
+| P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B |  |
+| P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B |  |
+| P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B |  |
+| P62 | Weapon strength needs to be developed and nerfed | C |  |
+| P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C |  |
+| P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B |  |
+| P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
+| P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |  |
+| P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |  |
+| P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C |  |
+| P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B |  |
+| P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |  |
+| P71 | A limited number of uses for each attack | C |  |
+| P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
+| P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |  |
+| P74 | Haven Isle should be further north than where it is now | D |  |
+| P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D |  |
+| P76 | The house on Haven Isle needs work on its interior | D |  |
+| P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D |  |
 
 (P55, P65 and P77 are the screenshot notes; they are the same kind of fault, the drawing order of the character over a gate or roof.)
 
@@ -183,10 +183,13 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **F, bag, equipment and storage:** P40, P41, P49. A redesign, so it needs Jack's answers first.
 - **G, taverns and furniture:** P43, P54.
 
-## Questions for Jack
-1. **P42 and P51:** do these fit together like this? Walking and sailing cost no stamina at all. Stamina is only spent by actions (casting, swinging, chopping and so on). At zero stamina you walk much slower, and only sleep (or food and potions) brings it back. Your note says "nothing will help regain stamina like sleep", so should food and the stamina tonic still restore stamina, or only sleep?
-2. **P41:** the note says "Drive the character to make a base". What did you mean to write? (Possibly "Drive the player to make a base".)
-3. **P41:** a carry limit and a storage chest at your house are a big change. Should there be a limit on how many different things the bag holds (Stardew has 12 slots that grow), or a total weight? Which do you prefer?
-4. **P54:** the carpenter. Is there a carpenter now? If not, where should one go (the Walled Settlement?) and which furniture should he sell? Is furniture something to place inside the house?
-5. **P56:** "Workbench Artifact design, two times in size": do you mean the workbench picture on the map should be drawn twice as big?
-6. **P43:** tavern: which town gets one, and how much should a night cost?
+## Jack's answers (22 Oct)
+1. **P42/P51:** walking and sailing cost no stamina; actions cost stamina as now; potions and food can restore stamina.
+2. **P41 "Drive the character":** disregard that note.
+3. **P41 carry capacity and storage:** disregard until the full user-interface redevelopment (batch F).
+4. **Carpenter (P54):** in one of the houses just outside the Darkwood's southern entrance. Sells home furnishings: beds, bookcases, tables and chairs, carpets, weapon racks, tool racks, chests of drawers, storage crates. More to come.
+5. **Workbench (P56):** the craftable bench placed in a house is a two-tile object, more detailed, with a vice and tools on top.
+6. **Taverns (P43):** one in the Walled Settlement and one in the Mountain Town; a night's sleep costs 100 gold.
+
+## Still open
+- **P47, island names.** The map still shows "Island 1", "Island 2", "Island 3", "Island 4", "Island 5", and the quest hints say "Island 3" and "Island 6", while Jack's own words say "fire island" and the map calls the volcano "Volcano Island" until the pirates come, then "Pirate Island". Names need Jack's choice for each island before they are changed everywhere.

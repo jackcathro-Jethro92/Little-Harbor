@@ -2,12 +2,17 @@
 const CAMP_R=5;
 // a camp placed since playtest #3 (`big:1`) is a tent two tiles wide and two tall plus a one-tile fire to its right; `x,y` is the fire. Everything else, and older camps, fill the one tile.
 const campTent=p=>[[p.x-2,p.y-1],[p.x-1,p.y-1],[p.x-2,p.y],[p.x-1,p.y]];
-function placedAt(x,y){return S.placed.find(p=>(p.x===x&&p.y===y)||(p.big&&p.id==='camp_kit'&&campTent(p).some(c=>c[0]===x&&c[1]===y)))}
+// the workbench (playtest #4) is two tiles wide: `x,y` is its left tile and it also fills the tile to the right (older benches grow to fit too)
+const WIDE={standard_bench:2};
+function placedAt(x,y){return S.placed.find(p=>(p.x===x&&p.y===y)||(WIDE[p.id]&&p.y===y&&x===p.x+1)||(p.big&&p.id==='camp_kit'&&campTent(p).some(c=>c[0]===x&&c[1]===y)))}
 const campOf=()=>S.placed.find(p=>p.id==='camp_kit');
 // the camp's tent: you can sleep when you stand next to the camp kit (within 2 tiles), the same as on the boat
 const atTent=()=>{const c=campOf();return !!c&&!sail&&Math.hypot(c.x-P.x,c.y-P.y)<=(c.big?3:2)};
+// where a station goes: the tile you face (a wide one extends to the right, or to the left of you when you face left so it never covers you)
+const stationSpot=id=>{const[fx,fy]=front();return[WIDE[id]&&P.f==='l'?fx-WIDE[id]+1:fx,fy]};
 let placing=null; // id of the station you are currently placing
-function placeWhy(id,x,y){
+function placeWhy(id,x,y,sub){
+  if(!sub&&WIDE[id]){const w=placeWhy(id,x+1,y,1);if(w)return w}
   if(sail)return 'Step onto land first.';
   const t=at(x,y),it=ITEMS[id];
   if(x===P.x&&y===P.y)return 'You are standing there.';
@@ -62,7 +67,7 @@ function placeItem(id){
     ui();save();return}
   if(id==='camp_kit'){const pl=campPlan(),why=pl.glob||(pl.tiles.find(q=>q[2])||[])[2];if(why){toast(why,2200);return say(why)}
     S.bag[id]--;if(!S.bag[id])delete S.bag[id];S.placed.push({id,x:pl.x+2,y:pl.y+1,big:1});placing=null;say('Camp set up. Stand close to the tent and tap Sleep to start a new day.');toast('Camp set up!');ui();save();return}
-  const[x,y]=front(),why=placeWhy(id,x,y);if(why){toast(why,2200);return say(why)}
+  const[x,y]=stationSpot(id),why=placeWhy(id,x,y);if(why){toast(why,2200);return say(why)}
   S.bag[id]--;if(!S.bag[id])delete S.bag[id];S.placed.push({id,x,y});placing=null;
   say(ITEMS[id].n+' placed.');toast(ITEMS[id].n+' placed!');ui();save()}
 function pickUp(p){

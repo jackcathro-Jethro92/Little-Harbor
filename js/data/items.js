@@ -29,7 +29,7 @@ const ITEMS={
  fiberglass_rod:{n:'Fiberglass rod',kind:'rod',price:600,power:1.7,wait:.7},
  carbon_rod:{n:'Carbon rod',kind:'rod',price:4000,power:2.3,wait:.55},
  wooden_sword:{n:'Wooden sword',kind:'weapon',wtype:'starter',price:0,damage:3,starter:1,desc:'A carved practice sword. Better than bare hands.'},
- sword:{n:'Old Sword',kind:'weapon',price:300,damage:5,desc:'A sturdy blade for dangerous islands.'},
+ sword:{n:'Old Sword',kind:'weapon',price:300,damage:5,smith:1,desc:'A sturdy blade for dangerous islands.'},
  pickaxe:{n:'Pickaxe',kind:'tool',price:200,use:'mine',power:1,desc:'Breaks rock and digs out ore.'},
  woodcutters_axe:{n:"Woodcutter's axe",kind:'tool',price:200,use:'chop',power:1,desc:'Fells trees for timber.'},
  knife:{n:'Knife',kind:'tool',price:60,use:'cut',power:1,desc:'A sharp little blade for cutting flax.'},

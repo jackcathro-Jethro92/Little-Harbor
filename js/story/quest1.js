@@ -17,11 +17,11 @@ STORY_PEOPLE.push(
  {npc:'Villager',if:{flag:'q1_villager_here'},at:[156,121],f:'d'},
  {npc:'Villager',hide:1});
 ENCOUNTERS.push({id:'q1_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[283,41]},{foe:'pirate_grunt',at:[283,39]},{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});   // two on the boardwalk path to the temple, three in the courtyard
-DLG.q1_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!"}}};   // JACK
+DLG.q1_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:"This isn't over! You'll see! Just wait till the rest of us get here! Then you'll wish you had never messed with The Fleet!"}}};   // JACK
 DLG.q1_stranger={start:'a',nodes:{
  a:{who:'Old Stranger',text:'[Placeholder] ...Is it safe? Have they gone?',next:'b'},
- b:{who:'Old Stranger',text:"Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough"}}};   // JACK (the second line)
-DLG.q1_villager={start:'a',nodes:{a:{who:'Villager',text:"Have you heard! Pirates have been sited taking of fire island and setting up some kind of camp! Id steer clear of those waters if i was you. They look mean alright. You should go talk to Bjorn. I think i is looking for you."}}};   // JACK
+ b:{who:'Old Stranger',text:"Thank you so much. They were just about to break into the sacred Vault. Thankfully you got my letter and made it here in time. Take this compass as a thanks. It will help show you the way when the seas get rough.."}}};   // JACK (the second line)
+DLG.q1_villager={start:'a',nodes:{a:{who:'Villager',text:"Have you heard! Pirates have been sighted taking over Fire Island and setting up some kind of camp! I'd steer clear of those waters if I was you. They look mean alright. You should go talk to Bjorn. I think he is looking for you."}}};   // JACK
 SCENES.q1_aftermath=[
  {wait:400},{say:'q1_pirate'},{toast:'The pirates have fled!'},
  {fade:'out',ms:500},{tp:['You',283,33]},{set:'q1_stranger_out'},{face:['You','u']},{face:['Old Stranger','d']},{fade:'in',ms:700},

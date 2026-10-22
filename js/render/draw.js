@@ -28,9 +28,9 @@ function draw(){
     if(k0==='claim'||k0==='prefab'||k0==='garden'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);
       m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Tap Use to place it.'}
-    else{const[fx,fy]=front(),w=placeWhy(placing,fx,fy);
+    else{const[fx,fy]=stationSpot(placing),w=placeWhy(placing,fx,fy),fw=WIDE[placing]||1;
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
-      g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,T-2,T-2);m=w||'It fits! Tap Use to place it.'}
+      g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,fw*T-2,T-2);m=w||'It fits! Tap Use to place it.'}
     if($('msg').textContent!==m)say(m)}
   const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
