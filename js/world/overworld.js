@@ -20,7 +20,8 @@ rect(39,130,44,135,(x,y)=>{if(at(x,y)===35)setT(x,y,36)});
 // islands from the sketch: [centre x, centre y, radius x, radius y, seed]
 [[206,81,8,7,1],[190,136,8,10,2],[244,138,32,31,3],[128,78,10,10,4],[144,170,9,8,6],[283,34,17,14,5],[71,28,14,13,8],[60,42,4,4,9],[82,43,4,4,10],[74,18,5,5,11]].forEach(a=>isl(...a));
 // Sailors' grave rocks
-for(let k=0;k<17;k++){const cx=74+hs(k,1)%33,cy=61+hs(k,2)%50,r=1+hs(k,3)%2;rect(cx-r,cy-r,cx+r,cy+r,(x,y)=>{if(!at(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1&&x>=0&&y>=0)setT(x,y,32)})}
+// (playtest #4: jagged rock like the stone barrier along the north-west coast, tile 54, in ragged clumps 1 to 3 tiles wide, so a boat must steer round them)
+for(let k=0;k<17;k++){const cx=74+hs(k,1)%33,cy=61+hs(k,2)%50,r=1+hs(k,3)%3;rect(cx-r-1,cy-r-1,cx+r+1,cy+r+1,(x,y)=>{if(!at(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1+(hs(x*7+k,y*13)%3-1)*r&&x>=0&&y>=0)setT(x,y,54)})}
 // trees, flax, ore and herbs on the new land
 for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1)continue;const n=hs(x*3,y*5)%100;M[i]=n<13?4:n<18?19:1}
 for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){if(inV(x,y))continue;const i=y*MW+x;if(M[i]!==1&&M[i]!==2)continue;
