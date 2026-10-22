@@ -3,14 +3,14 @@
 // (js/render/camp.js). Drawing only: nothing here blocks anyone. Some houses burn (a few flame tongues on the roof and a column of smoke), and every few seconds each ship fires: a flash at its side, a dark ball flying in an arc
 // to a spot on the island, and a burst where it lands. The timing comes from the clock, so nothing is stored.
 let RAID_ON=false;
-const RAID_BURN=[1,3,4,7],RAID_SHOTS=[[0,150,108],[1,170,112],[2,150,121],[3,162,119],[0,153,114],[1,164,107],[2,146,116],[3,158,123]];   // houses that burn (index among the village houses); [ship, target tile x, y] for each volley
+const RAID_BURN=[2,5,7,8],RAID_SHOTS=[[0,150,108],[1,170,112],[2,150,121],[3,162,119],[0,153,114],[1,164,107],[2,146,116],[3,158,123]];   // houses that burn (index among the village houses; since playtest #4 they are the four on either side of the main road, where the fighting is); [ship, target tile x, y] for each volley
 const raidHouses=()=>BL.filter(b=>b.roof&&!b.sign&&!b.ship&&b.x>=140&&b.x<=176&&b.y>=99&&b.y<=125);
 function raidFlames(x,y,w,t,seed){for(let i=0;i<5;i++){const fx=x+4+i*(w-8)/4,ph=t/95+seed*3+i*1.9,h=9+Math.sin(ph)*3+Math.sin(ph*1.7)*2;
     g.fillStyle='#c8321a';g.beginPath();g.moveTo(fx-4,y);g.lineTo(fx,y-h);g.lineTo(fx+4,y);g.fill();
     g.fillStyle='#f2a22e';g.beginPath();g.moveTo(fx-2.5,y);g.lineTo(fx,y-h*.7);g.lineTo(fx+2.5,y);g.fill();
     g.fillStyle='#ffe27a';g.fillRect(fx-1,y-h*.35,2,h*.35)}}
-function raidSmoke(x,y,t,seed){for(let k=0;k<6;k++){const a=((t/90+seed*17+k*11)%66)/66,px=x+Math.sin(a*5+k)*3+a*14,py=y-4-a*52,r=3+a*7;
-    g.fillStyle='rgba(60,56,60,'+(.5*(1-a)).toFixed(2)+')';g.beginPath();g.arc(px,py,r,0,7);g.fill()}}
+function raidSmoke(x,y,t,seed){for(let k=0;k<14;k++){const a=((t/80+seed*17+k*5)%70)/70,px=x+Math.sin(a*5+k)*4+a*20,py=y-4-a*76,r=3+a*11;   // thick black smoke (playtest #4: more of it, and darker)
+    g.fillStyle='rgba(16,14,18,'+(.75*(1-a)).toFixed(2)+')';g.beginPath();g.arc(px,py,r,0,7);g.fill()}}
 // the shops are shut: two planks nailed across each shop's door and a small CLOSED board hanging from them
 function raidBoards(b,cx,cy){const x=(b.x+1)*T-cx,y=(b.y+1)*T-cy;if(x<-20||x>VW+20||y<-20||y>VH+20)return;const O='#2a1a0c';
   g.fillStyle=O;g.fillRect(x-1,y+2,18,4);g.fillRect(x-1,y+9,18,4);g.fillStyle='#a8743f';g.fillRect(x,y+3,16,2);g.fillRect(x,y+10,16,2);g.fillStyle='#d8b27a';g.fillRect(x,y+3,16,1);g.fillRect(x,y+10,16,1);
@@ -30,3 +30,12 @@ function drawRaid(cx,cy,t){const hs=raidHouses();BL.forEach(b=>{if(b.sign&&b.x>=
 function drawTowerRaid(cx,cy,t){const px=212*T-cx,py=200*T-cy;if(px<-120||px>VW+120||py<-120||py>VH+80)return;
   [[-34,10],[34,18],[0,-6]].forEach(([dx,dy],i)=>raidSmoke(px+8+dx,py+dy,t,i+3));
   [[-60,40],[52,46],[-20,66]].forEach(([dx,dy],i)=>raidFlames(px+8+dx,py+dy,20,t,i+5))}
+
+// the burnt village (flag village_burnt, set when the last pirate has fled in Quest 7): the four houses that burned are blackened ruins with broken rafters, ash and a few dying embers (playtest #4)
+function raidRuin(b,cx,cy,t,i){const x=b.x*T-cx,y=b.y*T-cy;if(x<-60||x>VW+20||y<-40||y>VH+30)return;const W=b.w*T,O='#120e0c';
+  g.fillStyle=O;g.fillRect(x,y,W,T*2);for(let k=0;k<W;k+=3){const h=((k*13+i*7+(k>>2)*5)%11)-2;if(h>0)g.fillRect(x+k,y-h,2+(k%2),h)}   // broken rafters along the top
+  g.fillStyle='#2a2220';g.fillRect(x+2,y+3,W-4,T*2-5);g.fillStyle='#3e322a';for(let k=3;k<W-8;k+=11){g.fillRect(x+k,y+4+((k+i)%3)*3,8,2);g.fillRect(x+k+3,y+14+((k+i)%4)*2,2,7)}   // fallen beams
+  g.fillStyle='#6a625c';g.fillRect(x+4,y+T*2-6,10,3);g.fillRect(x+W-16,y+T*2-8,9,4);g.fillRect(x+20,y+T*2-5,8,2);   // ash
+  const f=((t/260+i*3)|0)%4;g.fillStyle=f<2?'#e8632e':'#a8321a';g.fillRect(x+9,y+T*2-9,2,2);g.fillRect(x+W-22,y+T*2-7,2,2);   // embers
+  for(let k=0;k<3;k++){const a=((t/160+i*13+k*22)%66)/66;g.fillStyle='rgba(110,106,108,'+(.35*(1-a)).toFixed(2)+')';g.beginPath();g.arc(x+W/2+Math.sin(a*4+k)*3,y-4-a*26,2+a*4,0,7);g.fill()}}
+function drawRuins(cx,cy,t){const hs=raidHouses();RAID_BURN.forEach((k,i)=>{const b=hs[k%Math.max(1,hs.length)];if(b)raidRuin(b,cx,cy,t,i)})}

@@ -152,17 +152,17 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P56 | Workbench art: twice the size | A | **Built** (batch A): two tiles wide, vice and tools |
 | P57 | Should be able to sell unwanted weapons | E |  |
 | P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E |  |
-| P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B |  |
-| P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B |  |
-| P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B |  |
+| P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B | **Built** (batch B): seven pirates scattered up the hill path |
+| P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B | **Built** (batch B): hop, red "!", walk up, placeholder line, then the battle. Decided (Jack, 22 Oct) |
+| P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B | **Built** (batch B): Barron walks down the path to you after the last pirate |
 | P62 | Weapon strength needs to be developed and nerfed | C |  |
 | P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C |  |
-| P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B |  |
+| P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B | **Built** (batch B): see the notes below |
 | P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
 | P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |  |
 | P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |  |
 | P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C |  |
-| P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B |  |
+| P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B | **Built** (batch B): twelve pirates round the spiral path |
 | P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |  |
 | P71 | A limited number of uses for each attack | C |  |
 | P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
@@ -193,3 +193,9 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 
 ## Still open
 - **P47, island names.** The map still shows "Island 1", "Island 2", "Island 3", "Island 4", "Island 5", and the quest hints say "Island 3" and "Island 6", while Jack's own words say "fire island" and the map calls the volcano "Volcano Island" until the pirates come, then "Pirate Island". Names need Jack's choice for each island before they are changed everywhere.
+
+## Batch B notes (22 Oct)
+- **P60:** sight rules as Jack described: the pirate hops with a "!", walks up, says a short placeholder line, then the battle starts. It applies to every pirate that stands in the world waiting to be fought (the temple pirates, the raiders in the village, the guards at the Sea temple). A pirate sees you within 6 tiles on foot with nothing solid in between.
+- **P61:** Barron comes after the last pirate of the path is beaten (and you are near the top), rather than after the explosion on its own, so you do not meet the boss with pirates still behind you.
+- **P64, my choices for Jack to change:** the houses that burn are now the four beside the main road (before they were on the edges); the burnt ruins stay for good (the old overnight repair is gone).
+- **Not done:** P44 (Run), P52 and the other fighting notes are batch C.

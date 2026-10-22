@@ -50,10 +50,10 @@ function seesPlayer(n){if(Math.abs(n.x-P.x)>SIGHT_R||Math.abs(n.y-P.y)>SIGHT_R)r
   const dx=P.x-n.x,dy=P.y-n.y,k=Math.max(Math.abs(dx),Math.abs(dy));
   for(let i=1;i<k;i++){const x=Math.round(n.x+dx*i/k),y=Math.round(n.y+dy*i/k),t=at(x,y);if(t!==0&&!WK.includes(t))return false}return true}
 // the shortest way to a tile beside the player (breadth-first over open ground), or null
-function encPath(n){const start=n.x+','+n.y,prev={[start]:null},q=[[n.x,n.y]];
+function encPath(n,maxd){maxd=maxd||SIGHT_R+2;const start=n.x+','+n.y,prev={[start]:null},q=[[n.x,n.y]];
   const near=(x,y)=>Math.abs(x-P.x)+Math.abs(y-P.y)===1;if(near(n.x,n.y))return[];
-  for(let h=0;h<q.length&&q.length<500;h++){const[x,y]=q[h];
-    for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,k=nx+','+ny;if(k in prev||!walkable(nx,ny)||Math.abs(nx-n.x)>SIGHT_R+2||Math.abs(ny-n.y)>SIGHT_R+2)continue;prev[k]=x+','+y;
+  for(let h=0;h<q.length&&q.length<4000;h++){const[x,y]=q[h];
+    for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,k=nx+','+ny;if(k in prev||!walkable(nx,ny)||Math.abs(nx-n.x)>maxd||Math.abs(ny-n.y)>maxd)continue;prev[k]=x+','+y;
       if(near(nx,ny)){const path=[[nx,ny]];let c=x+','+y;while(c!==start){const[cx,cy]=c.split(',').map(Number);path.unshift([cx,cy]);c=prev[c]}return path}
       q.push([nx,ny])}}
   return null}

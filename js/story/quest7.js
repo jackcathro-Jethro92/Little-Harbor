@@ -2,9 +2,9 @@
 // The story: as the player leaves the Sky island (the first time they get into the boat there after Quest 6) a seagull brings Bjorn's letter: the village is under attack. From then on the village is in its raid variant
 // (flag village_attack, row `village_raid` of VARIANTS): four pirate ships offshore (tile 101 under them blocks boats), burning roofs with smoke and cannon fire (js/render/raid.js), and villagers with new things to say.
 // On landing, three waves of pirates come ashore one after the other (encounters q7_w1 to q7_w3, fought one by one: 3, 4 and 5 pirates). A villager hands the player a healing potion between waves. When the last falls the
-// pirates flee, shouting that the boss will be finished at the tower (Jack's words). The next morning the village is repaired (village_repaired; the raid variant switches off).
+// pirates flee, shouting that the boss will be finished at the tower (Jack's words). When the last falls the screen fades to black and, as it clears, every pirate and ship is gone and the fires are out, but the four houses that burned are now blackened ruins that stay that way (flag village_burnt, drawn by `drawRuins` in js/render/raid.js; playtest #4).
 // The spoken lines marked JACK are Jack's own words from STORY_TEXT.md, word for word (also in JACKS_LINES.txt). Everything else is a PLACEHOLDER until he writes his own.
-// Switches: q7_started, village_attack, enc_q7_w1_done to enc_q7_w3_done, q7_done, village_repaired.
+// Switches: q7_started, village_attack, enc_q7_w1_done to enc_q7_w3_done, q7_done, village_burnt.
 QUESTS.push({id:'q7',name:'Under Attack',
  steps:['[Placeholder] The village is under attack! Sail home at once.','[Placeholder] Pirates are landing at the pier. Drive them off.','[Placeholder] More pirates are in the middle of the village. Drive them off.','[Placeholder] The last of the raiders are at the top of the village. Drive them off.'],
  goals:[[156,127],[156,122],[156,115],[156,108]]});
@@ -49,14 +49,13 @@ DLG.q7_flee={start:'a',nodes:{a:{who:'Pirate grunt',text:"Let’s get out of her
 SCENES.q7_wave1=[{encounter:'q7_w1'},{wait:300},{msg:'Pirates are landing at the pier!'},{step:1}];
 SCENES.q7_between1=[{wait:300},{give:{healing_potion:1}},{toast:'A villager gives you a healing potion.'},{msg:'[Placeholder] "Take this! More of them are coming up the road!"'},{encounter:'q7_w2'},{step:2}];
 SCENES.q7_between2=[{wait:300},{give:{healing_potion:1}},{toast:'A villager gives you a healing potion.'},{msg:'[Placeholder] "Take this! The last of them are at the top of the village!"'},{encounter:'q7_w3'},{step:3}];
-SCENES.q7_flee=[{wait:300},{say:'q7_flee'},{toast:'The pirates fled!'},{set:'q7_done'},{set:'tower_raided'},{done:'q7'},{quest:['q8',0]},{msg:'[Placeholder] The boss will be at the Temple Tower! Sail there at once. The village can be mended in the morning.'}];
+SCENES.q7_flee=[{wait:300},{say:'q7_flee'},{toast:'The pirates fled!'},{set:'q7_done'},{set:'tower_raided'},{done:'q7'},{quest:['q8',0]},
+ {fade:'out',ms:900},{wait:600},{clear:'village_attack'},{set:'village_burnt'},{wait:400},{fade:'in',ms:1400},{msg:'[Placeholder] The boss will be at the Temple Tower! Sail there at once. The village can be mended in the morning.'}];
 TRIGGERS.push(
  // the first time the player gets into the boat on the Sky island after Quest 6
  {id:'q7_letter',when:{board:[205,95,280,172]},if:{flag:'q6_done',noflag:'q7_started'},do:[{set:'q7_started'},{set:'village_attack'},{quest:['q7',0]},{letter:'q7_letter'}]},
  {id:'q7_landing',when:{walk:[141,99,176,127],n:1},if:{quest:'q7',step:0},do:[{scene:'q7_wave1'}]},
  {id:'q7_w1_beaten',when:{beaten:'q7_w1'},do:[{scene:'q7_between1'}]},
  {id:'q7_w2_beaten',when:{beaten:'q7_w2'},do:[{scene:'q7_between2'}]},
- {id:'q7_w3_beaten',when:{beaten:'q7_w3'},do:[{scene:'q7_flee'}]},
- // the next morning the village is mended
- {id:'q7_repair',when:{day:1},if:{flag:'q7_done',noflag:'village_repaired'},do:[{clear:'village_attack'},{set:'village_repaired'},{toast:'The villagers have mended the village overnight.'}]}
+ {id:'q7_w3_beaten',when:{beaten:'q7_w3'},do:[{scene:'q7_flee'}]}
 );
