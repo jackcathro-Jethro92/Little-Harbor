@@ -46,6 +46,7 @@ function draw(){
     if(sail)boatArt(bt,vert,bdir,bx,by+bob,'front');
   }});
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
+  if(TRAPFX&&TRAPFX.until>t)drawTrapFx(cx,cy,t);   // a dart or a jet of flame in the Depths (js/systems/traps.js)
   if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);
   if(RAID_ON&&zoneOf(P.x,P.y)===0)drawRaid(cx,cy,t);
   if(flag('village_burnt')&&zoneOf(P.x,P.y)===0)drawRuins(cx,cy,t);   // the burnt houses after Quest 7 (js/render/raid.js)
