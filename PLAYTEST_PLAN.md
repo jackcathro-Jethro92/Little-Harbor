@@ -246,3 +246,6 @@ Jack's answers: furniture goes in homes and at camp; racks work as storage (weap
 
 ## Batch F1 (22 Oct): the new Bag
 Sections on the left and a grid of icon squares, as in Jack's sketch. F2 vendors, F3 equipment and the single tool slot, F4 carry capacity (20 slots) follow.
+
+## Batch F2 (22 Oct): the Vendors screen
+Shops use the Bag's layout: sections on the left, a grid of squares, buttons below. Crates and ship storage still use the old list (they can move to the grid later).

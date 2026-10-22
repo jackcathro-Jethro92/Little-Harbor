@@ -61,15 +61,16 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #btitle{flex:1;text-align:center;background:#383838;color:#f8f4dc;border-radius:6px;padding:7px;font-size:18px;font-weight:700;letter-spacing:2px}
 #bcap{background:#f8f4dc;border:3px solid #383838;border-radius:6px;padding:5px 9px;font-size:15px;font-weight:700}
 #bmain{flex:1;display:flex;gap:8px;min-height:0}
-#btabs{width:108px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+#btabs,#stabs{width:108px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
 .btab{background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:14px;font-weight:700;padding:9px 4px;font-family:inherit;text-align:center}
 .btab.cur{background:#383838;color:#f8f4dc}
-#bgrid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:min-content;gap:5px;align-content:start;overflow-y:auto;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:6px}
+#bgrid,#sgrid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:min-content;gap:5px;align-content:start;overflow-y:auto;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:6px}
 .bcell{position:relative;aspect-ratio:1;background:#fffbe8;border:3px solid #b9b394;border-radius:6px;padding:2px;display:block}
 .bcell.cur{border-color:#d83828;outline:2px solid #d83828}
 .bcell canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
 .bcell .bn{position:absolute;right:1px;bottom:0;font-size:11px;font-style:normal;font-weight:700;color:#383838;background:#f8f4dc;border-radius:3px;padding:0 2px;line-height:1.1}
 .bcell .be{position:absolute;left:1px;top:0;font-size:10px;font-style:normal;font-weight:700;color:#f8f4dc;background:#4a74c0;border-radius:3px;padding:0 3px;line-height:1.3}
+.bcell.dim{opacity:.45}
 .bnone{grid-column:1/-1;color:#8a8672;font-size:15px;padding:10px 4px}
 .brow{display:flex;align-items:center;gap:4px;padding:9px 6px;font-size:16px;font-weight:700;border-bottom:2px dotted #c9c3a4;cursor:pointer}
 .brow .bn{flex:1}.brow .bcur{visibility:hidden;color:#d83828}.brow.cur .bcur{visibility:visible}.brow.dim{color:#8a8672;cursor:default}
@@ -258,3 +259,19 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 @keyframes btFire{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
 @keyframes quake{0%,100%{transform:translate(0,0)}15%{transform:translate(-3px,2px)}30%{transform:translate(3px,-2px)}45%{transform:translate(-2px,-1px)}60%{transform:translate(2px,2px)}80%{transform:translate(-1px,1px)}}
 #c.quake{animation:quake .22s linear 5}
+
+/* the Vendors screen (batch F2): the Bag's layout with the shop's sections and goods */
+#store.grid{background:#c9965a;justify-content:flex-start;align-items:stretch;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));font-family:'LHDigits','Pixelify Sans',ui-monospace,monospace;color:#383838;overflow:hidden}
+#store:not(.grid) #sview,#store.grid #items{display:none}
+#store.grid #st{background:#383838;color:#f8f4dc;border-radius:6px;padding:8px;font-size:17px;text-align:center;letter-spacing:1px;margin:0}
+#sview{display:flex;flex-direction:column;gap:8px;flex:1;min-height:0}
+#sswitch button{width:100%;background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:16px;font-weight:700;padding:8px;font-family:inherit}
+.snote{font-size:14px;color:#f8f4dc;padding:4px 2px}
+#smain{flex:1;display:flex;gap:8px;min-height:0}
+#sdesc{background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:8px;min-height:96px;font-size:15px;line-height:1.25;display:flex;flex-direction:column;gap:8px}
+#stop{display:flex;gap:10px;align-items:center}
+#sdi{width:48px;height:48px;image-rendering:pixelated;flex:none}
+#sbtns{display:flex;gap:8px}
+#sbtns button{flex:1;background:#4f9a5a;color:#fff;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:16px;font-weight:700;padding:8px;font-family:inherit}
+#sbtns button:disabled{background:#a8a48c;opacity:.7}
+#store.grid #sclose{background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:18px;padding:8px 14px!important;margin:0!important;font-family:inherit}
