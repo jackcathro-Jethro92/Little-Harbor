@@ -12,7 +12,8 @@ function act(){
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();
   {const en=!sail&&ENTR.find(q=>q.x===x&&q.y===y);if(en)return enterHall(en)}
   {const t2=at(x,y);if(!sail){if(t2===44||(t2===51&&!inFZ(P.x,P.y)))return enterForest(y<130);if((t2===43||t2===51)&&inFZ(P.x,P.y))return exitForest(y<FZ.y0+16);if(t2===46)return pickup(x,y)}}
-  if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome();
+  if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome(S.home);
+  if(S.isle&&!sail&&x===S.isle.x+1&&y===S.isle.y+1)return enterHome(S.isle);
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
   const tt=at(x,y);if(!sail&&PICKUPS[tt])return pickupTile(x,y,tt);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);

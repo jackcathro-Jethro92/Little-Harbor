@@ -27,7 +27,7 @@ function placeWhy(id,x,y,sub){
   if(placedAt(x,y))return 'Something is already there.';
   if((B.x===x&&B.y===y)||enemyAt(x,y))return "You can't place that there.";
   if(it.place==='camp')return inRoom(x,y)?"You can't set up camp indoors.":campOf()?'You already have a camp set up.':'';
-  if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';
+  if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';
   if(inRoom(x,y))return '';
   const c=campOf(),nearHome=S.home&&Math.hypot(x-(S.home.x+1),y-(S.home.y+1))<=CAMP_R,nearCamp=c&&Math.hypot(c.x-x,c.y-y)<=CAMP_R;
   if(nearHome||nearCamp||onIsle(x,y))return '';   // (on Haven Isle stations go anywhere on the island, not only near the house)
@@ -42,7 +42,7 @@ function campPlan(){const [fx,fy]=front(),f=P.f,x0=f==='l'?fx-2:f==='r'?fx:fx-1,
   const why=(x,y)=>{const k=at(x,y);if(inRoom(x,y))return "You can't set up camp indoors.";if(k===0)return "That's water.";if(zoneOf(x,y)>=3)return "You can't place that here.";
     if(!WK.includes(k)||CAMP_BAD.includes(k))return 'Something is in the way.';
     if(npcAt(x,y)||(x===P.x&&y===P.y)||(B.x===x&&B.y===y)||enemyAt(x,y)||placedAt(x,y)||gardenAt(x,y)||(typeof animalAt==='function'&&animalAt(x,y)))return 'Something is in the way.';
-    if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';return ''};
+    if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';return ''};
   for(let y=y0;y<y0+2;y++)for(let x=x0;x<x0+3;x++)t.push([x,y,why(x,y)]);
   return{x:x0,y:y0,w:3,h:2,tiles:t,glob:sail?'Step onto land first.':campOf()?'You already have a camp set up.':''}}
 function plan(id){if(id==='camp_kit')return campPlan();const it=ITEMS[id],[fx,fy]=front(),t=[];

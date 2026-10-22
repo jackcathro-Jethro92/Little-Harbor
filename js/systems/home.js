@@ -1,6 +1,7 @@
 // ---------- home and garden ----------
-function enterHome(){const gr=S.home&&S.home.grand;P.x=P.rx=gr?HG.dx:IR.dx;P.y=P.ry=gr?HG.dy:IR.dy;P.f='u';say('You step inside your home.');toast('Home sweet home');ui()}
-function exitHome(){P.x=P.rx=S.home.x+1;P.y=P.ry=S.home.y+2;P.f='d';say('You step back outside.');ui()}
+// two homes are possible (playtest #4): the cottage (S.home) and the Haven house (S.isle); each has its own interior room
+function enterHome(h){const gr=h&&h.grand;P.x=P.rx=gr?HG.dx:IR.dx;P.y=P.ry=gr?HG.dy:IR.dy;P.f='u';say('You step inside your home.');toast('Home sweet home');ui()}
+function exitHome(){const h=(inHG(P.x,P.y)&&S.isle)?S.isle:S.home;P.x=P.rx=h.x+1;P.y=P.ry=h.y+2;P.f='d';say('You step back outside.');ui()}
 function gardenAt(x,y){for(const g of S.gardens)if(x>=g.x&&x<g.x+3&&y>=g.y&&y<g.y+2)return{g,i:(y-g.y)*3+(x-g.x)};return null}
 function useGarden(c){const cell=c.g.cells[c.i];
   if(!cell){const own=Object.keys(CROPS).filter(count),empty=c.g.cells.every(q=>!q);
