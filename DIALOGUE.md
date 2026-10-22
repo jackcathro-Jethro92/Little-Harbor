@@ -356,6 +356,10 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 ## Dialogues in the DLG table (the story's text, by id)
 
+- *placeholder* `pirate_spot.a` Pirate: [Placeholder] Hey, you! Stop right there!
+- *placeholder* `pirate_spot.b` Pirate: [Placeholder] A visitor! This is as far as you go.
+- *placeholder* `pirate_spot.c` Pirate: [Placeholder] You are not getting past me!
+- *placeholder* `pirate_spot.d` Pirate: [Placeholder] The captain said to watch for you. Come on, then!
 - *placeholder* `fest_c1.a` Murl: [Placeholder] Welcome, friends, to the Little Harbor Sea Festival!
 - *placeholder* `fest_c2.a` Murl: [Placeholder] Every year we thank the sea for its gifts, and welcome those who will fish its waters.
 - *placeholder* `fest_c3.a` Murl: [Placeholder] This year our newest fisher joins us. Come forward, friend!

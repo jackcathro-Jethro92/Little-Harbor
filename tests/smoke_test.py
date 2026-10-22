@@ -29,7 +29,7 @@ def load(b, url, save):
     pg = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
     errs = []; pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("response", lambda r: r.status >= 400 and r.url.startswith("http://127.0.0.1") and errs.append("%d %s" % (r.status, r.url)))
-    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}")
+    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1")   # (pirates that spot you are tested on their own, near the end)
     pg.goto(url)
     pg.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(save)); pg.reload(); pg.wait_for_timeout(400)
     return pg, errs
@@ -960,6 +960,16 @@ def check(b, url):
     pg.wait_for_function("dlgActive()&&/take this for your trouble/.test($('dlg').textContent)", timeout=8000)   # then the reward line
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
+    # playtest #4 (P60): a pirate that sees you hops with a "!", walks up beside you, says a line, and then the battle starts
+    ev("sail=false;SCENE=null;BATTLE=null;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{if(n.enc)n.coolUntil=1e15});ENCOUNTERS.push({id:'t_sight',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[0,-4]}]});startEncounter('t_sight');ENC_SIGHT=true")
+    pg.wait_for_function("SCENE!==null", timeout=4000)
+    assert ev("(()=>{const n=encFigures('t_sight')[0];return n.alertUntil>performance.now()&&n.alertAt>0})()"), "a pirate that sees you shows the alert mark"
+    pg.wait_for_function("dlgActive()&&/Placeholder/.test($('dlg').textContent)", timeout=8000)
+    assert ev("(()=>{const n=encFigures('t_sight')[0];return Math.abs(n.x-P.x)+Math.abs(n.y-P.y)===1})()"), "the pirate walked up beside you before speaking"
+    ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("BATTLE!==null", timeout=4000)
+    assert ev("BATTLE.foes.length===1"), "the battle starts after the pirate's line"
+    ev("ENC_SIGHT=false;bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=4000)
+    ev("encClear(encRow('t_sight'));SCENE=null;NPC.forEach(n=>{n.coolUntil=0})")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places
