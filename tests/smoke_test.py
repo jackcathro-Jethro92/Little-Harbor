@@ -498,7 +498,7 @@ def check(b, url):
     ev("setFlag('t_scene_done',0);TRIGGERS.push({id:'t_sc_trg',when:{talk:'Murl'},do:[{scene:'t_scene'},{set:'t_after'}]})"); ev("(()=>{const n=NPC.find(q=>q.n==='Murl');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(300); ev("skipScene()")
     assert ev("flag('t_scene_done')&&flag('t_after')&&SCENE===null"), "a trigger starts a scene and carries on after it"
     # gates (2.5): a test boulder across two grass tiles blocks until its flag is set (by a trigger, or by Use with the needed tool), stays open after a reload, and never walls anyone in
-    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{n.busy=1})");   # (wandering villagers stand still so none walks onto the test boulder)
+    ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{n.busy=1});window.__AN=AN.splice(0)");   # (wandering villagers stand still and the farm animals are put away so none walks onto the test boulder)
     cells = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1&&at(x,y+1)===1&&at(x-1,y)===1)return[x,y]}})()")
     ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36,msg:'A boulder blocks the way.',needs:{eq:'pickaxe'},opens:'You break the boulder.'});applyGates()" % json.dumps(cells))
     assert ev("at(__g[0],__g[1])===36&&at(__g[0]+1,__g[1])===36&&!walkable(__g[0],__g[1])"), "a closed gate blocks"
@@ -571,7 +571,7 @@ def check(b, url):
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;S.hp=50;S.sta=100;S.coat=0;S.eq.weapon='sword';add('sword');ENEMIES.length===1||ENEMIES.splice(1);G.hp=G.max=12;G.alive=true;G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;P.f='u';window.__xp=S.xp.combat||0;act()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes.length===1&&BATTLE.foes[0].t.n==='Spirit'&&BATTLE.foes[0].t.art==='ghost'&&$('battle').classList.contains('open')"), "facing the spirit and pressing Use opens the battle"
     fight_out(); assert ev("!G.alive&&G.resp>=36&&G.resp<=40&&(S.xp.combat||0)>=__xp+20"), "beating it takes it off the map with a respawn count, and gives its xp"
-    ev("enemiesMorning()"); assert ev("G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy"), "a respawning creature is back at home each morning"
+    assert ev("(()=>{enemiesMorning();return G.alive&&G.hp===G.max&&G.x===G.hx&&G.y===G.hy})()"), "a respawning creature is back at home each morning"   # (one call, so the creature cannot wander off between the morning and the check)
     ev("G.cd=0;P.x=P.rx=G.x;P.y=P.ry=G.y+1;S.hp=50;window.__r0=Math.random;enemiesTick()"); pg.wait_for_timeout(100)
     assert ev("BATTLE!==null&&BATTLE.foes[0].t.n==='Spirit'"), "a creature that reaches the player starts a battle"
     ev("Math.random=()=>0;[...$('bt-menu').children].find(b=>b.textContent==='Run').click()"); pg.wait_for_function("BATTLE===null", timeout=8000); ev("Math.random=__r0")
