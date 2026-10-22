@@ -93,3 +93,7 @@ function zombieArt(e,cx,cy,t){const x=e.x*T-cx,y=e.y*T-cy,w=t-e.hitAt<250&&((t/6
   CharacterSprite.draw(g,x,y-3+Math.round(Math.sin(t/380+e.x)*.6),{view:vw(e.f||'d'),frame:[1,0,3,0][(t/340|0)%4],jacket:true,pack:false,hat:'none',style:'bald',colors:{skin:'#86a874',hair:'#3a3a30',shirt:'#6a6a58',jacket:'#4a4a42',pants:'#34343a',boots:'#26262a'}});
   g.fillStyle='rgba(70,90,50,.35)';g.fillRect(x+4,y+1,8,5);g.fillStyle='#5a3030';g.fillRect(x+6,y+9,2,1);g.fillRect(x+9,y+12,2,2);
   if(w){g.fillStyle='rgba(255,255,255,.55)';g.fillRect(x,y-3,16,18)}else if(e.pois>t){g.fillStyle='rgba(150,235,120,.4)';g.fillRect(x,y-3,16,18)}}
+
+// a pirate that has just seen you (playtest #4): a quick hop and a red "!" over the head for a moment (js/systems/encounters.js sets alertAt and alertUntil)
+const hopOf=(n,t)=>n.alertUntil>t?Math.round(5*Math.sin(Math.PI*Math.min(1,(t-n.alertAt)/280))):0;
+function alertMark(n,cx,cy,t){const x=n.x*T-cx+5,y=n.y*T-cy-17-hopOf(n,t),O='#2e1f10';pF(g,x-1,y-1,8,12,O);pF(g,x,y,6,10,'#fff8e0');pF(g,x+2,y+1,2,5,'#d8341f');pF(g,x+2,y+7,2,2,'#d8341f')}

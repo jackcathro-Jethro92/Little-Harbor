@@ -32,7 +32,7 @@ function draw(){
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,fw*T-2,T-2);m=w||'It fits! Tap Use to place it.'}
     if($('msg').textContent!==m)say(m)}
-  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
+  const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-hopOf(n,t)-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.alertUntil>t)alertMark(n,cx,cy,t);if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
   if(S.home&&S.home.grand&&zoneOf(P.x,P.y)===0)E.push({y:S.home.y+1.9,f:()=>grandHouse(S.home.x*T-cx,S.home.y*T-cy,t)});   // the grand house on Haven Isle (js/render/grandhouse.js): sorted with the people so you can walk behind its upper floors
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
@@ -48,6 +48,7 @@ function draw(){
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);
   if(RAID_ON&&zoneOf(P.x,P.y)===0)drawRaid(cx,cy,t);
+  if(flag('village_burnt')&&zoneOf(P.x,P.y)===0)drawRuins(cx,cy,t);   // the burnt houses after Quest 7 (js/render/raid.js)
   if(flag('tower_raided')&&zoneOf(P.x,P.y)===0)drawTowerRaid(cx,cy,t);   // the ransacked Temple Tower smokes   // the burning village and the pirate ships' cannon fire (js/render/raid.js)   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
   if(GULL)drawGull(cx,cy,t);   // the seagull of a letter (js/systems/letters.js)

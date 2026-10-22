@@ -54,9 +54,9 @@ SCENES.q10_sky=[{wait:200},{say:'q10_boy'},{take:{sky_key:1}},{set:'sky_key_retu
  {fade:'out',ms:500},{wait:300},{clear:'sky_damaged'},{fade:'in',ms:900},{msg:'The Temple to the Sky stands whole again!'}];
 SCENES.q10_fire=[{wait:300},{say:'q10_fire'},{take:{fire_key:1}},{set:'fire_key_returned'},{toast:'The Fire spirit seals the Fire Key.'},{wait:400},
  {giveletter:'q10_letter'},{read:'q10_letter'},{give:{house_key:1}},{toast:'You got the key to your new home!'},
- {fade:'out',ms:500},{islandhome:1},{set:'island_risen'},{wait:300},{fade:'in',ms:900},
+ {fade:'out',ms:500},{islandhome:1},{set:'island_risen'},{clear:'village_burnt'},{wait:300},{fade:'in',ms:900},
  {set:'q10_done'},{set:'story_complete'},{done:'q10'},
- {msg:'An island has risen from the sea north of the village. It is on your map, and the house on it is your home now. You have finished the main story of Little Harbor. The game goes on: fish, build and explore!'}];
+ {toast:'The villagers have rebuilt the burnt houses.'},{msg:'An island has risen from the sea north of the village. It is on your map, and the house on it is your home now. You have finished the main story of Little Harbor. The game goes on: fish, build and explore!'}];
 TRIGGERS.push(
  // returning a key: the first of the Earth and Sky keys just goes home; the second also sends you on to the Fire temple
  {id:'q10_earth_a',when:{talk:'Mysterious Girl'},if:{quest:'q10',has:{earth_key:1},noflag:'sky_key_returned'},do:[{scene:'q10_earth'}]},
