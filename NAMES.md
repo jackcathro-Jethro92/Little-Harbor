@@ -48,6 +48,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Farmer Hobb | Walled Settlement | Dairy farmer |
 | Maude | Walled Settlement | Shepherd |
 | Perrin | Walled Settlement | Egg farmer |
+| Carpenter Alder | Woodcutters' Shacks | Carpenter |
 | Hale | The Darkwood | Woodcutter (Darkwood) |
 | Wren | The Darkwood | Forager (Darkwood) |
 | Bergit | Mountain Town | Villager |

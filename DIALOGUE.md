@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 114 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 115 placeholder.**
 
 ### Miner Dell (Darkwood north gate)
 - *placeholder:* [Placeholder] This slide came down in the night. I will be at it all week.
@@ -338,6 +338,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Wilf (Walled Settlement)
 - *placeholder:* Welcome to the settlement. Mind the cobbles.
 - *placeholder:* The walls keep the wolves out, mostly.
+
+### Carpenter Alder (Woodcutters' Shacks)
+- *placeholder:* [Placeholder] Good timber makes a good house. Take a look.
 
 ## Lines spoken by menus and shopkeepers (in the code)
 

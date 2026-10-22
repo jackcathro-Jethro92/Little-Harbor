@@ -20,7 +20,7 @@ const ITEMS={
  earth_key:{n:'Earth Key',kind:'key',desc:'A golden key from the Temple to the Mountains. It opens its opposite. Keep it safe at the Temple Tower.'},
  ironwood_log:{n:'Ironwood log',kind:'key',desc:'A straight, extra-hard log from Oak Island. Murl wants one for a ship\'s mast.'},
  grandfather_compass:{n:"Grandfather's compass",kind:'key',desc:'An old brass compass. While you carry it, a small arrow shows the way to your quest.'},
- centipede_fang:{n:'Centipede fang',kind:'material',desc:'A curved, venom-hollow fang from a giant centipede. Nobody buys it yet.'},
+ centipede_fang:{n:'Centipede fang',kind:'material',desc:'A curved, venom-hollow fang from a giant centipede. Astrid the apothecary buys it.'},
  iron_bar:{n:'Iron bar',kind:'material',desc:'Forged from bronze, copper and tin at a forge.'},
  fiber:{n:'Flax fiber',kind:'material',desc:'Stringy fiber cut from flax. Twist it into rope.'},
  rope:{n:'Rope',kind:'material',desc:'Twisted from flax fiber. Needed to build ships and houses.'},
@@ -96,8 +96,8 @@ const ITEMS={
  sea_key:{n:'Sea Key',kind:'key',desc:'A key from the Temple of the Sea. It opens its opposite. Keep it safe at the Temple Tower.'},
  enchanted_armour:{n:'Enchanted armour',kind:'armour',slot:'armour',look:'enchanted',gem:'#9ec6e8',fx:{ward:.2},desc:'Armour woven with old magic. You take 20% less damage. Reward from the Temple Tower. It cannot be bought; it takes the Armour slot like any other armour.'},
  enchanted_boots:{n:'Enchanted boots',kind:'armour',slot:'boots',look:'enchanted',gem:'#58a8e8',fx:{speed:1},desc:'Boots that make you swift on your feet: you walk faster (not sailing). A swiftness potion is faster still. Reward from the Temple Tower.'},
- cloth:{n:'Cloth',kind:'material',smith:1,desc:'Woven from flax fiber. Cloth armour is sewn from it. Garrick sells it.'},
- leather:{n:'Leather',kind:'material',smith:1,desc:'Tanned hide. Leather armour is made from it. Garrick sells it.'},
+ cloth:{n:'Cloth',kind:'material',smith:1,desc:'Woven from flax fiber. Cloth armour is sewn from it. Wynn the tailor sells it.'},
+ leather:{n:'Leather',kind:'material',smith:1,desc:'Tanned hide. Leather armour is made from it. Wynn the tailor sells it.'},
  // armour (playtest #3): three pieces each of cloth, leather and chainmail. `slot` is where it is worn (helmet, armour, boots), `look` is how it is drawn on you (js/render/sprites.js ARM_PAL), `fx.ward` is the share of damage it stops (the pieces add up).
  // Bought at Garrick's Forge (very dear) or crafted at Crafting level 10 (js/data/recipes.js).
  cloth_hood:{n:'Cloth hood',kind:'armour',slot:'helmet',look:'cloth',price:500,smith:1,fx:{ward:.03},desc:'A padded linen hood. Stops 3% of damage.'},

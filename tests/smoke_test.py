@@ -190,7 +190,9 @@ def check(b, url):
     assert ev(f"[S.bag.gold_ore>=1,at({g[0]},{g[1]})===18,S.cut[{g[1]}*MW+{g[0]}].m]") == [True, True, 123], "gold can be mined"
     assert ev("REGROW(123)>REGROW(124)&&REGROW(124)>REGROW(15)"), "rarer ore regrows slower"
     ev("openTrader('smith','buy')"); assert ev("!/Gold ore/.test($('items').textContent)"), "Garrick must not sell gold"
-    ev("S.bag.gold_ore=2;openTrader('smith','sell')"); assert ev("/Gold ore x2/.test($('items').textContent)"), "Garrick buys gold"
+    ev("S.bag.gold_ore=2;openTrader('smith','sell')"); assert ev("!/Gold ore/.test($('items').textContent)"), "Garrick no longer buys gold (the goldsmith does, playtest #4)"
+    ev("openTrader('jeweller','buy')"); assert ev("!/Gold ore/.test($('items').textContent)"), "Lucie does not sell gold ore"
+    ev("openTrader('jeweller','sell')"); assert ev("/Gold ore x2/.test($('items').textContent)&&/Sells for 200g/.test($('items').textContent)"), "Lucie buys gold ore for half its old price"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     pgo, erro = load(b, url, dict(SAVE, cut={str(104 * 320 + 142): {"m": 17, "d": 1}}))   # an old ore record at a spot that no longer has ore (it was on the village island)
     assert pgo.evaluate("!S.cut[104*MW+142]&&at(142,104)!==18"), "old ore records elsewhere are dropped"
@@ -347,8 +349,33 @@ def check(b, url):
     ev("openStore('boat')"); assert tabs() == ["Boats", "Crew", "Yard"], tabs()
     ev("openTrader('smith','buy')"); assert tabs() == ["Materials", "Weapons", "Tools", "Armour", "Objects"], tabs()
     ev("openTrader('jeweller','buy')"); assert tabs() == ["Rings", "Amulets"], tabs()
-    ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons"], tabs()
+    ev("openTrader('apothecary','buy')"); assert tabs() == ["Potions", "Poisons", "Ingredients"], tabs()
     ev("S.bag.sardine=3;S.bag.carrot=2;openGeneral('sell')"); assert tabs()[0] == "Fish" and "Ingredients" in tabs(), tabs()
+
+    # playtest #4, batch E: who buys and sells what (P57, P58)
+    def shop(key, mode, bag=""):   # the names of the rows on a shop screen
+        ev("S.gold=100000;S.bag={};S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;%s;openTrader('%s','%s')" % (bag, key, mode)); return ev("[...document.querySelectorAll('#items .it b')].map(b=>b.textContent)")
+    def sells_row(name, button):
+        ev("[...[...document.querySelectorAll('#items .it')].find(r=>r.querySelector('b').textContent==%s).querySelectorAll('button')].find(b=>b.textContent==%s).click()" % (json.dumps(name), json.dumps(button)))
+    t = shop("smith", "buy"); assert all(x in t for x in ["Copper ore", "Iron bar", "Bronze sword", "Iron pickaxe", "Chainmail hauberk"]) and not any(x in t for x in ["Rope", "Softwood plank", "Cloth", "Leather", "Silver ore", "Gold ore"]), ("Garrick sells ore, iron, weapons, tools and armour, but no longer rope, planks, cloth, leather or rare ore", t)
+    t = shop("smith", "sell", "S.bag.sword=1;S.bag.bronze_sword=2;S.bag.divine_blade=1;S.bag.pickaxe=1;S.bag.knife=1;S.bag.iron_pickaxe=1;S.bag.rope=3;S.bag.cloth=2")
+    assert all(x in t for x in ["Old Sword x1", "Bronze sword x2", "Pickaxe x1", "Knife x1", "Iron pickaxe x1"]) and not any(("Wooden sword" in x or "Divine Blade" in x or x.startswith("Rope") or x.startswith("Cloth x")) for x in t), ("Garrick buys unwanted weapons and tools, but never the wooden sword or the Divine Blade (nor rope or cloth now)", t)
+    sells_row("Bronze sword x2", "Sell 1"); assert ev("S.gold===100000+225&&count('bronze_sword')===1"), "a weapon sells for half its price"
+    ev("S.eq.weapon='sword';S.bag.sword=1;openTrader('smith','sell')"); sells_row("Old Sword x1", "Sell 1"); assert ev("S.eq.weapon==='wooden_sword'&&count('sword')===0"), "selling the weapon you wield puts the wooden sword back in your hand"
+    t = shop("carpenter", "buy"); assert all(x in t for x in ["Softwood plank", "Medium wood plank", "Hardwood plank", "Rope"]) and not any("log" in x for x in t), ("the carpenter sells planks and rope (he does not sell logs)", t)
+    t = shop("carpenter", "sell", "S.bag.softwood=2;S.bag.fiber=5;S.bag.rope=1;S.bag.cloth=1"); assert all(x in t for x in ["Softwood log x2", "Flax fiber x5", "Rope x1"]) and not any(x.startswith("Cloth") for x in t), ("he buys logs, flax fiber, planks and rope", t)
+    t = shop("tailor", "buy"); assert "Cloth" in t and "Leather" in t and "Rope" not in t, ("Wynn sells cloth and leather", t)
+    t = shop("tailor", "sell", "S.bag.cloth=2;S.bag.leather=1;S.bag.rope=1"); assert "Cloth x2" in t and "Leather x1" in t and not any(x.startswith("Rope") for x in t), ("and buys them", t)
+    t = shop("apothecary", "buy"); assert "Basil" in t and "Moss" in t and "Death cap mushroom" in t and not any("fang" in x for x in t), ("Astrid sells herbs and mushrooms but not centipede fangs", t)
+    t = shop("apothecary", "sell", "S.bag.basil=3;S.bag.centipede_fang=2;S.bag.healing_potion=1;S.bag.carrot=1"); assert "Basil x3" in t and "Centipede fang x2" in t and "Healing potion x1" in t and not any(x.startswith("Carrot") for x in t), ("she buys herbs, fangs and potions, not vegetables", t)
+    assert ev("[...document.querySelectorAll('#items .it')].filter(r=>/Basil|Centipede fang/.test(r.querySelector('b').textContent)).map(r=>r.textContent.match(/Sells for (\\d+)g/)[1]).join()") == "5,12", "she pays what Odo paid for herbs (5 for basil), 12 for a fang, and half price for potions"
+    t = shop("jeweller", "sell", "S.bag.silver_ore=1;S.bag.gold_ore=1;S.bag.ring_vigor=1"); assert "Silver ore x1" in t and "Gold ore x1" in t and "Ring of Vigor x1" in t, ("Lucie buys gold and silver ore and jewellery", t)
+    ev("S.bag={};S.bag.basil=2;S.bag.sardine=2;S.bag.grilled_sardine=1;S.bag.carrot=1;openGeneral('sell')"); t = ev("[...document.querySelectorAll('#items .it b')].map(b=>b.textContent)"); assert "Sardine x2" in t and "Carrot x1" in t and "Grilled sardine x1" in t and not any(x.startswith("Basil") for x in t), ("Odo buys fish, vegetables and meals, but no longer herbs", t)
+    assert ev("(()=>{const c=NPC.find(n=>n.n==='Carpenter Alder');return !!c&&c.store==='carpenter'&&c.x===31&&c.y===158&&at(c.x,c.y)===1&&BL.some(b=>b.x===30&&b.y===156)&&c.y===BL.find(b=>b.x===30&&b.y===156).y+2})()"), "the carpenter stands at the door of a Woodcutters' Shack, outside the Darkwood's south gate"
+    ev("sail=false;SCENE=null;BATTLE=null;P.x=P.rx=31;P.y=P.ry=159;P.f='u';act()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Buy,Sell,Cancel'&&/Alder/.test($('menu-t').textContent)"), "talking to the carpenter offers Buy and Sell"
+    ev("$('menu').classList.remove('open');mn=null;(()=>{const w=NPC.find(n=>n.n==='Seamstress Wynn');P.x=P.rx=w.x;P.y=P.ry=w.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Try on clothes,Buy cloth and leather,Sell cloth and leather,Cancel'"), "Wynn still lets you try on clothes, and now buys and sells cloth and leather"
+    ev("$('menu').classList.remove('open');mn=null")
+    ev("S.bag={};S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # the dialogue box (2.2): a table of nodes by id with choices that set flags, a portrait for the speakers who have one, advancing by tap, Use or Space, villagers' chat in the box with their words unchanged
     ev("DLG.t_test={start:'a',nodes:{a:{who:'Murl',text:'First line.',next:'b'},b:{who:'You',text:'Pick one.',choices:[{t:'Yes',set:'t_yes',go:'c'},{t:'No'}]},c:{who:'Murl',text:'Done.'}}};window.__end=0;runDialogue('t_test',()=>{window.__end=1})")
