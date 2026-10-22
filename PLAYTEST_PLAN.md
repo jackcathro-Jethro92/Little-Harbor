@@ -159,17 +159,17 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C | **Built** (batch C1): a card with the filling bars and the amount |
 | P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B | **Built** (batch B): see the notes below |
 | P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
-| P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |  |
-| P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |  |
+| P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D | **Built** (batch D2): the hatch was never drawn (a drawing-order mistake) and is now solid |
+| P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D | **Built** (batch D2): 28 creatures, subtle dart plates and fire vents, and poison |
 | P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C | **Built** (batch C1): 30% to strike twice |
 | P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B | **Built** (batch B): twelve pirates round the spiral path |
 | P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |  |
 | P71 | A limited number of uses for each attack | C | **Built** (batch C1): uses per attack until you sleep; Scuffle when nothing is left |
 | P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
 | P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |  |
-| P74 | Haven Isle should be further north than where it is now | D |  |
+| P74 | Haven Isle should be further north than where it is now | D | **Built** (batch D2): Haven Isle at y 60; the house is a second home |
 | P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D |  |
-| P76 | The house on Haven Isle needs work on its interior | D |  |
+| P76 | The house on Haven Isle needs work on its interior | D | **Built** (batch D2): nine rooms with built-in stations, working crates and armour mannequins |
 | P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D |  |
 
 (P55, P65 and P77 are the screenshot notes; they are the same kind of fault, the drawing order of the character over a gate or roof.)
@@ -205,3 +205,10 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **C1, fighting mechanics (built):** P44, P52, P53, P63, P68, P71.
 - **C2, balance and new enemies (next):** P62 (weapon strength), P70 (Divine Strike and the pirates), P72 (sea creatures while sailing) and P73 (the Rock Dragon).
 - **P71 numbers are first guesses:** uses per attack are Strike 40, Bash 20, Slash 40, Lunge 25, Quick Strike 30, Power Slash 12, Chop 40, Cleave 12, Divine Strike 8, restored by sleeping or a guild bunk. Tell me if they feel too tight or too loose.
+
+## Jack's answers for batch D2 (22 Oct) and what was built
+- **P74:** Haven Isle about 22 tiles further north (y 60). Existing camps, cottages and claims stay exactly as they are; the Haven house is a second home beside them.
+- **P66:** it was the hatch in the shrine room floor, which looked see-through: it was never drawn (a mistake in the order the tiles are drawn). Fixed.
+- **P67:** about 28 creatures in the Depths; traps with subtle clues (a faint seam in the floor, a small hole in the wall); medium damage: a dart 8 plus poison (1 health a step for 10 steps, a healing potion cures it), a fire jet 14.
+- **P76:** better looking house with separate rooms: bedroom, wardrobe with mannequins that keep armour sets, kitchen with a cooking station, workshop with a workbench and forge, potion room with an alchemy station, a storage room of crates that all work, and a crate or two in every other room. Windows with a garden view and light on the floor.
+- **Please check on your phone:** the new rooms (do they feel right?), the built-in stations, the crates, the mannequins, and the Depths traps and creature numbers (28 is a lot; say if it is too hard).

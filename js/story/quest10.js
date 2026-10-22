@@ -35,7 +35,7 @@ function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,
   if(typeof groundDirty==='function')groundDirty()}
 VARIANTS.push({id:'haven_isle',flag:'island_risen',apply:on=>applyIsle(on)});applyVariants(true);
 // the key to the new home: the Haven house becomes a second home beside any cottage, claim or camp you have (nothing of yours is packed away or removed; playtest #4)
-TACT.islandhome=()=>{S.isle={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};ui();save()};   // the Haven house is a second home: any cottage, claim or camp you have stays exactly as it is (playtest #4). Stations and gardens can go anywhere on the island (onIsle in js/systems/stations.js)
+TACT.islandhome=()=>{S.isle={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};haveFixtures();ui();save()};   // the Haven house is a second home: any cottage, claim or camp you have stays exactly as it is (playtest #4). Stations and gardens can go anywhere on the island (onIsle in js/systems/stations.js)
 // ---- where the spirits stand (the girl in the Earth sanctum, the boy on the Sky plateau, the Fire Spirit in her hall) ----
 NPC.push({n:'Fire Spirit',x:PH.dx,y:PH.y0+6,hx:PH.dx,hy:PH.y0+6,f:'d',skin:2,hair:3,shirt:0,jk:0,hat:'none',hstyle:'bun',pack:false,fixed:1,say:['[Placeholder] The flame burns steadily now. Thank you.'],bio:{age:null,job:'Spirit of the Fire temple',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.unshift(

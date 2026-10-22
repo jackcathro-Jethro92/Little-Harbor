@@ -3,7 +3,7 @@ const roomZone=(x,y)=>{for(const r of ROOMTAB)if(x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r
 const FY=258,FOREST_PLAN=[[27,20],[28,22],[29,14],[30,24]]; // the Darkwood's foraging: forest sprigs, red caps, death caps, blue caps // the Darkwood is drawn FY rows below where its own coordinates say (see below)
 // ---------- home interior: a hidden room in the south-east sea, shown only when you are inside ----------
 const inHG=(x,y)=>x>=HG.x0&&x<=HG.x1&&y>=HG.y0&&y<=HG.y1;
-const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},HG={x0:286,y0:264,x1:317,y1:287,dx:301,dy:286},inRoom=(x,y)=>(x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1)||(x>=HG.x0&&x<=HG.x1&&y>=HG.y0&&y<=HG.y1);   // HG: the grand house's six rooms (js/world/granthome.js) count as home too
+const IR={x0:300,y0:250,x1:311,y1:259,dx:305,dy:258},HG={x0:292,y0:264,x1:319,y1:295,dx:305,dy:294},inRoom=(x,y)=>(x>=IR.x0&&x<=IR.x1&&y>=IR.y0&&y<=IR.y1)||(x>=HG.x0&&x<=HG.x1&&y>=HG.y0&&y<=HG.y1);   // HG: the grand house's nine rooms (js/world/granthome.js) count as home too (moved to x 292-319 in playtest #4: the old place overlapped a ship's storage room)
 if(!S.wv){S.wv=2; // saves from the small world used old coordinates: move them into the big map
   const mv=o=>{const ir=o.x>=50&&o.x<=61&&o.y>=41&&o.y<=50;o.x+=ir?IR.x0-50:OX;o.y+=ir?IR.y0-41:OY};
   S.placed.forEach(mv);S.gardens.forEach(g=>{g.x+=OX;g.y+=OY});if(S.claim){S.claim.x+=OX;S.claim.y+=OY}if(S.home){S.home.x+=OX;S.home.y+=OY}
@@ -14,6 +14,7 @@ if(S.wv<3){S.wv=3; // the hidden rooms moved below the sea (world version 3): ca
 if(S.wv<4){S.wv=4; // Haven Isle moved 22 rows north (playtest #4) and its house became a second home beside any cottage: carry an earlier island home and what was placed on the island to the new place
   const old={cx:166,cy:82,dy:-22},onOld=(x,y)=>y<240&&x>=old.cx-14&&x<=old.cx+14&&y>=old.cy-12&&y<=old.cy+16;
   if(S.home&&S.home.grand){S.isle={...S.home,y:S.home.y+old.dy};S.home=null;if(S.claim&&S.claim.isle)S.claim=null}
+  S.placed=S.placed.filter(o=>{if(o.x>=286&&o.x<=317&&o.y>=264&&o.y<=287){S.bag[o.id]=(S.bag[o.id]||0)+1;return false}return true});   // the six-room house became a nine-room one, so anything placed inside the old rooms goes back to your bag
   S.placed.forEach(o=>{if(S.isle&&onOld(o.x,o.y))o.y+=old.dy});S.gardens.forEach(g=>{if(S.isle&&onOld(g.x,g.y))g.y+=old.dy})}
 for(let y=IR.y0;y<=IR.y1;y++)for(let x=IR.x0;x<=IR.x1;x++)M[y*MW+x]=(x===IR.x0||x===IR.x1||y===IR.y0||y===IR.y1)?22:21;
 M[IR.y1*MW+IR.dx]=23;
