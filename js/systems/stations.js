@@ -4,7 +4,7 @@ const CAMP_R=5;
 const campTent=p=>[[p.x-2,p.y-1],[p.x-1,p.y-1],[p.x-2,p.y],[p.x-1,p.y]];
 // the workbench (playtest #4) is two tiles wide: `x,y` is its left tile and it also fills the tile to the right (older benches grow to fit too)
 const WIDE={standard_bench:2};
-function placedAt(x,y){return S.placed.find(p=>(p.x===x&&p.y===y)||(WIDE[p.id]&&p.y===y&&x===p.x+1)||(p.big&&p.id==='camp_kit'&&campTent(p).some(c=>c[0]===x&&c[1]===y)))}
+function placedAt(x,y){return S.placed.find(p=>isFurn(p)?(!furnFp(p.id).flat&&inFp(p,x,y)):(p.x===x&&p.y===y)||(WIDE[p.id]&&p.y===y&&x===p.x+1)||(p.big&&p.id==='camp_kit'&&campTent(p).some(c=>c[0]===x&&c[1]===y)))}
 const campOf=()=>S.placed.find(p=>p.id==='camp_kit');
 // the camp's tent: you can sleep when you stand next to the camp kit (within 2 tiles), the same as on the boat
 const atTent=()=>{const c=campOf();return !!c&&!sail&&Math.hypot(c.x-P.x,c.y-P.y)<=(c.big?3:2)};
@@ -45,7 +45,7 @@ function campPlan(){const [fx,fy]=front(),f=P.f,x0=f==='l'?fx-2:f==='r'?fx:fx-1,
     if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';return ''};
   for(let y=y0;y<y0+2;y++)for(let x=x0;x<x0+3;x++)t.push([x,y,why(x,y)]);
   return{x:x0,y:y0,w:3,h:2,tiles:t,glob:sail?'Step onto land first.':campOf()?'You already have a camp set up.':''}}
-function plan(id){if(id==='camp_kit')return campPlan();const it=ITEMS[id],[fx,fy]=front(),t=[];
+function plan(id){if(id==='camp_kit')return campPlan();if(ITEMS[id].kind==='furniture')return furnPlan(id);const it=ITEMS[id],[fx,fy]=front(),t=[];
   if(it.kind==='claim'){const x0=fx-3,y0=fy-2;
     for(let y=y0;y<y0+5;y++)for(let x=x0;x<x0+7;x++)t.push([x,y,okGround(x,y,[1,2,4,14,15,16,17,18,19,20])?'':'Part of that land is blocked (water, buildings, paths or fences).']);
     return{x:x0,y:y0,w:7,h:5,tiles:t,glob:sail?'Step onto land first.':S.claim?'You already have a claim.':''}}
@@ -58,6 +58,7 @@ function plan(id){if(id==='camp_kit')return campPlan();const it=ITEMS[id],[fx,fy
   return{x:x0,y:y0,w:3,h:2,tiles:t,glob:sail?'Step onto land first.':!S.claim?'Claim some land first.':S.home?'You already have a house.':''}}
 function placeItem(id){
   const it=ITEMS[id];
+  if(it.kind==='furniture')return placeFurn(id);
   if(it.kind==='claim'||it.kind==='prefab'||it.kind==='garden'){const pl=plan(id),why=pl.glob||(pl.tiles.find(q=>q[2])||[])[2];
     if(why){toast(why,2400);return say(why)}
     S.bag[id]--;if(!S.bag[id])delete S.bag[id];placing=null;
@@ -71,11 +72,11 @@ function placeItem(id){
   S.bag[id]--;if(!S.bag[id])delete S.bag[id];S.placed.push({id,x,y});placing=null;
   say(ITEMS[id].n+' placed.');toast(ITEMS[id].n+' placed!');ui();save()}
 function pickUp(p){
-  if(p.id==='camp_kit'){const rest=S.placed.filter(q=>q!==p&&!q.fixed);rest.forEach(q=>add(q.id));S.placed=S.placed.filter(q=>q.fixed);add('camp_kit');
+  if(p.id==='camp_kit'){const rest=S.placed.filter(q=>q!==p&&!q.fixed&&!isFurn(q));rest.forEach(q=>add(q.id));S.placed=S.placed.filter(q=>q.fixed||isFurn(q));add('camp_kit');
     say('Packed up the camp'+(rest.length?' and '+rest.length+' station'+(rest.length>1?'s':''):'')+'.')}
   else{S.placed=S.placed.filter(q=>q!==p);add(p.id);say(ITEMS[p.id].n+' picked up.')}
   ui();save()}
-function useStation(p){const it=ITEMS[p.id];
+function useStation(p){if(isFurn(p))return useFurn(p);const it=ITEMS[p.id];
   if(p.id==='camp_kit')return menu(it.n,['Cook','Pick up camp','Cancel'],o=>{if(o==='Cook')openCraft('fire');else if(o==='Pick up camp')pickUp(p)});
   const verb=it.place==='cooking'?'Cook':it.place==='shipwright'?'Build':it.place==='alchemy'?'Brew':'Craft';
   menu(it.n,p.fixed?[verb,'Cancel']:[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then tap Use.')}})}
