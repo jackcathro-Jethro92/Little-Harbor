@@ -1,5 +1,5 @@
 // ---------- the grand house on Haven Isle (Quest 10): a big Japanese-style manor after Jack's reference picture ----------
-// S.home.grand marks it. Its footprint is 9 x 4 tiles (x from home.x-3 to home.x+5, y from home.y-2 to home.y+1, all tile 5); the door is still the home system's (home.x+1, home.y+1). The picture is 9 tiles wide and 128 tall:
+// S.isle (the Haven house, a second home) holds it. Its footprint is 9 x 4 tiles (x from isle.x-3 to isle.x+5, y from isle.y-2 to isle.y+1, all tile 5); its door is at (isle.x+1, isle.y+1). The picture is 9 tiles wide and 128 tall:
 // the ground floor and its deep tiled roof, an upper floor with a gabled tower on the left and a flat-roofed block on the right, a gabled porch with steps over the door, lattice windows, a fence and stones. It is drawn once into a
 // cached picture and sorted with the people by its front edge (draw.js), so you can walk behind the upper floors.
 function grandHouse(x,y,t){g.drawImage(sprite('grandhouse',144,128,c=>{

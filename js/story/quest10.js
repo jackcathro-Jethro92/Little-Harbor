@@ -11,7 +11,7 @@ LETTERS.q10_letter={from:'The old man',title:'A home for you',text:"[Placeholder
 ITEMS.house_key={n:'House key',kind:'key',desc:'The key to your new home on Haven Isle, north of the village.'};
 TACT.giveletter=v=>{if(!hasLetter(v))myLetters().push(v);save()};   // a letter goes straight into the bag's LETTERS pocket
 // ---- the new island: Haven Isle, an oval of sand and grass in the open sea north of the village, with a pier, a path, lanterns and a house ----
-const ISLE={cx:166,cy:82,rx:12,ry:9.5,hx:165,hy:78},ISLE_ORIG=new Map(),ISLE_LAND=['Haven Isle',166,82];
+const ISLE={cx:166,cy:60,rx:12,ry:9.5,hx:165,hy:56},ISLE_ORIG=new Map(),ISLE_LAND=['Haven Isle',166,60];   // (it was at y 82; playtest #4 moved it 22 rows north)
 function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,y1=cy+16,gy=hy+8;   // gy: the row of the garden gate
   BL.filter(b=>b.haven).forEach(b=>BL.splice(BL.indexOf(b),1));
   if(!on){ISLE_ORIG.forEach((t,k)=>{M[k]=t});ISLE_ORIG.clear();const i=LAND.indexOf(ISLE_LAND);if(i>=0)LAND.splice(i,1);if(typeof groundDirty==='function')groundDirty();return}
@@ -29,15 +29,13 @@ function applyIsle(on){const{cx,cy,rx,ry,hx,hy}=ISLE,x0=cx-14,x1=cx+14,y0=cy-12,
   [[-2,hy+3],[2,hy+3],[-2,gy-1],[2,gy-1],[-2,hy+6],[2,hy+6]].forEach(([dx,y])=>setT(cx+dx,y,7));          // stone lanterns
   for(let x=cx-9;x<=cx+9;x++)if(Math.abs(x-cx)>=3)setT(x,gy,8);for(let y=hy+3;y<gy;y++){setT(cx-9,y,8);setT(cx+9,y,8)}   // a bamboo fence round the garden
   setT(cx-2,gy,107);setT(cx+2,gy,107);BL.push({x:cx-2,y:gy,w:5,towergate:1,haven:1});                        // the gate (posts, and the wooden roof drawn by towerGate)
-  if(S.home&&S.home.x===hx&&S.home.y===hy)for(let j=-2;j<2;j++)for(let i=-3;i<=5;i++)M[(hy+j)*MW+hx+i]=5;       // the grand house fills 9 x 4 tiles (js/render/grandhouse.js); the door is the home system's (home.x+1, home.y+1)
+  if(S.isle&&S.isle.x===hx&&S.isle.y===hy)for(let j=-2;j<2;j++)for(let i=-3;i<=5;i++)M[(hy+j)*MW+hx+i]=5;       // the grand house fills 9 x 4 tiles (js/render/grandhouse.js); the door is the home system's (home.x+1, home.y+1)
   if(!LAND.includes(ISLE_LAND))LAND.push(ISLE_LAND);
   for(let y=y0;y<=y1;y+=2)for(let x=x0;x<=x1;x+=2)FOG[(y>>2)*FW+(x>>2)]=1;                                   // it appears on the map
   if(typeof groundDirty==='function')groundDirty()}
 VARIANTS.push({id:'haven_isle',flag:'island_risen',apply:on=>applyIsle(on)});applyVariants(true);
-// the key to the new home: this house becomes your home (an older house is packed back into its kit and the old claim goes), on a claim round it
-TACT.islandhome=()=>{const h=S.home;if(h&&!(h.x===ISLE.hx&&h.y===ISLE.hy)){for(let j=0;j<2;j++)for(let i=0;i<3;i++){const k=(h.y+j)*MW+h.x+i;if(M[k]===5)M[k]=1;delete S.cut[k]}
-    const kit=Object.keys(ITEMS).find(id=>ITEMS[id].kind==='prefab'&&ITEMS[id].roof===h.roof);if(kit)add(kit,1)}
-  S.home={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};S.claim={x:ISLE.cx-14,y:ISLE.cy-11,w:29,h:22,isle:1};ui();save()};   // the claim is the whole island (not fenced); stations and gardens can go anywhere on it
+// the key to the new home: the Haven house becomes a second home beside any cottage, claim or camp you have (nothing of yours is packed away or removed; playtest #4)
+TACT.islandhome=()=>{S.isle={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};haveFixtures();ui();save()};   // the Haven house is a second home: any cottage, claim or camp you have stays exactly as it is (playtest #4). Stations and gardens can go anywhere on the island (onIsle in js/systems/stations.js)
 // ---- where the spirits stand (the girl in the Earth sanctum, the boy on the Sky plateau, the Fire Spirit in her hall) ----
 NPC.push({n:'Fire Spirit',x:PH.dx,y:PH.y0+6,hx:PH.dx,hy:PH.y0+6,f:'d',skin:2,hair:3,shirt:0,jk:0,hat:'none',hstyle:'bun',pack:false,fixed:1,say:['[Placeholder] The flame burns steadily now. Thank you.'],bio:{age:null,job:'Spirit of the Fire temple',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.unshift(

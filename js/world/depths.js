@@ -6,7 +6,7 @@
 // Tiles: 142 flagstone floor (walk), 143 dark stone wall, 144 the hatch in the shrine room floor (blocked, used by facing it), 145 stairs up out of the Depths (blocked, used by facing), 146 wall torch (blocked),
 // 147 chamber floor with the rune circle (walk), 148 earth brazier, 149 sea brazier, 150 sky brazier, 151 fire brazier (all blocked), 152 a toppled stand in the ransacked shrine room (walk). Art: js/render/depths.js and towerTile.
 const DZ={z:20,x0:20,y0:262,x1:66,y1:297},CZ={z:21,x0:22,y0:250,x1:36,y1:259,dx:29};
-ROOMTAB.push(DZ,CZ);WK.push(142,147,152);
+ROOMTAB.push(DZ,CZ);WK.push(142,147,152,172,174);   // 172 a dart plate and 174 a fire vent are floor you can walk on (and spring); 173 is the dart hole in a wall
 const DEPTH_CW=15,DEPTH_CH=11,DEPTH_OX=DZ.x0+1,DEPTH_OY=DZ.y0+1,DEPTH_SPOTS=[];
 {rect(DZ.x0,DZ.y0,DZ.x1,DZ.y1,(x,y)=>setT(x,y,143));
  let seed=8128;const rnd=()=>(seed=(seed*1103515245+12345)&0x7fffffff)/0x7fffffff;
@@ -21,16 +21,26 @@ const DEPTH_CW=15,DEPTH_CH=11,DEPTH_OX=DZ.x0+1,DEPTH_OY=DZ.y0+1,DEPTH_SPOTS=[];
  const S0=key(0,DEPTH_CH-1),E0=key(DEPTH_CW-1,0),prev={[S0]:null};const q=[S0];while(q.length){const c=q.shift();(adj[c]||[]).forEach(n=>{if(!(n in prev)){prev[n]=c;q.push(n)}})}
  const route=[];for(let c=E0;c;c=prev[c])route.unshift(c);
  const at2=k=>k.split(',').map(Number),spot=k=>{const[i,j]=at2(k),[x,y]=cell(i,j);return[x,y]};
- // nine creatures: six along the way (every few cells, alternating ghost and zombie) and three in side branches
+ // twenty-eight creatures (playtest #4: "a real gauntlet"): fourteen along the way, one every few cells, alternating ghost and zombie, and fourteen spread through the side branches
  const kinds=['depths_ghost','zombie'];let n=0;
- for(let m=1;m<=6;m++){const c=route[Math.round(m*(route.length-1)/7)],[x,y]=spot(c);DEPTH_SPOTS.push({t:kinds[n++%2],x,y})}
+ for(let m=1;m<=14;m++){const c=route[Math.round(m*(route.length-1)/15)],[x,y]=spot(c);DEPTH_SPOTS.push({t:kinds[n++%2],x,y})}
  const side=Object.keys(adj).filter(c=>!route.includes(c)).sort((a,b)=>hs(at2(a)[0]*11,at2(a)[1]*7)-hs(at2(b)[0]*11,at2(b)[1]*7));
- for(let m=0;m<3&&side.length;m++){const c=side[(m*Math.max(1,side.length/3))|0],[x,y]=spot(c);DEPTH_SPOTS.push({t:['depths_ghost','zombie','depths_ghost'][m],x,y})}
+ for(let m=0;m<14&&side.length;m++){const c=side[(m*Math.max(1,side.length/14))|0],[x,y]=spot(c);if(!DEPTH_SPOTS.some(q=>q.x===x&&q.y===y))DEPTH_SPOTS.push({t:kinds[(m+1)%2===0?0:1],x,y})}
  // wall torches where a wall has floor below it, some of the time
  for(let y=DZ.y0;y<=DZ.y1;y++)for(let x=DZ.x0;x<=DZ.x1;x++)if(at(x,y)===143&&at(x,y+1)===142&&hs(x*5,y*3)%9===0&&at(x-1,y)===143&&at(x+1,y)===143)setT(x,y,146);
  // in at the bottom left (stairs up to the shrine room), out at the top right (a door to the chamber)
  {const[x,y]=cell(0,DEPTH_CH-1);rect(x,y+2,x+1,y+2,(a,b)=>setT(a,b,145));DEPTH_START=[x,y+1];DEPTH_STAIRS=[[x,y+2],[x+1,y+2]]}
  {const[x,y]=cell(DEPTH_CW-1,0);rect(x,y-1,x+1,y-1,(a,b)=>setT(a,b,23));DEPTH_DOORS=[[x,y-1],[x+1,y-1]];DEPTH_EXIT=[x,y]}
+ // traps (playtest #4): subtle ones, on one lane of a straight two-wide corridor so the other lane is always clear. A dart plate (172) is a floor tile with a faint seam, with a small hole (173) in the wall across the corridor
+ // that the dart comes from; a fire vent (174) is a floor tile with faint grating. Stepping on one springs it (js/systems/traps.js). They keep six tiles away from each other, from creatures and from the stairs.
+ {const floorAt=(x,y)=>at(x,y)===142;
+  const cands=[];for(let y=DZ.y0+2;y<DZ.y1-2;y++)for(let x=DZ.x0+2;x<DZ.x1-2;x++){if(!floorAt(x,y))continue;
+    // a north lane (wall above, floor below, wall two below) or a south lane, and the same for east and west lanes
+    [[0,-1],[0,1],[-1,0],[1,0]].forEach(([dx,dy])=>{if(at(x+dx,y+dy)===143&&floorAt(x-dx,y-dy)&&at(x-2*dx,y-2*dy)===143&&floorAt(x+dy,y+dx)&&floorAt(x-dy,y-dx))cands.push({x,y,dx,dy})})}
+  cands.sort((a,b)=>hs(a.x*13,a.y*7)-hs(b.x*13,b.y*7));
+  const used=[],far=(x,y)=>used.every(u=>Math.hypot(u.x-x,u.y-y)>=6)&&DEPTH_SPOTS.every(q=>Math.hypot(q.x-x,q.y-y)>=3)&&Math.hypot(x-DEPTH_START[0],y-DEPTH_START[1])>=8,pick=[];
+  for(const c of cands){if(pick.length>=18)break;if(!far(c.x,c.y))continue;used.push(c);pick.push(c)}
+  pick.forEach((c,i)=>{if(i%2===0){setT(c.x,c.y,172);setT(c.x-2*c.dx,c.y-2*c.dy,173)}else setT(c.x,c.y,174)})}
 }
 var DEPTH_START,DEPTH_STAIRS,DEPTH_DOORS,DEPTH_EXIT;
 // ---- the chamber ----

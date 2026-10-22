@@ -10,20 +10,27 @@ function boardDeck(){if(!sail||shipLevel()<0)return;const r=SHIPR[S.eq.boat].dec
   say('You climb down onto the deck. Use the wheel to take the helm again.');toast(ITEMS[S.eq.boat].n+': deck');ui()}
 function takeHelm(){fade();P.x=P.rx=B.x;P.y=P.ry=B.y;P.f='d';sail=true;say('You take the helm.');ui()}
 function shipStore(ship){S.ships=S.ships||{};const o=S.ships[ship]=S.ships[ship]||{store:{}};o.store=o.store||{};return o.store}
-function openStorage(ship){const el=$('items'),cap=ITEMS[ship].store,st=shipStore(ship),used=()=>Object.values(st).reduce((a,b)=>a+b,0);
-  $('st').textContent=ITEMS[ship].n+' storage · '+used()+'/'+cap;el.innerHTML='';
+// the storage screen, shared by a ship's crates and the Haven house's crates (playtest #4): `st` is the {item: count} store, `cap` how many things it holds, `again` re-opens it after a change.
+// Equipped things stay with you, and quest keys cannot be stored.
+function openStash(title,st,cap,again){const el=$('items'),used=()=>Object.values(st).reduce((a,b)=>a+b,0);
+  $('st').textContent=title+' · '+used()+'/'+cap;el.innerHTML='';
   const head=t=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+t+'</b></div>';el.appendChild(r)};
   const row=(title,sub,btns)=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+title+'</b>'+(sub?'<br>'+sub:'')+'</div>';btns.forEach(([label,dis,fn])=>{const b=document.createElement('button');b.textContent=label;b.disabled=dis;b.onclick=fn;r.appendChild(b)});el.appendChild(r)};
   head('In storage');
-  const ids=Object.keys(st).filter(id=>st[id]>0);if(!ids.length)row('Empty','Put things in from your bag below.',[]);
+  const ids=Object.keys(st).filter(id=>st[id]>0&&ITEMS[id]);if(!ids.length)row('Empty','Put things in from your bag below.',[]);
   ids.forEach(id=>row(ITEMS[id].n+' x'+st[id],'',[['Take 1',false,()=>{take(id,1)}],['Take all',false,()=>{take(id,st[id])}]]));
   head('Your bag');
   const equipped=id=>Object.values(S.eq).includes(id),stowable=id=>(S.bag[id]||0)-(equipped(id)?1:0);
-  const bag=Object.keys(S.bag).filter(id=>ITEMS[id]&&ITEMS[id].kind!=='boat'&&stowable(id)>0);if(!bag.length)row('Nothing to store','Equipped things stay with you.',[]);
+  const bag=Object.keys(S.bag).filter(id=>ITEMS[id]&&ITEMS[id].kind!=='boat'&&ITEMS[id].kind!=='key'&&stowable(id)>0);if(!bag.length)row('Nothing to store','Equipped things and quest keys stay with you.',[]);
   bag.forEach(id=>{const free=cap-used(),n=stowable(id);row(ITEMS[id].n+' x'+n,'',[['Store 1',free<1,()=>{put(id,1)}],['Store all',free<1,()=>{put(id,Math.min(n,free))}]])});
-  function put(id,n){S.bag[id]-=n;if(!S.bag[id])delete S.bag[id];st[id]=(st[id]||0)+n;ui();save();openStorage(ship)}
-  function take(id,n){st[id]-=n;if(!st[id])delete st[id];add(id,n);ui();save();openStorage(ship)}
+  function put(id,n){S.bag[id]-=n;if(!S.bag[id])delete S.bag[id];st[id]=(st[id]||0)+n;ui();save();again()}
+  function take(id,n){st[id]-=n;if(!st[id])delete st[id];add(id,n);ui();save();again()}
   $('store').classList.add('open')}
+function openStorage(ship){openStash(ITEMS[ship].n+' storage',shipStore(ship),ITEMS[ship].store,()=>openStorage(ship))}
+// a storage crate in the Haven house (tile 175): every crate is its own store, kept in S.crates under "x,y"; each holds CRATE_CAP things
+const CRATE_CAP=60;
+function crateStore(x,y){S.crates=S.crates||{};return S.crates[x+','+y]=S.crates[x+','+y]||{}}
+function openCrate(x,y){openStash('Storage crate',crateStore(x,y),CRATE_CAP,()=>openCrate(x,y))}
 function bedSleep(){const r=shipRoomOf(P.x,P.y);if(!r||r.kind!=='quarters')return say('Nowhere to sleep here. Try your quarters.');sleep()}
 function shipUse(tt){const r=shipRoomOf(P.x,P.y);if(!r)return false;
   if(tt===128){takeHelm();return true}

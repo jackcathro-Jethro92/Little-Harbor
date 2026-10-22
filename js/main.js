@@ -1,4 +1,5 @@
 // ---------- start: draw loop, timers, restore explored map, first screen ----------
+haveFixtures();   // the Haven house's built-in stations (js/systems/home.js)
 (function loop(){draw();requestAnimationFrame(loop)})();
 setInterval(enemiesTick,600);setInterval(arenaTick,600);setInterval(()=>{if(S.buff)ui();const t=performance.now();},1000);setInterval(save,5000);
 setInterval(()=>NPC.forEach(n=>{if(n.fixed||n.busy||n.hidden||Math.random()<.6)return;

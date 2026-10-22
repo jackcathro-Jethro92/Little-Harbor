@@ -27,7 +27,7 @@ function placeWhy(id,x,y,sub){
   if(placedAt(x,y))return 'Something is already there.';
   if((B.x===x&&B.y===y)||enemyAt(x,y))return "You can't place that there.";
   if(it.place==='camp')return inRoom(x,y)?"You can't set up camp indoors.":campOf()?'You already have a camp set up.':'';
-  if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';
+  if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';
   if(inRoom(x,y))return '';
   const c=campOf(),nearHome=S.home&&Math.hypot(x-(S.home.x+1),y-(S.home.y+1))<=CAMP_R,nearCamp=c&&Math.hypot(c.x-x,c.y-y)<=CAMP_R;
   if(nearHome||nearCamp||onIsle(x,y))return '';   // (on Haven Isle stations go anywhere on the island, not only near the house)
@@ -42,7 +42,7 @@ function campPlan(){const [fx,fy]=front(),f=P.f,x0=f==='l'?fx-2:f==='r'?fx:fx-1,
   const why=(x,y)=>{const k=at(x,y);if(inRoom(x,y))return "You can't set up camp indoors.";if(k===0)return "That's water.";if(zoneOf(x,y)>=3)return "You can't place that here.";
     if(!WK.includes(k)||CAMP_BAD.includes(k))return 'Something is in the way.';
     if(npcAt(x,y)||(x===P.x&&y===P.y)||(B.x===x&&B.y===y)||enemyAt(x,y)||placedAt(x,y)||gardenAt(x,y)||(typeof animalAt==='function'&&animalAt(x,y)))return 'Something is in the way.';
-    if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';return ''};
+    if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';return ''};
   for(let y=y0;y<y0+2;y++)for(let x=x0;x<x0+3;x++)t.push([x,y,why(x,y)]);
   return{x:x0,y:y0,w:3,h:2,tiles:t,glob:sail?'Step onto land first.':campOf()?'You already have a camp set up.':''}}
 function plan(id){if(id==='camp_kit')return campPlan();const it=ITEMS[id],[fx,fy]=front(),t=[];
@@ -71,11 +71,11 @@ function placeItem(id){
   S.bag[id]--;if(!S.bag[id])delete S.bag[id];S.placed.push({id,x,y});placing=null;
   say(ITEMS[id].n+' placed.');toast(ITEMS[id].n+' placed!');ui();save()}
 function pickUp(p){
-  if(p.id==='camp_kit'){const rest=S.placed.filter(q=>q!==p);rest.forEach(q=>add(q.id));S.placed=[];add('camp_kit');
+  if(p.id==='camp_kit'){const rest=S.placed.filter(q=>q!==p&&!q.fixed);rest.forEach(q=>add(q.id));S.placed=S.placed.filter(q=>q.fixed);add('camp_kit');
     say('Packed up the camp'+(rest.length?' and '+rest.length+' station'+(rest.length>1?'s':''):'')+'.')}
   else{S.placed=S.placed.filter(q=>q!==p);add(p.id);say(ITEMS[p.id].n+' picked up.')}
   ui();save()}
 function useStation(p){const it=ITEMS[p.id];
   if(p.id==='camp_kit')return menu(it.n,['Cook','Pick up camp','Cancel'],o=>{if(o==='Cook')openCraft('fire');else if(o==='Pick up camp')pickUp(p)});
   const verb=it.place==='cooking'?'Cook':it.place==='shipwright'?'Build':it.place==='alchemy'?'Brew':'Craft';
-  menu(it.n,[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then tap Use.')}})}
+  menu(it.n,p.fixed?[verb,'Cancel']:[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then tap Use.')}})}

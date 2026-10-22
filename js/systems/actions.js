@@ -7,12 +7,15 @@ function act(){
   const[x,y]=front(),n=npcAt(x,y);
   {const en=enemyAt(x,y);if(en&&!sail)return startEnemyBattle(en)}
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
+  if(zoneOf(P.x,P.y)===1&&at(x,y)===175)return openCrate(x,y);   // a storage crate in the Haven house
+  if(zoneOf(P.x,P.y)===1&&at(x,y)===176)return openMannequin(x,y);   // a mannequin in its wardrobe (js/ui/mannequin.js)
   if(useGate(x,y))return;
   if(at(x,y)===23||at(x,y)===144||at(x,y)===145||at(x,y)===169){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();
   {const en=!sail&&ENTR.find(q=>q.x===x&&q.y===y);if(en)return enterHall(en)}
   {const t2=at(x,y);if(!sail){if(t2===44||(t2===51&&!inFZ(P.x,P.y)))return enterForest(y<130);if((t2===43||t2===51)&&inFZ(P.x,P.y))return exitForest(y<FZ.y0+16);if(t2===46)return pickup(x,y)}}
-  if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome();
+  if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome(S.home);
+  if(S.isle&&!sail&&x===S.isle.x+1&&y===S.isle.y+1)return enterHome(S.isle);
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
   const tt=at(x,y);if(!sail&&PICKUPS[tt])return pickupTile(x,y,tt);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
@@ -50,7 +53,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();restAttacks();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }
