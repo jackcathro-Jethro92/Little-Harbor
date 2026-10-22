@@ -2,7 +2,7 @@
 // The story: as the player leaves the Sky island (the first time they get into the boat there after Quest 6) a seagull brings Bjorn's letter: the village is under attack. From then on the village is in its raid variant
 // (flag village_attack, row `village_raid` of VARIANTS): four pirate ships offshore (tile 101 under them blocks boats), burning roofs with smoke and cannon fire (js/render/raid.js), and villagers with new things to say.
 // On landing, three waves of pirates come ashore one after the other (encounters q7_w1 to q7_w3, fought one by one: 3, 4 and 5 pirates). A villager hands the player a healing potion between waves. When the last falls the
-// pirates flee, shouting that the boss will be finished at the tower (Jack's words). When the last falls the screen fades to black and, as it clears, every pirate and ship is gone and the fires are out, but the four houses that burned are now blackened ruins that stay that way (flag village_burnt, drawn by `drawRuins` in js/render/raid.js; playtest #4).
+// pirates flee, shouting that the boss will be finished at the tower (Jack's words). When the last falls the screen fades to black and, as it clears, every pirate and ship is gone and the fires are out, but the houses that burned are now blackened ruins that stay until Quest 10 is finished (flag village_burnt, cleared when the island rises, drawn by `drawRuins` in js/render/raid.js; playtest #4).
 // The spoken lines marked JACK are Jack's own words from STORY_TEXT.md, word for word (also in JACKS_LINES.txt). Everything else is a PLACEHOLDER until he writes his own.
 // Switches: q7_started, village_attack, enc_q7_w1_done to enc_q7_w3_done, q7_done, village_burnt.
 QUESTS.push({id:'q7',name:'Under Attack',

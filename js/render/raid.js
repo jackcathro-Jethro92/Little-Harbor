@@ -3,7 +3,7 @@
 // (js/render/camp.js). Drawing only: nothing here blocks anyone. Some houses burn (a few flame tongues on the roof and a column of smoke), and every few seconds each ship fires: a flash at its side, a dark ball flying in an arc
 // to a spot on the island, and a burst where it lands. The timing comes from the clock, so nothing is stored.
 let RAID_ON=false;
-const RAID_BURN=[2,5,7,8],RAID_SHOTS=[[0,150,108],[1,170,112],[2,150,121],[3,162,119],[0,153,114],[1,164,107],[2,146,116],[3,158,123]];   // houses that burn (index among the village houses; since playtest #4 they are the four on either side of the main road, where the fighting is); [ship, target tile x, y] for each volley
+const RAID_BURN=[1,3,4,7,2,5,8],RAID_SHOTS=[[0,150,108],[1,170,112],[2,150,121],[3,162,119],[0,153,114],[1,164,107],[2,146,116],[3,158,123]];   // houses that burn (index among the village houses; the first four are the original ones, and playtest #4 added three more beside the main road); [ship, target tile x, y] for each volley
 const raidHouses=()=>BL.filter(b=>b.roof&&!b.sign&&!b.ship&&b.x>=140&&b.x<=176&&b.y>=99&&b.y<=125);
 function raidFlames(x,y,w,t,seed){for(let i=0;i<5;i++){const fx=x+4+i*(w-8)/4,ph=t/95+seed*3+i*1.9,h=9+Math.sin(ph)*3+Math.sin(ph*1.7)*2;
     g.fillStyle='#c8321a';g.beginPath();g.moveTo(fx-4,y);g.lineTo(fx,y-h);g.lineTo(fx+4,y);g.fill();
@@ -31,7 +31,7 @@ function drawTowerRaid(cx,cy,t){const px=212*T-cx,py=200*T-cy;if(px<-120||px>VW+
   [[-34,10],[34,18],[0,-6]].forEach(([dx,dy],i)=>raidSmoke(px+8+dx,py+dy,t,i+3));
   [[-60,40],[52,46],[-20,66]].forEach(([dx,dy],i)=>raidFlames(px+8+dx,py+dy,20,t,i+5))}
 
-// the burnt village (flag village_burnt, set when the last pirate has fled in Quest 7): the four houses that burned are blackened ruins with broken rafters, ash and a few dying embers (playtest #4)
+// the burnt village (flag village_burnt, set when the last pirate has fled in Quest 7): the houses that burned are blackened ruins with broken rafters, ash and a few dying embers (playtest #4)
 function raidRuin(b,cx,cy,t,i){const x=b.x*T-cx,y=b.y*T-cy;if(x<-60||x>VW+20||y<-40||y>VH+30)return;const W=b.w*T,O='#120e0c';
   g.fillStyle=O;g.fillRect(x,y,W,T*2);for(let k=0;k<W;k+=3){const h=((k*13+i*7+(k>>2)*5)%11)-2;if(h>0)g.fillRect(x+k,y-h,2+(k%2),h)}   // broken rafters along the top
   g.fillStyle='#2a2220';g.fillRect(x+2,y+3,W-4,T*2-5);g.fillStyle='#3e322a';for(let k=3;k<W-8;k+=11){g.fillRect(x+k,y+4+((k+i)%3)*3,8,2);g.fillRect(x+k+3,y+14+((k+i)%4)*2,2,7)}   // fallen beams

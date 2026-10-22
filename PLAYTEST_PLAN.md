@@ -192,10 +192,11 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 6. **Taverns (P43):** one in the Walled Settlement and one in the Mountain Town; a night's sleep costs 100 gold.
 
 ## Still open
-- **P47, island names.** The map still shows "Island 1", "Island 2", "Island 3", "Island 4", "Island 5", and the quest hints say "Island 3" and "Island 6", while Jack's own words say "fire island" and the map calls the volcano "Volcano Island" until the pirates come, then "Pirate Island". Names need Jack's choice for each island before they are changed everywhere.
+- **P47, island names (settled):** the map showed "Island 1", "Island 2", "Island 3", "Island 4", "Island 5", and the quest hints say "Island 3" and "Island 6", while Jack's own words say "fire island" and the map calls the volcano "Volcano Island" until the pirates come, then "Pirate Island". Names need Jack's choice for each island before they are changed everywhere.
 
 ## Batch B notes (22 Oct)
 - **P60:** sight rules as Jack described: the pirate hops with a "!", walks up, says a short placeholder line, then the battle starts. It applies to every pirate that stands in the world waiting to be fought (the temple pirates, the raiders in the village, the guards at the Sea temple). A pirate sees you within 6 tiles on foot with nothing solid in between.
 - **P61:** Barron comes after the last pirate of the path is beaten (and you are near the top), rather than after the explosion on its own, so you do not meet the boss with pirates still behind you.
-- **P64, my choices for Jack to change:** the houses that burn are now the four beside the main road (before they were on the edges); the burnt ruins stay for good (the old overnight repair is gone).
+- **P64 (Jack's corrections, 22 Oct):** "More burning houses" means the original four keep burning and three more start to burn (now seven). The burnt ruins stay until Quest 10 is finished, then the villagers rebuild.
+- **Island names (P47):** Jack was happy with the current names except Island 1 and Island 2 (nothing special on them), so their labels are removed from the map. The rest stays as it is.
 - **Not done:** P44 (Run), P52 and the other fighting notes are batch C.
