@@ -243,3 +243,6 @@ Odo, Bram, Murl and Lucie now work inside their own shop rooms. A tavern was add
 
 ## Batch G3 (22 Oct): the carpenter's furniture
 Jack's answers: furniture goes in homes and at camp; racks work as storage (weapons / tools only, shown on the rack); beds change nothing at home, and at camp let you sleep beside them; the list and prices as proposed (11 pieces). Built.
+
+## Batch F1 (22 Oct): the new Bag
+Sections on the left and a grid of icon squares, as in Jack's sketch. F2 vendors, F3 equipment and the single tool slot, F4 carry capacity (20 slots) follow.

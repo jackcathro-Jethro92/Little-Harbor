@@ -37,6 +37,6 @@ function useFurn(p){const it=ITEMS[p.id],f=it.furn,opts=[];
 function openFurn(p){const s=ITEMS[p.id].furn.store;p.st=p.st||{};openStash(s.title||ITEMS[p.id].n,p.st,s.cap,()=>openFurn(p),s.only)}
 // the picture: the prop, and on a rack the things it holds (up to three kinds, small)
 const FIC={};
-function furnIcon(id){if(FIC[id])return FIC[id];const x=$('bdi').getContext('2d'),keep=x.getImageData(0,0,16,16);icon(id);const c=document.createElement('canvas');c.width=c.height=16;c.getContext('2d').drawImage($('bdi'),0,0);x.putImageData(keep,0,0);return FIC[id]=c}
+function furnIcon(id){if(FIC[id])return FIC[id];const c=document.createElement('canvas');c.width=c.height=16;icon(id,c);return FIC[id]=c}
 function furnArt(p,cx,cy,t){const f=furnFp(p.id),sx=p.x*T-cx,sy=p.y*T-cy;drawProp({id:f.prop,rot:0,flip:0},sx,sy,(t/250)|0);
   if(p.st&&ITEMS[p.id].furn.store.only){const ids=Object.keys(p.st).filter(i=>p.st[i]>0&&ITEMS[i]).slice(0,f.w);g.imageSmoothingEnabled=false;ids.forEach((i,k)=>g.drawImage(furnIcon(i),Math.round(sx+k*T+1),Math.round(sy+1),14,14))}}
