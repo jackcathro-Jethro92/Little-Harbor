@@ -43,7 +43,7 @@ function openStore(k){
     r.appendChild(b);el.appendChild(r)});
   [...LIST('station'),...LIST('claim'),...LIST('garden')].filter(id=>rod?ITEMS[id].place!=='shipwright':ITEMS[id].place==='shipwright').forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),rod?'Home':'Yard');r.className='it';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';const b=document.createElement('button');
-    if(count(id)||S.placed.some(p=>p.id===id)||(it.kind==='claim'&&S.claim)){b.textContent='Owned';b.disabled=true}
+    if(count(id)||S.placed.some(p=>p.id===id&&!p.fixed)||(it.kind==='claim'&&S.claim)){b.textContent='Owned';b.disabled=true}
     else{b.textContent=it.price+'g';b.disabled=S.gold<it.price;b.onclick=()=>{S.gold-=it.price;add(id);ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
   shopTabs.redo=()=>openStore(k);shopTabs(el,'store:'+k);$('store').classList.add('open');
@@ -58,7 +58,7 @@ function openTrader(key,mode){
   let n=0;
   sh.list.forEach(([title,list])=>{
     if(buy&&(sh.noBuy||[]).includes(title))return;
-    if(buy){cat=title;list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel','armour'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id));
+    if(buy){cat=title;list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel','armour'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id&&!p.fixed));
       row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')})})}
     else if(sh.sell.includes(title)){cat=title;list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price*((sh.rate||{})[title]||.5));
       row(it.n+' x'+count(id),'Sells for '+pr.toLocaleString()+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id]){delete S.bag[id];if(S.eq[slotOf(id)]===id){S.eq[slotOf(id)]=null;if(it.kind==='weapon'&&count('wooden_sword'))S.eq.weapon='wooden_sword'}}ui();save();say(sh.who+': Sold '+it.n.toLowerCase()+' for '+pr.toLocaleString()+'g.');openTrader(key,'sell')})})}});
