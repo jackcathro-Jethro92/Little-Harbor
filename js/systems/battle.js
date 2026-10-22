@@ -53,6 +53,10 @@ function bFx(cls,target,text){if(BATTLE)(BATTLE.fx=BATTLE.fx||[]).push(cls+(text
   if(cls==='shield'){const i=document.createElement('img');i.src=shieldImg;d.appendChild(i)}else if(text)d.textContent=text;
   a.appendChild(d);setTimeout(()=>d.remove(),1000)}
 const bFlash=cv=>bShake(cv,'flash');
+// being hit (playtest #4): the whole field shakes, a red flash washes over it, you blink and the health bar flashes (the old red edge was on the map behind the battle, where nobody could see it)
+function bHurt(){bFx('hurt');if(BATTLE_FAST)return;const a=$('bt-arena'),m=$('bt-me'),h=$('bt-hp'),r=document.createElement('div');r.className='bt-redflash';a.appendChild(r);
+  bShake($('bt-meBox'),'hit');a.classList.add('screenshake');m.classList.add('hurtblink');h.classList.add('losing');
+  setTimeout(()=>{r.remove();a.classList.remove('screenshake')},520);setTimeout(()=>{m.classList.remove('hurtblink');h.classList.remove('losing')},700)}
 // keeps the sway going smoothly when the foes are redrawn (the animation picks up where it was)
 const swayDelay=()=>'-'+Math.round(performance.now()%2400)+'ms';
 const bShake=(el,cls)=>{if(!el||BATTLE_FAST)return;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),320)};
@@ -61,23 +65,34 @@ function startBattle(id,onEnd){const row=BATTLES[id];if(!row||BATTLE||SCENE)retu
   $('battle').classList.add('open');drawField();bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
   const note=AMBUSH_NOTE;AMBUSH_NOTE=false;
   (async()=>{if(note)await bSay('You were attacked while distracted!');await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
+// Run is only an option against wild creatures (a foe with `art`); pirates and other people never let you go (playtest #4)
+const bCanRun=()=>!BATTLE.row.noRun&&bAlive().every(f=>f.t.art);
 function bTurn(){const B=BATTLE;if(!B)return;B.picking=true;bDraw();$('bt-msg').textContent='What will you do?';
-  bMenu([['Attack',bAttackMenu],['Block',bBlock],['Item',bItems],['Run',bRun]])}
+  bMenu([['Attack',bAttackMenu],['Block',bBlock],['Item',bItems],...(bCanRun()?[['Run',bRun]]:[])])}
 // Attack opens the list of attacks the player knows with the weapon in hand (js/data/attacks.js); each costs stamina and one you cannot afford is greyed out
-function bAttackMenu(){const B=BATTLE;B.picking=true;$('bt-msg').textContent='Choose an attack. Stamina '+Math.ceil(S.sta)+'.';
-  bMenu([...knownAttacks().map(id=>[ATTACKS[id].n+' ('+ATTACKS[id].cost+')',()=>bAttack(id),S.sta<ATTACKS[id].cost]),['Back',bTurn]])}
-async function bAttack(id){const B=BATTLE,A=ATTACKS[id];B.picking=false;bMenu([]);let f=B.foes[B.sel];if(!f||!f.alive)f=bAlive()[0];B.sel=B.foes.indexOf(f);
-  const w=eq('weapon'),t=weaponType(),sk=t==='starter'?null:t,lv0=sk?lvl(sk):0;
-  S.sta=Math.max(0,S.sta-A.cost);
-  const base=w?w.damage:2;let d=Math.max(1,Math.round(base*(1+.08*lv0+fx('dmg'))*A.power*(.85+Math.random()*.3)));
+// each attack shows its stamina cost and the uses it has left (playtest #4); when none can be used, Scuffle (free, weak) is offered so you are never stuck
+function bAttackMenu(){const B=BATTLE;B.picking=true;const ks=knownAttacks(),worn=!ks.some(canUse);
+  $('bt-msg').textContent=worn?'You have no strength or no uses left for your attacks. All you can do is Scuffle.':'Choose an attack. Stamina '+Math.ceil(S.sta)+'.';
+  bMenu([...ks.map(id=>{const A=ATTACKS[id],u=usesLeft(id);return[A.n+' ('+A.cost+')'+(A.uses!==undefined&&PP_ON?'  '+u+'/'+A.uses:''),()=>bAttack(id),!canUse(id)]}),...(worn?[['Scuffle',()=>bAttack('scuffle')]]:[]),['Back',bTurn]])}
+// one blow of an attack: damage, animation and the line about it (a second blow of Quick Strike runs this again)
+async function bBlow(f,A,w,t,sk,first){
+  const base=w?w.damage:2;let d=Math.max(1,Math.round(base*(1+.08*(sk?lvl(sk):0)+fx('dmg'))*A.power*(.85+Math.random()*.3)));
   const blocked=A.pierce?false:Math.random()<foeBlockChance(f);   // `pierce` (Divine Strike) cannot be blocked
   if(blocked)d=Math.max(1,Math.round(d*BLOCK_TAKES));
-  f.hp-=d;gainXp('combat',1);if(sk&&A.xp)gainXp(sk,A.xp);
-  bShake($('bt-meBox'),'lunge');await bwait(230);
+  f.hp-=d;if(first){gainXp('combat',1);if(sk&&A.xp)gainXp(sk,A.xp)}
+  bShake($('bt-meBox'),'lunge');await bwait(first?230:150);
   bFx(t==='axe'?'chop':'slash',f.el);if(blocked){bFx('shield',f.el);bFx('dmg small',f.el,'-'+d)}else{bShake(f.el,'hit');bFlash(f.cv);bFx('dmg',f.el,'-'+d)}
   await bSay(blocked?f.t.n+' blocks! You use '+A.n+' for only '+d+'.':'You use '+A.n+' on '+f.t.n+' for '+d+'!');
+  return blocked}
+// a big banner across the field (a new attack learned)
+async function bBanner(text){bFx('banner',null,text);if(BATTLE_FAST)return;const a=$('bt-arena'),d=document.createElement('div');d.className='bt-banner';d.textContent=text;a.appendChild(d);setTimeout(()=>d.remove(),2600);await bwait(1700)}
+async function bAttack(id){const B=BATTLE,A=ATTACKS[id];B.picking=false;bMenu([]);let f=B.foes[B.sel];if(!f||!f.alive)f=bAlive()[0];B.sel=B.foes.indexOf(f);
+  const w=eq('weapon'),t=weaponType(),sk=t==='starter'?null:t,lv0=sk?lvl(sk):0;
+  S.sta=Math.max(0,S.sta-A.cost);if(A.uses!==undefined){S.pp=S.pp||{};S.pp[id]=(S.pp[id]||0)+1}
+  let blocked=await bBlow(f,A,w,t,sk,true);
+  if(A.twice&&f.hp>0&&!blocked&&Math.random()<A.twice){bFx('twice');await bSay('Quick! You strike again before '+f.t.n+' can answer!');blocked=await bBlow(f,A,w,t,sk,false)}   // Quick Strike (playtest #4)
   if(sk&&lvl(sk)>lv0){const learned=WEAPON_MOVES[t].filter(([,req])=>req>lv0&&req<=lvl(sk)).map(([i])=>ATTACKS[i].n);
-    await bSay('Your '+SKILLS.find(q=>q.id===sk).n+' skill reached level '+lvl(sk)+'!'+(learned.length?' You learned '+learned.join(' and ')+'!':''))}
+    await bSay('Your '+SKILLS.find(q=>q.id===sk).n+' skill reached level '+lvl(sk)+'!');if(learned.length)await bBanner('New attack learned: '+learned.join(' and ')+'!')}
   if(A.stun&&f.hp>0&&!blocked&&Math.random()<A.stun){f.stun=1;await bSay(f.t.n+' is stunned!')}
   if(w&&S.coat>0){S.coat--;f.pois=3;ui();await bSay(f.t.n+' is poisoned!')}
   if(f.hp<=0){f.alive=false;bDraw();await bSay(f.t.n+' is beaten!')}else bDraw();
@@ -89,11 +104,13 @@ async function bBlock(){const B=BATTLE;B.picking=false;bMenu([]);S.sta=Math.min(
 function bItems(){const B=BATTLE;B.picking=false;const ids=[...LIST('food'),...LIST('potion')].filter(count);
   if(!ids.length){$('bt-msg').textContent='You have nothing to use.';return bMenu([['Back',bTurn]])}
   $('bt-msg').textContent='Use which?';bMenu([...ids.map(id=>[ITEMS[id].n+' x'+count(id),()=>bUse(id)]),['Back',bTurn]])}
-async function bUse(id){bMenu([]);const n0=count(id),it=ITEMS[id];if(it.kind==='food')eat(id);else drink(id);const used=count(id)<n0;bDraw();
+async function bUse(id){bMenu([]);const n0=count(id),it=ITEMS[id],h0=S.hp,s0=S.sta;if(it.kind==='food')eat(id);else drink(id);const used=count(id)<n0;bDraw();
+  if(S.hp>h0)bFx('heal',$('bt-meBox'),'+'+Math.round(S.hp-h0)+' HP');if(S.sta>s0)bFx('heal',$('bt-meBox'),'+'+Math.round(S.sta-s0)+' STA');
   await bSay($('msg').textContent);if(!used)return bTurn();bFoes()}
 async function bRun(){const B=BATTLE;B.picking=false;bMenu([]);
-  if(B.row.noRun){await bSay('There is no way to run from this!');return bFoes()}
-  if(Math.random()<.6){await bSay('You got away!');return bEnd('ran')}
+  if(!bCanRun()){await bSay('There is no way to run from this!');return bFoes()}
+  const odds=Math.min(...bAlive().map(f=>f.t.escape!==undefined?f.t.escape:.6));   // each wild creature can set its own `escape` chance (default 60%; a fast or fierce one can be lower)
+  if(Math.random()<odds){await bSay('You got away!');return bEnd('ran')}
   await bSay('You could not get away!');bFoes()}
 // the foes that are left take their turns
 async function bFoes(){const B=BATTLE;
@@ -104,7 +121,7 @@ async function bFoes(){const B=BATTLE;
     // a foe with a `pattern` (the pirate boss) cycles through its steps: a plain hit, or `wind` (it winds up, no damage this turn, so a Block next turn takes the heavy blow that follows)
     let atk=f.t.atk,hit=f.t.hit;if(f.t.pattern){const st=f.t.pattern[((f.turns=(f.turns||0)+1)-1)%f.t.pattern.length];if(st.wind){await bSay(f.t.n+' '+st.wind);continue}atk=st.atk;hit=st.hit}
     const raw=rnd(hit[0],hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))*(B.blocking?BLOCK_TAKES:1)));bShake(f.el,'foelunge');await bwait(230);
-    S.hp=Math.max(0,S.hp-d);ui();flashHit();if(B.blocking){bFx('shield',$('bt-meBox'));bFx('dmg small',$('bt-meBox'),'-'+d)}else{bShake($('bt-meBox'),'hit');bFlash($('bt-me'));bFx('dmg player',$('bt-meBox'),'-'+d)}bDraw();
+    S.hp=Math.max(0,S.hp-d);ui();flashHit();if(B.blocking){bFx('shield',$('bt-meBox'));bFx('dmg small',$('bt-meBox'),'-'+d)}else{bHurt();bFx('dmg player',$('bt-meBox'),'-'+d)}bDraw();
     await bSay(f.t.n+' '+(atk||'attacks')+'! -'+d+' health.');if(S.hp<=0)return bEnd('lost')}
   B.blocking=false;bTurn()}
 function bActions(list){(list||[]).forEach(a=>{const k=Object.keys(a).find(q=>TACT[q]&&!['say','scene','letter','battle'].includes(q));if(k)TACT[k](a[k])})}

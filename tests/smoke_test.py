@@ -29,7 +29,7 @@ def load(b, url, save):
     pg = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
     errs = []; pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("response", lambda r: r.status >= 400 and r.url.startswith("http://127.0.0.1") and errs.append("%d %s" % (r.status, r.url)))
-    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1")   # (pirates that spot you are tested on their own, near the end)
+    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1;window.__NO_PP=1")   # (pirates that spot you are tested on their own, near the end)
     pg.goto(url)
     pg.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(save)); pg.reload(); pg.wait_for_timeout(400)
     return pg, errs
@@ -494,7 +494,7 @@ def check(b, url):
     # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
     pg.wait_for_timeout(100)
-    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
+    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu (no Run against pirates)"
     ev("move('u');act();sleep()"); assert ev("P.y===33+OY"), "no walking, using or sleeping during a battle"
     bclick = lambda name: ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith(%s)).click()" % json.dumps(name))
     for _ in range(12):
@@ -504,8 +504,15 @@ def check(b, url):
         pg.wait_for_timeout(30)
     pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='won'&&flag('t_won')&&S.gold>=110&&!$('battle').classList.contains('open')&&S.hp>0"), "winning gives gold and runs the win actions"
-    ev("window.__r=null;startBattle('t_win',r=>{window.__r=r});const m=Math.random;Math.random=()=>0;window.__m=m"); pg.wait_for_timeout(50); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
-    assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works"
+    # running (playtest #4): only wild creatures can be run from, and it can fail; pirates never let you go
+    ev("FOES.t_wild={n:'Wild spirit',hp:30,hit:[1,1],xp:0,art:'ghost',look:{}};BATTLES.t_wild={foes:['t_wild'],ran:[{set:'t_ran'}]};window.__r=null;startBattle('t_wild',r=>{window.__r=r});window.__m=Math.random;Math.random=()=>.99"); pg.wait_for_timeout(50)
+    assert ev("[...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a wild creature can be run from"
+    bclick("Run"); pg.wait_for_function("BATTLE!==null&&BATTLE.picking&&BATTLE.log.some(t=>/could not get away/.test(t))", timeout=5000)
+    ev("Math.random=()=>0"); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
+    assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works, but it can fail first"
+    ev("window.__r=null;startBattle('t_win',r=>{window.__r=r})"); pg.wait_for_timeout(50)
+    assert ev("![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "there is no Run against pirates"
+    ev("bEnd('lost')"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("S.hp=50;S.gold=100;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
     ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='lost'&&flag('t_lost')&&sail===true&&S.hp>1&&S.gold===90"), "a knock-out wakes you on the boat with a tenth of your gold gone"
     # Batch 8 animations: a hit shows a slash, a flash and a number; a foe that blocks shows a shield and takes less; blocking yourself shows a shield; walking costs less stamina
@@ -519,7 +526,7 @@ def check(b, url):
     pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
     assert ev("STAM.walk===0&&STAM.sail===0"), "walking and sailing cost no stamina"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
-    bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
+    assert ev("BATTLE!==null&&![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='escaped'&&flag('t_escaped')&&!flag('t_bwon')"), "a boss with flee runs away at low health and the escape actions run"
     ev("S.hp=50;S.eq.weapon='sword';BATTLES.t_three={foes:['pirate_grunt','pirate_gunner','pirate_grunt']};startBattle('t_three',()=>{})"); pg.wait_for_timeout(50)
@@ -837,6 +844,20 @@ def check(b, url):
     assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
     assert attack_list('hand_axe') == ["Chop (4)", "Back"]; end_battle()
     assert attack_list('sword', 'sword', 380) == ["Slash (4)", "Lunge (5)", "Back"], "Lunge is learned at sword level 2"; end_battle()
+    # playtest #4: attack uses, Scuffle, Quick Strike's second blow, the hit reaction, and the gain card for potions
+    ev("PP_ON=true;S.pp={}")
+    assert attack_list('sword') == ["Slash (4)  40/40", "Back"], "each attack shows its uses left"; end_battle()
+    ev("S.pp={}"); ev("S.xp={};S.eq.weapon='sword';S.sta=100;S.hp=50;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Slash"); menu_ready()
+    assert ev("S.pp.slash===1&&BATTLE.fx.includes('hurt')&&BATTLE.fx.some(q=>q.startsWith('dmg player'))"), "using an attack counts a use, and being hit shows the hurt reaction"; end_battle()
+    ev("S.pp={slash:40}"); out = attack_list('sword'); assert out == ["Slash (4)  0/40", "Scuffle", "Back"], out
+    ev("[...$('bt-menu').children].find(b=>b.textContent==='Scuffle').click()"); menu_ready(); assert ev("BATTLE.log.some(t=>/You use Scuffle/.test(t))&&S.pp.slash===40"), "when nothing else can be used, Scuffle always can"; end_battle()
+    ev("S.pp={slash:3};restAttacks()"); assert ev("Object.keys(S.pp).length===0"), "resting gives every attack its uses back"
+    ev("PP_ON=false;S.xp={};S.xp.sword=770;S.eq.weapon='sword';S.sta=100;S.hp=50;window.__m=Math.random;Math.random=()=>0;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Quick"); menu_ready()
+    assert ev("BATTLE.fx.includes('twice')&&BATTLE.log.some(t=>/strike again/.test(t))&&BATTLE.log.filter(t=>/You use Quick Strike/.test(t)).length===2"), "Quick Strike can hit twice before the foe answers"; end_battle()
+    ev("Math.random=()=>.99;S.sta=100;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Quick"); menu_ready()
+    assert ev("!BATTLE.fx.includes('twice')&&BATTLE.log.filter(t=>/You use Quick Strike/.test(t)).length===1"), "and usually hits once"; end_battle(); ev("Math.random=__m;S.xp={}")
+    ev("S.hp=10;S.sta=10;S.bag.healing_potion=1;drink('healing_potion')"); assert ev("!!$('gain')&&$('gain').querySelectorAll('.gr').length===1&&/HP/.test($('gain').textContent)&&/\\+\\d+/.test($('gain').textContent)"), "a potion shows a card with the bar filling and the amount gained"
+    ev("$('gain').remove();S.hp=50;S.sta=100")
     assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
     assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
     assert attack_list('hand_axe', 'axe', 3300) == ["Chop (4)", "Bash (4)", "Cleave (8)", "Back"], "the axe learns Bash at 3 and Cleave at 6"; end_battle()
@@ -851,9 +872,9 @@ def check(b, url):
     ev("Math.random=__r0"); end_battle()
     # learning an attack announces it
     attack_list('sword', 'sword', 765); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
-    assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 3!/.test(t))&&BATTLE.fx.includes('banner:New attack learned: Quick Strike!')"), "reaching level 3 teaches Quick Strike, with a banner"; end_battle()
     attack_list('sword', 'sword', 375); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
-    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2! You learned Lunge!/.test(t))"), "reaching level 2 teaches Lunge"; end_battle()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2!/.test(t))&&BATTLE.fx.includes('banner:New attack learned: Lunge!')"), "reaching level 2 teaches Lunge, with a banner"; end_battle()
     # the Divine Blade: its own attack, Divine Strike, on top of the sword's (Quest 8)
     ev("S.bag.divine_blade=1")
     assert attack_list('divine_blade') == ["Slash (4)", "Divine Strike (10)", "Back"], "the Divine Blade adds Divine Strike to the sword's attacks"; end_battle()

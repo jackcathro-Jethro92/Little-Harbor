@@ -137,7 +137,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P41 | Carry capacity might be worth adding, together with "Drive the character to make a base" (unclear: see questions), which means we also need a storage system (more like Stardew) | F |  |
 | P42 | Running out of stamina has a negative effect: a much slower walking speed. The swiftness potion could then help the player move faster again, but nothing regains stamina except sleep | A | **Built** (batch A) |
 | P43 | Taverns offer a place to sleep | G |  |
-| P44 | Run should have a chance to fail against wild creatures, and is not an option against pirates (combat) | C |  |
+| P44 | Run should have a chance to fail against wild creatures, and is not an option against pirates (combat) | C | **Built** (batch C1): no Run against pirates; wild creatures can still be run from, and it can fail |
 | P45 | The font for numbers is hard to read | A | **Built** (batch A): digits use a clearer device font |
 | P46 | Bram sells weapons; remove this, only the blacksmith sells weapons | A | **Built** (batch A): the Old Sword moved to Garrick |
 | P47 | Island names brought into continuity across the map and the story text | A | Waiting for Jack to pick the names (see questions) |
@@ -145,8 +145,8 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P49 | Equipment menu: a section for the equipped tool, depending on what you need to do | F |  |
 | P50 | Clearing the rockpile outside the mountain settlement: the pickaxe only breaks one stone. Change the dialogue; if you break all the stones the NPC gives you a gold reward | A | **Built** (batch A): each rock breaks on its own, 150 gold from Dell when all six are gone |
 | P51 | Remove the stamina penalty for movement | A | **Built** (batch A) |
-| P52 | When the character is hit by an attack make it more obvious: a flash or an animation showing the hit | C |  |
-| P53 | Announce when you have learned a new attack | C |  |
+| P52 | When the character is hit by an attack make it more obvious: a flash or an animation showing the hit | C | **Built** (batch C1): field shake, red flash, blinking, flashing health bar |
+| P53 | Announce when you have learned a new attack | C | **Built** (batch C1): a big banner in battle |
 | P54 | The carpenter: who sells furniture? | G (question) |  |
 | P55 | The character walks over the top of the Temple Tower (screenshot to come) | D |  |
 | P56 | Workbench art: twice the size | A | **Built** (batch A): two tiles wide, vice and tools |
@@ -156,15 +156,15 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B | **Built** (batch B): hop, red "!", walk up, placeholder line, then the battle. Decided (Jack, 22 Oct) |
 | P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B | **Built** (batch B): Barron walks down the path to you after the last pirate |
 | P62 | Weapon strength needs to be developed and nerfed | C |  |
-| P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C |  |
+| P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C | **Built** (batch C1): a card with the filling bars and the amount |
 | P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B | **Built** (batch B): see the notes below |
 | P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
 | P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |  |
 | P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |  |
-| P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C |  |
+| P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C | **Built** (batch C1): 30% to strike twice |
 | P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B | **Built** (batch B): twelve pirates round the spiral path |
 | P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |  |
-| P71 | A limited number of uses for each attack | C |  |
+| P71 | A limited number of uses for each attack | C | **Built** (batch C1): uses per attack until you sleep; Scuffle when nothing is left |
 | P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
 | P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |  |
 | P74 | Haven Isle should be further north than where it is now | D |  |
@@ -200,3 +200,8 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **P64 (Jack's corrections, 22 Oct):** "More burning houses" means the original four keep burning and three more start to burn (now seven). The burnt ruins stay until Quest 10 is finished, then the villagers rebuild.
 - **Island names (P47):** Jack was happy with the current names except Island 1 and Island 2 (nothing special on them), so their labels are removed from the map. The rest stays as it is.
 - **Not done:** P44 (Run), P52 and the other fighting notes are batch C.
+
+## Batch C is split in two (22 Oct)
+- **C1, fighting mechanics (built):** P44, P52, P53, P63, P68, P71.
+- **C2, balance and new enemies (next):** P62 (weapon strength), P70 (Divine Strike and the pirates), P72 (sea creatures while sailing) and P73 (the Rock Dragon).
+- **P71 numbers are first guesses:** uses per attack are Strike 40, Bash 20, Slash 40, Lunge 25, Quick Strike 30, Power Slash 12, Chop 40, Cleave 12, Divine Strike 8, restored by sleeping or a guild bunk. Tell me if they feel too tight or too loose.
