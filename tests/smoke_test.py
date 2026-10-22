@@ -785,7 +785,7 @@ def check(b, url):
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;SCENE=null;BATTLE=null;sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});P.x=P.rx=283;P.y=P.ry=44;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_land'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const r=encFigures('q9_guards').map(n=>Math.hypot((n.x-283)/24,(n.y-36)/19));return r.some(v=>v>.85)&&r.some(v=>v>.68&&v<.82)&&r.some(v=>v>.5&&v<.64)&&r.some(v=>v<.46&&v>.3)&&r.filter(v=>v<.3).length>=3})()"), "twelve pirates are spread round the spiral path: the beach, both terraces, the rim, the boardwalk and the courtyard"
     fight_all('q9_guards', 12, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
-    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===170&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
+    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===320&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
     ev("S.hp=9999;S.sta=100;BATTLE.foes[0].turns=0")
     seq = []
     for _ in range(4):
@@ -915,7 +915,7 @@ def check(b, url):
     ev("S.bag.divine_blade=1")
     assert attack_list('divine_blade') == ["Slash (4)", "Divine Strike (10)", "Back"], "the Divine Blade adds Divine Strike to the sword's attacks"; end_battle()
     attack_list('divine_blade'); ev("window.__r0=Math.random;Math.random=()=>0.5;[...$('bt-menu').children].find(b=>b.textContent==='Back').click();window.__f=BATTLE.foes[0];window.__s0=S.sta;window.__f.t.block=1;BATTLE_BLOCKS=true")
-    pick("Divine Strike"); menu_ready(); assert ev("__f.hp===999-40&&S.sta===__s0-10"), "Divine Strike: 18 x 2.2 = 40 damage for 10 stamina, even against a foe that always blocks"
+    pick("Divine Strike"); menu_ready(); assert ev("__f.hp===999-25&&S.sta===__s0-10"), "Divine Strike: 14 x 1.8 = 25 damage for 10 stamina, even against a foe that always blocks"
     ev("Math.random=__r0;BATTLE_BLOCKS=false"); end_battle(); ev("S.eq.weapon=null;delete S.bag.divine_blade")
     # the axe trains the axe, not the sword
     attack_list('hand_axe'); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Chop"); menu_ready(); assert ev("(S.xp.axe||0)===10&&!(S.xp.sword)"), "the axe trains the axe skill"; end_battle()
@@ -1022,6 +1022,23 @@ def check(b, url):
     pg.wait_for_function("dlgActive()&&/take this for your trouble/.test($('dlg').textContent)", timeout=8000)   # then the reward line
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
+    # playtest #4, batch C2: balance (P62, P70), sea creatures (P72) and the rock dragons (P73)
+    assert ev("ITEMS.iron_sword.damage===9&&ITEMS.greatsword.damage===12&&ITEMS.divine_blade.damage===14&&ATTACKS.divine_strike.power===1.8&&FOES.final_raider.hp>=50&&FOES.barron.hp>=300&&FOES.final_raider.hit[0]>=9"), "weapons are weaker and the late pirates hit harder and take more"
+    assert ev("(()=>{const best=ITEMS.divine_blade.damage*(1+.08*6)*ATTACKS.divine_strike.power*1.15;return best<FOES.final_raider.hp&&best<FOES.final_gunner.hp})()"), "Divine Strike no longer finishes a Final Fight pirate in one blow at Sword skill 6"
+    ev("sail=true;BATTLE=null;SCENE=null;setFlag('festival_done');window.__sp=(()=>{for(let y=60;y<230;y++)for(let x=250;x<310;x++)if(seaOpen(x,y)&&Math.hypot(x-156,y-113)>95)return[x,y];return null})();P.x=P.rx=B.x=__sp[0];P.y=P.ry=B.y=__sp[1]")
+    ev("seaQuiet=1;window.__m=Math.random;Math.random=()=>0;seaTick();Math.random=__m"); assert ev("SEA_ALERT>performance.now()"), "sailing in open sea far from home can bring an attack, with an alert first"
+    ev("P.x=P.rx=B.x=156;P.y=P.ry=B.y=130;SEA_ALERT=0;seaQuiet=1;Math.random=()=>0;seaTick();Math.random=__m"); assert ev("SEA_ALERT===0"), "never near the village"
+    pg.wait_for_function("BATTLE!==null&&BATTLE.row.field==='sea'", timeout=5000); assert ev("BATTLE.foes[0].t.n==='Shark'||BATTLE.foes[0].t.n==='Ancient squid'"), "then the battle starts on the sea"
+    assert ev("[...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a sea creature can be run from"
+    ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    ev("seaAttack('sea_squid')"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Ancient squid'", timeout=5000); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    ev("sail=false;SEA_ALERT=0;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
+    pgd, errd = load(b, url, SAVE); evd = pgd.evaluate   # a fresh page, because the older tests above clear the extra creatures
+    assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length>=3"), "rock dragons stand on the bare rock of the mountain country"
+    evd("BATTLE_FAST=true;sail=false;startEnemyBattle(ENEMIES.find(e=>e.t==='rock_dragon'))"); pgd.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Rock dragon'", timeout=5000)
+    assert evd("BATTLE.foes[0].t.pattern.length===3&&/fire/.test(BATTLE.foes[0].t.pattern[2].atk)&&BATTLE.foes[0].t.art==='dragon'"), "the dragon winds up and then breathes fire"
+    evd("S.hp=500;BATTLE.foes[0].turns=2;bFoes()"); pgd.wait_for_function("BATTLE.fx.includes('firebreath')", timeout=5000); evd("bEnd('ran')"); pgd.wait_for_function("BATTLE===null", timeout=5000)
+    assert not errd, errd; pgd.close()
     # playtest #4 (P60): a pirate that sees you hops with a "!", walks up beside you, says a line, and then the battle starts
     ev("sail=false;SCENE=null;BATTLE=null;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{if(n.enc)n.coolUntil=1e15});ENCOUNTERS.push({id:'t_sight',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[0,-4]}]});startEncounter('t_sight');ENC_SIGHT=true")
     pg.wait_for_function("SCENE!==null", timeout=4000)

@@ -1,6 +1,6 @@
 // ---------- chickens, the spirit, placed stations ----------
 function chick(c,cx,cy,t){chickArt(c,cx,cy,t)}   // the art is in js/render/people.js
-const ENEMY_ART={ghost:ghostArt,centipede:centipedeArt,zombie:zombieArt};   // enemy drawings by the `art` name in ENEMY_TYPES (js/data/enemies.js)
+const ENEMY_ART={ghost:ghostArt,centipede:centipedeArt,zombie:zombieArt,shark:sharkArt,squid:squidArt,dragon:dragonArt};   // enemy drawings by the `art` name in ENEMY_TYPES (js/data/enemies.js)
 function enemyDraw(e,cx,cy,t){ENEMY_ART[ENEMY_TYPES[e.t].art](e,cx,cy,t)}
 function obj(p,cx,cy,t){stationArt(p,cx,cy,t)}   // the art is in js/render/objects.js
 // ---------- farm animals and pets (sprites face right; a.f=1 mirrors them) ----------

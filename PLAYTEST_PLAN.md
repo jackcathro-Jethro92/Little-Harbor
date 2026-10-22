@@ -155,7 +155,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B | **Built** (batch B): seven pirates scattered up the hill path |
 | P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B | **Built** (batch B): hop, red "!", walk up, placeholder line, then the battle. Decided (Jack, 22 Oct) |
 | P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B | **Built** (batch B): Barron walks down the path to you after the last pirate |
-| P62 | Weapon strength needs to be developed and nerfed | C |  |
+| P62 | Weapon strength needs to be developed and nerfed | C | **Built** (batch C2): the top weapons are weaker (iron 9, greatsword 12, Divine Blade 14) |
 | P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C | **Built** (batch C1): a card with the filling bars and the amount |
 | P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B | **Built** (batch B): see the notes below |
 | P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
@@ -163,11 +163,14 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D | **Built** (batch D2): 28 creatures, subtle dart plates and fire vents, and poison |
 | P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C | **Built** (batch C1): 30% to strike twice |
 | P69 | Final fight quest: the pirates should be all around the spiral walking path of the Water island | B | **Built** (batch B): twelve pirates round the spiral path |
-| P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C |  |
+| P70 | Divine Strike is far too powerful compared with the pirates; pirates need to hit harder and take hits better | C | **Built** (batch C2): Divine Strike 1.8x and the late pirates and Barron are tougher and hit harder |
 | P71 | A limited number of uses for each attack | C | **Built** (batch C1): uses per attack until you sleep; Scuffle when nothing is left |
 | P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
 | P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |  |
 | P74 | Haven Isle should be further north than where it is now | D | **Built** (batch D2): Haven Isle at y 60; the house is a second home |
+| P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C | **Built** (batch C2): a shark or an ancient squid can attack in open sea |
+| P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C | **Built** (batch C2): four rock dragons in the mountains, with a fire breath |
+| P74 | Haven Isle should be further north than where it is now | D |  |
 | P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D |  |
 | P76 | The house on Haven Isle needs work on its interior | D | **Built** (batch D2): nine rooms with built-in stations, working crates and armour mannequins |
 | P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D |  |
@@ -212,3 +215,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **P67:** about 28 creatures in the Depths; traps with subtle clues (a faint seam in the floor, a small hole in the wall); medium damage: a dart 8 plus poison (1 health a step for 10 steps, a healing potion cures it), a fire jet 14.
 - **P76:** better looking house with separate rooms: bedroom, wardrobe with mannequins that keep armour sets, kitchen with a cooking station, workshop with a workbench and forge, potion room with an alchemy station, a storage room of crates that all work, and a crate or two in every other room. Windows with a garden view and light on the floor.
 - **Please check on your phone:** the new rooms (do they feel right?), the built-in stations, the crates, the mannequins, and the Depths traps and creature numbers (28 is a lot; say if it is too hard).
+## Batch C2 notes (22 Oct)
+- **P62 "developed and nerfed":** I read this as bringing the best weapons down and making the enemies in the late quests match them. I did not add new weapons. If you meant more weapon tiers, tell me.
+- **P72:** frequency is about one attack for every 250 tiles of open sea after the first 22 tiles from home; the squid only appears far out. All numbers are first guesses.
+- **P73:** four dragons; tell me if you want more, fewer, or some placed on the path to the temple.

@@ -3,6 +3,7 @@
 //   hp          health in the battle     hit  the damage of each of its hits in the battle (if left out: from half of `dmg` up to `dmg`)     cd  moves it waits after you run away from it (one move is about 0.6 s)
 //   speed       moves wait this many ticks (1 = every tick, 2 = half as fast)        chase  it follows you when you are this many tiles away or less, and otherwise wanders
 //   region      'island' keeps it on the tiles of the island it was built on (the spirit); anything else lets it walk on any walkable tile within `leash` tiles of where it started
+//   pattern     (optional) a cycle of steps instead of a plain hit, as for the pirate boss in js/data/battles.js: {atk,hit} a blow, {wind:'text'} a turn spent winding up    escape  chance (0-1) that Run works against it (default 0.6)
 //   block       chance (0-1) it blocks one of your attacks in the battle (so it takes about a third of the damage); people use 0.2 if left out, creatures 0
 //   art         the drawing in ENEMY_ART (js/render/entities.js), used on the map and on the battle screen    xp  Combat xp for the win    gold / drops  what it leaves behind    respawn  ticks until it returns (0 = stays dead)    die  the message
 // Creatures are created with spawnEnemy('id', x, y, {group:'name'}) (js/systems/combat.js); when every creature of a `group` is beaten, enemyBeaten('name') fires the triggers waiting for it.
@@ -13,5 +14,7 @@ const ENEMY_TYPES={
  depths_ghost:{n:'Wailing ghost',hp:26,dmg:10,hit:[7,10],cd:2,speed:1,chase:6,leash:6,art:'ghost',xp:60,gold:[10,25],drops:[],respawn:240,die:'The ghost wails and fades... until tomorrow.'},   // the Depths under the Temple Tower (Quest 8)
  zombie:{n:'Zombie',hp:46,dmg:11,hit:[8,11],cd:2,speed:2,chase:5,leash:6,art:'zombie',xp:80,gold:[15,35],drops:[['rope',.3,1]],block:.1,respawn:240,die:'The zombie falls apart... until tomorrow.'},   // slow (it moves every other tick), tough and hard-hitting
  oak_ghost:{n:'Restless spirit',hp:15,dmg:5,hit:[2,5],cd:2,speed:1,chase:6,leash:6,art:'ghost',xp:25,gold:[3,9],drops:[],respawn:240,die:'The restless spirit fades away... until tomorrow.'},   // the ghosts of Oak Island (Quest 3, playtest #3)
+ rock_dragon:{n:'Rock dragon',hp:90,dmg:10,hit:[7,10],cd:3,speed:2,chase:5,leash:7,art:'dragon',xp:140,gold:[40,80],drops:[['iron_bar',.4,1]],block:.1,escape:.5,respawn:300,   // a Komodo dragon made of stone in the mountain country (playtest #4): slow, tough, and it breathes fire every third turn after drawing a breath (a Block on that turn takes the blast)
+  pattern:[{atk:'rakes with its stony claws',hit:[7,10]},{wind:'draws a deep, rumbling breath, and its throat glows...'},{atk:'breathes a roaring jet of fire',hit:[17,23]}],die:'The rock dragon crumbles into gravel... until tomorrow.'},
  spirit:{n:'Spirit',hp:12,dmg:6,hit:[2,5],cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };
