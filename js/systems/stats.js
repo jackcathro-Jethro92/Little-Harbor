@@ -16,5 +16,5 @@ function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q
     if(WEAPON_MOVES[id]&&!(typeof BATTLE!=='undefined'&&BATTLE)){const nw=WEAPON_MOVES[id].filter(([,r])=>r>b&&r<=a).map(([i])=>ATTACKS[i].n);if(nw.length)setTimeout(()=>toast('New attack learned: '+nw.join(' and ')+'!',3600),1200)}   // (in a battle the battle screen announces it)
 say(k.n+' reached level '+a+'! '+k.perk(a));save()}
   ui()}
-const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),eq=k=>ITEMS[S.eq[k]],tier=k=>LIST(k).indexOf(S.eq[k]);
+const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),TOOLSLOTS=['rod','pickaxe','axe','knife'],eq=k=>TOOLSLOTS.includes(k)&&S.eq.tool!==k?undefined:ITEMS[S.eq[k]],isWorn=id=>{const sl=slotOf(id);return S.eq[sl]===id&&(!TOOLSLOTS.includes(sl)||S.eq.tool===sl)},tier=k=>LIST(k).indexOf(S.eq[k]);
 function spend(n){n*=1-fx('thrift');const was=S.sta;S.sta=Math.max(0,S.sta-n);if(!S.sta&&was>0)say('You are exhausted and move slowly. Sleep, eat or drink a tonic to recover.');ui()}

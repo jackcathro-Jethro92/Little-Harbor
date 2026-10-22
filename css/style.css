@@ -220,9 +220,9 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #eqs{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'LHDigits','Pixelify Sans',ui-monospace,monospace}
 #eqs-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
 #eqs-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14}
-#eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-rows:auto auto auto;gap:8px;align-items:center}
-#eqs-pt{grid-column:2;grid-row:1 / span 3;width:112px;height:112px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
-#eq-helmet{grid-column:1;grid-row:1}#eq-armour{grid-column:1;grid-row:2}#eq-boots{grid-column:1;grid-row:3}#eq-weapon{grid-column:3;grid-row:2}
+#eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-areas:'helmet amulet weapon' 'armour pt .' 'boots ring tool';gap:8px;align-items:center}
+#eq-helmet{grid-area:helmet}#eq-amulet{grid-area:amulet}#eq-weapon{grid-area:weapon}#eq-armour{grid-area:armour}#eq-boots{grid-area:boots}#eq-ring{grid-area:ring}#eq-tool{grid-area:tool}
+#eqs-pt{grid-area:pt;width:112px;height:112px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
 .eqslot{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:#e8c98c;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-family:inherit;min-height:84px}
 .eqslot canvas{width:40px;height:40px;image-rendering:pixelated;background:#f6e6bf;border:2px solid #b98e55;border-radius:4px}
 .eqslot b{font-size:13px}.eqslot span{font-size:11px;line-height:1.1;text-align:center;min-height:24px}
