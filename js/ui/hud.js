@@ -7,3 +7,13 @@ function ui(){S.hp=Math.min(S.hp,maxHp());S.sta=Math.min(S.sta,maxSta());$('day'
   if(S.buff&&S.buff<=Date.now())S.buff=0;const st=[];if(S.buff)st.push('Swift '+Math.ceil((S.buff-Date.now())/1000)+'s');if(S.coat>0)st.push('Poison coat x'+S.coat);
   $('status').textContent=st.join('   ');$('status').style.display=st.length?'block':'none'}
 function flashHit(){const w=$('wrap');w.style.boxShadow='inset 0 0 0 5px #d83828';setTimeout(()=>w.style.boxShadow='',180)}
+
+// what a potion or meal gave (playtest #4): a small card at the top with the health and stamina bars filling from where they were to where they are now, and the amount gained. Works on the map and in a battle.
+function showGain(h0,s0){const rows=[['HP',h0,S.hp,maxHp(),'#58d058'],['STA',s0,S.sta,maxSta(),'#48a8f0']].filter(r=>r[2]>r[1]);if(!rows.length)return;
+  const old=$('gain');if(old)old.remove();clearTimeout(showGain.t);
+  const c=document.createElement('div');c.id='gain';
+  rows.forEach(([l,a,b,m,col])=>{const r=document.createElement('div');r.className='gr';
+    r.innerHTML='<span class="gl">'+l+'</span><span class="gb"><i class="old" style="width:'+Math.round(100*a/m)+'%;background:#d0d0d0"></i><i class="new" style="width:'+Math.round(100*a/m)+'%;background:'+col+'"></i></span><span class="gn">+'+Math.round(b-a)+'</span>';c.appendChild(r)});
+  document.body.appendChild(c);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{c.querySelectorAll('.new').forEach((el,i)=>{el.style.width=Math.round(100*rows[i][2]/rows[i][3])+'%'})}));
+  showGain.t=setTimeout(()=>{c.style.opacity=0;setTimeout(()=>c.remove(),600)},2600)}

@@ -11,7 +11,7 @@ function guildMenu(){
     if(c===o[0]){if(lvl('combat')>=TRAIN.maxLvl)return say('Brenna: You have outgrown my lessons. Prove yourself in the arena.');
       if(S.gold<TRAIN.cost)return say('Brenna: Lessons cost '+TRAIN.cost+' gold.');S.gold-=TRAIN.cost;say('Brenna: Again! Good. Again!');gainXp('combat',TRAIN.xp);ui();save()}
     else if(c===o[1]){if(S.hp>=maxHp()&&S.sta>=maxSta())return say('Brenna: You look fine to me.');
-      if(S.gold<TRAIN.rest)return say('Brenna: A bunk costs '+TRAIN.rest+' gold.');S.gold-=TRAIN.rest;S.hp=maxHp();S.sta=maxSta();say('Brenna: Rested and ready.');ui();save()}})}
+      if(S.gold<TRAIN.rest)return say('Brenna: A bunk costs '+TRAIN.rest+' gold.');S.gold-=TRAIN.rest;S.hp=maxHp();S.sta=maxSta();restAttacks();say('Brenna: Rested and ready.');ui();save()}})}
 // practice dummy: a few stamina for a little combat XP, only for beginners
 function hitDummy(){
   if(!eq('weapon'))return say('Equip a weapon first, then hit the dummy.');

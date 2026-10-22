@@ -50,7 +50,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

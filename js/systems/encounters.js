@@ -33,8 +33,40 @@ function encounterGroupBeaten(group){const e=encRow(group);if(e&&e.mode==='realt
 function encFight(n){const e=encRow(n.enc.id);if(!e||BATTLE||SCENE)return;
   const figs=e.together?encFigures(e.id).slice(0,3):[n],key='enc:'+e.id+':'+(e.together?'all':n.enc.i);
   BATTLES[key]={foes:figs.map(q=>e.foes[q.enc.i].foe),noRun:e.noRun?1:0};
-  startBattle(key,res=>{delete BATTLES[key];if(res!=='won'&&res!=='escaped')return;
+  startBattle(key,res=>{delete BATTLES[key];if(res!=='won'&&res!=='escaped'){figs.forEach(q=>{q.coolUntil=performance.now()+6000});return}   // (a pirate that beat you does not spot you again for six seconds)
     const down=encDown(e.id);figs.forEach(q=>{if(!down.includes(q.enc.i))down.push(q.enc.i);const k=NPC.indexOf(q);if(k>=0)NPC.splice(k,1)});
     if(e.foes.every((f,i)=>down.includes(i)))encDone(e);else save()})}
 // testing menu helper: forget an encounter's progress and start it again around the player
 function restartEncounter(id){const e=encRow(id);if(!e)return false;encClear(e);const s=storyState();if(s.enc)delete s.enc[id];setFlag(e.start||'enc_'+id+'_on',0);setFlag(encDoneFlag(e),0);return startEncounter(id)}
+
+// ---------- sight (playtest #4, P60): a pirate that sees you comes for you, like a Pokemon trainer ----------
+// Every few moments each standing figure of a battle encounter looks for the player: close enough (SIGHT_R tiles), on foot, and nothing solid in the way (water does not block the view). The one that sees you
+// hops with a red "!" over its head, walks up to the tile beside you, says a short line (DLG.pirate_spot, placeholders) and then the battle starts, as if you had pressed Use on it. It is a scene, so Skip
+// works. A pirate with no way to reach you stays where it is (you can still walk up and press Use). `sight:0` on an encounter row turns it off; the tests turn all of it off (window.__NO_SIGHT, set before the page loads).
+let ENC_SIGHT=!window.__NO_SIGHT;const SIGHT_R=6;
+DLG.pirate_spot={start:'a',nodes:{a:{who:'Pirate',text:'[Placeholder] Hey, you! Stop right there!'},b:{who:'Pirate',text:'[Placeholder] A visitor! This is as far as you go.'},c:{who:'Pirate',text:'[Placeholder] You are not getting past me!'},d:{who:'Pirate',text:'[Placeholder] The captain said to watch for you. Come on, then!'}}};
+const faceToward=(a,b)=>Math.abs(b[0]-a.x)>=Math.abs(b[1]-a.y)?(b[0]>a.x?'r':'l'):(b[1]>a.y?'d':'u');
+function seesPlayer(n){if(Math.abs(n.x-P.x)>SIGHT_R||Math.abs(n.y-P.y)>SIGHT_R)return false;
+  const dx=P.x-n.x,dy=P.y-n.y,k=Math.max(Math.abs(dx),Math.abs(dy));
+  for(let i=1;i<k;i++){const x=Math.round(n.x+dx*i/k),y=Math.round(n.y+dy*i/k),t=at(x,y);if(t!==0&&!WK.includes(t))return false}return true}
+// the shortest way to a tile beside the player (breadth-first over open ground), or null
+function encPath(n,maxd){maxd=maxd||SIGHT_R+2;const start=n.x+','+n.y,prev={[start]:null},q=[[n.x,n.y]];
+  const near=(x,y)=>Math.abs(x-P.x)+Math.abs(y-P.y)===1;if(near(n.x,n.y))return[];
+  for(let h=0;h<q.length&&q.length<4000;h++){const[x,y]=q[h];
+    for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b,k=nx+','+ny;if(k in prev||!walkable(nx,ny)||Math.abs(nx-n.x)>maxd||Math.abs(ny-n.y)>maxd)continue;prev[k]=x+','+y;
+      if(near(nx,ny)){const path=[[nx,ny]];let c=x+','+y;while(c!==start){const[cx,cy]=c.split(',').map(Number);path.unshift([cx,cy]);c=prev[c]}return path}
+      q.push([nx,ny])}}
+  return null}
+SCSTEP.alert=([n,ms],c)=>{n.alertAt=performance.now();n.alertUntil=n.alertAt+ms;n.f=faceToward(n,[P.x,P.y]);if(c.fast){n.alertUntil=0;return c.go()}
+  const t=setTimeout(()=>{n.alertUntil=0;c.go()},ms);c.hold(()=>{clearTimeout(t);n.alertUntil=0})};
+SCSTEP.trek=([n,path,per],c)=>{n.busy=1;let k=0,last=[n.x,n.y];
+  const stepOnce=()=>{if(k>=path.length)return false;const p=path[k++];n.f=faceToward(n,p);n.x=p[0];n.y=p[1];return true},end=()=>{n.f=faceToward(n,[P.x,P.y])};
+  if(c.fast){while(stepOnce());end();return c.go()}
+  const t=setInterval(()=>{if(!stepOnce()){clearInterval(t);end();c.go()}},per);c.hold(()=>{clearInterval(t);while(stepOnce());end()})};
+function encNotice(n,path){const L=Object.values(DLG.pirate_spot.nodes),txt=L[(n.enc.i+n.x)%L.length].text;
+  runScene([{alert:[n,700]},{trek:[n,path,190]},{wait:150},{line:[n.n,txt]}],()=>{n.alertUntil=0;encFight(n)})}
+function encSightTick(){if(!ENC_SIGHT||SCENE||BATTLE||sail||dlgActive()||document.querySelector('.open')||(typeof trgRunning!=='undefined'&&trgRunning))return;
+  const now=performance.now(),z=zoneOf(P.x,P.y);
+  for(const n of NPC){if(!n.enc||n.hidden||(n.coolUntil||0)>now||zoneOf(n.x,n.y)!==z)continue;const e=encRow(n.enc.id);if(!e||e.mode!=='battle'||e.sight===0)continue;
+    if(!seesPlayer(n))continue;const path=encPath(n);if(!path)continue;encNotice(n,path);return}}
+setInterval(encSightTick,250);

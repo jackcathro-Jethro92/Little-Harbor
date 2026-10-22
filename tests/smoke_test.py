@@ -29,7 +29,7 @@ def load(b, url, save):
     pg = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
     errs = []; pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("response", lambda r: r.status >= 400 and r.url.startswith("http://127.0.0.1") and errs.append("%d %s" % (r.status, r.url)))
-    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){}")
+    pg.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1;window.__NO_PP=1")   # (pirates that spot you are tested on their own, near the end)
     pg.goto(url)
     pg.evaluate("s=>localStorage.setItem('little-harbor-v1',s)", json.dumps(save)); pg.reload(); pg.wait_for_timeout(400)
     return pg, errs
@@ -494,7 +494,7 @@ def check(b, url):
     # turn-based battles (3.6): opens full screen, blocks everything else, Attack / Item / Run work, wins give rewards and run the row's actions, a knock-out wakes you on the boat, a boss with `flee` escapes, a trigger can start one
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.sta=100;S.coat=0;S.gold=100;S.eq.weapon='sword';add('sword');BATTLES.t_win={foes:['pirate_grunt'],win:[{set:'t_won'}],lose:[{set:'t_lost'}],ran:[{set:'t_ran'}],escaped:[{set:'t_escaped'}]};window.__r=null;startBattle('t_win',r=>{window.__r=r})")
     pg.wait_for_timeout(100)
-    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item,Run'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu"
+    assert ev("BATTLE!==null&&$('battle').classList.contains('open')&&[...$('bt-menu').children].map(b=>b.textContent).join()==='Attack,Block,Item'&&document.querySelectorAll('.bt-foe canvas').length===1"), "the battle opens with the menu (no Run against pirates)"
     ev("move('u');act();sleep()"); assert ev("P.y===33+OY"), "no walking, using or sleeping during a battle"
     bclick = lambda name: ev("[...$('bt-menu').children].find(b=>b.textContent.startsWith(%s)).click()" % json.dumps(name))
     for _ in range(12):
@@ -504,8 +504,15 @@ def check(b, url):
         pg.wait_for_timeout(30)
     pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='won'&&flag('t_won')&&S.gold>=110&&!$('battle').classList.contains('open')&&S.hp>0"), "winning gives gold and runs the win actions"
-    ev("window.__r=null;startBattle('t_win',r=>{window.__r=r});const m=Math.random;Math.random=()=>0;window.__m=m"); pg.wait_for_timeout(50); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
-    assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works"
+    # running (playtest #4): only wild creatures can be run from, and it can fail; pirates never let you go
+    ev("FOES.t_wild={n:'Wild spirit',hp:30,hit:[1,1],xp:0,art:'ghost',look:{}};BATTLES.t_wild={foes:['t_wild'],ran:[{set:'t_ran'}]};window.__r=null;startBattle('t_wild',r=>{window.__r=r});window.__m=Math.random;Math.random=()=>.99"); pg.wait_for_timeout(50)
+    assert ev("[...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a wild creature can be run from"
+    bclick("Run"); pg.wait_for_function("BATTLE!==null&&BATTLE.picking&&BATTLE.log.some(t=>/could not get away/.test(t))", timeout=5000)
+    ev("Math.random=()=>0"); bclick("Run"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("Math.random=__m")
+    assert ev("window.__r==='ran'&&flag('t_ran')"), "running away works, but it can fail first"
+    ev("window.__r=null;startBattle('t_win',r=>{window.__r=r})"); pg.wait_for_timeout(50)
+    assert ev("![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "there is no Run against pirates"
+    ev("bEnd('lost')"); pg.wait_for_function("BATTLE===null", timeout=5000); ev("S.hp=50;S.gold=100;sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
     ev("window.__r=null;S.hp=1;S.gold=100;startBattle('t_win',r=>{window.__r=r});BATTLE.foes[0].hp=999;BATTLE.foes[0].max=999"); pg.wait_for_timeout(50); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='lost'&&flag('t_lost')&&sail===true&&S.hp>1&&S.gold===90"), "a knock-out wakes you on the boat with a tenth of your gold gone"
     # Batch 8 animations: a hit shows a slash, a flash and a number; a foe that blocks shows a shield and takes less; blocking yourself shows a shield; walking costs less stamina
@@ -519,7 +526,7 @@ def check(b, url):
     pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
     assert ev("STAM.walk===0&&STAM.sail===0"), "walking and sailing cost no stamina"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
-    bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
+    assert ev("BATTLE!==null&&![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
     assert ev("window.__r==='escaped'&&flag('t_escaped')&&!flag('t_bwon')"), "a boss with flee runs away at low health and the escape actions run"
     ev("S.hp=50;S.eq.weapon='sword';BATTLES.t_three={foes:['pirate_grunt','pirate_gunner','pirate_grunt']};startBattle('t_three',()=>{})"); pg.wait_for_timeout(50)
@@ -717,11 +724,16 @@ def check(b, url):
     assert ev("(()=>{S.hp=50;const w=fx('ward');return w===.2})()"), "the armour lowers damage by 20%"
     # Quest 6 (5.6): the Sky temple path, the explosion, seven pirates and their boss, the crying boy and the Sky Helm
     assert ev("Math.abs(questGoal()[0]-222)<=2&&!flag('sky_damaged')"), "Quest 5 hands over to Quest 6 and the compass points at the Sky temple's beach"
+    ev("sail=false;P.x=P.rx=222;P.y=P.ry=158;P.f='u';fireTriggers('step')"); pg.wait_for_function("flag('enc_q6_pirates_on')", timeout=6000)
+    assert ev("encFigures('q6_pirates').length===7&&encFigures('q6_pirates').every(n=>WK.includes(at(n.x,n.y)))&&[148,142,136].every(y=>encFigures('q6_pirates').filter(n=>n.y===y).length===2)&&encFigures('q6_pirates').every(n=>n.y>=130)"), "seven pirates are scattered up the hill path, two on each lower terrace, as soon as you land (playtest #4)"
     ev("sail=false;P.x=P.rx=225;P.y=P.ry=142;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_boom'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("flag('sky_damaged')&&flag('q6_boom')&&S.story.step===1&&at(236,108)!==80"), "halfway up an explosion ruins the temple on the plateau"
-    ev("P.x=P.rx=236;P.y=P.ry=130;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_ambush'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("S.story.step===2&&encFigures('q6_pirates').length===7&&encFigures('q6_pirates').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const b=NPC.find(n=>n.n==='Captain Barron');return b.hidden===0&&b.scale>1&&WK.includes(at(b.x,b.y))})()&&DLG.q6_barron1.nodes.a.text.startsWith('Who is this little dog')"), "seven pirates and Captain Barron stand on the path"
-    fight_all('q6_pirates', 7, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_escape'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
+    assert ev("!flag('enc_q6_pirates_done')&&NPC.find(n=>n.n==='Captain Barron').hidden===1"), "the boss does not come until every pirate on the path is beaten"
+    fight_all('q6_pirates', 7, True)
+    ev("P.x=P.rx=236;P.y=P.ry=129;P.f='u';sail=false;fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q6_barron'", timeout=6000)
+    pg.wait_for_function("(()=>{const b=NPC.find(n=>n.n==='Captain Barron');return b.hidden===0&&Math.abs(b.x-P.x)+Math.abs(b.y-P.y)===1})()", timeout=15000)   # he walks down the path and stops beside you
+    assert ev("S.story.step===2&&NPC.find(n=>n.n==='Captain Barron').scale>1&&DLG.q6_barron1.nodes.a.text.startsWith('Who is this little dog')"), "Captain Barron comes walking down the path to meet you"
+    ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=8000)
     assert ev("S.story.step===3&&flag('q6_barron_gone')&&NPC.find(n=>n.n==='Captain Barron').hidden===1&&flag('q6_boy_here')&&NPC.find(n=>n.n==='Mysterious Boy').hidden===0"), "the boss kicks dirt in your eyes and is gone; a boy is crying at the temple"
     ev("(()=>{const b=NPC.find(n=>n.n==='Mysterious Boy');P.x=P.rx=b.x;P.y=P.ry=b.y+1;P.f='u';sail=false;act()})()"); pg.wait_for_function("dlgActive()", timeout=5000)
     ev("dlgEnd();trgRunning=false"); pg.wait_for_timeout(200)
@@ -739,8 +751,8 @@ def check(b, url):
     fight_all('q7_w2', 4, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q7_between2'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
     assert ev("S.story.step===3&&count('healing_potion')===2&&encFigures('q7_w3').length===5&&encFigures('q7_w3').every(n=>WK.includes(at(n.x,n.y)))"), "and the last five come"
     fight_all('q7_w3', 5, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q7_flee'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("flag('q7_done')&&S.story.done.includes('q7')&&S.story.q==='q8'&&flag('tower_raided')&&DLG.q7_flee.nodes.a.text.startsWith('Let’s get out of here!')&&flag('village_attack')"), "the pirates flee with Jack's words; the village is still wrecked that night"
-    ev("fireTriggers('day')"); assert ev("!flag('village_attack')&&flag('village_repaired')&&!RAID_ON&&BL.filter(b=>b.raid).length===0&&at(136,107)===0"), "the next morning the village is mended and the ships are gone"
+    assert ev("flag('q7_done')&&S.story.done.includes('q7')&&S.story.q==='q8'&&flag('tower_raided')&&DLG.q7_flee.nodes.a.text.startsWith('Let’s get out of here!')&&!flag('village_attack')&&flag('village_burnt')&&!RAID_ON&&BL.filter(b=>b.raid).length===0&&at(136,107)===0"), "the pirates flee with Jack's words, the screen fades, and when it clears the pirates, ships and fires are gone but the burning houses are ruins"
+    ev("sail=false;P.x=P.rx=156;P.y=P.ry=112;fireTriggers('day');draw()"); assert ev("flag('village_burnt')&&!flag('village_attack')&&RAID_BURN.length===7&&raidHouses().length>=9"), "the ruins stay after a night, and the village (with its ruins) draws without errors"
     assert ev("NPC.filter(n=>(n.store||n.shop)&&n.x>=140&&n.x<=176&&n.y>=99&&n.y<=127).every(n=>!n.dlg)&&RAID_FIGHTERS.every(n=>n.hidden===1)"), "and the shops open again and the fighting is over"
     # Quest 8 (5.8): the ransacked Tower, the letter, the hatch, the long dark Depths with ghosts and zombies, and the chamber where the spirits give the Divine Blade
     assert ev("S.story.step===0&&flag('tower_raided')&&at(TS.dx-4,TS.y1-2)===152&&!flag('q8_hatch')&&at(TS.dx,TS.y0+5)!==144"), "after Quest 7 the Tower is ransacked (stands toppled) and Quest 8 begins"
@@ -762,8 +774,8 @@ def check(b, url):
     assert ev("flag('storm_on')&&STORM_ON&&BL.filter(b=>b.storm).length>=4&&BL.filter(b=>b.storm).every(b=>at(b.x+1,b.y+1)===101)&&questGoal()[0]===283"), "Quest 8 hands over to Quest 9: a storm breaks and pirate ships moor round the Sea temple's island"
     assert ev("(()=>{const seen=new Set(['200,100']),q=[[200,100]],D4=[[1,0],[-1,0],[0,1],[0,-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of D4){const nx=x+a,ny=y+b,k=nx+','+ny;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||at(nx,ny)!==0)continue;seen.add(k);q.push([nx,ny])}}let landings=0;for(let y=12;y<=60;y++)for(let x=254;x<=312;x++)if(WK.includes(at(x,y))&&[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>seen.has((x+a)+','+(y+b))))landings++;return landings>=5})()"), "the ships leave the Sea temple's island open to the sea (a boat can still land)"
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;SCENE=null;BATTLE=null;sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});P.x=P.rx=283;P.y=P.ry=44;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_land'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("S.story.step===1&&encFigures('q9_guards').length===8&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))"), "eight pirates hold the boardwalk and the courtyard"
-    fight_all('q9_guards', 8, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
+    assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const r=encFigures('q9_guards').map(n=>Math.hypot((n.x-283)/24,(n.y-36)/19));return r.some(v=>v>.85)&&r.some(v=>v>.68&&v<.82)&&r.some(v=>v>.5&&v<.64)&&r.some(v=>v<.46&&v>.3)&&r.filter(v=>v<.3).length>=3})()"), "twelve pirates are spread round the spiral path: the beach, both terraces, the rim, the boardwalk and the courtyard"
+    fight_all('q9_guards', 12, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
     assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===170&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
     ev("S.hp=9999;S.sta=100;BATTLE.foes[0].turns=0")
     seq = []
@@ -781,12 +793,12 @@ def check(b, url):
     talk("Mysterious Girl"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_earth'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null&&!dlgActive()", timeout=8000)
     assert ev("flag('earth_key_returned')&&count('earth_key')===0&&S.story.step===1&&DLG.q10_girl.nodes.a.text.startsWith('From the moment I laid eyes on you')"), "the Earth spirit takes her key and the Fire temple is last"
     ev("S.home={x:150,y:122,roof:'thatch'};S.claim={x:148,y:120,w:7,h:5};for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(122+j)*MW+150+i]=5;S.bag.cottage_kit=0;S.bag.house_key=0")
-    talk("Fire Spirit"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_fire'", timeout=6000)
+    ev("setFlag('village_burnt',1)"); talk("Fire Spirit"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_fire'", timeout=6000)
     for _ in range(12):
         ev("if(SCENE)skipScene()"); pg.wait_for_timeout(300)
         if ev("$('letter').classList.contains('open')"): ev("$('letter-close').click()")
         if ev("SCENE===null&&!dlgActive()"): break
-    assert ev("flag('q10_done')&&flag('story_complete')&&flag('island_risen')&&S.story.q===null&&S.story.done.includes('q10')&&count('fire_key')===0&&count('house_key')===1&&hasLetter('q10_letter')&&DLG.q10_fire.nodes.a.text.startsWith('So it is true.')"), "the Fire spirit gives the letter and the key and the main story is complete"
+    assert ev("flag('q10_done')&&!flag('village_burnt')&&flag('story_complete')&&flag('island_risen')&&S.story.q===null&&S.story.done.includes('q10')&&count('fire_key')===0&&count('house_key')===1&&hasLetter('q10_letter')&&DLG.q10_fire.nodes.a.text.startsWith('So it is true.')"), "the Fire spirit gives the letter and the key and the main story is complete"
     assert ev("S.home.x===165&&S.home.y===78&&S.home.grand===1&&S.claim.isle===1&&S.claim.x===152&&(()=>{for(let j=76;j<=79;j++)for(let i=162;i<=170;i++)if(at(i,j)!==5)return false;return true})()&&at(150,122)===1&&count('cottage_kit')===1&&LAND.some(l=>l[0]==='Haven Isle')&&FOG[(82>>2)*FW+(166>>2)]===1"), "the island's house is your home now (the old house is packed back into its kit) and the island is on the map"
     assert ev("(()=>{const seen=new Set(['166,80']),q=[[166,80]],D4=[[1,0],[-1,0],[0,1],[0,-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of D4){const k=(x+a)+','+(y+b);if(!seen.has(k)&&WK.includes(at(x+a,y+b))){seen.add(k);q.push([x+a,y+b])}}}const w=new Set(['150,60']),r=[[150,60]];while(r.length){const[x,y]=r.shift();for(const[a,b]of D4){const nx=x+a,ny=y+b,k=nx+','+ny;if(nx<0||ny<0||nx>=MW||ny>=WH||w.has(k)||at(nx,ny)!==0)continue;w.add(k);r.push([nx,ny])}}let touch=0;for(let y=70;y<=96;y++)for(let x=150;x<=182;x++)if(WK.includes(at(x,y))&&D4.some(([a,b])=>w.has((x+a)+','+(y+b))))touch++;return seen.size>120&&touch>=5})()"), "the island is a walkable island with a path to the door and the sea reaches its shore"
     # the whole island is yours: a workstation far from the house, and a garden, can go anywhere on it (and still not on the sea)
@@ -805,7 +817,7 @@ def check(b, url):
     assert ev("at(166,82)===0&&!LAND.some(l=>l[0]==='Haven Isle')"), "switching the island off puts the sea back"
     ev("storyJump('q6')"); assert ev("S.story.q==='q6'&&S.story.step===0&&count('sea_key')===0&&flag('q5_done')&&!flag('q6_done')"), "the testing menu can jump to Quest 6"
     ev("storyJump('q7')"); assert ev("S.story.q==='q7'&&S.story.step===0&&flag('village_attack')&&RAID_ON&&P.x===156&&P.y===126"), "the testing menu can jump to Quest 7, with the village under attack"
-    ev("storyJump('q8')"); assert ev("S.story.q==='q8'&&!flag('village_attack')&&!RAID_ON&&flag('village_repaired')"), "later jumps find the village mended"
+    ev("storyJump('q8')"); assert ev("S.story.q==='q8'&&!flag('village_attack')&&!RAID_ON&&flag('village_burnt')"), "later jumps find the village burnt but quiet"
     ev("storyJump('q4t')"); assert ev("S.story.q==='q4'&&S.story.step===3&&count('earth_key')===1&&flag('q4_key_got')"), "the testing menu can jump to the key at the tower"
     ev("storyJump('q5t')"); assert ev("S.story.q==='q5'&&S.story.step===3&&count('sea_key')===1"), "the testing menu can jump to the Sea Key at the tower"
     ev("S.eq.helmet=null;delete S.bag.sky_helm;S.eq.armour=null;delete S.bag.enchanted_armour;S.eq.boots=null;delete S.bag.enchanted_boots;storyReset();BATTLE_FAST=false;NPC.forEach(n=>{n.busy=0})")
@@ -832,6 +844,20 @@ def check(b, url):
     assert attack_list(None) == ["Strike (4)", "Bash (4)", "Back"], "bare hands and the wooden sword share Strike and Bash"; end_battle()
     assert attack_list('hand_axe') == ["Chop (4)", "Back"]; end_battle()
     assert attack_list('sword', 'sword', 380) == ["Slash (4)", "Lunge (5)", "Back"], "Lunge is learned at sword level 2"; end_battle()
+    # playtest #4: attack uses, Scuffle, Quick Strike's second blow, the hit reaction, and the gain card for potions
+    ev("PP_ON=true;S.pp={}")
+    assert attack_list('sword') == ["Slash (4)  40/40", "Back"], "each attack shows its uses left"; end_battle()
+    ev("S.pp={}"); ev("S.xp={};S.eq.weapon='sword';S.sta=100;S.hp=50;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Slash"); menu_ready()
+    assert ev("S.pp.slash===1&&BATTLE.fx.includes('hurt')&&BATTLE.fx.some(q=>q.startsWith('dmg player'))"), "using an attack counts a use, and being hit shows the hurt reaction"; end_battle()
+    ev("S.pp={slash:40}"); out = attack_list('sword'); assert out == ["Slash (4)  0/40", "Scuffle", "Back"], out
+    ev("[...$('bt-menu').children].find(b=>b.textContent==='Scuffle').click()"); menu_ready(); assert ev("BATTLE.log.some(t=>/You use Scuffle/.test(t))&&S.pp.slash===40"), "when nothing else can be used, Scuffle always can"; end_battle()
+    ev("S.pp={slash:3};restAttacks()"); assert ev("Object.keys(S.pp).length===0"), "resting gives every attack its uses back"
+    ev("PP_ON=false;S.xp={};S.xp.sword=770;S.eq.weapon='sword';S.sta=100;S.hp=50;window.__m=Math.random;Math.random=()=>0;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Quick"); menu_ready()
+    assert ev("BATTLE.fx.includes('twice')&&BATTLE.log.some(t=>/strike again/.test(t))&&BATTLE.log.filter(t=>/You use Quick Strike/.test(t)).length===2"), "Quick Strike can hit twice before the foe answers"; end_battle()
+    ev("Math.random=()=>.99;S.sta=100;startBattle('t_dummy')"); pg.wait_for_timeout(50); menu_ready(); pick("Quick"); menu_ready()
+    assert ev("!BATTLE.fx.includes('twice')&&BATTLE.log.filter(t=>/You use Quick Strike/.test(t)).length===1"), "and usually hits once"; end_battle(); ev("Math.random=__m;S.xp={}")
+    ev("S.hp=10;S.sta=10;S.bag.healing_potion=1;drink('healing_potion')"); assert ev("!!$('gain')&&$('gain').querySelectorAll('.gr').length===1&&/HP/.test($('gain').textContent)&&/\\+\\d+/.test($('gain').textContent)"), "a potion shows a card with the bar filling and the amount gained"
+    ev("$('gain').remove();S.hp=50;S.sta=100")
     assert attack_list('sword', 'sword', 770) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Back"], "Quick Strike is learned at sword level 3"; end_battle()
     assert attack_list('sword', 'sword', 3300) == ["Slash (4)", "Lunge (5)", "Quick Strike (2)", "Power Slash (8)", "Back"], "Power Slash at level 6"; end_battle()
     assert attack_list('hand_axe', 'axe', 3300) == ["Chop (4)", "Bash (4)", "Cleave (8)", "Back"], "the axe learns Bash at 3 and Cleave at 6"; end_battle()
@@ -846,9 +872,9 @@ def check(b, url):
     ev("Math.random=__r0"); end_battle()
     # learning an attack announces it
     attack_list('sword', 'sword', 765); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
-    assert ev("BATTLE.log.some(t=>/Sword skill reached level 3! You learned Quick Strike!/.test(t))"), "reaching level 3 teaches Quick Strike"; end_battle()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 3!/.test(t))&&BATTLE.fx.includes('banner:New attack learned: Quick Strike!')"), "reaching level 3 teaches Quick Strike, with a banner"; end_battle()
     attack_list('sword', 'sword', 375); ev("[...$('bt-menu').children].find(b=>b.textContent==='Back').click()"); pick("Slash"); menu_ready()
-    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2! You learned Lunge!/.test(t))"), "reaching level 2 teaches Lunge"; end_battle()
+    assert ev("BATTLE.log.some(t=>/Sword skill reached level 2!/.test(t))&&BATTLE.fx.includes('banner:New attack learned: Lunge!')"), "reaching level 2 teaches Lunge, with a banner"; end_battle()
     # the Divine Blade: its own attack, Divine Strike, on top of the sword's (Quest 8)
     ev("S.bag.divine_blade=1")
     assert attack_list('divine_blade') == ["Slash (4)", "Divine Strike (10)", "Back"], "the Divine Blade adds Divine Strike to the sword's attacks"; end_battle()
@@ -960,6 +986,16 @@ def check(b, url):
     pg.wait_for_function("dlgActive()&&/take this for your trouble/.test($('dlg').textContent)", timeout=8000)   # then the reward line
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
+    # playtest #4 (P60): a pirate that sees you hops with a "!", walks up beside you, says a line, and then the battle starts
+    ev("sail=false;SCENE=null;BATTLE=null;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{if(n.enc)n.coolUntil=1e15});ENCOUNTERS.push({id:'t_sight',mode:'battle',near:1,foes:[{foe:'pirate_grunt',at:[0,-4]}]});startEncounter('t_sight');ENC_SIGHT=true")
+    pg.wait_for_function("SCENE!==null", timeout=4000)
+    assert ev("(()=>{const n=encFigures('t_sight')[0];return n.alertUntil>performance.now()&&n.alertAt>0})()"), "a pirate that sees you shows the alert mark"
+    pg.wait_for_function("dlgActive()&&/Placeholder/.test($('dlg').textContent)", timeout=8000)
+    assert ev("(()=>{const n=encFigures('t_sight')[0];return Math.abs(n.x-P.x)+Math.abs(n.y-P.y)===1})()"), "the pirate walked up beside you before speaking"
+    ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("BATTLE!==null", timeout=4000)
+    assert ev("BATTLE.foes.length===1"), "the battle starts after the pirate's line"
+    ev("ENC_SIGHT=false;bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=4000)
+    ev("encClear(encRow('t_sight'));SCENE=null;NPC.forEach(n=>{n.coolUntil=0})")
     assert not errs, errs
     pg.close()
     # the hidden rooms moved below the sea (world version 3): an older world-version-2 save keeps its home-room station and its Darkwood treasure record in the new places

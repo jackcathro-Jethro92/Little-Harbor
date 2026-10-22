@@ -12,7 +12,9 @@ const fx=k=>['ring','amulet','boots','armour','helmet'].reduce((a,s)=>a+(((ITEMS
 const maxHp=()=>MAXHP+4*lvl('combat')+fx('hp'),maxSta=()=>MAXSTA+fx('sta');
 function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q=>q.id===id),b=lvl(id);S.xp[id]=(S.xp[id]||0)+n;const a=lvl(id);
   if(n>=1&&a===b)toast('+'+n+' '+k.n+' XP');
-  if(a>b){if(id==='combat')S.hp=Math.min(maxHp(),S.hp+4*(a-b));toast('★ '+k.n+' level '+a+'! ★',2800);say(k.n+' reached level '+a+'! '+k.perk(a));save()}
+  if(a>b){if(id==='combat')S.hp=Math.min(maxHp(),S.hp+4*(a-b));toast('★ '+k.n+' level '+a+'! ★',2800);
+    if(WEAPON_MOVES[id]&&!(typeof BATTLE!=='undefined'&&BATTLE)){const nw=WEAPON_MOVES[id].filter(([,r])=>r>b&&r<=a).map(([i])=>ATTACKS[i].n);if(nw.length)setTimeout(()=>toast('New attack learned: '+nw.join(' and ')+'!',3600),1200)}   // (in a battle the battle screen announces it)
+say(k.n+' reached level '+a+'! '+k.perk(a));save()}
   ui()}
 const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),eq=k=>ITEMS[S.eq[k]],tier=k=>LIST(k).indexOf(S.eq[k]);
 function spend(n){n*=1-fx('thrift');const was=S.sta;S.sta=Math.max(0,S.sta-n);if(!S.sta&&was>0)say('You are exhausted and move slowly. Sleep, eat or drink a tonic to recover.');ui()}

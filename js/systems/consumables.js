@@ -10,11 +10,11 @@ function drink(id){const it=ITEMS[id],p=potPow();
     const c=it.coat+Math.floor(lvl('alchemy')/3);S.coat=Math.min(20,S.coat+c);say('Your '+eq('weapon').n.toLowerCase()+' is coated. Poison x'+S.coat+'.')}
   else if(it.speed){S.buff=Math.max(S.buff,Date.now())+Math.round(it.speed*p)*1000;say('You feel light on your feet! Moving faster.')}
   else{if(it.hp&&!it.sta&&S.hp>=maxHp())return say("You're already at full health.");if(it.sta&&!it.hp&&S.sta>=maxSta())return say("You're already fully rested.");
-    const h=Math.round((it.hp||0)*p),st=Math.round((it.sta||0)*p);S.hp=Math.min(maxHp(),S.hp+h);S.sta=Math.min(maxSta(),S.sta+st);
+    const h=Math.round((it.hp||0)*p),st=Math.round((it.sta||0)*p),h0=S.hp,s0=S.sta;S.hp=Math.min(maxHp(),S.hp+h);S.sta=Math.min(maxSta(),S.sta+st);showGain(h0,s0);
     say('You drank the '+it.n.toLowerCase()+'.'+(h?' +'+h+' health.':'')+(st?' +'+st+' stamina.':''));toast((h?'+'+h+' HP ':'')+(st?'+'+st+' STA':''))}
   S.bag[id]--;if(!S.bag[id])delete S.bag[id];ui();save();drawBag()}
 function eat(id){const it=ITEMS[id];
   if(S.hp>=maxHp()&&S.sta>=maxSta())return say("You aren't hungry right now.");
   const pot=1+.04*lvl('cooking'),h=Math.round((it.hp||0)*pot),st=Math.round((it.sta||0)*pot);
-  S.hp=Math.min(maxHp(),S.hp+h);S.sta=Math.min(maxSta(),S.sta+st);S.bag[id]--;if(!S.bag[id])delete S.bag[id];
+  const h0=S.hp,s0=S.sta;S.hp=Math.min(maxHp(),S.hp+h);S.sta=Math.min(maxSta(),S.sta+st);showGain(h0,s0);S.bag[id]--;if(!S.bag[id])delete S.bag[id];
   say('You ate the '+it.n.toLowerCase()+'. +'+h+' health, +'+st+' stamina.');toast('+'+h+' HP  +'+st+' STA');ui();save();drawBag()}

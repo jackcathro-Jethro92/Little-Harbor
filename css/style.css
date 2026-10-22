@@ -223,3 +223,23 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 .eqrow{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 6px;border-bottom:2px dotted #b98e55;font-size:15px;cursor:pointer}
 .eqrow small{display:block;font-size:12px;opacity:.8}.eqrow.on{background:#fff1c9}.eqrow em{font-style:normal;font-weight:700;white-space:nowrap}
 #eqs-back,#ch-eq{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:8px}
+
+/* being hit in a battle, a new attack banner, and the stat gain card (playtest #4) */
+@keyframes btScreenShake{0%,100%{transform:translate(0,0)}12%{transform:translate(-10px,4px)}28%{transform:translate(9px,-4px)}44%{transform:translate(-7px,3px)}60%{transform:translate(5px,-2px)}80%{transform:translate(-2px,1px)}}
+#bt-arena.screenshake{animation:btScreenShake .5s}
+.bt-redflash{position:absolute;inset:0;z-index:7;pointer-events:none;background:radial-gradient(circle,rgba(216,40,24,.35),rgba(216,40,24,.8));animation:btRed .5s ease-out forwards}
+@keyframes btRed{0%{opacity:1}100%{opacity:0}}
+@keyframes btHurtBlink{0%,100%{opacity:1;filter:none}12%,50%,88%{opacity:.25;filter:brightness(3) sepia(1) hue-rotate(-40deg) saturate(8)}31%,69%{opacity:1;filter:brightness(1.6)}}
+#bt-me.hurtblink{animation:btHurtBlink .7s steps(1)}
+@keyframes btLosing{0%,100%{filter:none}25%,75%{filter:brightness(2.4) saturate(.3)}}
+#bt-hp.losing{animation:btLosing .7s steps(1)}
+.bt-banner{position:absolute;left:50%;top:38%;z-index:8;transform:translate(-50%,-50%);width:86%;text-align:center;padding:12px 8px;background:#3d2511;color:#f8d030;border:4px solid #f8d030;border-radius:8px;font-size:21px;font-weight:700;line-height:1.2;pointer-events:none;animation:btBanner 2.6s ease-out forwards}
+@keyframes btBanner{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}20%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{opacity:0}}
+#bt-hp,#bt-sta{transition:width .6s ease-out}
+.bt-fx.heal{font-size:28px;font-weight:700;color:#d8ffd0;text-shadow:2px 0 #1f7a2a,-2px 0 #1f7a2a,0 2px #1f7a2a,0 -2px #1f7a2a;animation:btFloat .9s ease-out forwards}
+#gain{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;width:min(300px,86vw);background:#f8f4dc;color:#383838;border:4px solid #383838;border-radius:8px;padding:8px 10px;box-shadow:0 4px 0 rgba(0,0,0,.3);pointer-events:none;transition:opacity .5s}
+#gain .gr{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin:3px 0}
+#gain .gl{width:34px}#gain .gb{flex:1;height:14px;background:#383838;border-radius:7px;overflow:hidden;position:relative}
+#gain .gb i{position:absolute;left:0;top:0;bottom:0;border-radius:7px}
+#gain .gb .old{background:#d0d0d0}#gain .gb .new{transition:width 1.1s ease-out}
+#gain .gn{width:60px;text-align:right;color:#1f7a2a}
