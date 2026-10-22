@@ -1,7 +1,6 @@
 // ---------- the Menu screen: how you look, how you are doing, what you carry on you, and the Save game and Load game buttons ----------
 // Opens from the "Menu" button at the end of the row under the picture. Save and Load open the same save choices as the ☰ menu (a file, a save code or one of three slots). The game also still saves by itself.
-function chPortrait(){const cv=$('ch-pt'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);
-  c.fillStyle='#8ec0e8';c.fillRect(0,0,cv.width,cv.height);const s=shadePerson({...playerLook(),view:'f',frame:0});c.drawImage(s,0,0,24,24,0,0,cv.width,cv.height)}
+function chPortrait(){drawArt($('ch-pt'),playerArt('f'),'#8ec0e8')}   // your detailed picture (js/render/heroart.js)
 function openCharacter(){chPortrait();
   const L=S.look||{},eq=SLOTS.filter(([sl])=>S.eq[sl]&&(!TOOLSLOTS.includes(sl)||S.eq.tool===sl)).map(([sl,n])=>n+': '+ITEMS[S.eq[sl]].n);
   const boat=S.eq.boat&&ITEMS[S.eq.boat]?ITEMS[S.eq.boat].n:'None';

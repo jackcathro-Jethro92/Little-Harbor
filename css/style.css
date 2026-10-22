@@ -90,7 +90,7 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #ch{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'LHDigits','Pixelify Sans',ui-monospace,monospace}
 #ch-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
 #ch-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14;text-align:center}
-#ch-pt{width:128px;height:128px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px}
+#ch-pt{width:104px;height:130px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px}
 #ch-info{margin:10px 0;text-align:left}#ch-info div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:2px dotted #b98e55;font-size:16px}
 #ch-more{text-align:left}#ch-more h4{margin:10px 0 2px;font-size:15px}#ch-more p{margin:0;font-size:14px;line-height:1.4}
 #ch-load,#ch-save,#ch-back,#qs-back{background:#f3d9a4;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:18px;padding:8px}
@@ -180,7 +180,7 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 .bt-mark{display:none;position:absolute;top:-52px;left:50%;margin-left:-7px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:11px solid #f6d070;filter:drop-shadow(0 1px 0 #3d2511);animation:btBob .7s ease-in-out infinite alternate;z-index:3}
 .bt-foe.sel .bt-mark{display:block}
 @keyframes btBob{from{transform:translateY(0)}to{transform:translateY(5px)}}
-#bt-meBox{position:absolute;left:14px;bottom:16px}#bt-meBox canvas{width:120px;height:120px;image-rendering:pixelated;position:relative}
+#bt-meBox{position:absolute;left:14px;bottom:16px}#bt-meBox canvas{width:100px;height:150px;image-rendering:pixelated;position:relative}
 #bt-stats{position:absolute;right:10px;bottom:14px;width:46%;background:rgba(243,217,164,.95);border:4px solid #3d2511;border-radius:8px;padding:8px;font-size:15px;font-weight:700}
 #bt-hpn,#bt-stan{margin-top:4px}
 #bt-msg{flex:0 0 auto;min-height:84px;background:#f3d9a4;border:4px solid #3d2511;border-radius:8px;padding:10px;font-size:17px;line-height:1.35}
@@ -222,7 +222,7 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #eqs-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14}
 #eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-areas:'helmet amulet weapon' 'armour pt .' 'boots ring tool';gap:8px;align-items:center}
 #eq-helmet{grid-area:helmet}#eq-amulet{grid-area:amulet}#eq-weapon{grid-area:weapon}#eq-armour{grid-area:armour}#eq-boots{grid-area:boots}#eq-ring{grid-area:ring}#eq-tool{grid-area:tool}
-#eqs-pt{grid-area:pt;width:112px;height:112px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
+#eqs-pt{grid-area:pt;width:100px;height:125px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
 .eqslot{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:#e8c98c;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-family:inherit;min-height:84px}
 .eqslot canvas{width:40px;height:40px;image-rendering:pixelated;background:#f6e6bf;border:2px solid #b98e55;border-radius:4px}
 .eqslot b{font-size:13px}.eqslot span{font-size:11px;line-height:1.1;text-align:center;min-height:24px}
@@ -276,3 +276,14 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #sbtns button:disabled{background:#a8a48c;opacity:.7}
 #store.grid #sclose{background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:18px;padding:8px 14px!important;margin:0!important;font-family:inherit}
 #btitle.full{background:#a83a2a}
+/* the character maker (batch H1) */
+#heropick{display:none;flex-direction:column;align-items:center;gap:10px;width:min(100%,360px)}
+#look.start #heropick{display:flex}#look.start #pv,#look.start #sws{display:none}
+.hp-row{display:flex;gap:10px;justify-content:center;width:100%}
+.hp-card{flex:1;max-width:104px;padding:4px;background:var(--panel);border:3px solid var(--ink);border-radius:8px;box-shadow:0 3px 0 var(--ink)}
+.hp-card canvas{width:100%;aspect-ratio:2/3;image-rendering:pixelated;display:block;border-radius:4px}
+.hp-card.sel{outline:4px solid #d83828;outline-offset:1px;background:#fff1c9}
+#hp-namel{display:flex;flex-direction:column;gap:4px;font-weight:700;width:100%;font-size:16px}
+#hp-name{font:inherit;font-size:18px;padding:10px;border:3px solid var(--ink);border-radius:6px;background:#fffbe8;color:var(--ink)}
+#hp-note{font-size:14px;min-height:18px}
+#go:disabled{opacity:.5}

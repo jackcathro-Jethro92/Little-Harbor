@@ -34,20 +34,20 @@
 <div id="craft"><div id="cr-title"></div><div id="cr-list"></div><div id="cr-det"></div><div id="cr-bt"><button id="cr-go">Craft</button><button id="cr-back">Back</button></div></div>
 <div id="menu"><div id="menu-card"><div id="menu-t"></div><div id="menu-o"></div></div></div>
 <div id="mapov"><div id="map-t">MAP</div><canvas id="mc"></canvas><div id="map-h">Only places you have sailed or walked near are shown.</div><button id="map-back">Back</button></div>
-<div id="ch"><div id="ch-title">MENU</div><div id="ch-body"><canvas id="ch-pt" width="96" height="96"></canvas><div id="ch-info"></div><div id="ch-more"></div></div><button id="ch-eq">Equipment</button><button id="ch-save">Save game</button><button id="ch-load">Load game</button><button id="ch-back">Back</button></div>
+<div id="ch"><div id="ch-title">MENU</div><div id="ch-body"><canvas id="ch-pt" width="64" height="80"></canvas><div id="ch-info"></div><div id="ch-more"></div></div><button id="ch-eq">Equipment</button><button id="ch-save">Save game</button><button id="ch-load">Load game</button><button id="ch-back">Back</button></div>
 <div id="eqs"><div id="eqs-title">EQUIPMENT</div><div id="eqs-body"><div id="eqs-grid">
 <button class="eqslot" id="eq-helmet" data-slot="helmet"><canvas width="16" height="16"></canvas><b>Helmet</b><span></span></button>
 <button class="eqslot" id="eq-amulet" data-slot="amulet"><canvas width="16" height="16"></canvas><b>Amulet</b><span></span></button>
 <button class="eqslot" id="eq-weapon" data-slot="weapon"><canvas width="16" height="16"></canvas><b>Weapon</b><span></span></button>
 <button class="eqslot" id="eq-armour" data-slot="armour"><canvas width="16" height="16"></canvas><b>Armour</b><span></span></button>
-<canvas id="eqs-pt" width="96" height="96"></canvas>
+<canvas id="eqs-pt" width="64" height="80"></canvas>
 <button class="eqslot" id="eq-boots" data-slot="boots"><canvas width="16" height="16"></canvas><b>Boots</b><span></span></button>
 <button class="eqslot" id="eq-ring" data-slot="ring"><canvas width="16" height="16"></canvas><b>Ring</b><span></span></button>
 <button class="eqslot" id="eq-tool" data-slot="tool"><canvas width="16" height="16"></canvas><b>Equipped Tool</b><span></span></button></div>
 <div id="eqs-stats"></div><div id="eqs-pick"></div></div><button id="eqs-back">Back</button></div>
 <div id="qs"><div id="qs-title">QUESTS</div><div id="qs-list"></div><button id="qs-back">Back</button></div>
 <div id="letter"><div id="letter-paper"><div id="letter-from"></div><div id="letter-title"></div><div id="letter-body"><div id="letter-text"></div></div><button id="letter-close">Close</button></div></div>
-<div id="battle"><div id="bt-arena"><canvas id="bt-bg" width="122" height="150"></canvas><div id="bt-foes"></div><div id="bt-meBox"><div class="bt-shadow"></div><canvas id="bt-me" width="96" height="96"></canvas></div><div id="bt-stats"><div class="bt-bar big"><i id="bt-hp"></i></div><div id="bt-hpn"></div><div class="bt-bar big sta"><i id="bt-sta"></i></div><div id="bt-stan"></div></div></div><div id="bt-msg"></div><div id="bt-menu"></div></div>
+<div id="battle"><div id="bt-arena"><canvas id="bt-bg" width="122" height="150"></canvas><div id="bt-foes"></div><div id="bt-meBox"><div class="bt-shadow"></div><canvas id="bt-me" width="48" height="72"></canvas></div><div id="bt-stats"><div class="bt-bar big"><i id="bt-hp"></i></div><div id="bt-hpn"></div><div class="bt-bar big sta"><i id="bt-sta"></i></div><div id="bt-stan"></div></div></div><div id="bt-msg"></div><div id="bt-menu"></div></div>
 <div id="skills"><div id="sk-title">SKILLS</div><div id="sk-list"></div><button id="sk-back">Back</button></div>
 <div id="bag"><div id="bhead"><div id="btitle">BAG</div><div id="bcap"></div></div>
 <div id="bmain"><div id="btabs"></div><div id="bgrid"></div></div>
@@ -57,6 +57,7 @@
 <div id="title"><h1 id="title-h"></h1><div id="title-body"></div><div id="title-note"></div></div>
 <div id="look">
   <h1 id="lookt">Who's the fisher?</h1>
+  <div id="heropick"><div class="hp-row" id="hp-f"></div><div class="hp-row" id="hp-m"></div><label id="hp-namel">Your name<input id="hp-name" maxlength="20" autocomplete="off" spellcheck="false" placeholder="Up to 12 letters"></label><div id="hp-note"></div></div>
   <canvas id="pv" width="16" height="20"></canvas>
   <div id="sws"></div>
   <button id="go" style="padding:10px 22px;font-size:18px">Set sail</button>
@@ -67,6 +68,7 @@
 <script>const BUILD='dev'; // the deploy step replaces this with the version of the game that was published</script>
 <script src="js/core.js"></script>
 <script src="js/data/items.js"></script>
+<script src="js/data/heroes.js"></script>
 <script src="js/data/gathering.js"></script>
 <script src="js/data/recipes.js"></script>
 <script src="js/data/skills.js"></script>
@@ -112,6 +114,7 @@
 <script src="js/world/shiprooms.js"></script>
 <script src="js/systems/player.js"></script>
 <script src="js/render/sprites.js"></script>
+<script src="js/render/heroart.js"></script>
 <script src="js/render/ground.js"></script>
 <script src="js/render/plants.js"></script>
 <script src="js/render/people.js"></script>

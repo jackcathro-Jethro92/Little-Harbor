@@ -16,6 +16,7 @@ function parseSave(text){text=(text||'').trim();if(!text)throw 'There is nothing
   const d=o&&o.game==='little-harbor'?o.data:o;
   if(!d||typeof d!=='object'||!d.look||typeof d.look!=='object'||!Number.isFinite(d.day)||d.day<1)throw 'That is not a Little Harbor save.';
   if(d.v!==undefined&&d.v>SAVE_V)throw 'That save is from a newer version of the game. Update the game first.';
+  if((d.v||1)<4)throw 'That save is from before the new characters, so it cannot be loaded. Start a new game.';
   return d}
 function installSave(d){try{const cur=localStorage.getItem(KEY);if(cur)localStorage.setItem(KEY+'-backup-before-load',cur);localStorage.setItem(KEY,JSON.stringify(d));sessionStorage.setItem(STARTED,'1')}catch(e){return tmNote('Could not store the save on this device.')}location.reload()}
 function newGame(){try{const cur=localStorage.getItem(KEY);if(cur)localStorage.setItem(KEY+'-backup-new-game',cur);localStorage.removeItem(KEY);sessionStorage.setItem(STARTED,'1')}catch(e){}location.reload()}

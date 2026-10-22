@@ -8,9 +8,11 @@ const PORTRAITS=['Murl','Bram','Odo','Garrick','Astrid','Lucie','Seamstress Wynn
 let dlgNodes=null,dlgNode=null,dlgDone=null,dlgTimer=null,dlgSel=0,dlgFull='';
 const dlgActive=()=>$('dlg').classList.contains('open');
 function portraitFor(who){const name=who==='You'||who===undefined?'You':who;if(!PORTRAITS.includes(name))return null;
+  if(name==='You')return{art:playerArt('f'),bg:'#8ec0e8'};
   const npc=name==='You'?null:NPC.find(n=>n.n===name);const base=name==='You'?S.look:npc?{...npc,...(NL[npc.n]||{})}:null;if(!base)return null;
   return {look:lo(name==='You'?{...S.look}:base),bg:name==='You'?'#8ec0e8':['#e8c898','#a8d0a0','#e0a8b0','#b8b0e0','#e8d8a0'][(name.length+name.charCodeAt(0))%5]}}
 function drawPortrait(pt){const cv=$('dlg-pt'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);if(!pt){cv.style.display='none';return}cv.style.display='block';
+  if(pt.art){drawBust(cv,pt.art,pt.bg);return}
   c.fillStyle=pt.bg;c.fillRect(0,0,cv.width,cv.height);const s=shadePerson({...pt.look,view:'f',frame:0});c.drawImage(s,3,3,18,16,0,0,cv.width,cv.height-2);
   c.fillStyle='rgba(0,0,0,.18)';c.fillRect(0,cv.height-2,cv.width,2)}
 function dlgShow(node){dlgNode=node;dlgSel=0;clearInterval(dlgTimer);const who=node.who||'',pt=portraitFor(node.portrait||who),box=$('dlg');

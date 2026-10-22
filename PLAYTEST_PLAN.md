@@ -255,3 +255,10 @@ Equipment screen drawn from Jack's sketch (amulet and ring included, plus the Eq
 
 ## Batch F4 (22 Oct): carrying space
 20 slots, stacks of 99, worn things and quest items free, rewards always arrive, a full bag stops gathering, fishing, crafting and buying with a message. Batch F is complete.
+
+## Batch H (22 Oct): detailed art. Jack's answers
+- Art: Claude draws everything in code now; any picture can be swapped for an image file later (C).
+- Six ready-made characters only (3 women, 3 men) plus a name; the tailor will later sell clothes that change your look.
+- The six as proposed (braided fisher, sailor in a headscarf, freckled forager, deckhand in a cap, navy coat, bandana and vest).
+- All old saves are cleared; Jack starts a new game.
+- Steps: **H1** characters and naming (built), H2 detailed talking portraits for NPCs, H3 detailed item icons (weapons and armour in the style of Jack's reference sheets).
