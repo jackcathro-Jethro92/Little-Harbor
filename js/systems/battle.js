@@ -12,12 +12,18 @@ function bSay(t){$('bt-msg').textContent=t;if(BATTLE)(BATTLE.log=BATTLE.log||[])
 function bMenu(buttons){const m=$('bt-menu');m.innerHTML='';buttons.forEach(([t,fn,dis])=>{const b=document.createElement('button');b.textContent=t;b.disabled=!!dis;b.onclick=fn;m.appendChild(b)});const f=m.querySelector('button:not(:disabled)');if(f&&!BATTLE_FAST)f.focus()}
 // A creature (the spirit, the centipede) is drawn by its map art, once per frame onto a small spare canvas by borrowing the game's drawing surface for a moment (`g`), then scaled up on the battle screen.
 // ART_SHOT says how big the picture is and where on the spare canvas the creature stands (tile coordinates) and which way it faces.
-const ART_SHOT={ghost:{w:48,h:48,x:1,y:1,f:'d',k:3},zombie:{w:48,h:48,x:1,y:1,f:'d',k:3},centipede:{w:48,h:30,x:.5,y:.55,f:'l',k:4}},artOff=document.createElement('canvas');
+const ART_SHOT={ghost:{w:48,h:48,x:1,y:1,f:'d',k:3},zombie:{w:48,h:48,x:1,y:1,f:'d',k:3},centipede:{w:48,h:30,x:.5,y:.55,f:'l',k:4},shark:{w:56,h:30,x:.4,y:.3,f:'l',k:4},squid:{w:52,h:46,x:.4,y:.2,f:'l',k:3},dragon:{w:44,h:30,x:.8,y:.45,f:'l',k:4}},artOff=document.createElement('canvas');
 function paintCreature(f,cv){const A=ART_SHOT[f.t.art]||ART_SHOT.ghost;artOff.width=A.w;artOff.height=A.h;const keep=g;g=artOff.getContext('2d');g.clearRect(0,0,A.w,A.h);
   try{ENEMY_ART[f.t.art]({x:A.x,y:A.y,f:A.f,hp:f.t.hp,max:f.t.hp,hitAt:0,pois:f.pois>0?performance.now()+1e4:0},0,0,performance.now())}finally{g=keep}
   const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.drawImage(artOff,0,0,A.w*A.k,A.h*A.k)}
 // the field: sky, far hills and a treeline, then grass with tufts and flowers, drawn once in pixels and scaled up behind the fighters
-function drawField(){const cv=$('bt-bg'),c=cv.getContext('2d'),W=cv.width,H=cv.height;c.imageSmoothingEnabled=false;const hz=Math.round(H*.34);
+function drawSea(){const cv=$('bt-bg'),c=cv.getContext('2d'),W=cv.width,H=cv.height;c.imageSmoothingEnabled=false;const hz=Math.round(H*.34);
+  for(let y=0;y<hz;y++){const k=y/hz;c.fillStyle='rgb('+Math.round(110+k*90)+','+Math.round(170+k*50)+','+Math.round(228-k*10)+')';c.fillRect(0,y,W,1)}
+  c.fillStyle='rgba(255,255,255,.85)';[[10,10,20],[64,16,24],[100,8,14]].forEach(([x,y,w])=>{c.fillRect(x,y,w,3);c.fillRect(x+3,y-2,w-6,2)})
+  for(let y=hz;y<H;y++){const k=(y-hz)/(H-hz);c.fillStyle='rgb('+Math.round(40-k*20)+','+Math.round(122-k*50)+','+Math.round(190-k*50)+')';c.fillRect(0,y,W,1)}
+  for(let i=0;i<110;i++){const x=(i*41)%W,y=hz+3+((i*59)%(H-hz-4));c.fillStyle=i%3?'#6fb1de':'#cfe8f6';c.fillRect(x,y,i%3?3:2,1)}   // wave crests
+  c.fillStyle='rgba(10,40,90,.25)';c.fillRect(0,H-6,W,6)}
+function drawField(kind){if(kind==='sea')return drawSea();const cv=$('bt-bg'),c=cv.getContext('2d'),W=cv.width,H=cv.height;c.imageSmoothingEnabled=false;const hz=Math.round(H*.34);
   for(let y=0;y<hz;y++){const k=y/hz;c.fillStyle='rgb('+Math.round(120+k*95)+','+Math.round(178+k*40)+','+Math.round(232-k*30)+')';c.fillRect(0,y,W,1)}
   c.fillStyle='rgba(255,255,255,.85)';[[14,8,18],[70,14,22],[104,6,14]].forEach(([x,y,w])=>{c.fillRect(x,y,w,3);c.fillRect(x+3,y-2,w-6,2);c.fillRect(x+2,y+3,w-4,1)})
   c.fillStyle='#8aa8c8';for(let x=0;x<W;x++)c.fillRect(x,hz-8-Math.round(Math.sin(x/9)*3+Math.sin(x/4.3)*1.5),1,9)          // far hills
@@ -62,7 +68,7 @@ const swayDelay=()=>'-'+Math.round(performance.now()%2400)+'ms';
 const bShake=(el,cls)=>{if(!el||BATTLE_FAST)return;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),320)};
 function startBattle(id,onEnd){const row=BATTLES[id];if(!row||BATTLE||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
   BATTLE={id,row,onEnd,sel:0,picking:false,foes:row.foes.slice(0,3).map(k=>({k,t:FOES[k],hp:FOES[k].hp,max:FOES[k].hp,pois:0,alive:true,fled:false}))};
-  $('battle').classList.add('open');drawField();bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
+  $('battle').classList.add('open');drawField(row.field||BATTLE.foes[0].t.field);bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
   const note=AMBUSH_NOTE;AMBUSH_NOTE=false;
   (async()=>{if(note)await bSay('You were attacked while distracted!');await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
 // Run is only an option against wild creatures (a foe with `art`); pirates and other people never let you go (playtest #4)
@@ -121,7 +127,7 @@ async function bFoes(){const B=BATTLE;
     // a foe with a `pattern` (the pirate boss) cycles through its steps: a plain hit, or `wind` (it winds up, no damage this turn, so a Block next turn takes the heavy blow that follows)
     let atk=f.t.atk,hit=f.t.hit;if(f.t.pattern){const st=f.t.pattern[((f.turns=(f.turns||0)+1)-1)%f.t.pattern.length];if(st.wind){await bSay(f.t.n+' '+st.wind);continue}atk=st.atk;hit=st.hit}
     const raw=rnd(hit[0],hit[1]),d=Math.max(1,Math.round((f.pois>0?raw/2:raw)*(1-fx('ward'))*(B.blocking?BLOCK_TAKES:1)));bShake(f.el,'foelunge');await bwait(230);
-    S.hp=Math.max(0,S.hp-d);ui();flashHit();if(B.blocking){bFx('shield',$('bt-meBox'));bFx('dmg small',$('bt-meBox'),'-'+d)}else{bHurt();bFx('dmg player',$('bt-meBox'),'-'+d)}bDraw();
+    if(/fire|flame/.test(atk||''))bFx('firebreath',$('bt-meBox'));S.hp=Math.max(0,S.hp-d);ui();flashHit();if(B.blocking){bFx('shield',$('bt-meBox'));bFx('dmg small',$('bt-meBox'),'-'+d)}else{bHurt();bFx('dmg player',$('bt-meBox'),'-'+d)}bDraw();
     await bSay(f.t.n+' '+(atk||'attacks')+'! -'+d+' health.');if(S.hp<=0)return bEnd('lost')}
   B.blocking=false;bTurn()}
 function bActions(list){(list||[]).forEach(a=>{const k=Object.keys(a).find(q=>TACT[q]&&!['say','scene','letter','battle'].includes(q));if(k)TACT[k](a[k])})}

@@ -6,7 +6,7 @@ function spawnEnemy(t,x,y,o={}){const ty=ENEMY_TYPES[t];if(!ty)return null;const
 const dropEnemies=group=>{for(let i=ENEMIES.length-1;i>=0;i--)if(ENEMIES[i].group===group)ENEMIES.splice(i,1)};
 // Touching a creature starts a turn-based battle (js/systems/battle.js): the creature reaches the player, the player walks into it or faces it and presses Use. The battle's foe is made from the creature's
 // ENEMY_TYPES row (health, `hit:[min,max]` or up to its `dmg`, xp, gold, drops, art), so every row can be fought without more work.
-function foeFromType(id){const ty=ENEMY_TYPES[id];return {n:ty.n,hp:ty.hp,hit:ty.hit||[Math.max(1,Math.round(ty.dmg*.5)),ty.dmg],gold:ty.gold,xp:ty.xp||0,drops:ty.drops,art:ty.art,block:ty.block,atk:ty.atk||'attacks'}}
+function foeFromType(id){const ty=ENEMY_TYPES[id];return {n:ty.n,hp:ty.hp,hit:ty.hit||[Math.max(1,Math.round(ty.dmg*.5)),ty.dmg],gold:ty.gold,xp:ty.xp||0,drops:ty.drops,art:ty.art,block:ty.block,atk:ty.atk||'attacks',pattern:ty.pattern,escape:ty.escape,field:ty.field}}
 function startEnemyBattle(e){if(BATTLE||SCENE||!e.alive)return false;
   const shut=[...document.querySelectorAll('.open')];if(shut.length){shut.forEach(el=>el.classList.remove('open'));AMBUSH_NOTE=true}const key='en:'+e.t;FOES[key]=foeFromType(e.t);BATTLES[key]={foes:[key]};
   return startBattle(key,res=>{const ty=ENEMY_TYPES[e.t];

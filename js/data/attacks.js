@@ -19,7 +19,7 @@ const ATTACKS={
  chop:{n:'Chop',power:1,cost:4,xp:10,uses:40},
  cleave:{n:'Cleave',power:1.6,cost:8,xp:16,uses:12},
  scuffle:{n:'Scuffle',power:.5,cost:0,xp:0},   // only offered when every real attack is out of uses or too dear: a weak flail that costs nothing, so you are never stuck
- divine_strike:{n:'Divine Strike',power:2.2,cost:10,xp:20,stun:.25,pierce:1,uses:8}   // the Divine Blade's own attack (Quest 8): a heavy blow that cannot be blocked and sometimes stuns. An item lists its own extra attacks in `moves`
+ divine_strike:{n:'Divine Strike',power:1.8,cost:10,xp:20,stun:.25,pierce:1,uses:8}   // the Divine Blade's own attack (Quest 8): a heavy blow that cannot be blocked and sometimes stuns. An item lists its own extra attacks in `moves`
 };
 const WEAPON_MOVES={
  starter:[['strike',0],['bash',0]],

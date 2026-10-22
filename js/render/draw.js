@@ -48,6 +48,7 @@ function draw(){
   E.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   if(FESTIVAL_ON&&zoneOf(P.x,P.y)===0)drawFestival(cx,cy,t);
   if(RAID_ON&&zoneOf(P.x,P.y)===0)drawRaid(cx,cy,t);
+  if(SEA_ALERT>t&&sail)seaAlertMark(cx,cy,t);   // the sea creature's warning over your boat (js/systems/wildlife.js)
   if(flag('village_burnt')&&zoneOf(P.x,P.y)===0)drawRuins(cx,cy,t);   // the burnt houses after Quest 7 (js/render/raid.js)
   if(flag('tower_raided')&&zoneOf(P.x,P.y)===0)drawTowerRaid(cx,cy,t);   // the ransacked Temple Tower smokes   // the burning village and the pirate ships' cannon fire (js/render/raid.js)   // the sea festival's bunting, lanterns and banner (js/render/festival.js)
   if(zoneOf(P.x,P.y)!==2)drawCompass(cx,cy,t);   // Grandfather's compass arrow (js/render/compass.js); in the Darkwood it is drawn after the darkness so it stays visible
