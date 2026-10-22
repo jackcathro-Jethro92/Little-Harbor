@@ -2,6 +2,7 @@
 function tile(tx,ty,sx,sy,t){
   const n=hs(tx,ty)%100,i=ty*MW+tx,mm=M[i],here=zoneOf(P.x,P.y)>=3||zoneOf(P.x,P.y)===1,zt=zoneOf(tx,ty),zp=zoneOf(P.x,P.y);
   if(zt!==zp){if(zp)R(sx,sy,T,T,'#000');else waterTile(tx,ty,sx,sy,t,true);return}
+  if(mm>=184&&mm<=201){interiorTile(mm,sx,sy,tx,ty);return}   // a shop room's floor or wall (js/render/props.js)
   if(mm>=21&&mm<=23){
     if(!here){waterTile(tx,ty,sx,sy,t,true);return}
     homeArt(mm,tx,ty,sx,sy,n);

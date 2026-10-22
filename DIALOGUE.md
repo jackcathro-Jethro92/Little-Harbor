@@ -4,9 +4,18 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 
 **Totals (people's lines): 27 original, 0 Jack's, 115 placeholder.**
 
+### Astrid (Astrid's Apothecary)
+- *placeholder:* Potions to heal, poisons to harm. Mind which is which.
+
+### Carpenter Alder (Carpenter Alder's Workshop)
+- *placeholder:* [Placeholder] Good timber makes a good house. Take a look.
+
 ### Miner Dell (Darkwood north gate)
 - *placeholder:* [Placeholder] This slide came down in the night. I will be at it all week.
 - *placeholder:* [Placeholder] Got a pickaxe? Give those rocks a good whack!
+
+### Barber Fenwick (Fenwick's Barber Shop)
+- *placeholder:* A trim, a shave, a new you.
 
 ### Aldric (Fighters Guild hall (Mountain Town))
 - *placeholder:* The practice dummies never hit back. Good place to start.
@@ -22,6 +31,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Sergeant Voss (Fighters Guild hall (Mountain Town))
 - *placeholder:* Again! Feet apart, guard up!
 - *placeholder:* A tired fighter is a dead fighter. Eat well.
+
+### Garrick (Garrick's Forge)
+- *placeholder:* Metal, blades and tools. Take a look.
 
 ### Arena Master Dorn (Gladiators' Arena (Mountain Town))
 - *placeholder:* Ready to fight?
@@ -251,12 +263,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* I would like a sword someday. Just to hang on the wall.
 - *placeholder:* Bring Garrick some iron. He will be grateful.
 
-### Astrid (Walled Settlement)
-- *placeholder:* Potions to heal, poisons to harm. Mind which is which.
-
-### Barber Fenwick (Walled Settlement)
-- *placeholder:* A trim, a shave, a new you.
-
 ### Bryn (Walled Settlement)
 - *placeholder:* Hush, the baby is finally asleep.
 - *placeholder:* Home is where the hearth is.
@@ -280,9 +286,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Fenna (Walled Settlement)
 - *placeholder:* I keep chickens. They keep me up.
 - *placeholder:* The gate guard never sleeps, I swear.
-
-### Garrick (Walled Settlement)
-- *placeholder:* Metal, blades and tools. Take a look.
 
 ### Gate Guard Bors (Walled Settlement)
 - *placeholder:* Halt. Oh, it is you. Carry on.
@@ -320,9 +323,6 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* Fresh eggs every morning, if the hens feel like it.
 - *placeholder:* The settlement folk buy most of what I grow.
 
-### Seamstress Wynn (Walled Settlement)
-- *placeholder:* Clothes make the fisher.
-
 ### Sunniva (Walled Settlement)
 - *placeholder:* Quiet times. I like it that way.
 - *placeholder:* The Darkwood is west, past the woodcutters.
@@ -339,8 +339,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* Welcome to the settlement. Mind the cobbles.
 - *placeholder:* The walls keep the wolves out, mostly.
 
-### Carpenter Alder (Woodcutters' Shacks)
-- *placeholder:* [Placeholder] Good timber makes a good house. Take a look.
+### Seamstress Wynn (Wynn's Tailor)
+- *placeholder:* Clothes make the fisher.
 
 ## Lines spoken by menus and shopkeepers (in the code)
 

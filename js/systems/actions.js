@@ -4,7 +4,7 @@ function act(){
   if(placing)return placeItem(placing);
   if(fs===1)return say('Too early. Wait for the bite.');
   if(fs===2)return hook();
-  const[x,y]=front(),n=npcAt(x,y);
+  const[x,y]=front(),n=npcAt(x,y)||counterNpc(x,y);   // (counterNpc: the shopkeeper behind a counter, js/systems/shoprooms.js)
   {const en=enemyAt(x,y);if(en&&!sail)return startEnemyBattle(en)}
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(zoneOf(P.x,P.y)===1&&at(x,y)===175)return openCrate(x,y);   // a storage crate in the Haven house

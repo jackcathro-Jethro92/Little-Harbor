@@ -39,16 +39,16 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Alder | Walled Settlement | Villager |
 | Fenna | Walled Settlement | Villager |
 | Joss | Walled Settlement | Villager |
-| Garrick | Walled Settlement | Blacksmith |
+| Garrick | Garrick's Forge | Blacksmith |
 | Tilda | Walled Settlement | Blacksmith's apprentice |
 | Gate Guard Bors | Walled Settlement | Gate guard |
-| Astrid | Walled Settlement | Apothecary |
-| Seamstress Wynn | Walled Settlement | Tailor |
-| Barber Fenwick | Walled Settlement | Barber |
+| Astrid | Astrid's Apothecary | Apothecary |
+| Seamstress Wynn | Wynn's Tailor | Tailor |
+| Barber Fenwick | Fenwick's Barber Shop | Barber |
 | Farmer Hobb | Walled Settlement | Dairy farmer |
 | Maude | Walled Settlement | Shepherd |
 | Perrin | Walled Settlement | Egg farmer |
-| Carpenter Alder | Woodcutters' Shacks | Carpenter |
+| Carpenter Alder | Carpenter Alder's Workshop | Carpenter |
 | Hale | The Darkwood | Woodcutter (Darkwood) |
 | Wren | The Darkwood | Forager (Darkwood) |
 | Bergit | Mountain Town | Villager |
