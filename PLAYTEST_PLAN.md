@@ -148,7 +148,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P52 | When the character is hit by an attack make it more obvious: a flash or an animation showing the hit | C | **Built** (batch C1): field shake, red flash, blinking, flashing health bar |
 | P53 | Announce when you have learned a new attack | C | **Built** (batch C1): a big banner in battle |
 | P54 | The carpenter: who sells furniture? | G (question) |  |
-| P55 | The character walks over the top of the Temple Tower (screenshot to come) | D |  |
+| P55 | The character walks over the top of the Temple Tower (screenshot to come) | D | **Built** (batch D1): the pagoda is drawn in front of the player when you stand behind it |
 | P56 | Workbench art: twice the size | A | **Built** (batch A): two tiles wide, vice and tools |
 | P57 | Should be able to sell unwanted weapons | E |  |
 | P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E |  |
@@ -158,7 +158,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P62 | Weapon strength needs to be developed and nerfed | C |  |
 | P63 | When using a potion (healing or stamina) a bar shows the increase in those stats | C | **Built** (batch C1): a card with the filling bars and the amount |
 | P64 | Quest "Under Attack": more black smoke from the burning houses; move the burning houses; when the pirates are defeated the screen fades to black and all pirates are gone, the fires are out and the burning houses are now burnt ruins | B | **Built** (batch B): see the notes below |
-| P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D |  |
+| P65 | Gate at the entrance to the Temple Tower: the character clips (screenshot to come) | D | **Built** (batch D1): the tower gate is drawn over your head when you stand in it |
 | P66 | Quest "Into the Depths": the chamber at the Temple Tower entrance is not a solid object when the character moves | D |  |
 | P67 | More enemies in the Temple Tower chamber, and dynamic traps that hurt you if triggered (poison dart, fire trap) | D |  |
 | P68 | Quick Strike: a chance to hit twice before the opponent can hit you back | C | **Built** (batch C1): 30% to strike twice |
@@ -168,9 +168,9 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P72 | Sea creatures can attack while you sail, out of nowhere: an alert, then you jump into battle. Ancient squid, sharks | C |  |
 | P73 | The mountain area needs an enemy: a Rock Dragon (a Komodo dragon made of stone) that breathes fire | C |  |
 | P74 | Haven Isle should be further north than where it is now | D |  |
-| P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D |  |
+| P75 | Sailors' Grave Rocks should be like the jagged rocks that block the northern mainland's coastline | D | **Built** (batch D1): jagged rock clumps like the northern coast |
 | P76 | The house on Haven Isle needs work on its interior | D |  |
-| P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D |  |
+| P77 | The character hovers over the gate on Haven Isle (screenshot to come) | D | **Built** (batch D1): the Haven Isle gate uses the same fix |
 
 (P55, P65 and P77 are the screenshot notes; they are the same kind of fault, the drawing order of the character over a gate or roof.)
 
@@ -205,3 +205,7 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 - **C1, fighting mechanics (built):** P44, P52, P53, P63, P68, P71.
 - **C2, balance and new enemies (next):** P62 (weapon strength), P70 (Divine Strike and the pirates), P72 (sea creatures while sailing) and P73 (the Rock Dragon).
 - **P71 numbers are first guesses:** uses per attack are Strike 40, Bash 20, Slash 40, Lunge 25, Quick Strike 30, Power Slash 12, Chop 40, Cleave 12, Divine Strike 8, restored by sleeping or a guild bunk. Tell me if they feel too tight or too loose.
+
+## Batch D1 notes (22 Oct)
+- **P55, P65, P77** were fixed from the code without the screenshots. Please check them on your phone: walk behind the pagoda, through the Tower's gate and through the Haven Isle gate. If any still looks wrong, send a screenshot.
+- **Still open (D2, waiting for Jack):** P74 (how far north for Haven Isle), P66 (which object in the Tower chamber), P67 (traps: visible or hidden, how hard they hit), P76 (what the Haven Isle house interior should have).
