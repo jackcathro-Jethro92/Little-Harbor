@@ -9,14 +9,19 @@ const GATES=[];
 const GATE_ORIG={};let gatePending=false;
 const gateKey=(x,y)=>y*MW+x;
 function applyGates(){let pend=false;
-  GATES.forEach(g=>{const open=flag(g.flag);g.cells.forEach(([x,y])=>{const k=gateKey(x,y);if(GATE_ORIG[k]===undefined)GATE_ORIG[k]=at(x,y);
+  GATES.forEach(g=>{g.cells.forEach(([x,y],i)=>{const open=cellOpen(g,i),k=gateKey(x,y);if(GATE_ORIG[k]===undefined)GATE_ORIG[k]=at(x,y);
     if(open)M[k]=GATE_ORIG[k];
     else if((P.x===x&&P.y===y)||(B.x===x&&B.y===y)||npcAt(x,y)||(typeof animalAt==='function'&&animalAt(x,y)))pend=true;
     else M[k]=g.closed})});
   gatePending=pend;if(typeof groundDirty==='function')groundDirty()}
-const gateAt=(x,y)=>GATES.find(g=>!flag(g.flag)&&g.cells.some(c=>c[0]===x&&c[1]===y));
+// a gate can also have `cf:['flag_a','flag_b',...]`, one switch per cell, so each cell opens on its own (the rockslide's rocks break one at a time); the gate's own flag is set once every cell is open, and setting it opens every cell
+const cellOpen=(g,i)=>flag(g.flag)||!!(g.cf&&flag(g.cf[i]));
+const gateCell=(x,y)=>{for(const g of GATES){const i=g.cells.findIndex(c=>c[0]===x&&c[1]===y);if(i>=0&&!cellOpen(g,i))return[g,i]}return null};
+const gateAt=(x,y)=>(gateCell(x,y)||[])[0];
 // facing a closed gate and pressing Use: it opens if the player has what it needs, otherwise it says why not. Returns true if it handled the press.
-function useGate(x,y){const g=gateAt(x,y);if(!g||npcAt(x,y))return false;
+function useGate(x,y){const gc=gateCell(x,y);if(!gc||npcAt(x,y))return false;const[g,i]=gc;
   const n=g.needs,ok=n&&((n.eq&&S.eq[n.eq])||(n.item&&count(n.item)>0));
-  if(ok){setFlag(g.flag,1);if(g.opens)say(g.opens);toast(g.opens||'It opens.',2200);if(g.fire)setTimeout(()=>fireTriggers('step'),1200)}else say(g.msg||'It is blocked.');return true}
+  if(ok){if(g.cf){setFlag(g.cf[i],1);const left=g.cf.filter(f=>!flag(f)).length;if(!left)setFlag(g.flag,1);const m=left?(g.part||'It breaks!').replace('{n}',left):g.opens;if(m)say(m);toast(m||'It opens.',2200);applyGates()}
+    else{setFlag(g.flag,1);if(g.opens)say(g.opens);toast(g.opens||'It opens.',2200)}
+    if(g.fire)setTimeout(()=>fireTriggers('step'),1200)}else say(g.msg||'It is blocked.');return true}
 applyGates();

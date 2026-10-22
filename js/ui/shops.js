@@ -35,7 +35,7 @@ function openStore(k){
     CREW.filter(c=>c.where==='boatyard').forEach(c=>{const r=document.createElement('div');r.className='it';r.dataset.cat='Crew';r.innerHTML='<div><b>'+c.n+'</b> · '+c.job+'<br>'+c.desc+'</div>';const b=document.createElement('button');
       if(flag(c.flag)){b.textContent='Aboard';b.disabled=true}else{b.textContent=c.price.toLocaleString()+'g';b.disabled=S.gold<c.price;b.onclick=()=>{S.gold-=c.price;setFlag(c.flag);ui();save();say('Murl: '+c.n+' will sail with you. Crew: '+crewHave()+'.');openStore(k)}}
       r.appendChild(b);el.appendChild(r)})}
-  if(rod)LIST('weapon').concat(LIST('tool')).filter(id=>!ITEMS[id].smith&&!ITEMS[id].starter&&!ITEMS[id].reward&&(!SHOP_LOCKS[id]||flag(SHOP_LOCKS[id])||count(id)>0)).forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),ITEMS[id].kind==='weapon'?'Weapons':'Tools');r.className='it';
+  if(rod)LIST('tool').filter(id=>!ITEMS[id].smith&&!ITEMS[id].starter&&!ITEMS[id].reward&&(!SHOP_LOCKS[id]||flag(SHOP_LOCKS[id])||count(id)>0)).forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),ITEMS[id].kind==='weapon'?'Weapons':'Tools');r.className='it';
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';
     const b=document.createElement('button');
     if(count(id)){b.textContent='Owned';b.disabled=true}

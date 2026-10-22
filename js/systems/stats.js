@@ -2,9 +2,11 @@
 const STEP_MS={walk:160,sail:90},GLIDE={walk:.085,sail:.14},SWIFT_MS={walk:110,sail:60},SWIFT_GLIDE={walk:.12,sail:.2}; // SWIFT_* is the old normal speed, now what a swiftness potion gives
 // Enchanted boots (a Quest 4 reward) speed up walking only, between the normal and the swiftness-potion speed; the potion wins if both apply. (Jack will tune the boots' speed later.)
 const BOOT_MS=135,BOOT_GLIDE=.1,swift=()=>S.buff>Date.now(),boots=()=>!sail&&fx('speed')>0;
-const stepMs=()=>swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sail?'sail':'walk'],glideAmt=()=>swift()?SWIFT_GLIDE[sail?'sail':'walk']:boots()?BOOT_GLIDE:GLIDE[sail?'sail':'walk'];
+// Out of stamina you move much more slowly (EXH_*); a swiftness potion brings you back to the normal pace, and only sleep, food or a tonic refill the bar.
+const EXH_MS={walk:300,sail:170},EXH_GLIDE={walk:.05,sail:.08},tired=()=>S.sta<=0;
+const stepMs=()=>tired()?(swift()?STEP_MS:EXH_MS)[sail?'sail':'walk']:swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sail?'sail':'walk'],glideAmt=()=>tired()?(swift()?GLIDE:EXH_GLIDE)[sail?'sail':'walk']:swift()?SWIFT_GLIDE[sail?'sail':'walk']:boots()?BOOT_GLIDE:GLIDE[sail?'sail':'walk'];
 // // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
-const MAXHP=50,MAXSTA=100,STAM={walk:.04,sail:.04,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
+const MAXHP=50,MAXSTA=100,STAM={walk:0,sail:0,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
 const fx=k=>['ring','amulet','boots','armour','helmet'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
 const maxHp=()=>MAXHP+4*lvl('combat')+fx('hp'),maxSta=()=>MAXSTA+fx('sta');
@@ -13,4 +15,4 @@ function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q
   if(a>b){if(id==='combat')S.hp=Math.min(maxHp(),S.hp+4*(a-b));toast('★ '+k.n+' level '+a+'! ★',2800);say(k.n+' reached level '+a+'! '+k.perk(a));save()}
   ui()}
 const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),eq=k=>ITEMS[S.eq[k]],tier=k=>LIST(k).indexOf(S.eq[k]);
-function spend(n){n*=1-fx('thrift');const was=S.sta;S.sta=Math.max(0,S.sta-n);if(!S.sta&&was>0)say('You are exhausted! Sleep on the boat to recover.');ui()}
+function spend(n){n*=1-fx('thrift');const was=S.sta;S.sta=Math.max(0,S.sta-n);if(!S.sta&&was>0)say('You are exhausted and move slowly. Sleep, eat or drink a tonic to recover.');ui()}

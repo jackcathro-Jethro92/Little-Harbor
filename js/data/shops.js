@@ -3,7 +3,7 @@
 const SMITH=[
  ['Materials',[['cloth',40],['leather',70],['copper_ore',30],['tin_ore',30],['bronze_ore',50],['iron_bar',160],['rope',25],['softwood_plank',15],['medium_plank',30],['hardwood_plank',55]]],
  ['Rare ore',[['silver_ore',220],['gold_ore',400]]],
- ['Weapons',[['hand_axe',400],['bronze_sword',450],['iron_sword',1100],['greatsword',3000]]],
+ ['Weapons',[['sword',300],['hand_axe',400],['bronze_sword',450],['iron_sword',1100],['greatsword',3000]]],
  ['Tools',[['iron_pickaxe',600],['iron_axe',600]]],
  ['Armour',[['cloth_hood',500],['cloth_tunic',1200],['cloth_shoes',450],['leather_cap',1500],['leather_jerkin',3500],['leather_boots',1300],['chain_coif',4500],['chain_hauberk',10000],['chain_boots',4000]]],
  ['Objects',[['standard_bench',100],['forge',400],['camp_kit',150]]]
@@ -29,4 +29,4 @@ const LOOK_PRICES={tailor:{shirt:50,jk:80,hc:40,hat:50,jon:30,pack:30},barber:{h
 
 // Things Bram's shop only shows once the story has handed them out (or the player already has one): item id -> the flag that unlocks it. Quest 2 gives the sword and pickaxe (Garrick);
 // Quest 3 (Murl) sends the player to Hale for the woodcutter's axe, so Bram stops selling it until then.
-const SHOP_LOCKS={sword:'q2_got_sword',pickaxe:'q2_got_pickaxe',woodcutters_axe:'has_axe'};
+const SHOP_LOCKS={pickaxe:'q2_got_pickaxe',woodcutters_axe:'has_axe'};

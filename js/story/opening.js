@@ -28,7 +28,7 @@ SCENES.festival_opening=[
  {lanterns:8000},{cheer:2500},{wait:3600},                                                                                                                  // 45-49 s: lanterns float out over the water
  {fade:'out',ms:1200},{wait:1300},{light:'reset'},{bars:'off'},{tp:['You',156,126]},{face:['You','d']},{set:'festival_done'},{fade:'in',ms:900},{msg:'Walk down the pier to your boat, face it, and tap Use.'}];
 SCENES.festival_opening.cine=true;
-LETTERS.q1_letter={from:'A stranger',title:'Please come quick!',text:'Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry'};
+LETTERS.q1_letter={from:'A stranger',title:'Please come quick!',text:'Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry!!'};
 TRIGGERS.push(
  {id:'festival_open',when:{start:1},if:{noflag:'festival_done'},do:[{set:'festival_on'},{scene:'festival_opening'}]},
  {id:'festival_down',when:{day:1},if:{flag:'festival_on'},do:[{clear:'festival_on'}]},

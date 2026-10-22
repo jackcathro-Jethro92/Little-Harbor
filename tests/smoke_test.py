@@ -339,9 +339,9 @@ def check(b, url):
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=9999")
     tabs = lambda: ev("[...document.querySelectorAll('#items .tabs button')].map(b=>b.textContent)")
     shown = lambda: ev("[...document.querySelectorAll('#items .it[data-cat]')].filter(r=>r.style.display!=='none').map(r=>r.dataset.cat).filter((v,i,a)=>a.indexOf(v)===i)")
-    ev("openStore('rod')"); assert tabs() == ["Rods", "Tools", "Home"] and ev("!/Pickaxe|Sword/.test($('items').textContent)"), ("Bram hides the sword and pickaxe until the story hands them out", tabs())
+    ev("openStore('rod')"); assert tabs() == ["Rods", "Tools", "Home"] and ev("!/Pickaxe|Sword/.test($('items').textContent)"), ("Bram hides the pickaxe until the story hands them out", tabs())
     ev("setFlag('q2_got_sword');setFlag('q2_got_pickaxe')")   # (Quest 2 unlocks them; the older checks below want the full shop)
-    ev("openStore('rod')"); assert tabs() == ["Rods", "Weapons", "Tools", "Home"] and shown() == ["Rods"], (tabs(), shown())
+    ev("openStore('rod')"); assert tabs() == ["Rods", "Tools", "Home"] and shown() == ["Rods"], (tabs(), shown())
     ev("[...document.querySelectorAll('#items .tabs button')].find(b=>b.textContent==='Tools').click()"); assert shown() == ["Tools"] and ev("[...document.querySelectorAll('#items .tabs button.sel')].map(b=>b.textContent)") == ["Tools"], shown()
     ev("openStore('rod')"); assert shown() == ["Tools"], "the chosen category is remembered"
     ev("openStore('boat')"); assert tabs() == ["Boats", "Crew", "Yard"], tabs()
@@ -517,7 +517,7 @@ def check(b, url):
     ev("BATTLE_BLOCKS=false;BATTLES.t_blk.foes=['pirate_grunt'];BATTLE.foes[0].hp=0;BATTLE.foes[0].alive=false"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
     ev("BATTLE_BLOCKS=false;window.__r=null;startBattle('t_win',()=>{})"); pg.wait_for_timeout(50); ev(ATTACK_JS)
     pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
-    assert ev("STAM.walk===.04&&STAM.sail===.04"), "walking and sailing cost half the stamina"
+    assert ev("STAM.walk===0&&STAM.sail===0"), "walking and sailing cost no stamina"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
     bclick("Run"); pg.wait_for_timeout(100); assert ev("BATTLE!==null&&BATTLE.log.some(t=>/no way to run/.test(t))"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
@@ -594,7 +594,7 @@ def check(b, url):
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_function("GULL!==null", timeout=10000)
     assert ev("sail===true&&SCENE!==null&&GULL!==null"), "boarding the boat in the village brings a seagull"
-    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
+    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry!!/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000)
     assert ev("SCENE===null&&flag('letter1_read')&&hasLetter('q1_letter')&&S.story.q==='q1'&&/Quest 1|Stranger/.test(QUESTS.find(q=>q.id==='q1').name)"), "the letter is kept and Quest 1 starts"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
@@ -603,7 +603,7 @@ def check(b, url):
     # Quest 1 (4.1): the courtyard fires the pirate encounter; the three are fought one by one; the last one's flight and the stranger's scene give the compass and finish the quest; the village news follows; the compass draws its arrow
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;storyReset();ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});NPC.forEach(n=>{n.busy=1});S.hp=50;S.sta=100;S.eq.weapon='sword';add('sword');S.bag.grandfather_compass=0;storyJump('q1')")
     assert ev("S.story.q==='q1'&&hasLetter('q1_letter')&&questGoal()[0]===283&&count('grandfather_compass')===0"), "Quest 1 begins with the letter, a goal and no compass yet"
-    assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then youl wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sited taking of fire island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
+    assert ev("DLG.q1_pirate.nodes.a.text===\"This isn't over! You'll see! Just wait till the rest of us get here! Then you'll wish you had never messed with The Fleet!\"&&/^Thank you so much\\. They were just about to break into the sacred Vault\\./.test(DLG.q1_stranger.nodes.b.text)&&/^Have you heard! Pirates have been sighted taking over Fire Island/.test(DLG.q1_villager.nodes.a.text)"), "Jack's three lines are in word for word"
     assert ev("encFigures('q1_pirates').length===0&&S.story.step===0"), "no pirates before the player lands"
     ev("sail=true;const wp=nearestTile(283,47,(x,y)=>at(x,y)===1);P.x=P.rx=wp[0];P.y=P.ry=wp[1]+1;sail=false;move('u')"); pg.wait_for_timeout(100)
     assert ev("encFigures('q1_pirates').length===5&&S.story.step===1&&!dlgActive()&&encFigures('q1_pirates').filter(n=>n.y>=38&&n.y<=43&&n.x>=282&&n.x<=284).length===2&&encFigures('q1_pirates').every(n=>WK.includes(at(n.x,n.y)))"), "the first step ashore puts five pirates at their posts, two of them on the path to the temple (the player says nothing)"
@@ -636,11 +636,11 @@ def check(b, url):
         ev("for(let i=0;i<30&&dlgActive();i++)dlgAdvance()")
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{if(e.t==='centipede'){e.alive=false;e.resp=1e9}});S.bag.sword=0;S.eq.weapon=null;S.bag.pickaxe=0;S.eq.pickaxe=null;S.bag.healing_potion=0;S.bag.stamina_tonic=0;S.hp=50;storyJump('q2')")
     assert ev("S.story.q==='q2'&&S.story.step===0&&Math.abs(questGoal()[0]-155)+Math.abs(questGoal()[1]-104)<=2&&NPC.find(n=>n.n==='Bjorn the Elder').hidden===0&&NPC.find(n=>n.n==='Rue').hidden===1"), "Quest 2 begins with the compass pointing at Bjorn; Rue is not about yet"
-    assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. Im guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am i glad to see you, Bjorn sent the right person for the job lets get out of here eh'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack's six lines are in word for word"
+    assert ev("DLG.q2_bjorn1.nodes.a.text.startsWith('Ahh! Thanks for coming to see me. I\\'m guessing you heard.')&&DLG.q2_garrick1.nodes.a.text.endsWith('Take this and stay safe')&&DLG.q2_rue1.nodes.a.text==='Boy am I glad to see you. Bjorn sent the right person for the job. Let\\'s get out of here, eh?'&&DLG.q2_garrick2.nodes.a.text.startsWith('Impressive work lad.')&&DLG.q2_rue2.nodes.a.text.startsWith('I sure am grateful')&&DLG.q2_bjorn2.nodes.a.text.startsWith('Well well well.')"), "Jack\\'s six lines are in word for word"
     ev("setFlag('q2_got_sword',0);setFlag('q2_got_pickaxe',0);openStore('rod')"); assert ev("!/Sword|Pickaxe/.test($('items').textContent)"), "Bram does not sell the sword or pickaxe yet"
     talk("Bjorn the Elder"); assert ev("flag('q2_started')&&S.story.step===1&&!dlgActive()&&questGoal()!==null"), "Bjorn starts the quest and sends the player to Garrick"
     talk("Garrick"); assert ev("flag('q2_got_sword')&&count('sword')===1&&S.eq.weapon==='sword'&&S.story.step===2"), "Garrick gives a sword (one copy, equipped)"
-    ev("openStore('rod')"); assert ev("/Sword/.test($('items').textContent)&&!/Pickaxe/.test($('items').textContent)"), "Bram sells the sword now but still not the pickaxe"
+    ev("openStore('rod')"); assert ev("!/Sword/.test($('items').textContent)&&!/Pickaxe/.test($('items').textContent)"), "Bram never sells swords (only Garrick does) and not the pickaxe yet"
     assert ev("(()=>{const n=NPC.find(q=>q.n==='Rue');return n.hidden===0&&n.y>=FY&&WK.includes(at(n.x,n.y))})()"), "Rue waits by the woodcutter's cottage in the Darkwood"
     assert ev("at(134,26+FY)===36&&!walkable(134,26+FY)&&!!gateAt(134,26+FY)"), "a boulder shuts the forest's east trail"
     ev("P.x=P.rx=133;P.y=P.ry=26+FY;P.f='r';S.eq.pickaxe=null;act()"); assert ev("at(134,26+FY)===36&&/pickaxe/.test($('msg').textContent)"), "without a pickaxe the boulder only says why"
@@ -660,7 +660,7 @@ def check(b, url):
     # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)
     ev("S.bag.woodcutters_axe=0;S.eq.axe=null;S.gold=0;S.bag.ironwood_log=0")
     assert ev("LAND.some(l=>l[0]==='Oak Island')&&(()=>{let n=0;for(let y=160;y<=180;y++)for(let x=135;x<=153;x++)if(at(x,y)===140)n++;return n===3})()"), "three ironwood logs lie on Oak Island"
-    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjorn sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('its all yours')"), "Murl's two speeches are Jack's words"
+    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjorn sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('it\\'s all yours')"), "Murl's two speeches are Jack's words"
     ev("setFlag('q3_started',0);openStore('rod')"); assert ev("!/Woodcutter/.test($('items').textContent)"), "Bram does not sell the axe any more"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     talk("Murl"); assert ev("flag('q3_started')&&S.story.q==='q3'&&S.story.step===0&&!dlgActive()&&Math.abs(questGoal()[0]-144)<=2"), "Murl starts Quest 3 and the compass points at Oak Island"
@@ -689,7 +689,7 @@ def check(b, url):
             pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});S.hp=50;S.eq.weapon='sword';add('sword');['q3_started','q3_done','axe_waiting','has_axe'].forEach(f=>setFlag(f,1))")
     ev("P.x=P.rx=60;P.y=P.ry=170;P.f='d';fireTriggers('step')"); pg.wait_for_function("SCENE!==null", timeout=10000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=10000)
-    assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('Iv just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
+    assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('I\\'ve just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
     ev("P.x=P.rx=12;P.y=P.ry=40;P.f='u';fireTriggers('step')")
     assert ev("flag('q4_gate_started')&&S.story.step===1&&encFigures('q4_gate').length===3&&encFigures('q4_gate').every(n=>WK.includes(at(n.x,n.y)))"), "three pirates hold the temple path"
     fight_all('q4_gate', 3, True); assert ev("flag('enc_q4_gate_done')&&S.story.step===2"), "beating them lets you in"
@@ -779,7 +779,7 @@ def check(b, url):
     assert ev("flag('sky_key_returned')&&count('sky_key')===0&&!flag('sky_damaged')&&S.story.step===0&&DLG.q10_boy.nodes.a.text.startsWith('The water was right all along.')&&at(235,108)===80&&at(236,108)===81"), "the Sky spirit takes his key and his temple is made whole again"
     talk("Fire Spirit"); assert ev("count('fire_key')===1&&!flag('fire_key_returned')&&S.story.step===0"), "the Fire spirit asks you to take the other keys home first"
     talk("Mysterious Girl"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_earth'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null&&!dlgActive()", timeout=8000)
-    assert ev("flag('earth_key_returned')&&count('earth_key')===0&&S.story.step===1&&DLG.q10_girl.nodes.a.text.startsWith('From the moment i layed eyes on you')"), "the Earth spirit takes her key and the Fire temple is last"
+    assert ev("flag('earth_key_returned')&&count('earth_key')===0&&S.story.step===1&&DLG.q10_girl.nodes.a.text.startsWith('From the moment I laid eyes on you')"), "the Earth spirit takes her key and the Fire temple is last"
     ev("S.home={x:150,y:122,roof:'thatch'};S.claim={x:148,y:120,w:7,h:5};for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(122+j)*MW+150+i]=5;S.bag.cottage_kit=0;S.bag.house_key=0")
     talk("Fire Spirit"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_fire'", timeout=6000)
     for _ in range(12):
@@ -953,8 +953,12 @@ def check(b, url):
     assert not ev(reach), "the rockslide seals the way from the Darkwood's north gate to the Mountain Town"
     assert ev("NPC.some(n=>n.n==='Miner Dell'&&n.work==='pick')"), "a miner is digging at the rocks"
     ev("act()"); assert ev("!flag('rockslide_cleared')"), "no pickaxe, the rocks stay"
-    ev("TRIGGERS.forEach(t=>{if(t.id!=='rockslide_thanks')markSeen('trg:'+t.id)});add('pickaxe');S.eq.pickaxe='pickaxe';act()"); assert ev("flag('rockslide_cleared')") and ev(reach), "a pickaxe breaks the rockslide and opens the road"
-    pg.wait_for_function("dlgActive()&&/this rock slide was going take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
+    ev("TRIGGERS.forEach(t=>{if(t.id!=='rockslide_thanks')markSeen('trg:'+t.id)});S.gold=0;add('pickaxe');S.eq.pickaxe='pickaxe';act()"); assert ev("flag('rock_3')&&!flag('rockslide_cleared')&&at(30,108)===141&&at(31,108)!==141"), "one swing breaks only the rock you face (you can squeeze through the gap, but Dell pays only when all are broken)"
+    ev("[29,30,32,33,34].forEach(x=>{P.x=P.rx=x;P.y=P.ry=109;P.f='u';act()})"); assert ev("flag('rockslide_cleared')&&[29,30,31,32,33,34].every(x=>at(x,108)!==141)") and ev(reach), "breaking every rock opens the road"
+    pg.wait_for_function("dlgActive()&&/This rock slide was going to take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
+    ev("dlgAdvance();dlgAdvance()")
+    pg.wait_for_function("dlgActive()&&/take this for your trouble/.test($('dlg').textContent)", timeout=8000)   # then the reward line
+    ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
     assert not errs, errs
     pg.close()

@@ -46,7 +46,17 @@ function campArt(p,cx,cy,t){const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3;
     [[1,9],[4,11],[8,11],[11,9],[2,6],[11,6]].forEach(([sx,sy])=>{pF(c,sx,sy,4,3,O);pF(c,sx+1,sy,2,2,'#9a9c94');pP(c,sx+1,sy,'#c4c6bd')});
     pF(c,3,8,10,3,O);pF(c,4,8,8,2,'#6b4423');pF(c,4,8,8,1,'#8a5a30');pF(c,6,5,3,5,O);pF(c,7,5,1,5,'#7a5230')}),x|0,y|0);
   g.fillStyle='#e8632e';g.fillRect(x+5,y+3+(fl%2),6,6);g.fillStyle='#f2a22e';g.fillRect(x+6,y+4+(fl%2),4,5);g.fillStyle='#ffe27a';g.fillRect(x+7+(fl===1?1:0),y+6,2,3)}
-function stationArt(p,cx,cy,t){if(p.big&&p.id==='camp_kit')return campArt(p,cx,cy,t);const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;
+// the workbench: two tiles wide, a thick plank top with a vice clamped on the left and a saw, hammer, chisels and a plank with nails on top (playtest #4)
+function benchArt(x,y){g.drawImage(sprite('sbench2',32,16,c=>{const O='#2e1f10',W='#a8743f',WL='#c9965a',WD='#7a5230',LG='#6b4423',ST='#8d97a1',SL='#c9d2da';pShadow(c,16,14,15,2,.3);
+  pF(c,1,10,5,5,O);pF(c,2,10,3,5,LG);pF(c,26,10,5,5,O);pF(c,27,10,3,5,LG);pF(c,2,10,1,5,WD);pF(c,27,10,1,5,WD);
+  pF(c,5,12,22,2,O);pF(c,6,12,20,1,WD);pF(c,8,11,3,1,'#5a3c20');
+  pF(c,0,5,32,6,O);pF(c,1,6,30,4,W);pF(c,1,6,30,1,WL);pF(c,1,9,30,1,WD);pP(c,12,8,WD);pP(c,13,8,WD);pP(c,19,7,WD);pP(c,24,8,WD);pP(c,6,9,'#8a5a30');
+  pF(c,2,3,7,3,O);pF(c,3,4,5,2,'#6e7480');pF(c,3,1,3,4,O);pF(c,4,1,1,3,SL);pF(c,6,2,3,3,O);pF(c,7,2,1,2,ST);pF(c,2,0,1,1,SL);pF(c,0,2,3,1,SL);pF(c,0,1,1,3,SL);
+  pF(c,11,5,10,2,O);pF(c,12,5,8,1,SL);pF(c,12,6,8,1,ST);pP(c,13,6,O);pP(c,15,6,O);pP(c,17,6,O);pP(c,19,6,O);pF(c,21,4,4,4,O);pF(c,22,5,2,2,LG);
+  pF(c,25,3,6,2,O);pF(c,26,3,4,1,'#8a5a30');pF(c,27,2,3,3,O);pF(c,28,2,2,2,ST);pP(c,28,2,SL);
+  pF(c,12,8,6,2,O);pF(c,13,8,4,1,'#d8b878');pF(c,18,8,3,2,O);pP(c,19,8,SL);pP(c,19,9,SL);
+  pF(c,22,8,5,2,O);pP(c,23,8,'#d83828');pP(c,24,8,'#3a8ad8');pP(c,25,8,'#e8b830')}),x|0,y|0)}
+function stationArt(p,cx,cy,t){if(p.big&&p.id==='camp_kit')return campArt(p,cx,cy,t);const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;if(id==='standard_bench')return benchArt(x,y);
   g.drawImage(sprite('s'+id,16,16,c=>{const O='#2e1f10';pShadow(c,8,14,7,2,.3);
     if(id==='camp_kit'){pF(c,3,1,2,2,O);pF(c,1,3,6,2,O);pF(c,0,5,8,3,O);pF(c,3,2,1,1,'#e8d09a');pF(c,2,4,4,1,'#d8b878');pF(c,1,6,6,2,'#d8b878');pF(c,3,6,2,2,'#3d2a14');pF(c,2,3,2,1,'#f4e8c4');
       pF(c,7,10,8,5,'#6e7068');pF(c,7,10,8,1,'#a8a8a0');pF(c,8,11,6,3,O);pF(c,8,12,6,1,'#7a5230')}
