@@ -660,7 +660,7 @@ def check(b, url):
     # Quest 3 (5.3): Murl, Oak Island's ironwood logs, 100 gold, and Hale's axe (Bram stops selling it until then)
     ev("S.bag.woodcutters_axe=0;S.eq.axe=null;S.gold=0;S.bag.ironwood_log=0")
     assert ev("LAND.some(l=>l[0]==='Oak Island')&&(()=>{let n=0;for(let y=160;y<=180;y++)for(let x=135;x<=153;x++)if(at(x,y)===140)n++;return n===3})()"), "three ironwood logs lie on Oak Island"
-    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjorn sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('its all yours')"), "Murl's two speeches are Jack's words"
+    assert ev("DLG.q3_murl1.nodes.a.text.startsWith('Old Bjorn sent ya did he?')&&DLG.q3_murl_got.nodes.a.text.endsWith('it\\'s all yours')"), "Murl's two speeches are Jack's words"
     ev("setFlag('q3_started',0);openStore('rod')"); assert ev("!/Woodcutter/.test($('items').textContent)"), "Bram does not sell the axe any more"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     talk("Murl"); assert ev("flag('q3_started')&&S.story.q==='q3'&&S.story.step===0&&!dlgActive()&&Math.abs(questGoal()[0]-144)<=2"), "Murl starts Quest 3 and the compass points at Oak Island"
@@ -779,7 +779,7 @@ def check(b, url):
     assert ev("flag('sky_key_returned')&&count('sky_key')===0&&!flag('sky_damaged')&&S.story.step===0&&DLG.q10_boy.nodes.a.text.startsWith('The water was right all along.')&&at(235,108)===80&&at(236,108)===81"), "the Sky spirit takes his key and his temple is made whole again"
     talk("Fire Spirit"); assert ev("count('fire_key')===1&&!flag('fire_key_returned')&&S.story.step===0"), "the Fire spirit asks you to take the other keys home first"
     talk("Mysterious Girl"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_earth'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null&&!dlgActive()", timeout=8000)
-    assert ev("flag('earth_key_returned')&&count('earth_key')===0&&S.story.step===1&&DLG.q10_girl.nodes.a.text.startsWith('From the moment i layed eyes on you')"), "the Earth spirit takes her key and the Fire temple is last"
+    assert ev("flag('earth_key_returned')&&count('earth_key')===0&&S.story.step===1&&DLG.q10_girl.nodes.a.text.startsWith('From the moment I laid eyes on you')"), "the Earth spirit takes her key and the Fire temple is last"
     ev("S.home={x:150,y:122,roof:'thatch'};S.claim={x:148,y:120,w:7,h:5};for(let j=0;j<2;j++)for(let i=0;i<3;i++)M[(122+j)*MW+150+i]=5;S.bag.cottage_kit=0;S.bag.house_key=0")
     talk("Fire Spirit"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q10_fire'", timeout=6000)
     for _ in range(12):
@@ -955,7 +955,7 @@ def check(b, url):
     ev("act()"); assert ev("!flag('rockslide_cleared')"), "no pickaxe, the rocks stay"
     ev("TRIGGERS.forEach(t=>{if(t.id!=='rockslide_thanks')markSeen('trg:'+t.id)});S.gold=0;add('pickaxe');S.eq.pickaxe='pickaxe';act()"); assert ev("flag('rock_3')&&!flag('rockslide_cleared')&&at(30,108)===141&&at(31,108)!==141"), "one swing breaks only the rock you face (you can squeeze through the gap, but Dell pays only when all are broken)"
     ev("[29,30,32,33,34].forEach(x=>{P.x=P.rx=x;P.y=P.ry=109;P.f='u';act()})"); assert ev("flag('rockslide_cleared')&&[29,30,31,32,33,34].every(x=>at(x,108)!==141)") and ev(reach), "breaking every rock opens the road"
-    pg.wait_for_function("dlgActive()&&/this rock slide was going take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
+    pg.wait_for_function("dlgActive()&&/This rock slide was going to take all day to clear/.test($('dlg').textContent)", timeout=8000)   # Dell thanks you
     ev("dlgAdvance();dlgAdvance()")
     pg.wait_for_function("dlgActive()&&/take this for your trouble/.test($('dlg').textContent)", timeout=8000)   # then the reward line
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
