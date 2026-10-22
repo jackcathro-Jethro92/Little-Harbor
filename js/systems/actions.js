@@ -17,6 +17,7 @@ function act(){
   if(S.home&&!sail&&x===S.home.x+1&&y===S.home.y+1)return enterHome(S.home);
   if(S.isle&&!sail&&x===S.isle.x+1&&y===S.isle.y+1)return enterHome(S.isle);
   const po=placedAt(x,y);if(po&&!sail)return useStation(po);
+  {const fc=!sail&&furnAt(x,y,true);if(fc)return useFurn(fc)}
   const gc=gardenAt(x,y);if(gc&&!sail)return useGarden(gc);
   const tt=at(x,y);if(!sail&&PICKUPS[tt])return pickupTile(x,y,tt);if(!sail&&(tt===4||tt===19||!!ORE[tt]||(tt>=24&&tt<=30)))return gather(x,y,tt);
   if(n){
@@ -56,7 +57,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn(),inB=atBed();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN&&!inB)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
-  const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inN?'You sleep soundly at the tavern.':inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
+  const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inN?'You sleep soundly at the tavern.':inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inB?'You sleep soundly in your bed.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

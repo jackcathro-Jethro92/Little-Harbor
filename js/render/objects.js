@@ -56,7 +56,7 @@ function benchArt(x,y){g.drawImage(sprite('sbench2',32,16,c=>{const O='#2e1f10',
   pF(c,25,3,6,2,O);pF(c,26,3,4,1,'#8a5a30');pF(c,27,2,3,3,O);pF(c,28,2,2,2,ST);pP(c,28,2,SL);
   pF(c,12,8,6,2,O);pF(c,13,8,4,1,'#d8b878');pF(c,18,8,3,2,O);pP(c,19,8,SL);pP(c,19,9,SL);
   pF(c,22,8,5,2,O);pP(c,23,8,'#d83828');pP(c,24,8,'#3a8ad8');pP(c,25,8,'#e8b830')}),x|0,y|0)}
-function stationArt(p,cx,cy,t){if(p.big&&p.id==='camp_kit')return campArt(p,cx,cy,t);const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;if(id==='standard_bench')return benchArt(x,y);
+function stationArt(p,cx,cy,t){if(isFurn(p))return furnArt(p,cx,cy,t);if(p.big&&p.id==='camp_kit')return campArt(p,cx,cy,t);const x=p.x*T-cx,y=p.y*T-cy,fl=((t/130)|0)%3,id=p.id;if(id==='standard_bench')return benchArt(x,y);
   g.drawImage(sprite('s'+id,16,16,c=>{const O='#2e1f10';pShadow(c,8,14,7,2,.3);
     if(id==='camp_kit'){pF(c,3,1,2,2,O);pF(c,1,3,6,2,O);pF(c,0,5,8,3,O);pF(c,3,2,1,1,'#e8d09a');pF(c,2,4,4,1,'#d8b878');pF(c,1,6,6,2,'#d8b878');pF(c,3,6,2,2,'#3d2a14');pF(c,2,3,2,1,'#f4e8c4');
       pF(c,7,10,8,5,'#6e7068');pF(c,7,10,8,1,'#a8a8a0');pF(c,8,11,6,3,O);pF(c,8,12,6,1,'#7a5230')}

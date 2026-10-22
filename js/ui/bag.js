@@ -32,7 +32,7 @@ function bagPick(){
   if(r&&r.id&&ITEMS[r.id]&&ITEMS[r.id].kind==='key')return;   // key items just sit in the bag: nothing to equip or use
   if(!r||pk==='fish'||pk==='mat'||(pk==='equip'&&!r.id))return;
   if(pk==='food'){const it=ITEMS[r.id];bpop={opts:[it.kind==='food'?'Eat':it.coat?'Apply to weapon':'Drink','Cancel'],i:0,row:r};return popRender()}
-  if(ITEMS[r.id]&&['station','prefab','claim','garden'].includes(ITEMS[r.id].kind)){bpop={opts:['Place','Cancel'],i:0,row:r};return popRender()}
+  if(ITEMS[r.id]&&['station','prefab','claim','garden','furniture'].includes(ITEMS[r.id].kind)){bpop={opts:['Place','Cancel'],i:0,row:r};return popRender()}
   const sl=r.slot||slotOf(r.id),on=S.eq[sl]===r.id,opts=[];
   if(!on)opts.push('Equip');else if(sl!=='rod'&&sl!=='boat')opts.push('Unequip');
   opts.push('Cancel');bpop={opts,i:0,row:r};popRender()}

@@ -27,7 +27,7 @@ function draw(){
   // entities by y
   S.gardens.forEach(gd=>gd.cells.forEach((cell,i)=>gardenCellArt(cell,(gd.x+i%3)*T-cx,(gd.y+(i/3|0))*T-cy)));
   if(placing){const k0=ITEMS[placing].kind,cell=(x,y,bad)=>R(x*T-cx+1,y*T-cy+1,T-2,T-2,bad?'rgba(220,70,60,.42)':'rgba(70,130,235,.5)');let m;
-    if(k0==='claim'||k0==='prefab'||k0==='garden'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
+    if(k0==='claim'||k0==='prefab'||k0==='garden'||k0==='furniture'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);
       m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Tap Use to place it.'}
     else{const[fx,fy]=stationSpot(placing),w=placeWhy(placing,fx,fy),fw=WIDE[placing]||1;
@@ -42,7 +42,7 @@ function draw(){
   if(S.isle&&zoneOf(P.x,P.y)===0)E.push({y:S.isle.y+1.9,f:()=>grandHouse(S.isle.x*T-cx,S.isle.y*T-cy,t)});   // the grand house on Haven Isle (js/render/grandhouse.js): sorted with the people so you can walk behind its upper floors
   if(AR.on)E.push({y:AR.y,f:()=>arenaFoe(cx,cy,t)});
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
-  S.placed.forEach(p=>E.push({y:p.y,f:()=>obj(p,cx,cy,t)}));
+  S.placed.forEach(p=>E.push({y:isFurn(p)?(furnFp(p.id).flat?p.y-9:p.y+furnFp(p.id).h-.5):p.y,f:()=>obj(p,cx,cy,t)}));
   ENEMIES.forEach(e=>{if(e.alive&&zoneOf(e.x,e.y)===zoneOf(P.x,P.y))E.push({y:e.y,f:()=>enemyDraw(e,cx,cy,t)})});
   E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;

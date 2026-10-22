@@ -12,6 +12,7 @@ const SMITH=[
 // The carpenter near the Darkwood's south gate (playtest #4): planks and rope, and he buys logs and flax fiber (the raw wood and fiber). Furniture comes in batch G.
 const CARPENTER=[
  ['Timber',[['softwood_plank',15],['medium_plank',30],['hardwood_plank',55],['rope',25]]],
+ ['Furniture',[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',350],['storage_crate',120],['weapon_rack',300],['tool_rack',250]]],
  ['Raw wood',[['softwood',16],['medium_wood',30],['hardwood',56],['fiber',8]]]   // only bought (noBuy)
 ];
 // Seamstress Wynn in the Walled Settlement: cloth and leather (the look screens are separate, js/ui/look.js)
@@ -34,7 +35,7 @@ const APOTHECARY=[
 // Every trader the generic shop screen (openTrader in js/ui/shops.js) can show. sell = sections the trader buys back at half price.
 const SHOPS={
  smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Ore, iron bars, blades, tools and armour.',sellTag:'Garrick buys ore, iron, weapons, tools and armour at half price.',none:'Bring ore, iron bars, weapons, tools or armour.',thanks:'A fine choice.',list:SMITH,sell:['Materials','Weapons','Tools','Old tools','Armour'],noBuy:['Old tools']},
- carpenter:{name:"Carpenter Alder's Workshop",who:'Alder',buyTag:'Planks and rope.',sellTag:'Alder buys planks, rope, logs and flax fiber at half price.',none:'Bring planks, rope, logs or flax fiber.',thanks:'Good timber, that.',list:CARPENTER,sell:['Timber','Raw wood'],noBuy:['Raw wood']},
+ carpenter:{name:"Carpenter Alder's Workshop",who:'Alder',buyTag:'Planks, rope and furniture.',sellTag:'Alder buys planks, rope, furniture, logs and flax fiber at half price.',none:'Bring planks, rope, logs or flax fiber.',thanks:'Good timber, that.',list:CARPENTER,sell:['Timber','Furniture','Raw wood'],noBuy:['Raw wood']},
  tailor:{name:"Wynn's Cloth & Leather",who:'Wynn',buyTag:'Cloth and leather.',sellTag:'Wynn buys cloth and leather at half price.',none:'Wynn only buys cloth and leather.',thanks:'Lovely.',list:TAILOR,sell:['Fabric']},
  apothecary:{name:"Astrid's Apothecary",who:'Astrid',buyTag:'Potions to heal and quicken, poisons for your blade, and herbs and mushrooms to brew with.',sellTag:'Astrid buys potions and poisons at half price, and herbs, mushrooms and centipede fangs at a fair price.',none:'Bring potions, poisons, herbs, mushrooms or centipede fangs.',thanks:'Use it wisely.',list:APOTHECARY,sell:['Potions','Poisons','Ingredients','Curios'],noBuy:['Curios'],rate:{Ingredients:1/3,Curios:1/3}},   // `rate`: the share of the list price she pays for a section (default one half): herbs and fangs are sold at three times what she pays
  jeweller:{name:"Lucie's Gold & Gems",who:'Lucie',buyTag:'Enchanted rings and amulets. Wear one ring and one amulet.',sellTag:'Lucie buys jewellery and gold and silver ore at half price.',none:'Lucie buys rings, amulets and gold and silver ore.',thanks:'May it serve you well.',list:JEWELLER,sell:['Rings','Amulets','Ore'],noBuy:['Ore']}

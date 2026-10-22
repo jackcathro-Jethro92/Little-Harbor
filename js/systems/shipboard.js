@@ -12,7 +12,7 @@ function takeHelm(){fade();P.x=P.rx=B.x;P.y=P.ry=B.y;P.f='d';sail=true;say('You 
 function shipStore(ship){S.ships=S.ships||{};const o=S.ships[ship]=S.ships[ship]||{store:{}};o.store=o.store||{};return o.store}
 // the storage screen, shared by a ship's crates and the Haven house's crates (playtest #4): `st` is the {item: count} store, `cap` how many things it holds, `again` re-opens it after a change.
 // Equipped things stay with you, and quest keys cannot be stored.
-function openStash(title,st,cap,again){const el=$('items'),used=()=>Object.values(st).reduce((a,b)=>a+b,0);
+function openStash(title,st,cap,again,only){const el=$('items'),used=()=>Object.values(st).reduce((a,b)=>a+b,0);
   $('st').textContent=title+' · '+used()+'/'+cap;el.innerHTML='';
   const head=t=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+t+'</b></div>';el.appendChild(r)};
   const row=(title,sub,btns)=>{const r=document.createElement('div');r.className='it';r.innerHTML='<div><b>'+title+'</b>'+(sub?'<br>'+sub:'')+'</div>';btns.forEach(([label,dis,fn])=>{const b=document.createElement('button');b.textContent=label;b.disabled=dis;b.onclick=fn;r.appendChild(b)});el.appendChild(r)};
@@ -21,7 +21,7 @@ function openStash(title,st,cap,again){const el=$('items'),used=()=>Object.value
   ids.forEach(id=>row(ITEMS[id].n+' x'+st[id],'',[['Take 1',false,()=>{take(id,1)}],['Take all',false,()=>{take(id,st[id])}]]));
   head('Your bag');
   const equipped=id=>Object.values(S.eq).includes(id),stowable=id=>(S.bag[id]||0)-(equipped(id)?1:0);
-  const bag=Object.keys(S.bag).filter(id=>ITEMS[id]&&ITEMS[id].kind!=='boat'&&ITEMS[id].kind!=='key'&&stowable(id)>0);if(!bag.length)row('Nothing to store','Equipped things and quest keys stay with you.',[]);
+  const bag=Object.keys(S.bag).filter(id=>ITEMS[id]&&ITEMS[id].kind!=='boat'&&ITEMS[id].kind!=='key'&&(!only||ITEMS[id].kind===only)&&stowable(id)>0);if(!bag.length)row('Nothing to store',only?'Only '+only+'s go here. Equipped things stay with you.':'Equipped things and quest keys stay with you.',[]);
   bag.forEach(id=>{const free=cap-used(),n=stowable(id);row(ITEMS[id].n+' x'+n,'',[['Store 1',free<1,()=>{put(id,1)}],['Store all',free<1,()=>{put(id,Math.min(n,free))}]])});
   function put(id,n){S.bag[id]-=n;if(!S.bag[id])delete S.bag[id];st[id]=(st[id]||0)+n;ui();save();again()}
   function take(id,n){st[id]-=n;if(!st[id])delete st[id];add(id,n);ui();save();again()}

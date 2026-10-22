@@ -240,3 +240,6 @@ Built from the designer's starter rooms. Garrick, Alder, Astrid, Wynn and Fenwic
 
 ## Batch G2 (22 Oct): village shops and taverns
 Odo, Bram, Murl and Lucie now work inside their own shop rooms. A tavern was added to the Walled Settlement and the Mountain Town: 100 gold rents a single or double room, and sleeping there works like sleeping at home. Next, G3: the carpenter's furniture.
+
+## Batch G3 (22 Oct): the carpenter's furniture
+Jack's answers: furniture goes in homes and at camp; racks work as storage (weapons / tools only, shown on the rack); beds change nothing at home, and at camp let you sleep beside them; the list and prices as proposed (11 pieces). Built.

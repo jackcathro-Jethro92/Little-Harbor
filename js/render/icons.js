@@ -10,6 +10,7 @@ function bagArt(c){const x=$('bic').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle
 function icon(id){const x=$('bdi').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=k;x.fillRect(a,b,w,h)};x.clearRect(0,0,16,16);
   if(!id){r(2,2,12,1,'#8a8672');r(2,13,12,1,'#8a8672');r(2,2,1,12,'#8a8672');r(13,2,1,12,'#8a8672');return}
   const K=ITEMS[id].kind;
+  if(ITEMS[id].furn){const fp=furnFp(id),sc=Math.min(1,16/(fp.w*T),16/(fp.h*T))*(fp.w*T>16||fp.h*T>16?1:1),W=fp.w*T*sc,H=fp.h*T*sc;x.imageSmoothingEnabled=false;x.drawImage(propSprite(fp.prop,0,0,0),4,4,fp.w*T,fp.h*T,(16-W)/2,(16-H)/2,W,H);return}
   if(K==='fish'){r(2,6,10,5,'#383838');r(3,7,8,3,FC[id]);r(11,4,3,8,'#383838');r(11,5,2,6,FC[id]);r(4,8,1,1,'#fff')}
   else if(K==='rod'){for(let t=0;t<12;t++)r(2+t,13-t,1,1,'#7a5230');r(13,2,1,3,'#fff');r(12,5,2,2,'#d94b3a')}
   else if(K==='boat'){r(1,8,14,5,'#383838');r(2,9,12,3,'#a8703a');r(7,2,1,7,'#383838');r(8,3,5,5,'#f4f4f0')}
