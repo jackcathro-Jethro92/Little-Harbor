@@ -25,7 +25,7 @@ function openStash(title,st,cap,again,only){const el=$('items'),used=()=>Object.
   bag.forEach(id=>{const free=cap-used(),n=stowable(id);row(ITEMS[id].n+' x'+n,'',[['Store 1',free<1,()=>{put(id,1)}],['Store all',free<1,()=>{put(id,Math.min(n,free))}]])});
   function put(id,n){S.bag[id]-=n;if(!S.bag[id])delete S.bag[id];st[id]=(st[id]||0)+n;ui();save();again()}
   function take(id,n){st[id]-=n;if(!st[id])delete st[id];add(id,n);ui();save();again()}
-  $('store').classList.add('open')}
+  $('store').classList.remove('grid');$('store').classList.add('open')}
 function openStorage(ship){openStash(ITEMS[ship].n+' storage',shipStore(ship),ITEMS[ship].store,()=>openStorage(ship))}
 // a storage crate in the Haven house (tile 175): every crate is its own store, kept in S.crates under "x,y"; each holds CRATE_CAP things
 const CRATE_CAP=60;

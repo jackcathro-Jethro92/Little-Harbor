@@ -420,7 +420,7 @@ def check(b, url):
     ev("closeBag();S.bag={};S.eq={};S.bag.furnace_x=0;S.bag.sardine=3;S.bag.carrot=2;S.bag.copper_ore=5;S.bag.grilled_sardine=2;S.bag.healing_potion=1;S.bag.sword=1;S.bag.pickaxe=1;S.bag.driftwood_rod=1;S.bag.ring_vigor=1;S.bag.cloth_hood=1;S.bag.storage_crate=1;S.bag.standard_bench=1;S.bag.knife=1;S.eq.weapon='sword';S.eq.ring='ring_vigor';delete S.bag.furnace_x;openBag()")
     assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Weapons,Clothing,Tools,Keepsakes'"), "the bag has eight sections, in the order Jack drew them"
     assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(3).includes('healing_potion')&&n(4).join()==='sword'&&n(5).includes('ring_vigor')&&n(5).includes('cloth_hood')&&n(6).includes('pickaxe')&&n(6).includes('knife')&&n(6).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
-    assert ev("document.querySelectorAll('.btab').length===8&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
+    assert ev("document.querySelectorAll('#btabs .btab').length===8&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
     ev("bs=4;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
     ev("bs=3;bc=cellsOf(3).findIndex(c=>c.id==='grilled_sardine');drawBag();S.hp=10;bagPick()"); assert ev("bpop&&bpop.opts[0]==='Eat'"), "tapping a food square offers Eat"
     ev("popChoose()"); assert ev("S.hp>10&&S.bag.grilled_sardine===1"), "eating from the new bag works"
@@ -430,6 +430,16 @@ def check(b, url):
     ev("bpop=null;popRender();bs=2;bc=0;drawBag();bagPick()"); assert ev("!bpop"), "materials have nothing to do"
     ev("bs=5;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
     ev("closeBag();S.bag={};S.eq={}")
+    # F2: the Vendors screen (sections on the left, a grid of squares, the chosen one's buttons below)
+    ev("S.gold=5000;S.bag={};S.eq={};openTrader('smith','buy')"); assert ev("$('store').classList.contains('grid')&&[...document.querySelectorAll('#stabs .btab')].map(b=>b.textContent).join()==='Materials,Weapons,Tools,Armour,Objects'"), "Garrick's screen shows his sections down the left"
+    assert ev("document.querySelectorAll('#sgrid .bcell').length===4&&getComputedStyle($('sgrid')).gridTemplateColumns.split(' ').length===5&&/Copper ore/.test($('stxt').textContent)&&$('sbtns').children.length===1"), "the squares are five across and the first is selected with its Buy button below"
+    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/30g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4970&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
+    ev("document.querySelector('#sswitch button').click()"); assert ev("/^Selling/.test($('sswitch').textContent)&&document.querySelectorAll('#sgrid .bcell').length>=1"), "the bar across the top switches to selling and shows what you can sell"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4985&&!count('tin_ore')"), "selling from the grid pays half price"
+    ev("openGeneral('buy')"); assert ev("[...document.querySelectorAll('#stabs .btab')].length>=1&&document.querySelectorAll('#sgrid .bcell canvas').length>=3"), "Odo's goods are squares too"
+    ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("!$('store').classList.contains('grid')"), "crates keep their own list screen"
+    ev("$('store').classList.remove('open')")
     ev("$('menu').classList.remove('open');mn=null;(()=>{const w=NPC.find(n=>n.n==='Seamstress Wynn');P.x=P.rx=w.x;P.y=P.ry=w.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Try on clothes,Buy cloth and leather,Sell cloth and leather,Cancel'"), "Wynn still lets you try on clothes, and now buys and sells cloth and leather"
     ev("$('menu').classList.remove('open');mn=null")
     ev("S.bag={};S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
