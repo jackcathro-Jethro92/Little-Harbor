@@ -150,8 +150,8 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 | P54 | The carpenter: who sells furniture? | G (question) |  |
 | P55 | The character walks over the top of the Temple Tower (screenshot to come) | D | **Built** (batch D1): the pagoda is drawn in front of the player when you stand behind it |
 | P56 | Workbench art: twice the size | A | **Built** (batch A): two tiles wide, vice and tools |
-| P57 | Should be able to sell unwanted weapons | E |  |
-| P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E |  |
+| P57 | Should be able to sell unwanted weapons | E | **Built** (batch E): Garrick buys unwanted weapons and tools at half price |
+| P58 | Moving sellable goods around: blacksmith buys and sells ore, weapons, armour; carpenter planks, rope; tailor cloth; apothecary potions, ingredients; goldsmith gold, silver, jewellery; general store food and ingredients | E | **Built** (batch E): goods moved between shops; the carpenter is built (placeholder name) |
 | P59 | Quest "At the Top of the World": the pirates should be scattered up the pathway so they are unavoidable | B | **Built** (batch B): seven pirates scattered up the hill path |
 | P60 | All pirates should trigger when they see you and the fight starts (Pokemon as the reference) | B | **Built** (batch B): hop, red "!", walk up, placeholder line, then the battle. Decided (Jack, 22 Oct) |
 | P61 | Quest "At the Top of the World": after the explosion the pirate leader comes walking down the path, and this starts your interaction with him | B | **Built** (batch B): Barron walks down the path to you after the last pirate |
@@ -213,3 +213,9 @@ Transcribed from six notebook pages, spelling corrected, in the order Jack wrote
 ## Batch D1 notes (22 Oct)
 - **P55, P65, P77** were fixed from the code without the screenshots. Please check them on your phone: walk behind the pagoda, through the Tower's gate and through the Haven Isle gate. If any still looks wrong, send a screenshot.
 - **Still open (D2, waiting for Jack):** P74 (how far north for Haven Isle), P66 (which object in the Tower chamber), P67 (traps: visible or hidden, how hard they hit), P76 (what the Haven Isle house interior should have).
+
+## Batch E (22 Oct): Jack's answers and what was built
+- **P57:** Garrick buys unwanted weapons (and, by my reading of the answer "B", old tools) at half price. Never the wooden sword or the Divine Blade.
+- **P58:** blacksmith: ore, weapons, armour; carpenter: planks and rope (he also buys logs and flax fiber); tailor: cloth and leather; apothecary: potions, herbs and mushrooms (and buys centipede fangs for 12); goldsmith: jewellery, and buys gold and silver ore; general store: food and ingredients, no longer herbs.
+- **The carpenter** is built now, with the placeholder name Carpenter Alder, at the door of a Woodcutters' Shack outside the Darkwood's south gate. **Please give him a name** and say if you want him in a different shack. Furniture is batch G.
+- **Please check:** do the prices feel right? Planks and rope are now bought from the carpenter near the Darkwood, not from Garrick in the Walled Settlement.

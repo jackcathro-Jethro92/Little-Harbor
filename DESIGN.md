@@ -448,3 +448,15 @@ Everyone on the battle screen sways a little from side to side (CSS `btSway`, ke
 ## Playtest #4, batch D1: roofs, gates and the Sailors' Grave Rocks
 - **Walking behind roofs and under gates:** the Temple Tower's pagoda and wooden gate (and the same gate in the Haven Isle garden) used to be drawn under the player, so standing behind or in them looked like floating over the roof. They are now drawn in the same layer as the people (`js/render/draw.js`, sorted by their south edge: the pagoda at `y + 4.9`, a gate at `y + 0.5`), so the roof covers you when you stand behind it and a gate's roof covers your head when you stand in the gap. Other tall buildings (the Sky temple's gateway, the Fire temple's gate) were not changed.
 - **Sailors' Grave Rocks** (`js/world/overworld.js`): 17 clumps of jagged rock (tile 54, the same as the stone barrier) 1 to 3 tiles wide, still round tile 90,86, with ragged edges; they block boats and the tests check the sea is still connected.
+
+## Playtest #4, batch E: who buys and sells what (P57, P58)
+Goods were moved round so each shop deals in its own kind of thing (stock tables in `js/data/shops.js`, the screen in `openTrader` in `js/ui/shops.js`). Where a paragraph above disagrees, this section is current.
+| Shop | Sells | Also buys (half price unless noted) |
+| --- | --- | --- |
+| **Garrick's Forge** (blacksmith) | copper, tin and bronze ore, iron bars; weapons (Old Sword, hand axe, bronze, iron, greatsword); iron pickaxe and axe; all armour; workbench, forge, camp kit | all of the above, plus **old tools** (pickaxe, woodcutter's axe, knife) and so **unwanted weapons**. Never the wooden sword or the Divine Blade. Selling the weapon you wield puts the wooden sword back in your hand |
+| **Carpenter Alder** (new, placeholder name; at the door of the middle Woodcutters' Shack, tile (31,158), outside the Darkwood's south gate; `js/world/carpenter.js`) | softwood, medium and hardwood planks, rope (furniture comes in batch G) | planks and rope, plus **logs** (softwood 8, medium 15, hardwood 28) and **flax fiber** (4) |
+| **Wynn the tailor** | cloth 40, leather 70 (she still offers *Try on clothes*) | cloth and leather |
+| **Astrid's Apothecary** | potions, poisons, and **herbs and mushrooms** (moss 12, holly 18, basil 15, forest sprig 15, red cap 24, death cap 42, blue cap 36) | potions and poisons at half price; herbs and mushrooms at a third of her price (what Odo used to pay: moss 4, basil 5 and so on); **centipede fangs for 12** (she does not sell them) |
+| **Lucie's Gold & Gems** | rings and amulets | jewellery, plus **gold and silver ore** (silver 110, gold 200; she does not sell ore, so mining stays the only source) |
+| **Odo's General Store** | vegetables and meat | fish, vegetables, meat and cooked meals. He **no longer buys herbs and mushrooms** |
+A section of a shop's table can be `noBuy` (bought only, not sold) and a shop can set `rate` per section (the share of the list price it pays; default one half). Bram's stock is unchanged (he buys nothing).
