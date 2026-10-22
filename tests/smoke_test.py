@@ -416,6 +416,20 @@ def check(b, url):
     ev("S.bag.chair=1;P.f='r';placing='chair';act()"); assert ev("S.placed.length===2"), "a second piece fits beside the first"
     ev("S.bag.chair=1;P.x=P.rx=IR.dx;P.y=P.ry=IR.dy-1;P.f='d';placing='chair';act()"); assert ev("S.placed.length===2"), "furniture cannot go on the tile just inside the door"
     ev("S.placed=[];S.home=null;S.bag={};document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));mn=null;placing=null")
+    # F1: the new Bag (sections on the left, a grid of squares on the right)
+    ev("closeBag();S.bag={};S.eq={};S.bag.furnace_x=0;S.bag.sardine=3;S.bag.carrot=2;S.bag.copper_ore=5;S.bag.grilled_sardine=2;S.bag.healing_potion=1;S.bag.sword=1;S.bag.pickaxe=1;S.bag.driftwood_rod=1;S.bag.ring_vigor=1;S.bag.cloth_hood=1;S.bag.storage_crate=1;S.bag.standard_bench=1;S.bag.knife=1;S.eq.weapon='sword';S.eq.ring='ring_vigor';delete S.bag.furnace_x;openBag()")
+    assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Weapons,Clothing,Tools,Keepsakes'"), "the bag has eight sections, in the order Jack drew them"
+    assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(3).includes('healing_potion')&&n(4).join()==='sword'&&n(5).includes('ring_vigor')&&n(5).includes('cloth_hood')&&n(6).includes('pickaxe')&&n(6).includes('knife')&&n(6).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
+    assert ev("document.querySelectorAll('.btab').length===8&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
+    ev("bs=4;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
+    ev("bs=3;bc=cellsOf(3).findIndex(c=>c.id==='grilled_sardine');drawBag();S.hp=10;bagPick()"); assert ev("bpop&&bpop.opts[0]==='Eat'"), "tapping a food square offers Eat"
+    ev("popChoose()"); assert ev("S.hp>10&&S.bag.grilled_sardine===1"), "eating from the new bag works"
+    ev("bs=5;bc=cellsOf(5).findIndex(c=>c.id==='cloth_hood');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Equip'"), "clothing squares offer Equip"
+    ev("popChoose()"); assert ev("S.eq.helmet==='cloth_hood'"), "equipping from the new bag works"
+    ev("bs=0;bc=cellsOf(0).findIndex(c=>c.id==='storage_crate');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Place'"), "home items offer Place"
+    ev("bpop=null;popRender();bs=2;bc=0;drawBag();bagPick()"); assert ev("!bpop"), "materials have nothing to do"
+    ev("bs=5;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
+    ev("closeBag();S.bag={};S.eq={}")
     ev("$('menu').classList.remove('open');mn=null;(()=>{const w=NPC.find(n=>n.n==='Seamstress Wynn');P.x=P.rx=w.x;P.y=P.ry=w.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Try on clothes,Buy cloth and leather,Sell cloth and leather,Cancel'"), "Wynn still lets you try on clothes, and now buys and sells cloth and leather"
     ev("$('menu').classList.remove('open');mn=null")
     ev("S.bag={};S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
@@ -492,8 +506,8 @@ def check(b, url):
     ev("move('u')"); assert ev("P.y===33+OY"), "no walking while the letter is open"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
     assert ev("sendLetter('t_letter')===false"), "a letter you have is not sent twice"
-    ev("openBag();bagGo(1);bagGo(1);bagGo(1);bagGo(1)"); assert ev("$('btitle').textContent==='LETTERS'&&/A plea/.test($('blist').textContent)"), "the bag has a LETTERS pocket with it"
-    ev("bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
+    ev("openBag();bs=7;bc=0;drawBag()"); assert ev("SECTIONS[bs].t==='Keepsakes'&&cellsOf(bs).some(c=>c.label==='A plea')&&/A plea/.test($('btxt').textContent+[...document.querySelectorAll('.bcell')].map(c=>c.title).join())"), "the bag has a Keepsakes section with it"
+    ev("bc=cellsOf(7).findIndex(c=>c.label==='A plea');drawBag();bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
     ev("closeLetter();closeBag()")
     ev("sendLetter('t_l2')"); pg.wait_for_timeout(300); ev("skipScene()"); assert ev("SCENE===null&&GULL===null&&hasLetter('t_l2')&&!$('letter').classList.contains('open')"), "Skip keeps the letter without showing it"
     ev("S.letters=S.letters.filter(i=>i!=='t_letter');save()"); ev("(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); ev("skipScene()")
@@ -699,7 +713,7 @@ def check(b, url):
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
     assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
-    ev("openBag();bp=3;bc=rowsOf(3).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
+    ev("openBag();bs=7;bc=cellsOf(7).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
     ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
     ev("sail=true;B.x=156;B.y=130;P.x=P.rx=156;P.y=P.ry=130;move('l');move('r')"); assert ev("SCENE===null&&sail===true&&at(B.x,B.y)===0"), "sailing around the village does not start the villager's scene or put the boat on land"
     ev("sail=false;P.x=P.rx=156;P.y=P.ry=129;move('u')"); assert ev("SCENE===null"), "one step on land is not enough"
