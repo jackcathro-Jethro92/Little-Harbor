@@ -7,4 +7,4 @@ function hook(){
   if(bt&&Math.random()<Math.min(.8,.3*bt)){const c=pick();if(ITEMS[c].value>ITEMS[cur].value)cur=c}
   land();
 }
-function land(){const f=ITEMS[cur];add(cur);cancel();say('Landed a '+f.n.toLowerCase()+'! Worth about '+f.value+' gold.');gainXp('fishing',f.xp);ui();save()}
+function land(){const f=ITEMS[cur];if(!room(cur)){cancel();bagFull();return}add(cur);cancel();say('Landed a '+f.n.toLowerCase()+'! Worth about '+f.value+' gold.');gainXp('fishing',f.xp);ui();save()}

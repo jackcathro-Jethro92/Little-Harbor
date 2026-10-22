@@ -39,7 +39,7 @@ function openGeneral(mode){
   const el=$('items'),buy=mode==='buy';el.innerHTML='';$('st').textContent="Odo's General Store · "+S.gold.toLocaleString()+'g';let cat='';
   const row=(t,d,label,dis,fn,id)=>{const r=document.createElement('div');r.className='it';if(cat)r.dataset.cat=cat;if(id)r.dataset.id=id;r.innerHTML='<div><b>'+t+'</b><br>'+d+'</div>';const b=document.createElement('button');b.textContent=label;b.disabled=dis;b.onclick=fn;r.appendChild(b);el.appendChild(r)};
   row(buy?'Buying':'Selling',buy?'Fresh produce and meat.':'Odo buys fish, ingredients and cooked meals.',buy?'Sell':'Buy',false,()=>openGeneral(buy?'sell':'buy'));
-  if(buy)LIST('ingredient').forEach(id=>{const it=ITEMS[id];row(it.n,it.desc+' (you have '+count(id)+')',it.price+'g',S.gold<it.price,()=>{S.gold-=it.price;add(id);ui();save();say('Odo: Here you go.');openGeneral('buy')},id)});
+  if(buy)LIST('ingredient').forEach(id=>{const it=ITEMS[id];row(it.n,it.desc+' (you have '+count(id)+')',it.price+'g',S.gold<it.price,()=>{if(!room(id))return bagFull();S.gold-=it.price;add(id);ui();save();say('Odo: Here you go.');openGeneral('buy')},id)});
   else{let n=0;const fc=fishCount();
     cat='Fish';if(fc){n++;row('All fish','Sell all '+fc+' fish you are carrying.',fishValue()+'g',false,()=>{const v=fishValue();S.gold+=v;fishIds.forEach(i=>delete S.bag[i]);ui();save();say('Odo: '+fc+' fish for '+v+' gold. Pleasure!');openGeneral('sell')},fishIds.find(count))}
     [...LIST('fish'),...LIST('ingredient'),...LIST('food')].filter(count).forEach(id=>{n++;const it=ITEMS[id],pr=sellPrice(id);cat=ITEMS[id].kind==='fish'?'Fish':ITEMS[id].kind==='ingredient'?'Ingredients':'Meals';
@@ -56,7 +56,7 @@ function openStore(k){
     const b=document.createElement('button');
     if(rod?i<=own:count(id)>0){if(rod){b.textContent='Owned';b.disabled=true}else if(S.eq.boat===id){b.textContent='In use';b.disabled=true}else if(!crewOk(id)){b.textContent='Need '+crewNeed(id)+' crew';b.disabled=true}else{b.textContent='Use';b.onclick=()=>{S.eq.boat=id;ui();save();say('Murl: Now sailing the '+it.n.toLowerCase()+'.');openStore(k)}}}
     else{b.textContent=it.price.toLocaleString()+'g';b.disabled=rod?!(i===own+1&&S.gold>=it.price):S.gold<it.price;
-      b.onclick=()=>{S.gold-=it.price;add(id);const ok=rod||crewOk(id);if(ok)S.eq[kind]=id;ui();save();say(ok?'Bought the '+it.n.toLowerCase()+'!':'Bought the '+it.n.toLowerCase()+'. '+crewNote(id)+' Hire sailors here first.');openStore(k)}}
+      b.onclick=()=>{if(!room(id))return bagFull();S.gold-=it.price;add(id);const ok=rod||crewOk(id);if(ok)S.eq[kind]=id;ui();save();say(ok?'Bought the '+it.n.toLowerCase()+'!':'Bought the '+it.n.toLowerCase()+'. '+crewNote(id)+' Hire sailors here first.');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
   if(!rod){const h=document.createElement('div');h.className='it';h.dataset.cat='Crew';h.innerHTML='<div>Murl: Bigger ships need more hands. You count as one. Right now your crew is '+crewHave()+(crewList().length?' ('+crewList().map(c=>c.n).join(', ')+')':'')+'.</div>';el.appendChild(h);
     CREW.filter(c=>c.where==='boatyard').forEach(c=>{const r=document.createElement('div');r.className='it';r.dataset.cat='Crew';r.innerHTML='<div><b>'+c.n+'</b> · '+c.job+'<br>'+c.desc+'</div>';const b=document.createElement('button');
@@ -66,12 +66,12 @@ function openStore(k){
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';
     const b=document.createElement('button');
     if(count(id)){b.textContent='Owned';b.disabled=true}
-    else{b.textContent=it.price+'g';b.disabled=S.gold<it.price;b.onclick=()=>{S.gold-=it.price;add(id);if(!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
+    else{b.textContent=it.price+'g';b.disabled=S.gold<it.price;b.onclick=()=>{if(!room(id))return bagFull();S.gold-=it.price;add(id);if(!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
   [...LIST('station'),...LIST('claim'),...LIST('garden')].filter(id=>rod?ITEMS[id].place!=='shipwright':ITEMS[id].place==='shipwright').forEach(id=>{const it=ITEMS[id],r=tag(document.createElement('div'),rod?'Home':'Yard');r.className='it';r.dataset.id=id;
     r.innerHTML='<div><b>'+it.n+'</b><br>'+it.desc+'</div>';const b=document.createElement('button');
     if(count(id)||S.placed.some(p=>p.id===id&&!p.fixed)||(it.kind==='claim'&&S.claim)){b.textContent='Owned';b.disabled=true}
-    else{b.textContent=it.price+'g';b.disabled=S.gold<it.price;b.onclick=()=>{S.gold-=it.price;add(id);ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
+    else{b.textContent=it.price+'g';b.disabled=S.gold<it.price;b.onclick=()=>{if(!room(id))return bagFull();S.gold-=it.price;add(id);ui();save();say('Bought the '+it.n.toLowerCase()+'!');openStore(k)}}
     r.appendChild(b);el.appendChild(r)});
   shopTabs.redo=()=>openStore(k);shopTabs(el,'store:'+k);$('store').classList.add('open');
 }
@@ -86,7 +86,7 @@ function openTrader(key,mode){
   sh.list.forEach(([title,list])=>{
     if(buy&&(sh.noBuy||[]).includes(title))return;
     if(buy){cat=title;list.forEach(([id,price])=>{const it=ITEMS[id],single=['weapon','tool','jewel','armour'].includes(it.kind),owned=single?count(id)>0:it.kind==='station'&&(count(id)||S.placed.some(p=>p.id===id&&!p.fixed));
-      row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')},id)})}
+      row(it.n,(it.desc||'')+(single||it.kind==='station'?'':' (you have '+count(id)+')'),owned?'Owned':price.toLocaleString()+'g',owned||S.gold<price,()=>{if(!room(id))return bagFull();S.gold-=price;add(id);if(single&&!S.eq[slotOf(id)])S.eq[slotOf(id)]=id;ui();save();say(sh.who+': '+sh.thanks);openTrader(key,'buy')},id)})}
     else if(sh.sell.includes(title)){cat=title;list.filter(([id])=>count(id)).forEach(([id,price])=>{n++;const it=ITEMS[id],pr=Math.floor(price*((sh.rate||{})[title]||.5));
       row(it.n+' x'+count(id),'Sells for '+pr.toLocaleString()+'g each.','Sell 1',false,()=>{S.gold+=pr;S.bag[id]--;if(!S.bag[id]){delete S.bag[id];if(S.eq[slotOf(id)]===id){S.eq[slotOf(id)]=null;if(it.kind==='weapon'&&count('wooden_sword'))S.eq.weapon='wooden_sword'}}ui();save();say(sh.who+': Sold '+it.n.toLowerCase()+' for '+pr.toLocaleString()+'g.');openTrader(key,'sell')},id)})}});
   cat='';if(!buy&&!n)row('Nothing to sell',sh.none,'',true,()=>{});

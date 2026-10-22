@@ -1,5 +1,19 @@
 // ---------- inventory helpers ----------
 const count=id=>S.bag[id]||0,add=(id,n=1)=>{S.bag[id]=count(id)+n};
+// ---------- carrying space (batch F4): a bag has a number of slots ----------
+// Each KIND of item takes one slot, and one slot holds STACK of them (more takes another slot). Things you are wearing or holding (one of each), letters, quest items (kind 'key') and boats take no slot. The bag you own is S.bagId, a row of BAGS
+// (bigger bags are added later as rows). Things you gather, catch, craft, buy, pick up or take out of storage need room (room / tryAdd): if there is none the game says so and nothing is lost. Quest rewards, story items and battle loot
+// go in with `add` whatever the room (the bag may then be over its limit until you make space; you just cannot take on more). Saves that already carry more than the limit keep everything.
+const BAGS=[{id:'satchel',n:'Satchel',slots:20}],STACK=99;
+const bagSlots=()=>(BAGS.find(b=>b.id===S.bagId)||BAGS[0]).slots;
+const noSlot=id=>{const k=ITEMS[id]&&ITEMS[id].kind;return k==='key'||k==='boat'};
+const slotsFor=n=>n>0?Math.ceil(n/STACK):0;
+const heldIn=id=>count(id)-(typeof isWorn==='function'&&isWorn(id)?1:0);
+const slotsUsed=()=>Object.keys(S.bag).reduce((a,id)=>a+(ITEMS[id]&&!noSlot(id)?slotsFor(heldIn(id)):0),0);
+const room=(id,n=1)=>noSlot(id)||slotsUsed()-slotsFor(heldIn(id))+slotsFor(heldIn(id)+n)<=Math.max(bagSlots(),slotsUsed());
+const bagFull=()=>{say('Your bag is full. Leave things in a crate to make room.');toast('Bag full',1800)};
+const tryAdd=(id,n=1)=>{if(!room(id,n)){bagFull();return false}add(id,n);return true};
+const maxRoom=(id,n)=>{let k=n;while(k>0&&!room(id,k))k--;return k};
 const fishIds=LIST('fish'),fishCount=()=>fishIds.reduce((a,i)=>a+count(i),0),fishValue=()=>fishIds.reduce((a,i)=>a+count(i)*ITEMS[i].value,0);
 // TESTING: items granted once to every save (empty this list to stop)
 const TEST_STARTER=false;   // master switch for the testing gifts below: off, so a new game starts with no gold and only a driftwood rod and a wooden sword (Jack's playtest note). Switch on to get the test kits again.

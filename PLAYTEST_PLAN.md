@@ -252,3 +252,6 @@ Shops use the Bag's layout: sections on the left, a grid of squares, buttons bel
 
 ## Batch F3 (22 Oct): the Equipment screen and one tool in hand
 Equipment screen drawn from Jack's sketch (amulet and ring included, plus the Equipped Tool box). Jack's rule: you equip the tool you need in the Equipment menu before using it; nothing switches automatically. F4 (carry capacity) is next.
+
+## Batch F4 (22 Oct): carrying space
+20 slots, stacks of 99, worn things and quest items free, rewards always arrive, a full bag stops gathering, fishing, crafting and buying with a message. Batch F is complete.

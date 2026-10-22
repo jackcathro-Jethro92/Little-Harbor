@@ -275,3 +275,4 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #sbtns button{flex:1;background:#4f9a5a;color:#fff;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:16px;font-weight:700;padding:8px;font-family:inherit}
 #sbtns button:disabled{background:#a8a48c;opacity:.7}
 #store.grid #sclose{background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:18px;padding:8px 14px!important;margin:0!important;font-family:inherit}
+#btitle.full{background:#a83a2a}

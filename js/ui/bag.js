@@ -28,7 +28,7 @@ function cellsOf(si){const s=SECTIONS[si],eqd=isWorn;
   return cells}
 function drawBag(){
   const s=SECTIONS[bs],cells=cellsOf(bs),tabs=$('btabs'),grid=$('bgrid');bc=Math.max(0,Math.min(bc,cells.length-1));
-  $('bag').style.setProperty('--acc',s.c);$('bcap').textContent='Gold '+S.gold.toLocaleString()+'g';
+  $('bag').style.setProperty('--acc',s.c);$('btitle').textContent='BAG '+slotsUsed()+'/'+bagSlots();$('bcap').textContent='Gold '+S.gold.toLocaleString()+'g';$('btitle').classList.toggle('full',slotsUsed()>=bagSlots());
   tabs.innerHTML='';SECTIONS.forEach((q,i)=>{const b=document.createElement('button');b.className='btab'+(i===bs?' cur':'');b.textContent=q.t;b.onclick=()=>{bpop=null;popRender();bs=i;bc=0;drawBag()};tabs.appendChild(b)});
   grid.innerHTML='';
   if(!cells.length){const d=document.createElement('div');d.className='bnone';d.textContent=s.none;grid.appendChild(d)}
