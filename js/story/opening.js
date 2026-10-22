@@ -21,7 +21,7 @@ SCENES.festival_opening=[
  {pan:[156,127,5200]},                                                                                                                                      // 3-8 s: the camera drifts up to the pier as the sky lightens
  {build:[0,1,5500]},{walks:festCrowdWalks},{crowd:'face'},                                                                                                    // 8-15 s: the village wakes: bunting and lanterns go up, villagers gather
  {pan:[156,122,2600]},{wait:400},                                                                                                                           // 15-18 s: the road lined with people
- {walks:[['Murl',156,127,300]]},{face:['Murl','u']},{pan:[156,126,1200]},                                                                                    // 18-21 s: Murl steps onto the pier
+ {tp:['Murl',156,122]},{walks:[['Murl',156,127,300]]},{face:['Murl','u']},{pan:[156,126,1200]},                                                                                    // 18-21 s: Murl steps onto the pier
  {speak:'fest_c1',ms:3800},{cheer:2400},{wait:2400},{speak:'fest_c2',ms:4600},{cheer:2000},{wait:1800},{speak:'fest_c3',ms:3200},{cheer:3000},{pan:['back',700]}, // 21-36 s: Murl's speech and the cheering
  {walks:[['You',156,125,230]]},{face:['You','d']},                                                                                                          // 36-40 s: the crowd parts and the newest fisher walks to Murl
  {speak:'fest_c4',ms:4200},{toast:'Murl gives you the rowboat!'},{face:['Murl','d']},{wait:500},                                                             // 40-45 s: the rowboat

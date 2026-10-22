@@ -30,7 +30,7 @@ function applyRaid(on){RAID_ON=on;
   if(typeof groundDirty==='function')groundDirty()}
 VARIANTS.push({id:'village_raid',flag:'village_attack',apply:on=>applyRaid(on)});applyVariants(true);
 // ---- the shops are shut while it lasts: each shopkeeper says so (a `dlg` row beats the shop menu) and the shop doors are boarded up (js/render/raid.js) ----
-NPC.filter(n=>(n.store||n.shop)&&n.x>=140&&n.x<=176&&n.y>=99&&n.y<=127).forEach(n=>{DLG['raid_closed_'+n.n]={start:'a',nodes:{a:{who:n.n,text:'[Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.'}}};
+NPC.filter(n=>{const sr=n.shopRoom&&SHOP_ROOMS.find(q=>q.id===n.shopRoom),p=sr?{x:sr.door[0],y:sr.door[1]}:n;return(n.store||n.shop)&&p.x>=140&&p.x<=176&&p.y>=99&&p.y<=127}).forEach(n=>{DLG['raid_closed_'+n.n]={start:'a',nodes:{a:{who:n.n,text:'[Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.'}}};
   STORY_PEOPLE.unshift({npc:n.n,if:{flag:'village_attack'},dlg:'raid_closed_'+n.n})});
 // ---- the villagers while it lasts (everyone but the shopkeepers) ----
 const RAID_SAY=['[Placeholder] Get off our island, you pirates!','[Placeholder] Stay behind me! I will not let them near the children.','[Placeholder] My roof is on fire! Somebody help!','[Placeholder] They came out of nowhere! Look at all those ships!','[Placeholder] Hold the line! The fisher is here!','[Placeholder] I have never seen so many pirates.'];

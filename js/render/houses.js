@@ -3,7 +3,7 @@
 // red tiled roof with eaves, signs and one small extra such as a barrel, firewood, a lit window or a crate) and copied each frame; only the chimney smoke on slate roofs moves. Art ported from
 // art/graphics/graphics_upgrade_mockup.js. Where things stand, their size, doors and signs are unchanged. The halls, temples and placeholder buildings keep their own drawing.
 const HROOF={thatch:['#c9a35c','#b08c48','#8a6a32','#e0c07c','#f0d898'],slate:['#5a6c80','#485a6e','#334356','#7c90a6','#a8bccf'],red:['#b0473a','#8e3328','#64221a','#d0685a','#e8907e']};
-const HSIGN={fish:'#2f5f9e',rod:'#6a3f90',boat:'#257a68',smith:'#b8481f',gold:'#c8a02a',tailor:'#a04a8a',barber:'#c8402a',apothecary:'#3a8f4a'};
+const HSIGN={fish:'#2f5f9e',rod:'#6a3f90',boat:'#257a68',smith:'#b8481f',gold:'#c8a02a',tailor:'#a04a8a',barber:'#c8402a',apothecary:'#3a8f4a',tavern:'#8a4a1f'};
 function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.x+','+b.y+k+W+(b.sign||'')+(b.big?'B':'');
   return sprite(key,W+28,54,c=>{const ox=14,oy=14,O='#24170c',dc=hs(b.x,b.y)%4,RP=HROOF[k],f=(x,y,w,h,col)=>pF(c,ox+x,oy+y,w,h,col),q=(x,y,col)=>pP(c,ox+x,oy+y,col);
     f(-1,30,W+6,4,'rgba(20,30,10,.35)');f(W,14,4,18,'rgba(20,30,10,.35)');
@@ -37,6 +37,7 @@ function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.
       else if(b.sign==='tailor'){f(sx+4,16,12,1,'#b8b8c0');f(sx+6,15,2,3,'#a04a8a');f(sx+12,15,2,3,'#a04a8a');f(sx+8,17,4,1,'#f2c14e')}
       else if(b.sign==='barber'){for(let z=0;z<5;z++)f(sx+7+z*2,15,1,3,z%2?'#3b82c4':'#d83828');f(sx+5,18,10,1,'#f2f2ec')}
       else if(b.sign==='apothecary'){f(sx+8,15,4,1,'#6b4423');f(sx+9,16,2,1,'#c8d8e0');f(sx+7,17,6,1,'#7a3fa0');f(sx+6,18,8,1,'#7a3fa0')}
+      else if(b.sign==='tavern'){f(sx+7,15,6,4,'#d9a441');f(sx+7,15,6,1,'#fff');f(sx+13,16,2,2,'#d9a441')}
       else if(b.sign==='gold'){f(sx+6,16,8,2,'#d9a441');f(sx+8,18,4,1,'#d9a441');f(sx+9,15,2,2,'#d83828');f(sx+15,15,2,1,'#fff')}
       else if(b.sign==='smith'){f(sx+5,15,10,2,'#3a3a44');f(sx+8,17,4,1,'#3a3a44');f(sx+6,18,8,1,'#3a3a44');f(sx+15,15,2,1,'#e8632e')}
       else{f(sx+4,17,12,1,'#7a4a26');f(sx+9,15,1,3,'#6b4423')}}

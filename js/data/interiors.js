@@ -31,5 +31,12 @@ const SHOP_ROOMS=[
  {id:'apothecary',design:'alchemist',npc:'Astrid',table:'alchemy',door:[91,216],name:"Astrid's Apothecary",msg:'Dried herbs, bubbling glass and a faint green smell.'},
  {id:'tailor',design:'tailor',npc:'Seamstress Wynn',table:'cutting',door:[98,216],name:"Wynn's Tailor",msg:'Bolts of cloth and the click of scissors.'},
  {id:'barber',design:'barber',npc:'Barber Fenwick',table:'counter4',door:[102,216],name:"Fenwick's Barber Shop",msg:'Soap, hot towels and a row of mirrors.',
-  edit:{remove:[['rug',3,7],['plant',0,8],['armchair',5,9]],add:[['counter4',2,8]]}}
+  edit:{remove:[['rug',3,7],['plant',0,8],['armchair',5,9]],add:[['counter4',2,8]]}},
+ {id:'odo',design:'grocery',npc:'Odo',table:'counter4',door:[160,111],name:"Odo's General Store",msg:'Baskets of fish, fresh bread and the smell of the sea.'},
+ {id:'bram',design:'fisher',npc:'Bram',table:'table',door:[165,111],name:"Bram's Tackle Shop",msg:'Rods, nets, rope and tools on every wall.'},
+ {id:'murl',design:'fisher',npc:'Murl',table:'table',door:[161,124],name:"Murl's Boatyard",msg:'Tar, rope and the creak of timber.',
+  edit:{remove:[['hammock',0,4]],add:[['barrel',0,4]]}},
+ {id:'lucie',design:'gold',npc:'Lucie',table:'rings',door:[29,70],name:"Lucie's Gold & Gems",msg:'Gold glints in every case.'},
+ {id:'inn_settlement',design:'tavern',npc:'Innkeeper Hobb',table:'bar',door:[103,220],name:'The Salty Anchor',msg:'Warm firelight, the clink of mugs and a crackling fire.',edit:{remove:[['stool',3,5]]},inn:[['Single room','room_single'],['Double room','room_double']]},
+ {id:'inn_mountain',design:'tavern',npc:'Innkeeper Ragna',table:'bar',door:[23,70],name:'The Frosty Tankard',msg:'Warm firelight, the clink of mugs and a crackling fire.',edit:{remove:[['stool',3,5]]},inn:[['Single room','room_single'],['Double room','room_double']]}
 ];

@@ -8,6 +8,7 @@ rect(16,66,38,67,(x,y)=>{if(at(x,y)===48)setT(x,y,6)}); // a cross street
 const MT_HOUSES=[[22,62,'red'],[35,62,'thatch'],[18,74,'red']];
 MT_HOUSES.forEach(([x,y,roof])=>{BL.push({x,y,w:3,roof});rect(x,y,x+2,y+1,(xx,yy)=>setT(xx,yy,5))});
 BL.push({x:28,y:69,w:3,roof:'red',sign:'gold'});rect(28,69,30,70,(x,y)=>setT(x,y,5));                                  // Lucie's Gold & Gems
+BL.push({x:22,y:69,w:3,roof:'thatch',sign:'tavern'});rect(22,69,24,70,(x,y)=>setT(x,y,5));                                  // The Frosty Tankard tavern (door stand tile is (23,71))
 BL.push({x:28,y:72,w:5,hall:'guild'});rect(28,72,32,73,(x,y)=>setT(x,y,5));                                                // Fighters Guild
 BL.push({x:34,y:72,w:5,hall:'arena'});rect(34,72,38,73,(x,y)=>setT(x,y,5));                                                // Gladiators' Arena
 [[25,65],[27,65],[25,68],[27,68],[27,75],[29,75],[33,75],[35,75]].forEach(([x,y])=>{if([6,48].includes(at(x,y)))setT(x,y,7)}); // lanterns
@@ -27,6 +28,7 @@ MT_NAMES.forEach((n,i)=>{const[hx,hy]=MT_HOMES[i],x=hx+1,y=hy+2;
     bio:{age:null,job:null,backstory:null,likes:[],quests:[]},say:MT_SAY[i]})});
 const mkLook=(n,x,y,f,o)=>NPC.push({n,x,y,hx:x,hy:y,f,fixed:1,pack:false,bio:{age:null,job:null,backstory:null,likes:[],quests:[]},...o});
 mkLook('Lucie',29,71,'d',{skin:0,hair:4,shirt:2,jk:3,hat:'none',jon:true,store:'jeweller',bio:{age:null,job:'Goldsmith',backstory:null,likes:[],quests:[]},say:['Gold, gems and a little magic.']});
+mkLook('Innkeeper Ragna',23,71,'u',{skin:1,hair:2,shirt:4,jk:3,hat:'none',jon:true,bio:{age:null,job:'Innkeeper',backstory:null,likes:[],quests:[]},say:['Rooms are 100 gold a night. Clean sheets, I promise.','Mind the stairs after a few mugs.']});
 mkLook('Warden Orrin',25,77,'u',{skin:3,hair:0,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['Welcome to the Mountain Town. Keep your blade sheathed in the streets.','The arena is for fighting. The streets are not.']});
 mkLook('Warden Brann',24,60,'r',{skin:2,hair:1,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['The north gate. The path up the mountain leads to the Temple to the Mountains.','Good boots for the climb, friend.']});
 mkLook('Miner Gudrun',22,67,'r',{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:3,jon:false,fixed:0,say:['Copper again today. Always copper.','Bring me bronze and I will talk your ear off.']});
