@@ -10,18 +10,18 @@ const haToHex=a=>'#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(1
 const haMix=(a,b,t)=>{const A=haHex(a),B=haHex(b);return haToHex(A.map((v,i)=>v+(B[i]-v)*t))};
 // a colour's four tones: light, base, shadow (cooler) and deep (for lines)
 const haRamp=c=>[haMix(c,'#fff6dc',.34),c,haMix(haMix(c,'#000000',.24),'#3a2a6a',.16),haMix(haMix(c,'#000000',.5),'#2a1a3a',.2)];
-function HAPainter(){this.pid=new Int16Array(HA_W*HA_H).fill(-1);this.parts=[];this.det=[]}
+function HAPainter(w,h){this.W=w||HA_W;this.H=h||HA_H;this.pid=new Int16Array(this.W*this.H).fill(-1);this.parts=[];this.det=[]}
 HAPainter.prototype={
   part(color,opt){const o=opt||{};this.parts.push({r:o.warm?[haMix(color,'#fff0dc',.3),color,haMix(color,'#a8503a',.26),haMix(color,'#5a2418',.55)]:haRamp(color),o});return this.parts.length-1},
-  fill(k,f){for(let y=0;y<HA_H;y++)for(let x=0;x<HA_W;x++)if(f(x+.5,y+.5))this.pid[y*HA_W+x]=k},
+  fill(k,f){for(let y=0;y<this.H;y++)for(let x=0;x<this.W;x++)if(f(x+.5,y+.5))this.pid[y*this.W+x]=k},
   erase(f){this.fill(-1,f)},
-  at(x,y){return x<0||y<0||x>=HA_W||y>=HA_H?-1:this.pid[y*HA_W+x]},
+  at(x,y){return x<0||y<0||x>=this.W||y>=this.H?-1:this.pid[y*this.W+x]},
   dot(x,y,c){this.det.push([x,y,1,1,c])},
   rect(x,y,w,h,c){this.det.push([x,y,w,h,c])},
   line(x0,y0,x1,y1,c){const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0))||1;for(let i=0;i<=n;i++)this.dot(Math.round(x0+(x1-x0)*i/n),Math.round(y0+(y1-y0)*i/n),c)},
   tone(k,t){return this.parts[k].r[t]},
-  render(cv){const c=cv.getContext('2d'),img=c.createImageData(HA_W,HA_H),d=img.data,set=(x,y,h)=>{const a=haHex(h),i=(y*HA_W+x)*4;d[i]=a[0];d[i+1]=a[1];d[i+2]=a[2];d[i+3]=255};
-    for(let y=0;y<HA_H;y++)for(let x=0;x<HA_W;x++){const k=this.at(x,y);
+  render(cv){const c=cv.getContext('2d'),img=c.createImageData(this.W,this.H),d=img.data,set=(x,y,h)=>{const a=haHex(h),i=(y*this.W+x)*4;d[i]=a[0];d[i+1]=a[1];d[i+2]=a[2];d[i+3]=255};
+    for(let y=0;y<this.H;y++)for(let x=0;x<this.W;x++){const k=this.at(x,y);
       if(k<0){let j=-1;for(const[a,b]of[[0,1],[0,-1],[1,0],[-1,0]]){const q=this.at(x+a,y+b);if(q>=0&&(j<0||q>j))j=q}if(j>=0)set(x,y,this.parts[j].o.flat?HA_OUT:haMix(this.parts[j].r[3],HA_OUT,.55));continue}
       const P=this.parts[k],same=(a,b)=>this.at(x+a,y+b)===k;
       let t=1;

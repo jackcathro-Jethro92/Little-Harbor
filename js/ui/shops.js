@@ -24,13 +24,13 @@ function shopLayout(el,key,rows){
   const grid=$('sgrid');grid.innerHTML='';
   const words=r=>{const d=r.firstElementChild.cloneNode(true),b=d.querySelector('b');if(b)b.remove();const br=d.querySelector('br');if(br)br.remove();return d.textContent};
   mine.forEach((r,i)=>{const d=document.createElement('button'),m=bt(r).match(/^(.*) x(\d+)$/),btn=r.querySelector('button'),dead=btn&&btn.disabled;d.className='bcell'+(i===sel?' cur':'')+(dead?' dim':'');d.title=m?m[1]:bt(r);
-    const cv=document.createElement('canvas');cv.width=cv.height=16;d.appendChild(cv);
+    const cv=document.createElement('canvas');cv.width=cv.height=24;d.appendChild(cv);
     if(r.dataset.id&&ITEMS[r.dataset.id])icon(r.dataset.id,cv);else{const x=cv.getContext('2d');x.fillStyle='#383838';x.fillRect(4,3,8,10);x.fillRect(3,4,10,8);x.fillStyle='#f2c14e';x.fillRect(4,4,8,8);x.fillStyle='#d9a441';x.fillRect(7,6,2,4)}
     if(m){const n=document.createElement('i');n.className='bn';n.textContent=m[2];d.appendChild(n)}
     if(btn&&/^(Owned|In use|Aboard)$/.test(btn.textContent)){const n=document.createElement('i');n.className='be';n.textContent='✓';d.appendChild(n)}
     d.onclick=()=>{SHOPSEL[key]={cat:cur,i};shopLayout(el,key,rows)};grid.appendChild(d)});
   if(!mine.length){const d=document.createElement('div');d.className='bnone';d.textContent=(notes[0]?notes[0].textContent:'Nothing here.');grid.appendChild(d)}
-  const r=mine[sel],cv=$('sdi'),x=cv.getContext('2d');x.clearRect(0,0,16,16);$('sbtns').innerHTML='';
+  const r=mine[sel],cv=$('sdi'),x=cv.getContext('2d');x.clearRect(0,0,24,24);$('sbtns').innerHTML='';
   if(r){if(r.dataset.id&&ITEMS[r.dataset.id])icon(r.dataset.id,cv);const m=bt(r).match(/^(.*) x(\d+)$/);$('stxt').innerHTML='<b></b><br><span></span>';$('stxt').querySelector('b').textContent=m?m[1]+' x'+m[2]:bt(r);$('stxt').querySelector('span').textContent=words(r);
     [...r.querySelectorAll('button')].forEach(real=>{const b=document.createElement('button');b.textContent=real.textContent;b.disabled=real.disabled;b.onclick=()=>real.click();$('sbtns').appendChild(b)})}
   else $('stxt').textContent='';

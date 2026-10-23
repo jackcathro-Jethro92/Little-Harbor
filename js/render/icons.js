@@ -7,7 +7,9 @@ const FC={sardine:'#9bb8d0',mackerel:'#4f8fa6',bream:'#c98b5a',tuna:'#3f5fa0',ko
 function bagArt(c){const x=$('bic').getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=k;x.fillRect(a,b,w,h)};x.clearRect(0,0,48,56);
   r(10,22,28,30,'#383838');r(11,23,26,28,'#b5651d');r(11,23,26,6,'#d98a3d');r(14,36,20,2,'#8c4a12');r(14,44,20,2,'#8c4a12');
   r(16,4,16,12,'#383838');r(18,6,12,10,c);r(8,12,32,14,'#383838');r(9,13,30,12,'#8c4a12');r(9,13,30,3,'#a8631f');r(21,22,6,7,'#383838');r(22,23,4,5,'#f2c14e')}
-function icon(id,cv){const x=(cv||$('bdi')).getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=k;x.fillRect(a,b,w,h)};x.clearRect(0,0,16,16);
+function icon(id,cv){const C=cv||$('bdi'),x=C.getContext('2d'),r=(a,b,w,h,k)=>{x.fillStyle=k;x.fillRect(a,b,w,h)};x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,C.width,C.height);x.imageSmoothingEnabled=false;
+  const ia=id&&ITEMS[id]&&!ITEMS[id].furn&&itemArt(id);if(ia){x.drawImage(ia,0,0,C.width,C.height);return}   // the detailed 24 x 24 icon (js/render/itemart.js)
+  x.setTransform(C.width/16,0,0,C.height/16,0,0);   // (the older 16 x 16 drawings below, kept for anything without a detailed icon)
   if(!id){r(2,2,12,1,'#8a8672');r(2,13,12,1,'#8a8672');r(2,2,1,12,'#8a8672');r(13,2,1,12,'#8a8672');return}
   const K=ITEMS[id].kind;
   if(ITEMS[id].furn){const fp=furnFp(id),sc=Math.min(1,16/(fp.w*T),16/(fp.h*T))*(fp.w*T>16||fp.h*T>16?1:1),W=fp.w*T*sc,H=fp.h*T*sc;x.imageSmoothingEnabled=false;x.drawImage(propSprite(fp.prop,0,0,0),4,4,fp.w*T,fp.h*T,(16-W)/2,(16-H)/2,W,H);return}
