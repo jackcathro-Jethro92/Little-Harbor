@@ -53,3 +53,22 @@ const SHOP_ROOMS=[
  {id:'inn_settlement',design:'c_tavern',npc:'Innkeeper Hobb',table:'bar',door:[103,220],name:'The Salty Anchor',msg:'Warm firelight, the clink of mugs and a crackling fire.',inn:[['Single room','c_single'],['Double room','c_double']]},
  {id:'inn_mountain',design:'c_tavern',npc:'Innkeeper Ragna',table:'bar',door:[23,70],name:'The Frosty Tankard',msg:'Warm firelight, the clink of mugs and a crackling fire.',inn:[['Single room','c_single'],['Double room','c_double']]}
 ];
+// ---------- the Haven house's furniture (js/systems/havendecor.js) ----------
+// One row per room of the nine (column 0-2 left to right, row 0-2 top to bottom). Each prop is [id, x, y, mirror, quarter turns] in the room's own tiles: x 0-7, y 0-8, and y -1 is the wall above the room (paintings, clocks, racks).
+// Crates, mannequins, the built-in stations, the bathtub, windows and doorways are part of the house itself and are not listed here; the tiles in front of them are left clear.
+const HAVEN_DECOR=[
+ {n:'Bedroom',c:0,r:0,props:[['painting',1,-1],['clock',7,-1],['wardrobe',0,0],['nightstand',1,0],['canopyk',2,0],['nightstand',5,0],['vanity',7,0],['stool',7,1],['chest',3,2],['cat',5,2],
+   ['lamp',0,3],['rug',2,4],['bookshelf',0,5],['rocker',1,6],['plant',7,6],['dresser',5,7]]},
+ {n:'Wardrobe',c:1,r:0,props:[['swords',3,-1],['wardrobe',0,0],['hats',4,0],['plant',6,0],['rug',2,3],['wardrobe',0,5],['clothes',1,6],['fitmirror',7,5],['platform',6,6],['coatrack',5,7]]},
+ {n:'Bathroom',c:2,r:0,props:[['mirror',6,-1],['plant',0,0],['washstand',6,0],['towels',7,0],['stool',4,1],['rug',2,4],['drawers',7,4],['vase',7,5],['lamp',0,6],['treepot',7,6],['towels',5,7]]},
+ {n:'Kitchen',c:0,r:1,props:[['pots',0,-1],['garlic',2,-1],['sausages',5,-1],['kcounter',0,0],['baskets',3,0],['stove',5,0],['icebox',7,0],['barrel',0,2],['sack',0,3],
+   ['chair',0,4],['table',1,4],['chair',3,4,1],['bench',1,5],['bread',5,7],['barrel',7,7],['milk',7,8],['vegbin',2,8],['cheese',2,7]]},
+ {n:'Living room',c:1,r:1,props:[['painting',2,-1],['painting',5,-1],['fireplace',0,0],['bookshelf',5,0],['bookshelf',6,0],['grandclock',7,0],['armchair',0,2],['armchair',2,2],
+   ['rug',1,4],['roundtable',5,3],['chair',7,3],['lamp',0,5],['sofa',1,6],['cat',3,5],['globe',7,6],['piano',5,7],['plant',7,8]]},
+ {n:'Workshop',c:2,r:1,props:[['toolrack',0,-1],['weapons',4,-1],['shield',7,-1],['ingotrack',0,0],['coal',4,0],['armor',7,0],['grindstone',0,2],['anvil',5,2],['quench',7,3],
+   ['timber',0,5],['chopblock',4,4],['carpbench',4,6],['shavings',3,7],['barrow',7,6]]},
+ {n:'Potion room',c:0,r:2,props:[['potions',0,-1],['potions',2,-1],['potions',5,-1],['garlic',7,-1],['herbs',0,0],['scrolls',2,0],['bookshelf',7,0],['cauldron',5,3],['candelabra',7,3],
+   ['bookstand',0,4],['rug',2,5],['crystal',7,6],['desk',0,6],['plant',7,8]]},
+ {n:'Entrance hall',c:1,r:2,props:[['wmap',0,-1],['painting',6,-1],['grandclock',0,0],['treepot',5,0],['runner',3,0],['runner',4,0],['runner',3,3],['runner',4,3],['runner',3,6],['runner',4,6],
+   ['lamp',0,2],['lamp',7,2],['bench',0,6],['bench',6,6],['plant',0,8],['coatrack',2,8],['luggage',6,8]]},
+ {n:'Storage room',c:2,r:2,props:[['barrel',0,0],['barrel',1,0],['cask',2,0],['sacks',4,0],['sack',6,0],['barrow',0,2],['tallshelf',0,7],['logs',2,8],['barrel',4,8],['keg',5,8]]}];

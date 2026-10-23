@@ -17,4 +17,4 @@ function useGarden(c){const cell=c.g.cells[c.i];
 
 // the built-in stations of the Haven house (playtest #4): a cooking station, a workbench, a forge and an alchemy station stand ready in their rooms. They are real stations (S.placed) marked `fixed:1`, so they work like
 // any other but cannot be picked up or moved and are never packed with a camp. This puts back any that are missing (it runs at load and when the island's house is given), so it is safe to call again.
-function haveFixtures(){if(!S.isle)return;HG_FIXTURES.forEach(f=>{if(!S.placed.some(p=>p.fixed&&p.id===f.id&&p.x===f.x&&p.y===f.y))S.placed.push({id:f.id,x:f.x,y:f.y,fixed:1})})}
+function haveFixtures(){if(!S.isle)return;HG_FIXTURES.forEach(f=>{if(!S.placed.some(p=>p.fixed&&p.id===f.id&&p.x===f.x&&p.y===f.y))S.placed.push({id:f.id,x:f.x,y:f.y,fixed:1})});if(typeof hgDecorFit==='function')hgDecorFit()}
