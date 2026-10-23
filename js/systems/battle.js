@@ -36,7 +36,9 @@ function bDraw(){const B=BATTLE;if(!B)return;
   $('bt-foes').innerHTML='';B.foes.forEach((f,i)=>{const d=document.createElement('div');d.className='bt-foe'+(f.alive?'':' gone')+(i===B.sel&&f.alive?' sel':'');
     const sh=document.createElement('div');sh.className='bt-shadow';d.appendChild(sh);
     const cv=document.createElement('canvas');
-    if(f.t.art){const A=ART_SHOT[f.t.art]||ART_SHOT.ghost;cv.width=A.w*A.k;cv.height=A.h*A.k;paintCreature(f,cv);cv.className='bt-big'}
+    const big=f.t.art?creatureArt(f.t.art,f.t.n):foeArt(f.t);   // the detailed battle picture (js/render/creatureart.js)
+    if(big){const k=2;cv.width=big.width*k;cv.height=big.height*k;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(big,0,0,cv.width,cv.height);cv.className='bt-big';cv.dataset.big=1}
+    else if(f.t.art){const A=ART_SHOT[f.t.art]||ART_SHOT.ghost;cv.width=A.w*A.k;cv.height=A.h*A.k;paintCreature(f,cv);cv.className='bt-big'}
     else{cv.width=96;cv.height=96;cv.getContext('2d').imageSmoothingEnabled=false;cv.getContext('2d').drawImage(shadePerson({...lo(f.t.look),armour:f.t.look.armour,view:'f',frame:0}),0,0,24,24,0,0,96,96)}
     cv.style.animationDelay=swayDelay();if(i%2)cv.style.animationDirection='reverse';
     f.cv=cv;d.appendChild(cv);const mk=document.createElement('div');mk.className='bt-mark';d.appendChild(mk);
@@ -68,7 +70,7 @@ const swayDelay=()=>'-'+Math.round(performance.now()%2400)+'ms';
 const bShake=(el,cls)=>{if(!el||BATTLE_FAST)return;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),320)};
 function startBattle(id,onEnd){const row=BATTLES[id];if(!row||BATTLE||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
   BATTLE={id,row,onEnd,sel:0,picking:false,foes:row.foes.slice(0,3).map(k=>({k,t:FOES[k],hp:FOES[k].hp,max:FOES[k].hp,pois:0,alive:true,fled:false}))};
-  $('battle').classList.add('open');drawField(row.field||BATTLE.foes[0].t.field);bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected)paintCreature(f,f.cv)})},130);
+  $('battle').classList.add('open');drawField(row.field||BATTLE.foes[0].t.field);bDraw();BATTLE.anim=setInterval(()=>{if(BATTLE)BATTLE.foes.forEach(f=>{if(f.alive&&f.t.art&&f.cv&&f.cv.isConnected&&!f.cv.dataset.big)paintCreature(f,f.cv)})},130);
   const note=AMBUSH_NOTE;AMBUSH_NOTE=false;
   (async()=>{if(note)await bSay('You were attacked while distracted!');await bSay(BATTLE.foes.length>1?'Enemies block your way!':BATTLE.foes[0].t.n+' attacks!');bTurn()})();return true}
 // Run is only an option against wild creatures (a foe with `art`); pirates and other people never let you go (playtest #4)

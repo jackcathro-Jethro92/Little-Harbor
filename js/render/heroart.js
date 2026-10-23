@@ -57,6 +57,9 @@ const POSES={
  greet:{lean:.7,hip:-1.3,turn:-.5,aL:[[12,35],[13.6,43.6]],aR:[[40.5,26],[42,16]],lL:[[18.6,56],[18.6,68]],lR:[[27.4,56.4],[29.6,67.6,1]]},
  rope:{lean:-.5,hip:1.3,turn:.5,aL:[[9.5,33.5],[15,25.5]],aR:[[37,35.5],[35.6,43.6]],lL:[[20.6,56.4],[18.4,67.6,1]],lR:[[29.4,56],[29.6,68]],prop:'rope'},
  crossed:{lean:-.4,hip:1.2,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[20.4,56.4],[18.2,67.6,1]],lR:[[29.2,56],[29.4,68]]},
+ fight:{lean:1.2,hip:.8,turn:.6,aL:[[11,33],[14.5,37.5]],aR:[[38,29],[39.5,21]],lL:[[17.5,55],[13.5,67]],lR:[[30.5,55.5],[33.5,67.5]],prop:'cutlass'},
+ aim:{lean:-.6,hip:-.8,turn:.7,aL:[[11.5,35],[14,43]],aR:[[38.5,29],[44,27.5]],lL:[[19,56],[17,68]],lR:[[29.5,56],[31.5,68]],prop:'pistol'},
+ zombie:{lean:1.6,hip:.6,turn:0,aL:[[10.5,31],[15,26.5]],aR:[[37.5,31.5],[33,27]],lL:[[19,56],[17.5,68]],lR:[[29.5,55],[31,66,1]]},
  stand:{lean:0,turn:0,aL:[[12,34],[13.6,43]],aR:[[36,34],[34.4,43]],lL:[[20,56],[19.5,68]],lR:[[28,56],[28.5,68]]}};
 // spec: {sex:'f'|'m', pose, hair:'braid'|'bob'|'wavy'|'messy'|'curly'|'crop', top:'sweater'|'stripes'|'tunic'|'tee'|'shirt', over:'vest'|'flannel'|'coat'|null, acc:[...], col:{skin,hair,shirt,jacket,hat,pants,boots,eye}}
 // view 'f' (front) or 'b' (back, for battle). arm: the worn armour {helm, body, boots} (ARM_PAL names), drawn over the clothes.
@@ -102,6 +105,10 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
       hands.push([C2,d,n])}};
   const ARMS=[[15,P.aL,P.hideL,'L'],[33,P.aR,P.hideR,'R']];ARMS.forEach(q=>{if(q[3]!==P.front)drawArm(q)});
   if(P.prop==='rope'){const rp=p.part('#c8a060');p.fill(rp,U(haAnd(haEl(15,31,5.6,7.2),iaNotH(haEl(15,31,3.4,5)))));for(let y=25;y<38;y+=2)DU(11,y,'#8a6a30')}
+  if(P.prop==='cutlass'||P.prop==='pistol'){const h=(back?P.aL:P.aR)[1],dx=back?-1:1;
+    if(P.prop==='cutlass'){const bl=p.part('#d8dce4');p.fill(bl,haOr(haTaper(h[0],h[1]-1.5,h[0]+dx*2.5,h[1]-9,1.5,1.3),haTaper(h[0]+dx*2.5,h[1]-9,h[0]+dx*6.5,h[1]-17,1.3,.3)));const gd=p.part('#c8a040');p.fill(gd,haSeg(h[0]-2,h[1]-1.4,h[0]+2,h[1]-1.4,.9))}
+    else{const gn=p.part('#3a3a42');p.fill(gn,haOr(haSeg(h[0],h[1]-.6,h[0]+dx*7,h[1]-1.2,1),haSeg(h[0]-dx*.5,h[1],h[0]-dx*1.5,h[1]+3,1.1)));p.dot(Math.round(h[0]+dx*7),Math.round(h[1]-1),'#1a1416')}
+    p.fill(skin,haEl(h[0],h[1],2.3,2.1))}
   if(P.prop==='rod'){const h=(back?P.aL:P.aR)[1],rod=p.part('#7a5230',{flat:1}),dx=back?-1:1;p.fill(rod,haSeg(h[0]-dx*2,h[1]+3,h[0]+dx*10,h[1]-21,.75));p.fill(skin,haEl(h[0]+.3,h[1]+.3,2.2,2));p.dot(h[0]+dx*1.5|0,h[1]+1|0,'#c9c9d0')}
   if(spec.top==='sweater'&&!back&&!ap('body')){const col=p.part(C.shirt);p.fill(col,U(haPoly([[20.6,19.5],[27.4,19.5],[27.8,23.5],[20.2,23.5]])))}
   // neck and head. The neck is its own, slightly shaded part drawn first, so the jaw gets a clean line where it meets it (no lump at the side); the face is an oval that is widest at the
@@ -170,10 +177,12 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     if(acc.includes('scar'))LU(18+s,12,20+s,15,sk[3]);
     if(acc.includes('moustache')||acc.includes('beard')||acc.includes('longbeard')||acc.includes('goatee')){RU(21+s,15,6,1,BC);DU(21+s,16,BC);DU(26+s,16,BC);RU(22+s,15,4,1,haRamp(BC)[0])}
     if(acc.includes('stubble'))for(let y=16;y<20;y++)for(let x=17;x<32;x+=3){const X=x+(y%3)+s;if(p.at(Math.round(X+ux(y)),y)===head&&(y>=18||Math.abs(X-24-s)>3.5)&&!(y===16&&Math.abs(X-24-s)<3))DU(X,y,haMix(dk,sk[3],.35))}
+    if(acc.includes('zombie')){RU(22+s,16,4,2,'#3a1a1a');DU(23+s,16,'#e8e8c8');LU(26+s,12,29+s,15,'#5a3a3a');[[27,13],[28,14]].forEach(([x,y])=>DU(x+s,y,'#d8d0b0'))}
     if(acc.includes('freckles'))[[20,14],[22,14],[21,15],[26,14],[28,14],[27,15]].forEach(([x,y])=>DU(x+s,y,haMix(dk,'#9a5a30',.45)));
   }
   hands.forEach(([c,d,n])=>{[-.85,.85].forEach(o=>p.dot(Math.round(c[0]+d[0]*1.7+n[0]*o),Math.round(c[1]+d[1]*1.7+n[1]*o),sk[2]));p.dot(Math.round(c[0]-d[0]*.3),Math.round(c[1]-d[1]*.3),sk[0])});
   cuffs.forEach(([c,n])=>p.line(Math.round(c[0]+n[0]*2),Math.round(c[1]+n[1]*2),Math.round(c[0]-n[0]*2),Math.round(c[1]-n[1]*2),haMix(C.shirt,'#ffffff',.3)));
+  if(acc.includes('zombie'))for(let i=0;i<14;i++){const x=12+((i*7)%24),y=26+((i*5)%18);if(p.at(x,y)===shirt)p.dot(x,y,C.skin)}
   // hair texture: a shine band and a few clumps
   const HR=haRamp(C.hair);
   if(spec.hair==='curly')for(let y=3;y<9;y+=2)for(let x=17+(y%4);x<32;x+=3)DU(x,y,HR[0]);

@@ -1083,7 +1083,8 @@ def check(b, url):
     d0 = ev("S.day"); ev("S.hp=1;sleep()"); assert ev("S.day")==d0+1 and ev("S.hp===maxHp()&&$('msg').textContent.includes('tent')"), "sleeping in the tent starts a new day and heals"
     ev("S.placed=S.placed.filter(o=>o.id!=='camp_kit');ui()"); assert ev("!atTent()&&!inRoom(P.x,P.y)?$('sleep').style.visibility==='hidden':true"), "no tent, no sleeping outdoors"
     assert ev("ITEMS.sword.n==='Old Sword'&&ENEMY_TYPES.centipede.respawn>=240"), "Old Sword, slower centipede respawn"
-    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
+    ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;sail=false;ENEMIES.forEach(e=>{e.cd=1e9});SCENE=null;document.querySelectorAll('.open').forEach(el=>el.classList.remove('open'));if(dlgActive())dlgEnd();if(AR&&AR.on)AR.on=false;S.hp=maxHp();S.sta=50;const e=spawnEnemy('spirit',P.x+1,P.y);e.cd=0;e.keep=1;window.__amb=e;openBag();")
+    assert ev("['ghost','zombie','centipede','shark','squid','dragon'].every(a=>{const c=creatureArt(a,'Spirit');return c&&c.width>=40})&&Object.values(FOES).every(t=>{const c=t.art?creatureArt(t.art,t.n):foeArt(t);return c&&c.height>=40})&&Object.values(ENEMY_TYPES).every(t=>creatureArt(t.art,t.n))"), "every creature and every foe has a detailed battle picture"
     assert ev("$('bag').classList.contains('open')&&canBeAmbushed()"), "a creature may ambush over the bag"
     ev("enemiesTick()"); pg.wait_for_function("BATTLE!==null&&BATTLE.log&&BATTLE.log.includes('You were attacked while distracted!')")
     assert ev("!$('bag').classList.contains('open')&&$('bt-sta').style.width!==''&&$('bt-sta').style.width!=='0%'"), "the bag closed, the notice showed, the stamina bar is drawn"
