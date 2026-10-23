@@ -23,20 +23,33 @@ const INTERIOR_DESIGNS={
  store:{n:'General store',floor:'tile',wall:'white',light:'day',props:[['window',1,0],['shelf',4,1],['shelf',6,1],['painting',9,0],['baskets',0,3],['crate',0,5],['counter6',3,6],['scale',4,5],['mannequin',9,3],['display',5,8],['sacks',8,10],['barrel',9,9],['rug',2,9],['door',5,12]]},
  fisher:{n:'Fisher\'s hut',floor:'dark',wall:'ship',light:'dusk',props:[['porthole',2,1],['wheel',5,0],['porthole',8,1],['net',0,2],['rods',7,2],['buoy',4,2],['hammock',0,4],['anchor',9,5],['rope',2,6],['table',4,8],['stool',3,9],['stool',6,9],['barrel',9,10],['crate',0,10],['door',5,12]]}
 };
+// SHOP_DESIGNS (Jack, after G2): smaller rooms decorated by hand for each trade. Small shops are 8 wide and 11 deep (8 x 8 of floor below the 3 wall rows), the big trades 10 x 13 (10 x 10 of floor).
+// Same format as INTERIOR_DESIGNS: [prop, x, y]; wall pieces sit in rows 0-2; the shopkeeper's counter (the row's `table`) has a clear tile behind it for them and in front for you, and a clear path to the door.
+const SHOP_DESIGNS={
+ c_barber:{n:'Barber shop',rw:8,rh:11,floor:'tile',wall:'white',light:'day',props:[['bmirror',1,0],['bmirror',5,0],['bpole',7,1],['bchair',1,3],['bchair',6,3],['razors',3,3],['basin',4,3],['counter4',2,6],['towels',7,6],['rug',2,8],['plant',0,9],['armchair',7,9],['door',4,10]]},
+ c_tailor:{n:'Tailor',rw:8,rh:11,floor:'wood',wall:'plaster',light:'day',props:[['spools',1,0],['window',5,0],['bolts',0,3],['treadle',5,3],['hats',7,3],['mannequin',7,4],['cutting',2,6],['mannequin',0,7],['fitmirror',7,7],['platform',6,8],['clothes',1,9],['plant',7,9],['door',4,10]]},
+ c_apothecary:{n:'Apothecary',rw:8,rh:11,floor:'dark',wall:'brick',light:'night',props:[['bookshelf',0,1],['potions',2,1],['herbs',5,0],['sconce',7,1],['alchemy',0,3],['crystal',3,3],['cauldron',6,3],['counter4',2,6],['scale',6,6],['candelabra',7,7],['scrolls',0,8],['rug',3,8],['baskets',0,9],['plant',7,9],['door',4,10]]},
+ c_gold:{n:'Goldsmith',rw:8,rh:11,floor:'marble',wall:'plaster',light:'warm',props:[['window',1,0],['chandelier',3,0],['painting',6,0],['gembench',0,3],['crucible',3,3],['safe',7,3],['jewelcase',2,6],['rings',6,6],['bust',0,7],['goldstack',7,7],['rug',2,8],['candelabra',0,9],['plant',7,9],['door',4,10]]},
+ c_tackle:{n:'Tackle shop',rw:8,rh:11,floor:'dark',wall:'ship',light:'dusk',props:[['rods',1,1],['net',4,0],['porthole',7,1],['buoy',0,3],['rope',1,3],['crate',6,3],['barrel',7,3],['counter4',2,6],['fishrack',0,8],['anchor',7,8],['crate',0,9],['sacks',6,9],['door',4,10]]},
+ c_forge:{n:'Forge',rw:10,rh:13,floor:'cobble',wall:'stone',light:'warm',props:[['shield',2,1],['toolwall',4,1],['weapons',7,0],['furnace',0,3],['bellows',3,4],['anvil',6,4],['quench',8,3],['grindstone',9,6],['coal',0,7],['counter4',3,8],['armor',0,9],['ingotrack',8,9],['crate',0,11],['horseshoes',8,11],['barrel',9,11],['door',5,12]]},
+ c_carp:{n:'Carpenter',rw:10,rh:13,floor:'wood',wall:'log',light:'day',props:[['saws',0,0],['toolwall',4,1],['chisels',8,1],['lathe',0,3],['sawhorse',3,4],['timber',8,3],['cabframe',0,6],['chairframe',9,6],['carpbench',3,8],['varnish',9,9],['planks',0,10],['shavings',2,10],['logs',8,10],['door',5,12]]},
+ c_boat:{n:'Boatyard',rw:10,rh:13,floor:'dark',wall:'ship',light:'dusk',props:[['wheel',1,0],['porthole',4,1],['wmap',6,0],['net',8,1],['hammock',0,3],['maptable',7,3],['anchor',9,5],['barrel',0,6],['rope',1,6],['counter4',3,8],['buoy',9,9],['crate',0,10],['crate',0,11],['lantern',8,11],['barrel',9,11],['door',5,12]]},
+ c_grocery:{n:'General store',rw:10,rh:13,floor:'light',wall:'white',light:'day',props:[['sausages',1,0],['garlic',4,0],['window',7,0],['produce',0,3],['vegbin',3,3],['bread',5,3],['cheese',8,3],['icebox',9,3],['milk',0,6],['eggs',1,6],['butcher',7,6],['scale',2,8],['counter4',3,8],['sacks',0,10],['barrel',9,10],['baskets',0,11],['plant',8,11],['crate',9,11],['door',5,12]]},
+ c_tavern:{n:'Tavern',rw:10,rh:13,floor:'wood',wall:'plaster',light:'warm',props:[['window',1,0],['dartboard',4,1],['fireplace',7,0],['backbar',1,3],['keg',4,3],['keg',5,3],['stairs',9,3],['bar',1,5],['stool',1,6],['stool',5,6],['cask',0,7],['roundtable',6,7],['chair',8,8],['chair',6,9],['longtable',1,9],['stool',1,10],['stool',3,10],['booth',8,10],['door',5,12]]},
+ c_single:{n:'Inn room (single bed)',rw:7,rh:9,floor:'wood',wall:'wood',light:'dusk',props:[['window',1,0],['painting',4,0],['bs_blue',0,3],['nightstand',1,3],['wardrobe',6,3],['rug',2,5],['washstand',6,6],['luggage',0,7],['roomdoor',3,8]]},
+ c_double:{n:'Inn room (double bed)',rw:8,rh:9,floor:'wood',wall:'plaster',light:'dusk',props:[['window',1,0],['painting',5,0],['wardrobe',0,3],['nightstand',2,3],['bd_red',3,3],['nightstand',5,3],['dresser',6,3],['rug',2,6],['armchair',7,6],['luggage',0,7],['roomdoor',4,8]]}};
 // SHOP_ROOMS: the shops that have a room behind their door (batch G1). door: the building's door tile (face it from the street and press Use); npc: the shopkeeper, who moves inside and stands behind 'table' (a prop of the design that
 // acts as the counter: face it, or the tiles either side of it, and press Use to talk across it). edit: small changes to the starter design (remove [id,x,y] ... and add [id,x,y] ...). Their order must never change (add at the end).
 const SHOP_ROOMS=[
- {id:'smith',design:'smithy',npc:'Garrick',table:'counter4',door:[104,230],name:"Garrick's Forge",msg:'Heat, the ring of hammers and the smell of hot iron.'},
- {id:'carpenter',design:'carp',npc:'Carpenter Alder',table:'carpbench',door:[31,157],name:"Carpenter Alder's Workshop",msg:'Sawdust and the sweet smell of fresh timber.'},
- {id:'apothecary',design:'alchemist',npc:'Astrid',table:'alchemy',door:[91,216],name:"Astrid's Apothecary",msg:'Dried herbs, bubbling glass and a faint green smell.'},
- {id:'tailor',design:'tailor',npc:'Seamstress Wynn',table:'cutting',door:[98,216],name:"Wynn's Tailor",msg:'Bolts of cloth and the click of scissors.'},
- {id:'barber',design:'barber',npc:'Barber Fenwick',table:'counter4',door:[102,216],name:"Fenwick's Barber Shop",msg:'Soap, hot towels and a row of mirrors.',
-  edit:{remove:[['rug',3,7],['plant',0,8],['armchair',5,9]],add:[['counter4',2,8]]}},
- {id:'odo',design:'grocery',npc:'Odo',table:'counter4',door:[160,111],name:"Odo's General Store",msg:'Baskets of fish, fresh bread and the smell of the sea.'},
- {id:'bram',design:'fisher',npc:'Bram',table:'table',door:[165,111],name:"Bram's Tackle Shop",msg:'Rods, nets, rope and tools on every wall.'},
- {id:'murl',design:'fisher',npc:'Murl',table:'table',door:[161,124],name:"Murl's Boatyard",msg:'Tar, rope and the creak of timber.',
-  edit:{remove:[['hammock',0,4]],add:[['barrel',0,4]]}},
- {id:'lucie',design:'gold',npc:'Lucie',table:'rings',door:[29,70],name:"Lucie's Gold & Gems",msg:'Gold glints in every case.'},
- {id:'inn_settlement',design:'tavern',npc:'Innkeeper Hobb',table:'bar',door:[103,220],name:'The Salty Anchor',msg:'Warm firelight, the clink of mugs and a crackling fire.',edit:{remove:[['stool',3,5]]},inn:[['Single room','room_single'],['Double room','room_double']]},
- {id:'inn_mountain',design:'tavern',npc:'Innkeeper Ragna',table:'bar',door:[23,70],name:'The Frosty Tankard',msg:'Warm firelight, the clink of mugs and a crackling fire.',edit:{remove:[['stool',3,5]]},inn:[['Single room','room_single'],['Double room','room_double']]}
+ {id:'smith',design:'c_forge',npc:'Garrick',table:'counter4',door:[104,230],name:"Garrick's Forge",msg:'Heat, the ring of hammers and the smell of hot iron.'},
+ {id:'carpenter',design:'c_carp',npc:'Carpenter Alder',table:'carpbench',door:[31,157],name:"Carpenter Alder's Workshop",msg:'Sawdust and the sweet smell of fresh timber.'},
+ {id:'apothecary',design:'c_apothecary',npc:'Astrid',table:'counter4',door:[91,216],name:"Astrid's Apothecary",msg:'Dried herbs, bubbling glass and a faint green smell.'},
+ {id:'tailor',design:'c_tailor',npc:'Seamstress Wynn',table:'cutting',door:[98,216],name:"Wynn's Tailor",msg:'Bolts of cloth and the click of scissors.'},
+ {id:'barber',design:'c_barber',npc:'Barber Fenwick',table:'counter4',door:[102,216],name:"Fenwick's Barber Shop",msg:'Soap, hot towels and a row of mirrors.'},
+ {id:'odo',design:'c_grocery',npc:'Odo',table:'counter4',door:[160,111],name:"Odo's General Store",msg:'Baskets of fish, fresh bread and the smell of the sea.'},
+ {id:'bram',design:'c_tackle',npc:'Bram',table:'counter4',door:[165,111],name:"Bram's Tackle Shop",msg:'Rods, nets, rope and tools on every wall.'},
+ {id:'murl',design:'c_boat',npc:'Murl',table:'counter4',door:[161,124],name:"Murl's Boatyard",msg:'Tar, rope and the creak of timber.'},
+ {id:'lucie',design:'c_gold',npc:'Lucie',table:'jewelcase',door:[29,70],name:"Lucie's Gold & Gems",msg:'Gold glints in every case.'},
+ {id:'inn_settlement',design:'c_tavern',npc:'Innkeeper Hobb',table:'bar',door:[103,220],name:'The Salty Anchor',msg:'Warm firelight, the clink of mugs and a crackling fire.',inn:[['Single room','c_single'],['Double room','c_double']]},
+ {id:'inn_mountain',design:'c_tavern',npc:'Innkeeper Ragna',table:'bar',door:[23,70],name:'The Frosty Tankard',msg:'Warm firelight, the clink of mugs and a crackling fire.',inn:[['Single room','c_single'],['Double room','c_double']]}
 ];

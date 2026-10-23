@@ -19,7 +19,7 @@ function buildRoom(key,d,name){const i=INTR.length,rw=d.rw||11,rh=d.rh||13,x0=(i
   const room={z:30+i,x0,y0,x1:x0+rw-1,y1:y0+rh-1,dx:x0+door,kind:'shop',key,name,rw,rh,light:d.light||'day',props,glows};ROOMTAB.push(room);INTR.push(room);return room}
 // every starter design gets a room (the testing menu visits them), then every shop gets its own (edited) copy
 Object.entries(INTERIOR_DESIGNS).forEach(([key,d])=>buildRoom(key,d,d.n));
-SHOP_ROOMS.forEach(sr=>{const base=INTERIOR_DESIGNS[sr.design],ed=sr.edit||{},props=(base.props||[]).filter(p=>!(ed.remove||[]).some(([id,x,y])=>p[0]===id&&p[1]===x&&p[2]===y)).concat(ed.add||[]),
+SHOP_ROOMS.forEach(sr=>{const base=SHOP_DESIGNS[sr.design]||INTERIOR_DESIGNS[sr.design],ed=sr.edit||{},props=(base.props||[]).filter(p=>!(ed.remove||[]).some(([id,x,y])=>p[0]===id&&p[1]===x&&p[2]===y)).concat(ed.add||[]),
   room=buildRoom('shop_'+sr.id,{...base,props},sr.name);sr.room=room;
   HALLS['shop_'+sr.id]={z:room,id:room.z,msg:sr.msg,name:sr.name};ENTR.push({x:sr.door[0],y:sr.door[1],to:'shop_'+sr.id,out:[sr.door[0],sr.door[1]+1]});
   // the shopkeeper moves inside, behind the counter: the tile just north of the middle of the table prop, or the nearest free one along it
@@ -30,7 +30,7 @@ SHOP_ROOMS.forEach(sr=>{const base=INTERIOR_DESIGNS[sr.design],ed=sr.edit||{},pr
     if(spot){n.x=n.hx=spot[0];n.y=n.hy=spot[1];n.f='d';n.shopRoom=sr.id}}});
 // taverns: the innkeeper rents out rooms (INN_PRICE gold a night). Each guest room is built after all the shops (so no shop's room ever moves); its door leads back down into the tavern
 const INN_PRICE=100;
-SHOP_ROOMS.filter(sr=>sr.inn).forEach(sr=>{const n=NPC.find(q=>q.n===sr.npc),tav=sr.room;if(!n)return;n.inn=sr.inn.map(([label,design])=>{const key='inn_'+sr.id+'_'+design,g=buildRoom(key,INTERIOR_DESIGNS[design],label+' ('+sr.name+')');g.guest=true;
+SHOP_ROOMS.filter(sr=>sr.inn).forEach(sr=>{const n=NPC.find(q=>q.n===sr.npc),tav=sr.room;if(!n)return;n.inn=sr.inn.map(([label,design])=>{const key='inn_'+sr.id+'_'+design,g=buildRoom(key,SHOP_DESIGNS[design]||INTERIOR_DESIGNS[design],label+' ('+sr.name+')');g.guest=true;
   HALLS[key]={z:g,id:g.z,msg:'The innkeeper shows you up to your room. Sleep in the bed to rest.',name:label};ENTR.push({x:-1,y:-1,to:key,out:[tav.dx,tav.y1-1],back:'You step back down into the tavern.'});return{label,key}})});
 const inInn=()=>{const r=!sail&&zoneOf(P.x,P.y)>=30?intrOf(P.x,P.y):null;return!!(r&&r.guest)};
 function innMenu(n){const sr=SHOP_ROOMS.find(s=>s.id===n.shopRoom);
