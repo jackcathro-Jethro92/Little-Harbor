@@ -5,7 +5,7 @@ import functools, http.server, json, os, sys, threading
 from playwright.sync_api import sync_playwright
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAVE = {"v": 3, "wv": 2, "look": {"skin": 0, "hair": 1, "shirt": 5, "jk": 1}, "day": 2, "gold": 10, "seen": 1, "hp": 50, "sta": 100, "xp": {},
+SAVE = {"v": 4, "wv": 2, "hero": "f1", "name": "Tester", "look": {"skin": 0, "hair": 1, "shirt": 5, "jk": 1}, "day": 2, "gold": 10, "seen": 1, "hp": 50, "sta": 100, "xp": {},
         "granted": ["sword", "roundA", "roundB", "roundC", "roundD", "roundE", "roundF", "roundG"], "cut": {}, "placed": [], "gardens": [], "claim": None, "home": None,
         "bag": {"driftwood_rod": 1, "rowboat": 1}, "eq": {"rod": "driftwood_rod", "boat": "rowboat", "weapon": None, "pickaxe": None, "axe": None, "knife": None}}
 OLD_SAVE = {"look": {"skin": 0, "hair": 1, "shirt": 5}, "day": 3, "gold": 50, "seen": 1, "inv": 4, "rod": 1, "boat": 0}  # v1 save from the small world
@@ -1178,10 +1178,30 @@ def check(b, url):
     assert mig == {"wv": 4, "placed": [[303, 254]], "cutNew": True, "cutOld": False, "zonesBelow": True, "seaClean": True, "edge": True, "forest": True}, mig
     assert not errs, errs
     pg.close()
-    # an old v1 save still loads, is migrated, and is backed up
-    pg, errs = load(b, url, OLD_SAVE)
-    s = pg.evaluate("({v:S.v,wv:S.wv,day:S.day,sardine:S.bag.sardine,rod:S.eq.rod,backup:!!localStorage.getItem('little-harbor-v1-backup-v1')})")
-    assert s == {"v": 3, "wv": 4, "day": 3, "sardine": 4, "rod": "bamboo_rod", "backup": True}, s  # (the testing gifts are off, so no extra sardines)
+    # saves from before the six characters (batch H1): Jack asked for them all to be cleared. The old save is put aside as a backup and a new game starts at the character maker
+    for olds in (OLD_SAVE, dict(SAVE, v=3, day=9)):
+        pg, errs = load(b, url, olds)
+        s = pg.evaluate("({v:S.v,day:S.day,seen:S.seen,hero:S.hero,backup:!!localStorage.getItem('little-harbor-v1-backup-before-reset')})")
+        assert s == {"v": 4, "day": 1, "seen": 0, "hero": None, "backup": True}, s
+        assert not errs, errs
+        pg.close()
+    # the character maker (batch H1): six characters (three women, three men), a name, then Set sail
+    pg, errs = load(b, url, OLD_SAVE); ev = pg.evaluate
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));openLook()")
+    assert ev("$('look').classList.contains('open')&&document.querySelectorAll('#hp-f .hp-card').length===3&&document.querySelectorAll('#hp-m .hp-card').length===3&&$('go').disabled"), "the maker shows three women and three men, and Set sail waits for a choice"
+    pg.click("#hp-m .hp-card >> nth=1"); assert ev("$('go').disabled&&/name/.test($('hp-note').textContent)"), "after choosing, it asks for a name"
+    pg.fill("#hp-name", "  Captain   Jack  "); assert ev("!$('go').disabled"), "a name makes it ready"
+    pg.click("#go"); pg.wait_for_timeout(300)
+    assert ev("S.hero==='m2'&&S.name==='Captain Jack'&&S.seen===1&&S.look.skin===4&&S.look.jk===0&&!$('look').classList.contains('open')"), "Set sail keeps the character, their walking colours and the tidied name"
+    assert ev("(()=>{const a=playerArt('f'),b=playerArt('b'),c=a.getContext('2d').getImageData(0,0,48,72).data;let n=0;for(let i=3;i<c.length;i+=4)if(c[i])n++;return a.width===48&&a.height===72&&b.width===48&&n>900})()"), "your detailed picture (front and back) is drawn"
+    ev("openCharacter()"); assert ev("$('ch-pt').width===64&&$('ch-pt').height===80"), "the Menu shows your detailed picture"
+    ev("closeCharacter();openEquip()"); assert ev("$('eqs-pt').height===80"), "so does the Equipment screen"
+    ev("closeEquip();dlgSay('You','Hello.')"); pg.wait_for_timeout(400); assert ev("$('dlg-who').textContent==='Captain Jack'&&$('dlg-pt').style.display==='block'"), "your own words show your name and your face"
+    ev("dlgAdvance();dlgAdvance()")
+    for h in ("f1", "f2", "f3", "m1", "m2", "m3"):
+        ev("S.hero='%s';S.look=JSON.parse(JSON.stringify(HEROES.find(q=>q.id==='%s').look));HA_CACHE.clear();playerArt('f');playerArt('b');draw()" % (h, h))
+    ev("S.eq.helmet='leather_cap';S.eq.armour='chain_hauberk';S.eq.boots='leather_boots';S.bag.leather_cap=1;S.bag.chain_hauberk=1;S.bag.leather_boots=1;playerArt('f');playerArt('b')")
+    bad = ev("(()=>{try{parseSave(JSON.stringify({look:{},day:2,v:3}));return 'accepted'}catch(e){return e}})()"); assert "before the new characters" in bad, bad
     assert not errs, errs
     pg.close()
 

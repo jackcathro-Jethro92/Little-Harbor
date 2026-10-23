@@ -9,8 +9,7 @@ const eqOwned=sl=>Object.keys(S.bag).filter(id=>count(id)&&ITEMS[id]&&(sl==='too
 function equipItem(id){const sl=slotOf(id);S.eq[sl]=id;if(TOOLSLOTS.includes(sl))S.eq.tool=sl}
 function unequipItem(id){const sl=slotOf(id);if(TOOLSLOTS.includes(sl))S.eq.tool=null;else S.eq[sl]=null}
 const eqEffect=id=>{const it=ITEMS[id],f=it.fx||{};return it.kind==='weapon'?'Damage '+(it.damage||2):it.kind==='rod'?(it.wait<1?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'A plain starter rod'):it.kind==='tool'?it.desc:f.ward?'Stops '+Math.round(f.ward*100)+'% of damage':f.speed?'Walk faster':it.desc||''};
-function eqPortrait(){const cv=$('eqs-pt'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);c.fillStyle='#8ec0e8';c.fillRect(0,0,cv.width,cv.height);
-  c.drawImage(shadePerson({...playerLook(),view:'f',frame:0}),1,1,22,22,0,0,cv.width,cv.height)}
+function eqPortrait(){drawArt($('eqs-pt'),playerArt('f'),'#8ec0e8')}   // your detailed picture, wearing your armour
 function drawEquip(){
   EQ_SLOTS.forEach(([sl,n])=>{const b=$('eq-'+sl),id=eqCurrent(sl),c=b.querySelector('canvas').getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,16,16);
     if(id&&ITEMS[id])icon(id,b.querySelector('canvas'));b.querySelector('span').textContent=id&&ITEMS[id]?ITEMS[id].n:'Empty';b.classList.toggle('sel',eqPick===sl)});

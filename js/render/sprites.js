@@ -58,7 +58,8 @@ if(A.body)wearBody(g,k,A.body);
 if(A.boots)wearBoots(g,A.boots);
 if(A.helm&&HELM[A.helm])put(g,HELM[A.helm][k]);
 else{if(o.hat==="cap")put(g,L[k].cap);
-if(o.hat==="straw")put(g,L[k].straw)}
+if(o.hat==="straw")put(g,L[k].straw);
+if(o.hat==="scarf")put(g,k==="s"?{3:"....KAAAAAAK....",4:"...KAAAAAAAAKA..",5:"...KaaaaaaaaKa.."}:k==="b"?{3:".....KAAAAAAK...",4:"....KAAAAAAAAK..",5:"....KaaaaaaaaK..",6:".......KAAK....."}:{3:".....KAAAAAAK...",4:"....KAAAAAAAAK..",5:"....KaaaaaaaaKA."})}
 return g}
 function draw(ctx,x,y,opts){var o=opts||{};
 var view=o.view||"f",f=o.frame||0,fish=!!o.fishing,t=o.t||0;
@@ -81,7 +82,7 @@ if(!o.noLine){var by=o.bite?17:15+((t>>5)&1);for(var ly=9;ly<by;ly++)px(18,ly,"#
 ctx.restore()}
 return{draw:draw,defaultColors:DC}})();
 
-OPT.jacket=['#3a63a8','#d9534f','#4caf72','#f2c14e','#9c5bb5','#3a3a48'];
+OPT.jacket=['#3a63a8','#d9534f','#4caf72','#f2c14e','#9c5bb5','#3a3a48','#7a5230'];
 OPT.hat=['#d9a441','#c8553d','#3b82c4','#4caf72','#f4f4f0'];
 const vw=f=>({u:'b',d:'f',l:'l',r:'r'})[f];
 const HSTYLES=['short','long','spiky','bun','ponytail','bald'];
