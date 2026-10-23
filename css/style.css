@@ -279,8 +279,9 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 /* the character maker (batch H1) */
 #heropick{display:none;flex-direction:column;align-items:center;gap:10px;width:min(100%,360px)}
 #look.start #heropick{display:flex}#look.start #pv,#look.start #sws{display:none}
-.hp-row{display:flex;gap:10px;justify-content:center;width:100%}
-.hp-card{flex:1;max-width:104px;padding:4px;background:var(--panel);border:3px solid var(--ink);border-radius:8px;box-shadow:0 3px 0 var(--ink)}
+.hp-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
+#look.start{justify-content:flex-start}
+.hp-card{flex:0 0 calc(33.3% - 7px);max-width:104px;padding:4px;background:var(--panel);border:3px solid var(--ink);border-radius:8px;box-shadow:0 3px 0 var(--ink)}
 .hp-card canvas{width:100%;aspect-ratio:2/3;image-rendering:pixelated;display:block;border-radius:4px}
 .hp-card.sel{outline:4px solid #d83828;outline-offset:1px;background:#fff1c9}
 #hp-namel{display:flex;flex-direction:column;gap:4px;font-weight:700;width:100%;font-size:16px}
