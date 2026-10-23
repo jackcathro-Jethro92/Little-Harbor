@@ -1,16 +1,14 @@
 // ---------- the dialogue box (roadmap step 2.2): a FireRed-style text box at the bottom of the picture, with a speaker name, a portrait and choices ----------
 // Text lives in the table DLG, keyed by id, never inside game logic: DLG.some_id = {start:'a', nodes:{a:{who:'Murl', text:'...', next:'b'}, b:{who, text, choices:[{t:'Yes', set:'flag_name', go:'c'}, {t:'No'}]}, ...}}.
 // runDialogue(id, onEnd) plays one; dlgSay(who, text, onEnd) shows a single line (every villager's chat uses it, with their words unchanged). A node may name a `portrait` (a character name);
-// otherwise the speaker's own portrait is used when they have one (the PORTRAITS list below: story and working characters). Tap the box, press Use, Space or Enter to go on; Up and Down
+// otherwise the speaker's own detailed portrait is used (everyone who speaks has one: js/data/portraits.js). Tap the box, press Use, Space or Enter to go on; Up and Down
 // then Enter choose. Text appears letter by letter (a tap shows it all at once). Existing lines stay word for word; new story lines are placeholders until Jack writes them.
 const DLG={};
-const PORTRAITS=['Murl','Bram','Odo','Garrick','Astrid','Lucie','Seamstress Wynn','Barber Fenwick','Guildmaster Brenna','Arena Master Dorn','Hale','Wren','Captain Redd','Warden Orrin','Gate Guard Bors','You'];
 let dlgNodes=null,dlgNode=null,dlgDone=null,dlgTimer=null,dlgSel=0,dlgFull='';
 const dlgActive=()=>$('dlg').classList.contains('open');
-function portraitFor(who){const name=who==='You'||who===undefined?'You':who;if(!PORTRAITS.includes(name))return null;
+function portraitFor(who){const name=who==='You'||who===undefined?'You':who;   // (batch H2) everyone who speaks has a detailed portrait: yours, or theirs from js/data/portraits.js
   if(name==='You')return{art:playerArt('f'),bg:'#8ec0e8'};
-  const npc=name==='You'?null:NPC.find(n=>n.n===name);const base=name==='You'?S.look:npc?{...npc,...(NL[npc.n]||{})}:null;if(!base)return null;
-  return {look:lo(name==='You'?{...S.look}:base),bg:name==='You'?'#8ec0e8':['#e8c898','#a8d0a0','#e0a8b0','#b8b0e0','#e8d8a0'][(name.length+name.charCodeAt(0))%5]}}
+  return npcArt(name)}
 function drawPortrait(pt){const cv=$('dlg-pt'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);if(!pt){cv.style.display='none';return}cv.style.display='block';
   if(pt.art){drawBust(cv,pt.art,pt.bg);return}
   c.fillStyle=pt.bg;c.fillRect(0,0,cv.width,cv.height);const s=shadePerson({...pt.look,view:'f',frame:0});c.drawImage(s,3,3,18,16,0,0,cv.width,cv.height-2);

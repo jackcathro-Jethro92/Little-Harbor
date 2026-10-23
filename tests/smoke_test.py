@@ -478,7 +478,9 @@ def check(b, url):
     pg.keyboard.press("Space"); pg.wait_for_timeout(700); assert ev("$('dlg-txt').textContent==='Pick one.'&&document.querySelectorAll('#dlg-ch button').length===2"), "Space goes on to the choice"
     ev("document.querySelectorAll('#dlg-ch button')[0].click()"); pg.wait_for_timeout(500); assert ev("flag('t_yes')&&$('dlg-txt').textContent==='Done.'"), "a choice sets its flag and goes on"
     ev("act()"); pg.wait_for_timeout(100); ev("act()"); assert ev("!dlgActive()&&window.__end===1"), "the end callback runs when it finishes"
-    ev("dlgSay('Mara','Hello.')"); pg.wait_for_timeout(500); assert ev("$('dlg-pt').style.display==='none'&&dlgActive()"), "no portrait for a character without one"; ev("dlgAdvance();dlgAdvance()")
+    ev("dlgSay('Mara','Hello.')"); pg.wait_for_timeout(500); assert ev("$('dlg-pt').style.display==='block'&&dlgActive()"), "an ordinary villager has a portrait too (batch H2)"; ev("dlgAdvance();dlgAdvance()")
+    ev("dlgSay('Nobody At All','Hello.')"); pg.wait_for_timeout(500); assert ev("$('dlg-pt').style.display==='none'&&dlgActive()"), "no portrait for a speaker who is not a person in the game"
+    assert ev("(()=>{const names=[...new Set([...Object.keys(NPC_ART),...NPC.map(q=>q.n)])];return names.every(n=>{const a=npcArt(n);return a&&a.art.width===48&&a.bg})&&npcArtSpec('Garrick').acc.includes('beard')&&npcArtSpec('Old Tess').acc.includes('old')&&npcArtSpec('Captain Redd').acc.includes('eyepatch')})()"), "every person who can speak has a detailed portrait; the important ones are designed"; ev("dlgAdvance();dlgAdvance()")
     ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');n.i=0;P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(700)
     assert ev("(()=>{const n=NPC.find(q=>q.n==='Gate Guard Bors');return dlgActive()&&$('dlg-who').textContent==='Gate Guard Bors'&&n.say.includes($('dlg-txt').textContent)&&$('dlg-pt').style.display==='block'})()") , "villager chat uses the box"
     ev("dlgAdvance();dlgAdvance()")
