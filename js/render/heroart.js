@@ -49,11 +49,11 @@ const POSES={
  hips:{lean:-.8,turn:-.4,aL:[[8.5,34],[16,41.5]],aR:[[39.5,34],[32,41.5]],lL:[[18,56],[15,68]],lR:[[30,56],[33,68]]},
  walk:{lean:-1.2,turn:.7,aL:[[11.5,34.5],[19,31.5]],aR:[[36,35],[38,43]],lL:[[19,56],[17.5,68]],lR:[[29.5,55],[32,65.5,1]]},
  wave:{lean:-1,turn:-.6,aL:[[11,35],[17,42],false],aR:[[40.5,22],[41,12]],lL:[[19,56],[16,68]],lR:[[29.5,56],[32,68]]},
- cross:{lean:0,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[18.5,56],[15.5,68]],lR:[[29.5,56],[32.5,68]]},
- point:{lean:1.4,turn:.8,aL:[[8.5,34],[16,41.5]],aR:[[39,27.5],[45.5,23]],lL:[[17.5,56],[13.5,67.5]],lR:[[29.5,57],[30.5,68]]},
+ cross:{lean:-.4,hip:1.1,turn:.4,aL:[[11.4,33],[31,31],false],aR:[[36.6,34.8],[17,34.4]],lL:[[20.4,56.4],[18.4,67.6,1]],lR:[[29.2,56],[29.4,68]]},
+ point:{lean:.9,hip:1.2,turn:.8,aL:[[9,34],[16,41.5]],aR:[[37.5,30.5],[42.6,24.6],'point'],lL:[[20.4,56.4],[18.2,67.6,1]],lR:[[29.4,56],[29.6,68]]},
  brim:{lean:-.6,hip:1.4,turn:.5,aL:[[9,34],[16,41.5]],aR:[[38.5,19.5],[30,6.5]],lL:[[20.5,56.2],[18.2,67.6,1]],lR:[[29.6,56],[29.8,68]],front:'R'},
- book:{lean:.5,hip:-1.2,turn:-.3,aL:[[12,35.5],[21.5,32]],aR:[[36,35.5],[26.5,32]],lL:[[18.6,56],[18.6,68]],lR:[[27.6,56.4],[29.8,67.6,1]],prop:'book'},
- stride:{lean:-1,hip:.8,turn:.6,aL:[[8.5,34],[16,41.5]],aR:[[37,35],[38.6,42.8]],lL:[[19,55.6],[17,67.6]],lR:[[29,56.2],[31.2,65.8,1]]},
+ book:{lean:.5,hip:-1.2,turn:-.3,aL:[[13,37],[22,31.5]],aR:[[35.6,35],[34.6,43.4]],lL:[[18.6,56],[18.6,68]],lR:[[27.6,56.4],[29.8,67.6,1]],prop:'book'},
+ stride:{lean:-.8,hip:.8,turn:.6,aL:[[13,34.8],[11.6,42.6]],aR:[[35.4,35],[37.6,42]],lL:[[19,55.6],[17,67.6]],lR:[[29,56.2],[31.2,65.8,1]]},
  greet:{lean:.7,hip:-1.3,turn:-.5,aL:[[12,35],[13.6,43.6]],aR:[[40.5,26],[42,16]],lL:[[18.6,56],[18.6,68]],lR:[[27.4,56.4],[29.6,67.6,1]]},
  rope:{lean:-.5,hip:1.3,turn:.5,aL:[[9.5,33.5],[15,25.5]],aR:[[37,35.5],[35.6,43.6]],lL:[[20.6,56.4],[18.4,67.6,1]],lR:[[29.4,56],[29.6,68]],prop:'rope'},
  crossed:{lean:-.4,hip:1.2,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[20.4,56.4],[18.2,67.6,1]],lR:[[29.2,56],[29.4,68]]},
@@ -86,16 +86,19 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     else if(spec.over==='cloak')p.fill(jk,haAnd(haOr(U(haPoly([[13.5,22.6],[34.5,22.6],[38.5,58],[9.5,58]])),U(haEl(24,22.4,8.6,3.2))),(x,y)=>back||y<24||Math.abs(x-ux(y)-24)>3+(y-24)*.12))
     else if(spec.over!=='apron')p.fill(jk,haAnd(torso,(x,y)=>back||Math.abs(x-ux(y)-24)>(spec.over==='vest'?2.6:2.2)+(y-24)*.09))}
   if(spec.over==='apron'&&!back){const apr=p.part(C.apron||'#e8e0c8');p.fill(apr,U(haPoly([[19.5,25.5],[28.5,25.5],[29.5,31],[31.5,49],[16.5,49],[18.5,31]])))}
-  const short=(spec.top==='stripes'||spec.top==='shirt')&&!ap('body');
-  const sleeves=p.part(spec.over&&!['vest','apron','cloak'].includes(spec.over)&&!ap('body')?C.jacket:bodyC),bare=spec.top==='tank'&&!['coat','longcoat','flannel'].includes(spec.over)&&!ap('body');
+  const short=(spec.top==='stripes'||spec.top==='shirt'||spec.top==='dress')&&!ap('body');
+  const sleeves=p.part(spec.over&&!['vest','apron','cloak'].includes(spec.over)&&!ap('body')?haMix(C.jacket,'#ffffff',.1):bodyC),bare=spec.top==='tank'&&!['coat','longcoat','flannel'].includes(spec.over)&&!ap('body');
   // arms: a rounded shoulder, an upper arm that tapers to the elbow, a forearm that narrows to the wrist, and a hand turned the way the forearm points (palm, thumb and finger lines)
-  const hands=[];
-  if(P.prop==='book'&&!back){const bk=p.part('#7a3a2a');p.fill(bk,U(haPoly([[17.5,26.5],[30.5,26.5],[30.5,37],[17.5,37]])));const pg2=p.part('#f2ead0',{flat:1});p.fill(pg2,U(haPoly([[18.5,27.5],[29.5,27.5],[29.5,29],[18.5,29]])));RU(23,31,2,4,'#d9a441')}
-  const drawArm=([sx,[e,h],hide])=>{const S=[sx+ux(25.5),25.5],L=Math.hypot(h[0]-e[0],h[1]-e[1])||1,d=[(h[0]-e[0])/L,(h[1]-e[1])/L],W=[h[0]-d[0]*1.9,h[1]-d[1]*1.9];
+  const hands=[],cuffs=[];
+  if(P.prop==='book'&&!back){const bk=p.part('#7a3a2a');p.fill(bk,U(haPoly([[15.5,25.5],[26.5,25.5],[26.5,36],[15.5,36]])));const pg2=p.part('#f2ead0',{flat:1});p.fill(pg2,U(haPoly([[16.5,26.5],[25.5,26.5],[25.5,28],[16.5,28]])));RU(20,30,2,4,'#d9a441')}
+  const drawArm=([sx,[e,h,how],hide])=>{const S=[sx+ux(25.5),25.5],L=Math.hypot(h[0]-e[0],h[1]-e[1])||1,d=[(h[0]-e[0])/L,(h[1]-e[1])/L],W=[h[0]-d[0]*1.9,h[1]-d[1]*1.9];
     const up=haOr(haTaper(S[0],S[1],e[0],e[1],3,2.3),haEl(S[0],S[1]+.3,3.2,3)),elbow=haEl(e[0],e[1],2.3,2.3),fore=haTaper(e[0],e[1],W[0],W[1],2.25,1.45),cuff=[e[0]+(W[0]-e[0])*(short?.22:.86),e[1]+(W[1]-e[1])*(short?.22:.86)];
+    const nn=[-d[1],d[0]],cuffBand=!short&&!bare&&['coat','longcoat','flannel','cloak'].includes(spec.over)&&!ap('body');
     p.fill(skin,fore);if(bare)p.fill(skin,haOr(up,elbow));else p.fill(sleeves,haOr(up,elbow,haTaper(e[0],e[1],cuff[0],cuff[1],2.5,short?2.3:1.75)));
     if(!hide){const n=[-d[1],d[0]],sg=((24-h[0])*n[0]+(h[1]<28?-n[1]:0))>=0?1:-1,C2=[h[0]+d[0]*.4,h[1]+d[1]*.4];
       p.fill(skin,haOr(haOEl(C2[0],C2[1],d[0],d[1],2.5,1.9),haEl(C2[0]+n[0]*sg*1.75-d[0]*.6,C2[1]+n[1]*sg*1.75-d[1]*.6,1.05,1.05),haTaper(W[0],W[1],C2[0],C2[1],1.45,1.75)));
+      if(cuffBand)cuffs.push([cuff,nn]);
+      if(how==='point')p.fill(skin,haTaper(C2[0]+d[0]*1.6,C2[1]+d[1]*1.6,C2[0]+d[0]*4.6,C2[1]+d[1]*4.6,.95,.6));
       hands.push([C2,d,n])}};
   const ARMS=[[15,P.aL,P.hideL,'L'],[33,P.aR,P.hideR,'R']];ARMS.forEach(q=>{if(q[3]!==P.front)drawArm(q)});
   if(P.prop==='rope'){const rp=p.part('#c8a060');p.fill(rp,U(haAnd(haEl(15,31,5.6,7.2),iaNotH(haEl(15,31,3.4,5)))));for(let y=25;y<38;y+=2)DU(11,y,'#8a6a30')}
@@ -170,6 +173,7 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     if(acc.includes('freckles'))[[20,14],[22,14],[21,15],[26,14],[28,14],[27,15]].forEach(([x,y])=>DU(x+s,y,haMix(dk,'#9a5a30',.45)));
   }
   hands.forEach(([c,d,n])=>{[-.85,.85].forEach(o=>p.dot(Math.round(c[0]+d[0]*1.7+n[0]*o),Math.round(c[1]+d[1]*1.7+n[1]*o),sk[2]));p.dot(Math.round(c[0]-d[0]*.3),Math.round(c[1]-d[1]*.3),sk[0])});
+  cuffs.forEach(([c,n])=>p.line(Math.round(c[0]+n[0]*2),Math.round(c[1]+n[1]*2),Math.round(c[0]-n[0]*2),Math.round(c[1]-n[1]*2),haMix(C.shirt,'#ffffff',.3)));
   // hair texture: a shine band and a few clumps
   const HR=haRamp(C.hair);
   if(spec.hair==='curly')for(let y=3;y<9;y+=2)for(let x=17+(y%4);x<32;x+=3)DU(x,y,HR[0]);
