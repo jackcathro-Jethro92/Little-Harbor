@@ -527,7 +527,7 @@ def check(b, url):
     assert ev("flag('t_scene_done')&&flag('t_after')&&SCENE===null"), "a trigger starts a scene and carries on after it"
     # gates (2.5): a test boulder across two grass tiles blocks until its flag is set (by a trigger, or by Use with the needed tool), stays open after a reload, and never walls anyone in
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;NPC.forEach(n=>{n.busy=1});window.__AN=AN.splice(0)");   # (wandering villagers stand still and the farm animals are put away so none walks onto the test boulder)
-    cells = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1&&at(x,y+1)===1&&at(x-1,y)===1)return[x,y]}})()")
+    cells = ev("(()=>{for(let r=3;r<40;r++)for(let dx=-r;dx<=r;dx++){const x=P.x+dx,y=P.y-r;if(at(x,y)===1&&at(x+1,y)===1&&at(x,y+1)===1&&at(x-1,y)===1&&!NPC.some(n=>Math.abs(n.x-x)<5&&Math.abs(n.y-y)<5)&&!(Math.abs(B.x-x)<3&&Math.abs(B.y-y)<3))return[x,y]}})()")
     ev("window.__g=%s;GATES.push({id:'t_boulder',flag:'t_boulder_open',cells:[[__g[0],__g[1]],[__g[0]+1,__g[1]]],closed:36,msg:'A boulder blocks the way.',needs:{eq:'pickaxe'},opens:'You break the boulder.'});applyGates()" % json.dumps(cells))
     assert ev("at(__g[0],__g[1])===36&&at(__g[0]+1,__g[1])===36&&!walkable(__g[0],__g[1])"), "a closed gate blocks"
     ev("P.x=P.rx=__g[0];P.y=P.ry=__g[1]+1;P.f='u';S.eq.pickaxe=null;act()"); assert ev("$('msg').textContent==='A boulder blocks the way.'&&at(__g[0],__g[1])===36"), "without the tool it only says why"
