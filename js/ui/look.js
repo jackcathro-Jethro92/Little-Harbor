@@ -29,7 +29,7 @@ let heroSel=null;
 function buildHeroPick(){['f','m'].forEach(sx=>{const row=$('hp-'+sx);row.innerHTML='';
   HEROES.filter(h=>h.sex===sx).forEach(h=>{const b=document.createElement('button');b.className='hp-card'+(heroSel===h.id?' sel':'');b.setAttribute('aria-label',h.n);
     const cv=document.createElement('canvas');cv.width=48;cv.height=72;b.appendChild(cv);
-    const L=h.look,spec={...h.art,sex:h.sex,col:{skin:OPT.skin[L.skin],hair:OPT.hair[L.hair],shirt:OPT.shirt[L.shirt],jacket:OPT.jacket[L.jk],hat:OPT.hat[L.hc||0],eye:h.art.eye,pants:h.art.pants,boots:h.art.boots}};
+    const spec=heroSpecFor(h,h.look);
     drawArt(cv,heroCanvas('hero_'+h.id,spec,'f'),'#8ec0e8');
     b.onclick=()=>{heroSel=h.id;buildHeroPick();heroReady()};row.appendChild(b)})})}
 const heroName=()=>($('hp-name').value||'').replace(/\s+/g,' ').trim().slice(0,12);

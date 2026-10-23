@@ -1190,7 +1190,7 @@ def check(b, url):
     # the character maker (batch H1): six characters (three women, three men), a name, then Set sail
     pg, errs = load(b, url, OLD_SAVE); ev = pg.evaluate
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));openLook()")
-    assert ev("$('look').classList.contains('open')&&document.querySelectorAll('#hp-f .hp-card').length===3&&document.querySelectorAll('#hp-m .hp-card').length===3&&$('go').disabled"), "the maker shows three women and three men, and Set sail waits for a choice"
+    assert ev("$('look').classList.contains('open')&&document.querySelectorAll('#hp-f .hp-card').length===6&&document.querySelectorAll('#hp-m .hp-card').length===6&&HEROES.length===12&&$('go').disabled"), "the maker shows six women and six men, and Set sail waits for a choice"
     pg.click("#hp-m .hp-card >> nth=1"); assert ev("$('go').disabled&&/name/.test($('hp-note').textContent)"), "after choosing, it asks for a name"
     pg.fill("#hp-name", "  Captain   Jack  "); assert ev("!$('go').disabled"), "a name makes it ready"
     pg.click("#go"); pg.wait_for_timeout(300)
@@ -1200,7 +1200,7 @@ def check(b, url):
     ev("closeCharacter();openEquip()"); assert ev("$('eqs-pt').height===80"), "so does the Equipment screen"
     ev("closeEquip();dlgSay('You','Hello.')"); pg.wait_for_timeout(400); assert ev("$('dlg-who').textContent==='Captain Jack'&&$('dlg-pt').style.display==='block'"), "your own words show your name and your face"
     ev("dlgAdvance();dlgAdvance()")
-    for h in ("f1", "f2", "f3", "m1", "m2", "m3"):
+    for h in ("f1", "f2", "f3", "f4", "f5", "f6", "m1", "m2", "m3", "m4", "m5", "m6"):
         ev("S.hero='%s';S.look=JSON.parse(JSON.stringify(HEROES.find(q=>q.id==='%s').look));HA_CACHE.clear();playerArt('f');playerArt('b');draw()" % (h, h))
     ev("S.eq.helmet='leather_cap';S.eq.armour='chain_hauberk';S.eq.boots='leather_boots';S.bag.leather_cap=1;S.bag.chain_hauberk=1;S.bag.leather_boots=1;playerArt('f');playerArt('b')")
     bad = ev("(()=>{try{parseSave(JSON.stringify({look:{},day:2,v:3}));return 'accepted'}catch(e){return e}})()"); assert "before the new characters" in bad, bad

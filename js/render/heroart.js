@@ -40,6 +40,7 @@ const haAnd=(...fs)=>(x,y)=>fs.every(f=>f(x,y));
 // a tapering limb (radius r0 at a, r1 at b), and an ellipse turned to point along (ux,uy)
 const haTaper=(ax,ay,bx,by,r0,r1)=>(x,y)=>{const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-ax-dx*t,y-ay-dy*t)<=r0+(r1-r0)*t};
 const haOEl=(cx,cy,ux,uy,ra,rb)=>(x,y)=>{const a=(x-cx)*ux+(y-cy)*uy,b=-(x-cx)*uy+(y-cy)*ux;return(a/ra)**2+(b/rb)**2<=1};
+const iaNotH=f=>(x,y)=>!f(x,y);
 const haSeg=(ax,ay,bx,by,r)=>(x,y)=>{const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(x-ax-dx*t,y-ay-dy*t)<=r};
 // POSES: how each character stands (Jack: "dynamic positions and poses, a sense of movement"). lean: how far the head and shoulders sway sideways (pixels at the head); arms and legs are joints in the front picture:
 // aL/aR = [elbow, hand], lL/lR = [knee, ankle]; hand:false hides a hand (in a pocket); prop: something held. The back picture (battle) is the same pose seen from behind (mirrored).
@@ -50,13 +51,18 @@ const POSES={
  wave:{lean:-1,turn:-.6,aL:[[11,35],[17,42],false],aR:[[40.5,22],[41,12]],lL:[[19,56],[16,68]],lR:[[29.5,56],[32,68]]},
  cross:{lean:0,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[18.5,56],[15.5,68]],lR:[[29.5,56],[32.5,68]]},
  point:{lean:1.4,turn:.8,aL:[[8.5,34],[16,41.5]],aR:[[39,27.5],[45.5,23]],lL:[[17.5,56],[13.5,67.5]],lR:[[29.5,57],[30.5,68]]},
+ brim:{lean:.6,turn:.5,aL:[[8.5,34],[16,41.5]],aR:[[39,19.5],[30.5,6.5]],lL:[[19.5,56],[18,68]],lR:[[29,56],[31,68]],front:'R'},
+ book:{lean:0,turn:-.3,aL:[[12,35.5],[21.5,32]],aR:[[36,35.5],[26.5,32]],lL:[[20,56],[18.5,68]],lR:[[28.5,56],[30,68]],prop:'book'},
+ stride:{lean:-1.3,turn:.6,aL:[[8.5,34],[16,41.5]],aR:[[37.5,35],[40,42.5]],lL:[[18,55.5],[14.5,67]],lR:[[29.5,56.5],[33,65.5,1]]},
+ greet:{lean:-.8,turn:-.5,aL:[[11,35],[13.5,43.5]],aR:[[41,26],[42.5,16]],lL:[[19.5,56],[17,68]],lR:[[29,56],[31.5,68]]},
+ rope:{lean:.8,turn:.5,aL:[[9.5,33.5],[15,25.5]],aR:[[37,35],[34.5,43]],lL:[[18.5,56],[16,68]],lR:[[29.5,56],[32.5,68]],prop:'rope'},
  stand:{lean:0,turn:0,aL:[[12,34],[13.6,43]],aR:[[36,34],[34.4,43]],lL:[[20,56],[19.5,68]],lR:[[28,56],[28.5,68]]}};
 // spec: {sex:'f'|'m', pose, hair:'braid'|'bob'|'wavy'|'messy'|'curly'|'crop', top:'sweater'|'stripes'|'tunic'|'tee'|'shirt', over:'vest'|'flannel'|'coat'|null, acc:[...], col:{skin,hair,shirt,jacket,hat,pants,boots,eye}}
 // view 'f' (front) or 'b' (back, for battle). arm: the worn armour {helm, body, boots} (ARM_PAL names), drawn over the clothes.
 // Proportions follow the FireRed trainer pictures Jack sent: a smaller head (about a sixth of the height), long legs, the face turned a little to one side (turn), sharp eyes and brows, coloured outlines.
 function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.sex==='f',back=view==='b',acc=spec.acc||[],A=arm||{},ap=k=>A[k]&&ARM_PAL[k==='boots'&&A[k]==='enchanted'?'enchanted_boots':A[k]];
   const P0=POSES[spec.pose]||POSES.stand,mx=back?(v=>48-v):(v=>v),J=v=>Array.isArray(v)?[mx(v[0]),v[1],v[2]]:v,P={lean:back?-P0.lean:P0.lean,aL:(back?P0.aR:P0.aL).map(J),aR:(back?P0.aL:P0.aR).map(J),lL:(back?P0.lR:P0.lL).map(J),lR:(back?P0.lL:P0.lR).map(J),
-    hideL:(back?P0.aR:P0.aL)[2]===false,hideR:(back?P0.aL:P0.aR)[2]===false,prop:P0.prop},turn=back?0:P0.turn||0,s=Math.round(turn*1.4);
+    hideL:(back?P0.aR:P0.aL)[2]===false,hideR:(back?P0.aL:P0.aR)[2]===false,prop:P0.prop,front:P0.front&&!back?P0.front:null},turn=back?0:P0.turn||0,s=Math.round(turn*1.4);
   const ux=y=>y<43?P.lean*(43-y)/15:0,U=f=>(x,y)=>f(x-ux(y),y);   // the upper body sways: U shifts a shape, DU/RU/LU a detail
   const DU=(x,y,c)=>p.dot(Math.round(x+ux(y)),y,c),RU=(x,y,w,h,c)=>p.rect(Math.round(x+ux(y)),y,w,h,c),LU=(x0,y0,x1,y1,c)=>p.line(Math.round(x0+ux(y0)),y0,Math.round(x1+ux(y1)),y1,c);
   const long=spec.hair==='wavy'||spec.hair==='long',skin=p.part(C.skin,{soft:1,warm:1}),dk=C.skin,sk=haRamp(dk);
@@ -71,22 +77,27 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
   const bodyC=ap('body')?ap('body')[0]:C.shirt,shirt=p.part(bodyC);
   const torso=U(spec.build==='stout'?haPoly([[20.5,20.5],[27.5,20.5],[34.5,23.4],[36.5,27],[36.6,33],[35.6,40],[34.6,43.5],[13.4,43.5],[12.4,40],[11.4,33],[11.5,27],[13.5,23.4]]):fem?haPoly([[21,20.5],[27,20.5],[32.5,23.4],[33.6,26.5],[32.8,30.5],[31.2,35],[32.6,40],[32.8,43.5],[15.2,43.5],[15.4,40],[16.8,35],[15.2,30.5],[14.4,26.5],[15.5,23.4]])
     :haPoly([[20.5,20.5],[27.5,20.5],[33.5,23.4],[35,26.5],[34.2,31],[33,36],[32.6,43.5],[15.4,43.5],[15,36],[13.8,31],[13,26.5],[14.5,23.4]]));
-  p.fill(shirt,haOr(torso,spec.top==='tunic'?haPoly([[15,40],[33,40],[35,50],[13,50]]):()=>false));
+  p.fill(shirt,haOr(torso,spec.top==='tunic'?haPoly([[15,40],[33,40],[35,50],[13,50]]):spec.top==='dress'?haPoly([[15,40],[33,40],[36.5,57],[11.5,57]]):()=>false));
   const jk=spec.over&&!ap('body')?p.part(C.jacket):-1;
   if(jk>=0){if(spec.over==='coat')p.fill(jk,haOr(torso,haPoly([[14.5,40],[33.5,40],[35.5,49.5],[12.5,49.5]])));
     else if(spec.over==='robe')p.fill(jk,haOr(torso,haPoly([[14.5,38],[33.5,38],[36.5,66],[11.5,66]])));
+    else if(spec.over==='longcoat')p.fill(jk,haOr(torso,haPoly([[14.5,38],[33.5,38],[36,62],[12,62]])));
+    else if(spec.over==='cloak')p.fill(jk,haAnd(haOr(U(haPoly([[13.5,22.6],[34.5,22.6],[38.5,58],[9.5,58]])),U(haEl(24,22.4,8.6,3.2))),(x,y)=>back||y<24||Math.abs(x-ux(y)-24)>3+(y-24)*.12))
     else if(spec.over!=='apron')p.fill(jk,haAnd(torso,(x,y)=>back||Math.abs(x-ux(y)-24)>(spec.over==='vest'?2.6:2.2)+(y-24)*.09))}
   if(spec.over==='apron'&&!back){const apr=p.part(C.apron||'#e8e0c8');p.fill(apr,U(haPoly([[19.5,25.5],[28.5,25.5],[29.5,31],[31.5,49],[16.5,49],[18.5,31]])))}
   const short=(spec.top==='stripes'||spec.top==='shirt')&&!ap('body');
-  const sleeves=p.part(spec.over&&spec.over!=='vest'&&spec.over!=='apron'&&!ap('body')?C.jacket:bodyC);
+  const sleeves=p.part(spec.over&&!['vest','apron','cloak'].includes(spec.over)&&!ap('body')?C.jacket:bodyC),bare=spec.top==='tank'&&!['coat','longcoat','flannel'].includes(spec.over)&&!ap('body');
   // arms: a rounded shoulder, an upper arm that tapers to the elbow, a forearm that narrows to the wrist, and a hand turned the way the forearm points (palm, thumb and finger lines)
   const hands=[];
-  [[15,P.aL,P.hideL],[33,P.aR,P.hideR]].forEach(([sx,[e,h],hide])=>{const S=[sx+ux(25.5),25.5],L=Math.hypot(h[0]-e[0],h[1]-e[1])||1,d=[(h[0]-e[0])/L,(h[1]-e[1])/L],W=[h[0]-d[0]*1.9,h[1]-d[1]*1.9];
+  if(P.prop==='book'&&!back){const bk=p.part('#7a3a2a');p.fill(bk,U(haPoly([[17.5,26.5],[30.5,26.5],[30.5,37],[17.5,37]])));const pg2=p.part('#f2ead0',{flat:1});p.fill(pg2,U(haPoly([[18.5,27.5],[29.5,27.5],[29.5,29],[18.5,29]])));RU(23,31,2,4,'#d9a441')}
+  const drawArm=([sx,[e,h],hide])=>{const S=[sx+ux(25.5),25.5],L=Math.hypot(h[0]-e[0],h[1]-e[1])||1,d=[(h[0]-e[0])/L,(h[1]-e[1])/L],W=[h[0]-d[0]*1.9,h[1]-d[1]*1.9];
     const up=haOr(haTaper(S[0],S[1],e[0],e[1],3,2.3),haEl(S[0],S[1]+.3,3.2,3)),elbow=haEl(e[0],e[1],2.3,2.3),fore=haTaper(e[0],e[1],W[0],W[1],2.25,1.45),cuff=[e[0]+(W[0]-e[0])*(short?.22:.86),e[1]+(W[1]-e[1])*(short?.22:.86)];
-    p.fill(skin,fore);p.fill(sleeves,haOr(up,elbow,haTaper(e[0],e[1],cuff[0],cuff[1],2.5,short?2.3:1.75)));
+    p.fill(skin,fore);if(bare)p.fill(skin,haOr(up,elbow));else p.fill(sleeves,haOr(up,elbow,haTaper(e[0],e[1],cuff[0],cuff[1],2.5,short?2.3:1.75)));
     if(!hide){const n=[-d[1],d[0]],sg=((24-h[0])*n[0]+(h[1]<28?-n[1]:0))>=0?1:-1,C2=[h[0]+d[0]*.4,h[1]+d[1]*.4];
       p.fill(skin,haOr(haOEl(C2[0],C2[1],d[0],d[1],2.5,1.9),haEl(C2[0]+n[0]*sg*1.75-d[0]*.6,C2[1]+n[1]*sg*1.75-d[1]*.6,1.05,1.05),haTaper(W[0],W[1],C2[0],C2[1],1.45,1.75)));
-      hands.push([C2,d,n])}});
+      hands.push([C2,d,n])}};
+  const ARMS=[[15,P.aL,P.hideL,'L'],[33,P.aR,P.hideR,'R']];ARMS.forEach(q=>{if(q[3]!==P.front)drawArm(q)});
+  if(P.prop==='rope'){const rp=p.part('#c8a060');p.fill(rp,U(haAnd(haEl(15,31,5.6,7.2),iaNotH(haEl(15,31,3.4,5)))));for(let y=25;y<38;y+=2)DU(11,y,'#8a6a30')}
   if(P.prop==='rod'){const h=(back?P.aL:P.aR)[1],rod=p.part('#7a5230',{flat:1}),dx=back?-1:1;p.fill(rod,haSeg(h[0]-dx*2,h[1]+3,h[0]+dx*10,h[1]-21,.75));p.fill(skin,haEl(h[0]+.3,h[1]+.3,2.2,2));p.dot(h[0]+dx*1.5|0,h[1]+1|0,'#c9c9d0')}
   if(spec.top==='sweater'&&!back&&!ap('body')){const col=p.part(C.shirt);p.fill(col,U(haPoly([[20.6,19.5],[27.4,19.5],[27.8,23.5],[20.2,23.5]])))}
   // neck and head. The neck is its own, slightly shaded part drawn first, so the jaw gets a clean line where it meets it (no lump at the side); the face is an oval that is widest at the
@@ -101,7 +112,7 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
   const hair=p.part(C.hair,{shade:(x,y)=>x-ux(y)>27&&y>7});
   const dome=haEl(24,9.3,9.1,7.9),fringe=(x,y)=>y<9.2+Math.sin(x*1.4)*.8+(Math.abs(x-24-s)>5?1.4:0);
   let hf;
-  if(back&&spec.hair==='bald')hf=haAnd(haEl(24,11,8.2,8.8),(x,y)=>y>9&&y<17);
+  if(back&&spec.hair==='bald')hf=acc.includes('old')?haAnd(haEl(24,11,8.2,8.8),(x,y)=>y>12&&y<17):()=>false;
   else if(back)hf=haOr(haAnd(haEl(24,11,8.2,8.8),(x,y)=>y<18.5),spec.hair==='bob'?haPoly([[15.8,10],[32.2,10],[32.2,18.5],[15.8,18.5]]):()=>false);
   else if(spec.hair==='braid')hf=haOr(haAnd(dome,fringe),haPoly([[15.6,8],[18.2,8],[17.8,17],[15.6,16]]),haPoly([[29.8,8],[32.4,8],[32.4,15],[30.2,15]]));
   else if(spec.hair==='bob')hf=haOr(haAnd(dome,(x,y)=>y<8.8),haPoly([[15.3,7.5],[18.6,7.5],[18.2,18],[15.3,18]]),haPoly([[29.4,7.5],[32.7,7.5],[32.7,18],[29.8,18]]));
@@ -111,6 +122,8 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
   else if(spec.hair==='long')hf=haOr(haAnd(dome,(x,y)=>y<8.6),haPoly([[15,7.5],[18,8.5],[17.8,25],[15.2,27],[14,22]]),haPoly([[30,8.5],[33,7.5],[34,22],[32.8,27],[30.2,25]]));
   else if(spec.hair==='bun')hf=haOr(haAnd(dome,fringe),haEl(24,2.4,3.4,2.6),haPoly([[15.6,8],[17.8,9],[17.4,14],[15.6,13]]),haPoly([[30.2,9],[32.4,8],[32.4,13],[30.6,14]]));
   else if(spec.hair==='ponytail')hf=haOr(haAnd(dome,fringe),haPoly([[30,8],[33.8,9.5],[35.2,21],[33,24],[31.4,14]]),haPoly([[15.6,8],[17.8,9],[17.4,14],[15.6,13]]));
+  else if(spec.hair==='buns')hf=haOr(haAnd(dome,fringe),haEl(17,3.4,3.4,2.9),haEl(31,3.4,3.4,2.9),haPoly([[15.6,8],[17.8,9],[17.4,14],[15.6,13]]),haPoly([[30.2,9],[32.4,8],[32.4,13],[30.6,14]]));
+  else if(spec.hair==='pixie')hf=haOr(haAnd(dome,(x,y)=>y<8.6+(x-24)*.22+Math.sin(x*1.6)*.6),haPoly([[15.6,7.5],[18,8.5],[17.6,13],[15.6,12]]),haPoly([[30.2,8.5],[32.4,7.5],[32.4,12],[30.6,13]]));
   else if(spec.hair==='bald')hf=haOr(haPoly([[15.6,8.5],[17.6,9.5],[17.4,14],[15.6,13]]),haPoly([[30.4,9.5],[32.4,8.5],[32.4,13],[30.6,14]]));
   else hf=haAnd(haEl(24,9.2,8,6.6),(x,y)=>y<8.2+(Math.abs(x-24)>6?2.4:0));
   p.fill(hair,U(hf));
@@ -119,18 +132,22 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
   if(back&&long){const hl=p.part(C.hair);p.fill(hl,U(haPoly([[15,10],[33,10],[35,32],[30.5,34.5],[24,33],[17.5,34.5],[13,32]])))}
   // beards and moustaches (C.beard, or the hair colour)
   const BC=C.beard||C.hair;
+  if(!back&&acc.includes('goatee')){const gt=p.part(BC);p.fill(gt,U(haAnd(haEl(24+turn*.8,18.9,2.3,1.9),face)))}
   if(!back&&(acc.includes('beard')||acc.includes('longbeard'))){const bd=p.part(BC,{shade:(x,y)=>x-ux(y)>27});
     p.fill(bd,U(haAnd(haOr(haAnd(face,(x,y)=>y>14.6&&Math.abs(x-24-turn*.6)>(y<16.8?2.8:0)),haEl(24+turn*.8,18.6,5.4,3.3),acc.includes('longbeard')?haPoly([[18.5,17],[29.5,17],[27.5,25],[24.5,30.5],[21,25]]):()=>false),(x,y)=>!haEl(24+s,16.3,2.1,.9)(x,y))))}
   // hats and scarves
   if(acc.includes('scarf')||acc.includes('bandana')){const sc=p.part(C.hat);
     if(acc.includes('scarf'))p.fill(sc,U(haOr(haAnd(haEl(24,8.2,8.8,6.4),(x,y)=>y<7.6+(back?2.5:0)),haEl(back?24:31.5,back?12:9.8,2.1,1.7))));
     else{p.fill(sc,U(haAnd(haEl(24,9.5,8.6,7.6),(x,y)=>y>(back?4:5.6)&&y<(back?9:8.2))));p.fill(sc,U(haOr(haPoly([[30,7],[33.5,8.5],[32.8,11]]),haPoly([[30,7.6],[32.6,12],[31,12.6]]))))}}
+  if(acc.includes('captain')&&!ap('helm')){const cp=p.part(C.hat);p.fill(cp,U(haAnd(haEl(24,7.2,9.4,5.6),(x,y)=>y<8.4)));const pk=p.part('#2a2228');if(!back)p.fill(pk,U(haAnd(haEl(24.5+s,9,8.4,1.8),(x,y)=>y>8)));RU(16,7,17,1,'#e8c24a');if(!back)RU(23+s,4,2,2,'#e8c24a')}
   if(acc.includes('cap')&&!ap('helm')){const cp=p.part(C.hat);p.fill(cp,U(haAnd(haEl(24,7.6,8.6,5.2),(x,y)=>y<8.2)));if(!back)p.fill(cp,U(haAnd(haEl(25.5+s,8.6,9,1.6),(x,y)=>y>7.6)))}
   if(acc.includes('straw')){const st=p.part(C.hat);p.fill(st,U(haOr(haAnd(haEl(24,7.3,13,2.2),(x,y)=>true),haAnd(haEl(24,5.4,7.2,4.2),(x,y)=>y<7.4))))}
   if(acc.includes('tricorn')){const tc=p.part(C.hat2||'#2a2228');p.fill(tc,U(haOr(haAnd(haEl(24,5.6,8.3,5),(x,y)=>y<7.6),haPoly([[10.5,8.6],[24,4.6],[37.5,8.6],[33.5,10],[24,8.4],[14.5,10]]))));LU(12,8,24,5,'#d9a441');LU(24,5,36,8,'#d9a441');if(acc.includes('skull'))RU(23,5,2,2,'#f2f0e6')}
+  if(acc.includes('beanie')){const bn=p.part(C.hat);p.fill(bn,U(haOr(haAnd(haEl(24,8.6,9.2,7.2),(x,y)=>y<9.2),haEl(24,1.8,2.2,2))));const bb=p.part(haMix(C.hat,'#000000',.15));p.fill(bb,U(haAnd(haEl(24,9.6,9.6,8),(x,y)=>y>6.4&&y<9.4)));for(let x=17;x<32;x+=2)DU(x,7,haRamp(C.hat)[2])}
   if(acc.includes('chef')){const ch=p.part('#f4f2ea');p.fill(ch,U(haOr(haEl(24,2.6,6.4,3),haPoly([[18.5,3],[29.5,3],[29.5,7.4],[18.5,7.4]]))))}
   if(acc.includes('hood')){const hd=p.part(C.jacket);p.fill(hd,U(haAnd(haOr(haEl(24,10.6,10.4,11),haPoly([[14,14],[34,14],[36,25],[12,25]])),(x,y)=>back||!(face(x,y)&&y>6.2)&&!(y>19.5&&Math.abs(x-24)<3.8))))}
   if(ap('helm')){const h=ap('helm'),hm=p.part(h[0]);p.fill(hm,U(haAnd(haEl(24,9.6,8.9,8),(x,y)=>y<(back?16:8.6))));if(!back)p.fill(hm,U(haOr(haPoly([[15.4,8],[18,8],[18,15],[15.4,14]]),haPoly([[30,8],[32.6,8],[32.6,14],[30,15]]))))}
+  ARMS.forEach(q=>{if(q[3]===P.front)drawArm(q)});
   if(acc.includes('satchel')){const bag=p.part('#8a5a30');p.fill(bag,back?haPoly([[29,41],[35.5,41],[35.5,47.5],[29,47.5]]):haPoly([[12.5,41],[19,41],[19,47.5],[12.5,47.5]]))}
   // -------- the hand-placed details --------
   const D=(x,y,c)=>p.dot(x,y,c),eye=C.eye||'#3a2a20',lip=fem?'#c0565a':haMix(dk,'#6a2a20',.45),brow=haRamp(C.hair)[3],OUT=haMix(sk[3],HA_OUT,.6);
@@ -147,7 +164,7 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     if(acc.includes('eyepatch')){RU(27+s,10,3,4,'#1a1416');LU(29+s,10,32,7,'#1a1416');LU(26+s,10,17,7,'#1a1416')}
     if(acc.includes('earring')&&turn<=.25){DU(16,14,'#e8c24a');DU(16,15,'#e8c24a')}
     if(acc.includes('scar'))LU(18+s,12,20+s,15,sk[3]);
-    if(acc.includes('moustache')||acc.includes('beard')||acc.includes('longbeard')){RU(21+s,15,6,1,BC);DU(21+s,16,BC);DU(26+s,16,BC);RU(22+s,15,4,1,haRamp(BC)[0])}
+    if(acc.includes('moustache')||acc.includes('beard')||acc.includes('longbeard')||acc.includes('goatee')){RU(21+s,15,6,1,BC);DU(21+s,16,BC);DU(26+s,16,BC);RU(22+s,15,4,1,haRamp(BC)[0])}
     if(acc.includes('stubble'))for(let y=16;y<20;y++)for(let x=17;x<32;x+=3){const X=x+(y%3)+s;if(p.at(Math.round(X+ux(y)),y)===head&&(y>=18||Math.abs(X-24-s)>3.5)&&!(y===16&&Math.abs(X-24-s)<3))DU(X,y,haMix(dk,sk[3],.35))}
     if(acc.includes('freckles'))[[20,14],[22,14],[21,15],[26,14],[28,14],[27,15]].forEach(([x,y])=>DU(x+s,y,haMix(dk,'#9a5a30',.45)));
   }
@@ -162,6 +179,8 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     if(spec.top==='stripes')for(let y=25;y<44;y+=3)for(let x=4;x<44;x++){const k=p.at(x,y);if(k===shirt||k===sleeves)D(x,y,'#f4f2ea')}
     if(spec.top==='sweater')for(let x=13;x<36;x+=3)for(let y=25;y<43;y++)if(p.at(Math.round(x+ux(y)),y)===shirt)D(Math.round(x+ux(y)),y,haRamp(C.shirt)[2]);
     if(spec.top==='tunic'){RU(15,40,19,2,'#6b4423');RU(23,40,3,2,'#d9a441')}
+    if(spec.over==='longcoat'&&!back){for(let y=27;y<56;y+=5){DU(21.5,y,'#e8c24a');DU(26.5,y,'#e8c24a')}LU(24,22,24,60,haRamp(C.jacket)[3]);LU(20,21,23,27,haRamp(C.jacket)[0]);LU(28,21,25,27,haRamp(C.jacket)[0])}
+    if(spec.over==='cloak'&&!back){LU(19,23,21,26,'#d9a441');LU(29,23,27,26,'#d9a441')}
     if(spec.over==='flannel')for(let y=20;y<50;y++)for(let x=4;x<44;x++){const k=p.at(x,y);if(k>=0&&p.parts[k].r[1]===C.jacket&&((x-Math.round(ux(y)))%4===0||y%4===0))D(x,y,haRamp(C.jacket)[2])}
     if(spec.over==='coat'&&!back){for(let y=27;y<44;y+=4){if(p.at(Math.round(21.5+ux(y)),y)===jk)DU(21.5,y,'#e8c24a');if(p.at(Math.round(26.5+ux(y)),y)===jk)DU(26.5,y,'#e8c24a')}RU(21,21,6,2,C.shirt);LU(24,23,24,40,haRamp(C.jacket)[3])}
     if(spec.over==='vest'&&!back)for(let y=27;y<42;y+=5){DU(21,y,haRamp(C.jacket)[3]);DU(27,y,haRamp(C.jacket)[3])}
@@ -179,8 +198,8 @@ function heroCanvas(key,spec,view,arm){const k=key+'|'+view+'|'+JSON.stringify(s
   if(file&&file.complete&&file.naturalWidth)cv.getContext('2d').drawImage(file,0,0,HA_W,HA_H);else paintHero(spec,view,arm).render(cv);
   HA_CACHE.set(k,cv);return cv}
 // the player's own picture: their chosen character (HEROES in js/data/heroes.js) in the colours of S.look, wearing what they wear
-function heroSpec(){const h=HEROES.find(q=>q.id===S.hero)||HEROES[0],L=S.look||h.look;
-  return{...h.art,sex:h.sex,col:{skin:OPT.skin[L.skin],hair:OPT.hair[L.hair],shirt:OPT.shirt[L.shirt],jacket:OPT.jacket[L.jk===undefined?1:L.jk],hat:OPT.hat[L.hc||0],eye:h.art.eye,pants:h.art.pants,boots:h.art.boots}}}
+function heroSpecFor(h,L){return{...h.art,sex:h.sex,col:{skin:OPT.skin[L.skin],hair:OPT.hair[L.hair],shirt:OPT.shirt[L.shirt],jacket:OPT.jacket[L.jk===undefined?1:L.jk],hat:h.art.hatCol||OPT.hat[L.hc||0],eye:h.art.eye,pants:h.art.pants,boots:h.art.boots}}}
+function heroSpec(){const h=HEROES.find(q=>q.id===S.hero)||HEROES[0];return heroSpecFor(h,S.look||h.look)}
 const playerArt=view=>heroCanvas('hero_'+(S.hero||'f1'),heroSpec(),view||'f',armourLook());
 // draw a picture onto a canvas, keeping its shape (centred, no blurring)
 function drawArt(cv,art,bg){const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);if(bg){c.fillStyle=bg;c.fillRect(0,0,cv.width,cv.height)}
