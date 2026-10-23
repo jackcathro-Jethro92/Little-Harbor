@@ -12,7 +12,7 @@ const haMix=(a,b,t)=>{const A=haHex(a),B=haHex(b);return haToHex(A.map((v,i)=>v+
 const haRamp=c=>[haMix(c,'#fff6dc',.34),c,haMix(haMix(c,'#000000',.24),'#3a2a6a',.16),haMix(haMix(c,'#000000',.5),'#2a1a3a',.2)];
 function HAPainter(){this.pid=new Int16Array(HA_W*HA_H).fill(-1);this.parts=[];this.det=[]}
 HAPainter.prototype={
-  part(color,opt){this.parts.push({r:haRamp(color),o:opt||{}});return this.parts.length-1},
+  part(color,opt){const o=opt||{};this.parts.push({r:o.warm?[haMix(color,'#fff0dc',.3),color,haMix(color,'#a8503a',.26),haMix(color,'#5a2418',.55)]:haRamp(color),o});return this.parts.length-1},
   fill(k,f){for(let y=0;y<HA_H;y++)for(let x=0;x<HA_W;x++)if(f(x+.5,y+.5))this.pid[y*HA_W+x]=k},
   erase(f){this.fill(-1,f)},
   at(x,y){return x<0||y<0||x>=HA_W||y>=HA_H?-1:this.pid[y*HA_W+x]},
@@ -59,7 +59,7 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     hideL:(back?P0.aR:P0.aL)[2]===false,hideR:(back?P0.aL:P0.aR)[2]===false,prop:P0.prop},turn=back?0:P0.turn||0,s=Math.round(turn*1.4);
   const ux=y=>y<43?P.lean*(43-y)/15:0,U=f=>(x,y)=>f(x-ux(y),y);   // the upper body sways: U shifts a shape, DU/RU/LU a detail
   const DU=(x,y,c)=>p.dot(Math.round(x+ux(y)),y,c),RU=(x,y,w,h,c)=>p.rect(Math.round(x+ux(y)),y,w,h,c),LU=(x0,y0,x1,y1,c)=>p.line(Math.round(x0+ux(y0)),y0,Math.round(x1+ux(y1)),y1,c);
-  const long=spec.hair==='wavy',skin=p.part(C.skin,{soft:1}),dk=C.skin,sk=haRamp(dk);
+  const long=spec.hair==='wavy',skin=p.part(C.skin,{soft:1,warm:1}),dk=C.skin,sk=haRamp(dk);
   const hairBack=p.part(C.hair,{under:1});
   if(long&&!back)p.fill(hairBack,U(haPoly([[14.5,10],[33.5,10],[35.5,33],[31.5,35],[24,36],[16.5,35],[12.5,33]])));
   // legs (hip, knee, ankle) and boots
@@ -87,10 +87,14 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
       hands.push([C2,d,n])}});
   if(P.prop==='rod'){const h=(back?P.aL:P.aR)[1],rod=p.part('#7a5230',{flat:1}),dx=back?-1:1;p.fill(rod,haSeg(h[0]-dx*2,h[1]+3,h[0]+dx*10,h[1]-21,.75));p.fill(skin,haEl(h[0]+.3,h[1]+.3,2.2,2));p.dot(h[0]+dx*1.5|0,h[1]+1|0,'#c9c9d0')}
   if(spec.top==='sweater'&&!back&&!ap('body')){const col=p.part(C.shirt);p.fill(col,U(haPoly([[20.6,19.5],[27.4,19.5],[27.8,23.5],[20.2,23.5]])))}
-  // neck and head (a narrower face with a pointed chin, turned a little: the far ear hides)
-  p.fill(skin,U(haPoly([[21.6,17],[26.4,17],[26.6,23],[21.4,23]])));
-  p.fill(skin,U(haOr(haEl(24,11.5,7.4,8.2),turn>.25?()=>false:haEl(16.5,12.2,1.4,2),turn<-.25?()=>false:haEl(31.5,12.2,1.4,2))));
-  {const jaw=U((x,y)=>y>14.2&&y<20&&Math.abs(x-24-turn*.8)>6.6-(y-14.2)*1.1&&Math.abs(x-24)<8.5&&!(Math.abs(x-24)<2.8));for(let y=14;y<20;y++)for(let x=0;x<HA_W;x++)if(p.at(x,y)===skin&&jaw(x+.5,y+.5)&&!(x>=20&&x<=28&&y>=17))p.pid[y*HA_W+x]=-1}
+  // neck and head. The neck is its own, slightly shaded part drawn first, so the jaw gets a clean line where it meets it (no lump at the side); the face is an oval that is widest at the
+  // cheekbones and narrows to a small chin, which moves a little toward the way the face is turned (the far ear hides)
+  const neck=p.part(haMix(C.skin,'#a8503a',.12),{warm:1});
+  p.fill(neck,U(haPoly([[22,14.5],[26,14.5],[26.3,20.5],[27.6,23.6],[20.4,23.6],[21.7,20.5]])));
+  const head=p.part(C.skin,{soft:1,warm:1}),FW=[[12,7.15],[13.5,7],[15,6.55],[16.3,5.85],[17.4,4.95],[18.4,3.85],[19.2,2.7],[19.8,1.4]];
+  const faceW=y=>{if(y<=12)return null;for(let i=1;i<FW.length;i++)if(y<=FW[i][0])return FW[i-1][1]+(FW[i][1]-FW[i-1][1])*(y-FW[i-1][0])/(FW[i][0]-FW[i-1][0]);return -1};
+  const face=(x,y)=>{if(y<3.2)return false;if(y<=12)return((x-24)/7.3)**2+((y-12)/8.8)**2<=1;const w=faceW(y);return w>0&&Math.abs(x-24-turn*.9*(y-12)/7.8)<=w};
+  p.fill(head,U(haOr(face,turn>.25?()=>false:haEl(16.6,12.4,1.35,1.9),turn<-.25?()=>false:haEl(31.4,12.4,1.35,1.9))));
   // hair, by style
   const hair=p.part(C.hair,{shade:(x,y)=>x-ux(y)>27&&y>7});
   const dome=haEl(24,9.3,9.1,7.9),fringe=(x,y)=>y<9.2+Math.sin(x*1.4)*.8+(Math.abs(x-24-s)>5?1.4:0);
