@@ -36,14 +36,14 @@
 <div id="mapov"><div id="map-t">MAP</div><canvas id="mc"></canvas><div id="map-h">Only places you have sailed or walked near are shown.</div><button id="map-back">Back</button></div>
 <div id="ch"><div id="ch-title">MENU</div><div id="ch-body"><canvas id="ch-pt" width="64" height="80"></canvas><div id="ch-info"></div><div id="ch-more"></div></div><button id="ch-eq">Equipment</button><button id="ch-save">Save game</button><button id="ch-load">Load game</button><button id="ch-back">Back</button></div>
 <div id="eqs"><div id="eqs-title">EQUIPMENT</div><div id="eqs-body"><div id="eqs-grid">
-<button class="eqslot" id="eq-helmet" data-slot="helmet"><canvas width="16" height="16"></canvas><b>Helmet</b><span></span></button>
-<button class="eqslot" id="eq-amulet" data-slot="amulet"><canvas width="16" height="16"></canvas><b>Amulet</b><span></span></button>
-<button class="eqslot" id="eq-weapon" data-slot="weapon"><canvas width="16" height="16"></canvas><b>Weapon</b><span></span></button>
-<button class="eqslot" id="eq-armour" data-slot="armour"><canvas width="16" height="16"></canvas><b>Armour</b><span></span></button>
+<button class="eqslot" id="eq-helmet" data-slot="helmet"><canvas width="24" height="24"></canvas><b>Helmet</b><span></span></button>
+<button class="eqslot" id="eq-amulet" data-slot="amulet"><canvas width="24" height="24"></canvas><b>Amulet</b><span></span></button>
+<button class="eqslot" id="eq-weapon" data-slot="weapon"><canvas width="24" height="24"></canvas><b>Weapon</b><span></span></button>
+<button class="eqslot" id="eq-armour" data-slot="armour"><canvas width="24" height="24"></canvas><b>Armour</b><span></span></button>
 <canvas id="eqs-pt" width="64" height="80"></canvas>
-<button class="eqslot" id="eq-boots" data-slot="boots"><canvas width="16" height="16"></canvas><b>Boots</b><span></span></button>
-<button class="eqslot" id="eq-ring" data-slot="ring"><canvas width="16" height="16"></canvas><b>Ring</b><span></span></button>
-<button class="eqslot" id="eq-tool" data-slot="tool"><canvas width="16" height="16"></canvas><b>Equipped Tool</b><span></span></button></div>
+<button class="eqslot" id="eq-boots" data-slot="boots"><canvas width="24" height="24"></canvas><b>Boots</b><span></span></button>
+<button class="eqslot" id="eq-ring" data-slot="ring"><canvas width="24" height="24"></canvas><b>Ring</b><span></span></button>
+<button class="eqslot" id="eq-tool" data-slot="tool"><canvas width="24" height="24"></canvas><b>Equipped Tool</b><span></span></button></div>
 <div id="eqs-stats"></div><div id="eqs-pick"></div></div><button id="eqs-back">Back</button></div>
 <div id="qs"><div id="qs-title">QUESTS</div><div id="qs-list"></div><button id="qs-back">Back</button></div>
 <div id="letter"><div id="letter-paper"><div id="letter-from"></div><div id="letter-title"></div><div id="letter-body"><div id="letter-text"></div></div><button id="letter-close">Close</button></div></div>
@@ -51,9 +51,9 @@
 <div id="skills"><div id="sk-title">SKILLS</div><div id="sk-list"></div><button id="sk-back">Back</button></div>
 <div id="bag"><div id="bhead"><div id="btitle">BAG</div><div id="bcap"></div></div>
 <div id="bmain"><div id="btabs"></div><div id="bgrid"></div></div>
-<div id="bdesc"><canvas id="bdi" width="16" height="16"></canvas><div id="btxt"></div></div><div id="bpop"></div><div id="bfoot"><button id="beq">Equipment</button><button id="bback">Back</button></div></div>
+<div id="bdesc"><canvas id="bdi" width="24" height="24"></canvas><div id="btxt"></div></div><div id="bpop"></div><div id="bfoot"><button id="beq">Equipment</button><button id="bback">Back</button></div></div>
 
-<div id="store"><h1 id="st"></h1><div id="sview"><div id="sswitch"></div><div id="smain"><div id="stabs"></div><div id="sgrid"></div></div><div id="sdesc"><div id="stop"><canvas id="sdi" width="16" height="16"></canvas><div id="stxt"></div></div><div id="sbtns"></div></div></div><div id="items"></div><button id="sclose" style="padding:10px 22px;margin-top:12px">Close</button></div>
+<div id="store"><h1 id="st"></h1><div id="sview"><div id="sswitch"></div><div id="smain"><div id="stabs"></div><div id="sgrid"></div></div><div id="sdesc"><div id="stop"><canvas id="sdi" width="24" height="24"></canvas><div id="stxt"></div></div><div id="sbtns"></div></div></div><div id="items"></div><button id="sclose" style="padding:10px 22px;margin-top:12px">Close</button></div>
 <div id="title"><h1 id="title-h"></h1><div id="title-body"></div><div id="title-note"></div></div>
 <div id="look">
   <h1 id="lookt">Who's the fisher?</h1>
@@ -116,6 +116,7 @@
 <script src="js/systems/player.js"></script>
 <script src="js/render/sprites.js"></script>
 <script src="js/render/heroart.js"></script>
+<script src="js/render/itemart.js"></script>
 <script src="js/render/ground.js"></script>
 <script src="js/render/plants.js"></script>
 <script src="js/render/people.js"></script>

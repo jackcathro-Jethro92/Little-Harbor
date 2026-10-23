@@ -11,7 +11,7 @@ function unequipItem(id){const sl=slotOf(id);if(TOOLSLOTS.includes(sl))S.eq.tool
 const eqEffect=id=>{const it=ITEMS[id],f=it.fx||{};return it.kind==='weapon'?'Damage '+(it.damage||2):it.kind==='rod'?(it.wait<1?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'A plain starter rod'):it.kind==='tool'?it.desc:f.ward?'Stops '+Math.round(f.ward*100)+'% of damage':f.speed?'Walk faster':it.desc||''};
 function eqPortrait(){drawArt($('eqs-pt'),playerArt('f'),'#8ec0e8')}   // your detailed picture, wearing your armour
 function drawEquip(){
-  EQ_SLOTS.forEach(([sl,n])=>{const b=$('eq-'+sl),id=eqCurrent(sl),c=b.querySelector('canvas').getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,16,16);
+  EQ_SLOTS.forEach(([sl,n])=>{const b=$('eq-'+sl),id=eqCurrent(sl),c=b.querySelector('canvas').getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,24,24);
     if(id&&ITEMS[id])icon(id,b.querySelector('canvas'));b.querySelector('span').textContent=id&&ITEMS[id]?ITEMS[id].n:'Empty';b.classList.toggle('sel',eqPick===sl)});
   eqPortrait();
   const w=eq('weapon');

@@ -265,3 +265,6 @@ Equipment screen drawn from Jack's sketch (amulet and ring included, plus the Eq
 
 ## Batch H2 (23 Oct): talking portraits
 Everyone who speaks has a detailed portrait (Jack's choice A): about 50 designed by hand, the rest built from each villager's own colours and hair, with age lines and beards. Next: H3, item icons.
+
+## Batch H3 (23 Oct): item icons
+Every item (about 140) has a detailed icon in the style of Jack's weapon and armour sheets. Batch H is complete.
