@@ -262,3 +262,6 @@ Equipment screen drawn from Jack's sketch (amulet and ring included, plus the Eq
 - The six as proposed (braided fisher, sailor in a headscarf, freckled forager, deckhand in a cap, navy coat, bandana and vest).
 - All old saves are cleared; Jack starts a new game.
 - Steps: **H1** characters and naming (built), H2 detailed talking portraits for NPCs, H3 detailed item icons (weapons and armour in the style of Jack's reference sheets).
+
+## Batch H2 (23 Oct): talking portraits
+Everyone who speaks has a detailed portrait (Jack's choice A): about 50 designed by hand, the rest built from each villager's own colours and hair, with age lines and beards. Next: H3, item icons.

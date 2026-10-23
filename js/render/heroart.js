@@ -59,7 +59,7 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     hideL:(back?P0.aR:P0.aL)[2]===false,hideR:(back?P0.aL:P0.aR)[2]===false,prop:P0.prop},turn=back?0:P0.turn||0,s=Math.round(turn*1.4);
   const ux=y=>y<43?P.lean*(43-y)/15:0,U=f=>(x,y)=>f(x-ux(y),y);   // the upper body sways: U shifts a shape, DU/RU/LU a detail
   const DU=(x,y,c)=>p.dot(Math.round(x+ux(y)),y,c),RU=(x,y,w,h,c)=>p.rect(Math.round(x+ux(y)),y,w,h,c),LU=(x0,y0,x1,y1,c)=>p.line(Math.round(x0+ux(y0)),y0,Math.round(x1+ux(y1)),y1,c);
-  const long=spec.hair==='wavy',skin=p.part(C.skin,{soft:1,warm:1}),dk=C.skin,sk=haRamp(dk);
+  const long=spec.hair==='wavy'||spec.hair==='long',skin=p.part(C.skin,{soft:1,warm:1}),dk=C.skin,sk=haRamp(dk);
   const hairBack=p.part(C.hair,{under:1});
   if(long&&!back)p.fill(hairBack,U(haPoly([[14.5,10],[33.5,10],[35.5,33],[31.5,35],[24,36],[16.5,35],[12.5,33]])));
   // legs (hip, knee, ankle) and boots
@@ -69,14 +69,16 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
     p.fill(boots,haOr(haTaper(bx,by,f[0],f[1],tr-.6,tr-.9),f[2]?haEl(f[0]+dir*1.2,f[1]+.6,2.8,2):haEl(f[0]+dir*1.7,f[1]+1.2,3.9,2.1)))});
   // body: the shirt (or tunic), the coat or jacket over it, the arms, then the head
   const bodyC=ap('body')?ap('body')[0]:C.shirt,shirt=p.part(bodyC);
-  const torso=U(fem?haPoly([[21,20.5],[27,20.5],[32.5,23.4],[33.6,26.5],[32.8,30.5],[31.2,35],[32.6,40],[32.8,43.5],[15.2,43.5],[15.4,40],[16.8,35],[15.2,30.5],[14.4,26.5],[15.5,23.4]])
+  const torso=U(spec.build==='stout'?haPoly([[20.5,20.5],[27.5,20.5],[34.5,23.4],[36.5,27],[36.6,33],[35.6,40],[34.6,43.5],[13.4,43.5],[12.4,40],[11.4,33],[11.5,27],[13.5,23.4]]):fem?haPoly([[21,20.5],[27,20.5],[32.5,23.4],[33.6,26.5],[32.8,30.5],[31.2,35],[32.6,40],[32.8,43.5],[15.2,43.5],[15.4,40],[16.8,35],[15.2,30.5],[14.4,26.5],[15.5,23.4]])
     :haPoly([[20.5,20.5],[27.5,20.5],[33.5,23.4],[35,26.5],[34.2,31],[33,36],[32.6,43.5],[15.4,43.5],[15,36],[13.8,31],[13,26.5],[14.5,23.4]]));
   p.fill(shirt,haOr(torso,spec.top==='tunic'?haPoly([[15,40],[33,40],[35,50],[13,50]]):()=>false));
   const jk=spec.over&&!ap('body')?p.part(C.jacket):-1;
   if(jk>=0){if(spec.over==='coat')p.fill(jk,haOr(torso,haPoly([[14.5,40],[33.5,40],[35.5,49.5],[12.5,49.5]])));
-    else p.fill(jk,haAnd(torso,(x,y)=>back||Math.abs(x-ux(y)-24)>(spec.over==='vest'?2.6:2.2)+(y-24)*.09))}
+    else if(spec.over==='robe')p.fill(jk,haOr(torso,haPoly([[14.5,38],[33.5,38],[36.5,66],[11.5,66]])));
+    else if(spec.over!=='apron')p.fill(jk,haAnd(torso,(x,y)=>back||Math.abs(x-ux(y)-24)>(spec.over==='vest'?2.6:2.2)+(y-24)*.09))}
+  if(spec.over==='apron'&&!back){const apr=p.part(C.apron||'#e8e0c8');p.fill(apr,U(haPoly([[19.5,25.5],[28.5,25.5],[29.5,31],[31.5,49],[16.5,49],[18.5,31]])))}
   const short=(spec.top==='stripes'||spec.top==='shirt')&&!ap('body');
-  const sleeves=p.part(spec.over&&spec.over!=='vest'&&!ap('body')?C.jacket:bodyC);
+  const sleeves=p.part(spec.over&&spec.over!=='vest'&&spec.over!=='apron'&&!ap('body')?C.jacket:bodyC);
   // arms: a rounded shoulder, an upper arm that tapers to the elbow, a forearm that narrows to the wrist, and a hand turned the way the forearm points (palm, thumb and finger lines)
   const hands=[];
   [[15,P.aL,P.hideL],[33,P.aR,P.hideR]].forEach(([sx,[e,h],hide])=>{const S=[sx+ux(25.5),25.5],L=Math.hypot(h[0]-e[0],h[1]-e[1])||1,d=[(h[0]-e[0])/L,(h[1]-e[1])/L],W=[h[0]-d[0]*1.9,h[1]-d[1]*1.9];
@@ -99,34 +101,54 @@ function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.se
   const hair=p.part(C.hair,{shade:(x,y)=>x-ux(y)>27&&y>7});
   const dome=haEl(24,9.3,9.1,7.9),fringe=(x,y)=>y<9.2+Math.sin(x*1.4)*.8+(Math.abs(x-24-s)>5?1.4:0);
   let hf;
-  if(back)hf=haOr(haAnd(haEl(24,11,8.2,8.8),(x,y)=>y<18.5),spec.hair==='bob'?haPoly([[15.8,10],[32.2,10],[32.2,18.5],[15.8,18.5]]):()=>false);
+  if(back&&spec.hair==='bald')hf=haAnd(haEl(24,11,8.2,8.8),(x,y)=>y>9&&y<17);
+  else if(back)hf=haOr(haAnd(haEl(24,11,8.2,8.8),(x,y)=>y<18.5),spec.hair==='bob'?haPoly([[15.8,10],[32.2,10],[32.2,18.5],[15.8,18.5]]):()=>false);
   else if(spec.hair==='braid')hf=haOr(haAnd(dome,fringe),haPoly([[15.6,8],[18.2,8],[17.8,17],[15.6,16]]),haPoly([[29.8,8],[32.4,8],[32.4,15],[30.2,15]]));
   else if(spec.hair==='bob')hf=haOr(haAnd(dome,(x,y)=>y<8.8),haPoly([[15.3,7.5],[18.6,7.5],[18.2,18],[15.3,18]]),haPoly([[29.4,7.5],[32.7,7.5],[32.7,18],[29.8,18]]));
   else if(spec.hair==='wavy')hf=haOr(haAnd(dome,fringe),haPoly([[15,7.5],[18,9],[17.6,24],[15.4,27],[13.6,22]]),haPoly([[30,9],[33,7.5],[34.4,22],[32.6,27],[30.4,24]]));
   else if(spec.hair==='messy')hf=haOr(haAnd(haEl(24,8.8,9.4,7.8),(x,y)=>y<8.6+Math.abs(Math.sin(x*.9))*1.8&&y>1.6+Math.abs(Math.sin(x*.8))*2.4),haPoly([[15.6,7],[18,9],[17.4,14],[15.6,13]]),haPoly([[30,9],[32.4,7],[32.4,13],[30.6,14]]));
   else if(spec.hair==='curly')hf=haAnd(haEl(24,9.2,8,6.4),(x,y)=>y<(Math.abs(x-24)>5.5?10.5:8.4));
+  else if(spec.hair==='long')hf=haOr(haAnd(dome,(x,y)=>y<8.6),haPoly([[15,7.5],[18,8.5],[17.8,25],[15.2,27],[14,22]]),haPoly([[30,8.5],[33,7.5],[34,22],[32.8,27],[30.2,25]]));
+  else if(spec.hair==='bun')hf=haOr(haAnd(dome,fringe),haEl(24,2.4,3.4,2.6),haPoly([[15.6,8],[17.8,9],[17.4,14],[15.6,13]]),haPoly([[30.2,9],[32.4,8],[32.4,13],[30.6,14]]));
+  else if(spec.hair==='ponytail')hf=haOr(haAnd(dome,fringe),haPoly([[30,8],[33.8,9.5],[35.2,21],[33,24],[31.4,14]]),haPoly([[15.6,8],[17.8,9],[17.4,14],[15.6,13]]));
+  else if(spec.hair==='bald')hf=haOr(haPoly([[15.6,8.5],[17.6,9.5],[17.4,14],[15.6,13]]),haPoly([[30.4,9.5],[32.4,8.5],[32.4,13],[30.6,14]]));
   else hf=haAnd(haEl(24,9.2,8,6.6),(x,y)=>y<8.2+(Math.abs(x-24)>6?2.4:0));
   p.fill(hair,U(hf));
   if(spec.hair==='braid'){const br=p.part(C.hair);for(let i=0;i<6;i++){const cx=back?24:16.6-i*.35,cy=(back?19:18)+i*3;p.fill(br,U(haEl(cx,cy,2.2,1.7)))}
     RU(back?23:14,back?37:35,3,2,C.jacket)}
   if(back&&long){const hl=p.part(C.hair);p.fill(hl,U(haPoly([[15,10],[33,10],[35,32],[30.5,34.5],[24,33],[17.5,34.5],[13,32]])))}
+  // beards and moustaches (C.beard, or the hair colour)
+  const BC=C.beard||C.hair;
+  if(!back&&(acc.includes('beard')||acc.includes('longbeard'))){const bd=p.part(BC,{shade:(x,y)=>x-ux(y)>27});
+    p.fill(bd,U(haAnd(haOr(haAnd(face,(x,y)=>y>14.6&&Math.abs(x-24-turn*.6)>(y<16.8?2.8:0)),haEl(24+turn*.8,18.6,5.4,3.3),acc.includes('longbeard')?haPoly([[18.5,17],[29.5,17],[27.5,25],[24.5,30.5],[21,25]]):()=>false),(x,y)=>!haEl(24+s,16.3,2.1,.9)(x,y))))}
   // hats and scarves
   if(acc.includes('scarf')||acc.includes('bandana')){const sc=p.part(C.hat);
     if(acc.includes('scarf'))p.fill(sc,U(haOr(haAnd(haEl(24,8.2,8.8,6.4),(x,y)=>y<7.6+(back?2.5:0)),haEl(back?24:31.5,back?12:9.8,2.1,1.7))));
     else{p.fill(sc,U(haAnd(haEl(24,9.5,8.6,7.6),(x,y)=>y>(back?4:5.6)&&y<(back?9:8.2))));p.fill(sc,U(haOr(haPoly([[30,7],[33.5,8.5],[32.8,11]]),haPoly([[30,7.6],[32.6,12],[31,12.6]]))))}}
   if(acc.includes('cap')&&!ap('helm')){const cp=p.part(C.hat);p.fill(cp,U(haAnd(haEl(24,7.6,8.6,5.2),(x,y)=>y<8.2)));if(!back)p.fill(cp,U(haAnd(haEl(25.5+s,8.6,9,1.6),(x,y)=>y>7.6)))}
+  if(acc.includes('straw')){const st=p.part(C.hat);p.fill(st,U(haOr(haAnd(haEl(24,7.3,13,2.2),(x,y)=>true),haAnd(haEl(24,5.4,7.2,4.2),(x,y)=>y<7.4))))}
+  if(acc.includes('tricorn')){const tc=p.part(C.hat2||'#2a2228');p.fill(tc,U(haOr(haAnd(haEl(24,5.6,8.3,5),(x,y)=>y<7.6),haPoly([[10.5,8.6],[24,4.6],[37.5,8.6],[33.5,10],[24,8.4],[14.5,10]]))));LU(12,8,24,5,'#d9a441');LU(24,5,36,8,'#d9a441');if(acc.includes('skull'))RU(23,5,2,2,'#f2f0e6')}
+  if(acc.includes('chef')){const ch=p.part('#f4f2ea');p.fill(ch,U(haOr(haEl(24,2.6,6.4,3),haPoly([[18.5,3],[29.5,3],[29.5,7.4],[18.5,7.4]]))))}
+  if(acc.includes('hood')){const hd=p.part(C.jacket);p.fill(hd,U(haAnd(haOr(haEl(24,10.6,10.4,11),haPoly([[14,14],[34,14],[36,25],[12,25]])),(x,y)=>back||!(face(x,y)&&y>6.2)&&!(y>19.5&&Math.abs(x-24)<3.8))))}
   if(ap('helm')){const h=ap('helm'),hm=p.part(h[0]);p.fill(hm,U(haAnd(haEl(24,9.6,8.9,8),(x,y)=>y<(back?16:8.6))));if(!back)p.fill(hm,U(haOr(haPoly([[15.4,8],[18,8],[18,15],[15.4,14]]),haPoly([[30,8],[32.6,8],[32.6,14],[30,15]]))))}
   if(acc.includes('satchel')){const bag=p.part('#8a5a30');p.fill(bag,back?haPoly([[29,41],[35.5,41],[35.5,47.5],[29,47.5]]):haPoly([[12.5,41],[19,41],[19,47.5],[12.5,47.5]]))}
   // -------- the hand-placed details --------
   const D=(x,y,c)=>p.dot(x,y,c),eye=C.eye||'#3a2a20',lip=fem?'#c0565a':haMix(dk,'#6a2a20',.45),brow=haRamp(C.hair)[3],OUT=haMix(sk[3],HA_OUT,.6);
   if(!back){
     [[20+s,11],[27+s,11]].forEach(([x,y],i)=>{
-      if(fem){RU(x,y,2,1,OUT);DU(i?x+2:x-1,y-(i?1:1),OUT);RU(x,y+1,2,2,eye);DU(i?x:x+1,y+2,haRamp(eye)[3]);DU(x,y+1,'#ffffff')}
+      if(fem&&!acc.includes('old')){RU(x,y,2,1,OUT);DU(i?x+2:x-1,y-(i?1:1),OUT);RU(x,y+1,2,2,eye);DU(i?x:x+1,y+2,haRamp(eye)[3]);DU(x,y+1,'#ffffff')}
       else{RU(x-(i?0:1),y,3,1,OUT);RU(x,y+1,2,1,eye);DU(i?x:x+1,y+1,haRamp(eye)[3]);DU(x,y+1,'#ffffff');RU(x-(i?0:1),y-2,3,1,brow);DU(i?x+2:x-1,y-1,brow)}});
     if(fem){DU(20+s-(1),9,brow);RU(20+s,8,2,1,brow);RU(27+s,8,2,1,brow);DU(29+s,9,brow)}
     DU(24+s+(turn>0?1:0),14,sk[2]);DU(24+s+(turn>0?1:0),13,sk[0]);
     RU(23+s,16,fem?2:3,1,lip);if(!fem)DU(23+s,17,sk[2]);
     if(fem)[[19+s,14],[28+s,14]].forEach(([x,y])=>RU(x,y,2,1,haMix(dk,'#ff7a80',.35)));
+    if(acc.includes('old')){[[18,13],[30,13],[21,15],[27,15],[22,6.6],[25,6.6]].forEach(([x,y],i)=>i<4?DU(x+s,y,sk[2]):RU(x+s,Math.round(y),2,1,sk[2]))}
+    if(acc.includes('glasses')){const G='#3a3440';[[20+s,11],[27+s,11]].forEach(([x,y])=>{RU(x-1,y,4,1,G);RU(x-1,y+3,4,1,G);RU(x-1,y,1,4,G);RU(x+2,y,1,4,G)});RU(23+s,11,1,1,G)}
+    if(acc.includes('eyepatch')){RU(27+s,10,3,4,'#1a1416');LU(29+s,10,32,7,'#1a1416');LU(26+s,10,17,7,'#1a1416')}
+    if(acc.includes('earring')&&turn<=.25){DU(16,14,'#e8c24a');DU(16,15,'#e8c24a')}
+    if(acc.includes('scar'))LU(18+s,12,20+s,15,sk[3]);
+    if(acc.includes('moustache')||acc.includes('beard')||acc.includes('longbeard')){RU(21+s,15,6,1,BC);DU(21+s,16,BC);DU(26+s,16,BC);RU(22+s,15,4,1,haRamp(BC)[0])}
+    if(acc.includes('stubble'))for(let y=16;y<20;y++)for(let x=17;x<32;x+=3){const X=x+(y%3)+s;if(p.at(Math.round(X+ux(y)),y)===head&&(y>=18||Math.abs(X-24-s)>3.5)&&!(y===16&&Math.abs(X-24-s)<3))DU(X,y,haMix(dk,sk[3],.35))}
     if(acc.includes('freckles'))[[20,14],[22,14],[21,15],[26,14],[28,14],[27,15]].forEach(([x,y])=>DU(x+s,y,haMix(dk,'#9a5a30',.45)));
   }
   hands.forEach(([c,d,n])=>{[-.85,.85].forEach(o=>p.dot(Math.round(c[0]+d[0]*1.7+n[0]*o),Math.round(c[1]+d[1]*1.7+n[1]*o),sk[2]));p.dot(Math.round(c[0]-d[0]*.3),Math.round(c[1]-d[1]*.3),sk[0])});
