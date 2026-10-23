@@ -51,27 +51,28 @@ const POSES={
  wave:{lean:-1,turn:-.6,aL:[[11,35],[17,42],false],aR:[[40.5,22],[41,12]],lL:[[19,56],[16,68]],lR:[[29.5,56],[32,68]]},
  cross:{lean:0,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[18.5,56],[15.5,68]],lR:[[29.5,56],[32.5,68]]},
  point:{lean:1.4,turn:.8,aL:[[8.5,34],[16,41.5]],aR:[[39,27.5],[45.5,23]],lL:[[17.5,56],[13.5,67.5]],lR:[[29.5,57],[30.5,68]]},
- brim:{lean:.6,turn:.5,aL:[[8.5,34],[16,41.5]],aR:[[39,19.5],[30.5,6.5]],lL:[[19.5,56],[18,68]],lR:[[29,56],[31,68]],front:'R'},
- book:{lean:0,turn:-.3,aL:[[12,35.5],[21.5,32]],aR:[[36,35.5],[26.5,32]],lL:[[20,56],[18.5,68]],lR:[[28.5,56],[30,68]],prop:'book'},
- stride:{lean:-1.3,turn:.6,aL:[[8.5,34],[16,41.5]],aR:[[37.5,35],[40,42.5]],lL:[[18,55.5],[14.5,67]],lR:[[29.5,56.5],[33,65.5,1]]},
- greet:{lean:-.8,turn:-.5,aL:[[11,35],[13.5,43.5]],aR:[[41,26],[42.5,16]],lL:[[19.5,56],[17,68]],lR:[[29,56],[31.5,68]]},
- rope:{lean:.8,turn:.5,aL:[[9.5,33.5],[15,25.5]],aR:[[37,35],[34.5,43]],lL:[[18.5,56],[16,68]],lR:[[29.5,56],[32.5,68]],prop:'rope'},
+ brim:{lean:-.6,hip:1.4,turn:.5,aL:[[9,34],[16,41.5]],aR:[[38.5,19.5],[30,6.5]],lL:[[20.5,56.2],[18.2,67.6,1]],lR:[[29.6,56],[29.8,68]],front:'R'},
+ book:{lean:.5,hip:-1.2,turn:-.3,aL:[[12,35.5],[21.5,32]],aR:[[36,35.5],[26.5,32]],lL:[[18.6,56],[18.6,68]],lR:[[27.6,56.4],[29.8,67.6,1]],prop:'book'},
+ stride:{lean:-1,hip:.8,turn:.6,aL:[[8.5,34],[16,41.5]],aR:[[37,35],[38.6,42.8]],lL:[[19,55.6],[17,67.6]],lR:[[29,56.2],[31.2,65.8,1]]},
+ greet:{lean:.7,hip:-1.3,turn:-.5,aL:[[12,35],[13.6,43.6]],aR:[[40.5,26],[42,16]],lL:[[18.6,56],[18.6,68]],lR:[[27.4,56.4],[29.6,67.6,1]]},
+ rope:{lean:-.5,hip:1.3,turn:.5,aL:[[9.5,33.5],[15,25.5]],aR:[[37,35.5],[35.6,43.6]],lL:[[20.6,56.4],[18.4,67.6,1]],lR:[[29.4,56],[29.6,68]],prop:'rope'},
+ crossed:{lean:-.4,hip:1.2,turn:.4,aL:[[11,35],[28,33.5],false],aR:[[37,35],[20,35]],lL:[[20.4,56.4],[18.2,67.6,1]],lR:[[29.2,56],[29.4,68]]},
  stand:{lean:0,turn:0,aL:[[12,34],[13.6,43]],aR:[[36,34],[34.4,43]],lL:[[20,56],[19.5,68]],lR:[[28,56],[28.5,68]]}};
 // spec: {sex:'f'|'m', pose, hair:'braid'|'bob'|'wavy'|'messy'|'curly'|'crop', top:'sweater'|'stripes'|'tunic'|'tee'|'shirt', over:'vest'|'flannel'|'coat'|null, acc:[...], col:{skin,hair,shirt,jacket,hat,pants,boots,eye}}
 // view 'f' (front) or 'b' (back, for battle). arm: the worn armour {helm, body, boots} (ARM_PAL names), drawn over the clothes.
 // Proportions follow the FireRed trainer pictures Jack sent: a smaller head (about a sixth of the height), long legs, the face turned a little to one side (turn), sharp eyes and brows, coloured outlines.
 function paintHero(spec,view,arm){const p=new HAPainter(),C=spec.col,fem=spec.sex==='f',back=view==='b',acc=spec.acc||[],A=arm||{},ap=k=>A[k]&&ARM_PAL[k==='boots'&&A[k]==='enchanted'?'enchanted_boots':A[k]];
-  const P0=POSES[spec.pose]||POSES.stand,mx=back?(v=>48-v):(v=>v),J=v=>Array.isArray(v)?[mx(v[0]),v[1],v[2]]:v,P={lean:back?-P0.lean:P0.lean,aL:(back?P0.aR:P0.aL).map(J),aR:(back?P0.aL:P0.aR).map(J),lL:(back?P0.lR:P0.lL).map(J),lR:(back?P0.lL:P0.lR).map(J),
+  const P0=POSES[spec.pose]||POSES.stand,mx=back?(v=>48-v):(v=>v),hipX=(back?-1:1)*(P0.hip||0),J=v=>Array.isArray(v)?[mx(v[0]),v[1],v[2]]:v,JA=v=>Array.isArray(v)?[mx(v[0])+hipX,v[1],v[2]]:v,P={lean:back?-P0.lean:P0.lean,aL:(back?P0.aR:P0.aL).map(JA),aR:(back?P0.aL:P0.aR).map(JA),lL:(back?P0.lR:P0.lL).map(J),lR:(back?P0.lL:P0.lR).map(J),
     hideL:(back?P0.aR:P0.aL)[2]===false,hideR:(back?P0.aL:P0.aR)[2]===false,prop:P0.prop,front:P0.front&&!back?P0.front:null},turn=back?0:P0.turn||0,s=Math.round(turn*1.4);
-  const ux=y=>y<43?P.lean*(43-y)/15:0,U=f=>(x,y)=>f(x-ux(y),y);   // the upper body sways: U shifts a shape, DU/RU/LU a detail
+  const ux=y=>hipX+(y<43?P.lean*(43-y)/15:0),U=f=>(x,y)=>f(x-ux(y),y);   // the upper body sways: U shifts a shape, DU/RU/LU a detail
   const DU=(x,y,c)=>p.dot(Math.round(x+ux(y)),y,c),RU=(x,y,w,h,c)=>p.rect(Math.round(x+ux(y)),y,w,h,c),LU=(x0,y0,x1,y1,c)=>p.line(Math.round(x0+ux(y0)),y0,Math.round(x1+ux(y1)),y1,c);
   const long=spec.hair==='wavy'||spec.hair==='long',skin=p.part(C.skin,{soft:1,warm:1}),dk=C.skin,sk=haRamp(dk);
   const hairBack=p.part(C.hair,{under:1});
   if(long&&!back)p.fill(hairBack,U(haPoly([[14.5,10],[33.5,10],[35.5,33],[31.5,35],[24,36],[16.5,35],[12.5,33]])));
   // legs (hip, knee, ankle) and boots
   const pants=p.part(C.pants||'#3b4a6b'),bootC=ap('boots')?ap('boots')[0]:C.boots||'#5a3a22',boots=p.part(bootC),tr=fem?3.3:3.6;
-  [[20,P.lL],[28,P.lR]].forEach(([hx,[k,f]])=>{p.fill(pants,haOr(haTaper(hx,43.5,k[0],k[1],tr+.4,tr-.45),haEl(k[0],k[1],tr-.45,tr-.45),haTaper(k[0],k[1],f[0],f[1],tr-.45,tr-1.2),haEl(hx,43.8,tr+.6,3),haOEl(k[0]+(f[0]-k[0])*.3+(f[0]<24?-.5:.5),k[1]+(f[1]-k[1])*.3,0,1,3.4,tr-.2)))});
-  [[20,P.lL],[28,P.lR]].forEach(([hx,[k,f]])=>{const dir=f[0]<24?-1:1,t=.58,bx=k[0]+(f[0]-k[0])*t,by=k[1]+(f[1]-k[1])*t;
+  [[20+hipX,P.lL],[28+hipX,P.lR]].forEach(([hx,[k,f]])=>{p.fill(pants,haOr(haTaper(hx,43.5,k[0],k[1],tr+.4,tr-.45),haEl(k[0],k[1],tr-.45,tr-.45),haTaper(k[0],k[1],f[0],f[1],tr-.45,tr-1.2),haEl(hx,43.8,tr+.6,3),haOEl(k[0]+(f[0]-k[0])*.3+(f[0]<24?-.5:.5),k[1]+(f[1]-k[1])*.3,0,1,3.4,tr-.2)))});
+  [[20+hipX,P.lL],[28+hipX,P.lR]].forEach(([hx,[k,f]])=>{const dir=f[0]<24?-1:1,t=.58,bx=k[0]+(f[0]-k[0])*t,by=k[1]+(f[1]-k[1])*t;
     p.fill(boots,haOr(haTaper(bx,by,f[0],f[1],tr-.6,tr-.9),f[2]?haEl(f[0]+dir*1.2,f[1]+.6,2.8,2):haEl(f[0]+dir*1.7,f[1]+1.2,3.9,2.1)))});
   // body: the shirt (or tunic), the coat or jacket over it, the arms, then the head
   const bodyC=ap('body')?ap('body')[0]:C.shirt,shirt=p.part(bodyC);
