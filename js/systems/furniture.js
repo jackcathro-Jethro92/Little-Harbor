@@ -17,7 +17,7 @@ function furnWhy(id,x,y){const fp=furnFp(id),t=at(x,y);
     const c=campOf(),nearHome=S.home&&Math.hypot(x-(S.home.x+1),y-(S.home.y+1))<=CAMP_R,nearCamp=c&&Math.hypot(c.x-x,c.y-y)<=CAMP_R;
     if(!(nearHome||nearCamp||onIsle(x,y)))return c||S.home?'Too far from camp or home. Furniture goes within '+CAMP_R+' tiles.':'Furniture needs a camp (or a home) nearby.'}
   if((x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';
-  if(npcAt(x,y)||(B.x===x&&B.y===y)||enemyAt(x,y))return 'Something is in the way.';
+  if(npcAt(x,y)||(B.x===x&&B.y===y)||enemyAt(x,y)||(!fp.flat&&INTBLK[y*MW+x]))return 'Something is in the way.';
   if(S.placed.some(p=>!isFurn(p)&&placedAt(x,y)===p)||furnAt(x,y,fp.flat)||gardenAt(x,y))return 'Something is already there.';
   return ''}
 // where a piece goes: the footprint starts at the tile you face and reaches away from you

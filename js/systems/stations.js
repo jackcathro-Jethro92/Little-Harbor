@@ -24,7 +24,7 @@ function placeWhy(id,x,y,sub){
   if(zoneOf(x,y)>=3)return "You can't place that here.";
   if(![1,2,6,18,20,21,48,153,108,165].includes(t))return "You can't place that there.";
   if(npcAt(x,y))return 'Someone is standing there.';
-  if(placedAt(x,y))return 'Something is already there.';
+  if(placedAt(x,y)||INTBLK[y*MW+x])return 'Something is already there.';
   if((B.x===x&&B.y===y)||enemyAt(x,y))return "You can't place that there.";
   if(it.place==='camp')return inRoom(x,y)?"You can't set up camp indoors.":campOf()?'You already have a camp set up.':'';
   if((S.home&&x===S.home.x+1&&y===S.home.y+2)||(S.isle&&x===S.isle.x+1&&y===S.isle.y+2)||(x===IR.dx&&y===IR.dy)||(x===HG.dx&&y===HG.dy))return 'Keep the doorway clear.';

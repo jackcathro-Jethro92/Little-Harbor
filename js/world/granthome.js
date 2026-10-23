@@ -9,6 +9,7 @@
 // Doorways: bedroom-wardrobe, wardrobe-bathroom, kitchen-living, living-workshop, potion-hall, hall-storage on the vertical walls (x 301 and 310); bedroom-kitchen, wardrobe-living (two wide), bathroom-workshop, kitchen-potion,
 // living-hall (two wide), workshop-storage on the horizontal walls (y 275 and 285). Tiles 153-171 and 175-183: see js/render/granthome.js.
 // Stations can stand anywhere on a free floor in any room (the usual home rule); you sleep anywhere inside (Sleep button).
+// The furniture tiles placed below (156-171, 178-183) are cleared again by js/systems/havendecor.js, which furnishes the rooms with the shop and carpenter props instead (HAVEN_DECOR); they stay here so the world builds the same as before.
 WK.push(153,155,165);
 const mannIndex=x=>(x-303)>>1;   // the four mannequins stand at x 303, 305, 307 and 309 in the wardrobe: 0 to 3
 const HG_COL=[[293,300],[302,309],[311,318]],HG_ROW=[[266,274],[276,284],[286,294]];
