@@ -1,7 +1,14 @@
 // ---------- the taverns: the job notice boards, the regulars inside, and the tables outside (js/systems/taverns.js) ----------
-// JOBS: the jobs pinned to the taverns' notice boards. Quests come later; a row will look like
-//   {id:'wolf_pelts', title:'Wolf pelts wanted', at:'inn_settlement' (or 'inn_mountain', or 'any'), reward:'60 gold', desc:'...'}
-const JOBS=[];
+// JOBS: the jobs pinned to the taverns' notice boards (Jack's tavern quests; js/systems/jobs.js runs them). at: the tavern (its SHOP_ROOMS id). from: who asked. desc: the notice, in Jack's words.
+//   need {item:count}  bring these to `to` (that person takes them and pays)           enc 'id'  an encounter (js/systems/encounters.js) to beat; paid at the board once it is done
+//   find 'item'        also pick this up on the map (job.spot); it goes back with you   reward {gold, item}   what you get
+const JOBS=[
+ {id:'lucie_gold',at:'inn_mountain',title:'Gold for Lucie',from:'Lucie',desc:'Lucie wants you to bring her 100 gold ore and 100 silver ore.',need:{gold_ore:100,silver_ore:100},to:'Lucie',reward:{item:'amulet_healing'}},
+ {id:'lost_axe',at:'inn_mountain',title:'A villager lost his axe',from:'Halvard',desc:'While clearing a rock slide on the outskirts of town, Halvard was attacked by rock dragons. He dropped his axe and ran, but he needs help getting it back. Go and find his axe and defeat the rock dragons.',enc:'job_axe',find:'halvards_axe',reward:{gold:500}},
+ {id:'centipede_nests',at:'inn_mountain',title:'Clear the centipede nests',from:'The Mountain Town',desc:'It seems the centipede population is growing, and their nests in the corners of the Darkwood are getting out of control. We need someone to go in and clear them out.',enc:'job_nests',reward:{gold:2500}},
+ {id:'astrid_materials',at:'inn_settlement',title:'Materials needed',from:'Astrid',desc:'Astrid wants you to bring her 20 centipede fangs, 50 red caps and 150 basil.',need:{centipede_fang:20,red_cap:50,basil:150},to:'Astrid',reward:{item:'vigour_draught'}},
+ {id:'bandits',at:'inn_settlement',title:'Clear out the bandits',from:'The Mayor of the Walled Settlement',desc:'A bandit camp has moved into the lands in the south-west corner of the map. Clear them out for the Mayor of the Walled Settlement. Ten bandits to clear.',enc:'job_bandits',reward:{gold:1000}},
+ {id:'winter_collection',at:'inn_settlement',title:'Tailor in need',from:'Seamstress Wynn',desc:'Wynn is looking for someone to bring her 50 wolf pelts to make her new winter collection. She knows this is no small task, so she will pay 5000 gold.',need:{wolf_pelt:50},to:'Seamstress Wynn',reward:{gold:5000}}];
 // TAVERN_REGULARS: the people sitting in each tavern (at: the tavern's SHOP_ROOMS id; x, y: their tile inside the room; f: the way they face). Their looks use the usual NPC colour numbers.
 const TAVERN_REGULARS=[
  {at:'inn_settlement',n:'Wendel',x:2,y:6,f:'u',skin:3,hair:5,shirt:2,jk:1,hc:4,hat:'cap',say:['Pull up a stool. The ale is warm and so is the fire.','I sailed every sea once. Now I sail this stool.']},

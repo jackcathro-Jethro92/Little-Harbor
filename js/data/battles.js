@@ -34,6 +34,9 @@ const FOES={
  final_brute:{n:'Pirate brute',hp:70,hit:[10,14],gold:[70,110],xp:100,drops:[['iron_bar',.5,1]],atk:'swings a boarding axe',look:{skin:3,hair:2,shirt:0,jk:0,hat:'none',hstyle:'bald',pack:false,armour:{body:'leather',boots:'leather'}}},
  barron:{n:'Captain Barron',hp:320,hit:[11,14],gold:[300,400],xp:400,drops:[],look:{skin:1,hair:4,shirt:0,jk:5,hat:'none',hstyle:'long',pack:false,armour:{helm:'gold',body:'gold',boots:'gold'}},
   pattern:[{atk:'slashes with his sabre',hit:[11,14]},{atk:'slashes with his sabre',hit:[11,14]},{wind:'raises his sabre high above his head...'},{atk:'brings the sabre crashing down',hit:[26,32]}]},
+ bandit:{n:'Bandit',hp:30,hit:[5,9],gold:[20,40],xp:60,drops:[['rope',.3,1]],atk:'swings a rusty sword',look:{skin:2,hair:0,shirt:2,jk:6,hat:'scarf',hc:3,pack:false}},   // the bandit camp in the south-west (tavern job)
+ bandit_archer:{n:'Bandit archer',hp:24,hit:[6,10],gold:[25,45],xp:70,drops:[],atk:'looses an arrow',look:{skin:0,hair:1,shirt:3,jk:2,hat:'scarf',hc:1,pack:false}},
+ bandit_chief:{n:'Bandit chief',hp:70,hit:[8,12],gold:[80,140],xp:160,drops:[['iron_bar',.5,1]],atk:'slashes with a broad blade',look:{skin:3,hair:4,shirt:0,jk:5,hat:'cap',hc:1,pack:false}},
  pirate_captain:{n:'Pirate captain',hp:60,hit:[6,10],gold:[60,100],xp:120,drops:[],atk:'slashes with a heavy sabre',flee:{at:.35,msg:'The captain shouts a curse and escapes!'},look:{skin:1,hair:4,shirt:0,jk:0,hat:'cap',hc:1,hstyle:'long',pack:false}}
 };
 const BATTLES={

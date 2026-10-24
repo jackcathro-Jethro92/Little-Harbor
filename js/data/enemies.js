@@ -20,5 +20,9 @@ const ENEMY_TYPES={
   pattern:[{atk:'bites',hit:[10,14]},{atk:'snaps at your legs',hit:[9,13]},{wind:'crouches low, growling, ready to spring...'},{atk:'leaps at you with its jaws wide',hit:[22,28]}],die:'The wolf limps away into the long grass... it will be back.'},
  spirit:{n:'Spirit',hp:12,dmg:6,hit:[2,5],cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };
+// for the tavern jobs (js/systems/jobs.js): the rock dragons that guard Halvard's axe and the Darkwood's centipede nests stay beaten; the swarm round the nests comes back fast while the nests stand
+ENEMY_TYPES.rock_dragon_q={...ENEMY_TYPES.rock_dragon,respawn:0};
+ENEMY_TYPES.centipede_nest={n:'Centipede nest',hp:80,dmg:8,hit:[5,8],cd:2,speed:99,chase:0,leash:0,art:'nest',xp:150,gold:[20,40],drops:[['centipede_fang',1,3]],block:0,escape:.5,respawn:0,atk:'swarms you with biting young',die:'The nest collapses into dust and broken shells.'};
+ENEMY_TYPES.centipede_swarm={...ENEMY_TYPES.centipede,n:'Young centipede',hp:22,respawn:60};
 // the wolves come in coats (Jack's reference sheet; colours in WOLF_COL, js/render/wolfart.js): each is the same strong wolf
 ENEMY_TYPES.wolf_white={...ENEMY_TYPES.wolf,n:'White wolf'};ENEMY_TYPES.wolf_pale={...ENEMY_TYPES.wolf,n:'Pale wolf'};ENEMY_TYPES.wolf_black={...ENEMY_TYPES.wolf,n:'Black wolf'};

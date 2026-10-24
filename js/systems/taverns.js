@@ -8,6 +8,4 @@ const YARD_PROPS=Object.entries(TAVERN_YARDS).flatMap(([at,list])=>list.map(([id
 // the notice board you are facing (inside a tavern), or null
 function boardAt(x,y){const r=zoneOf(P.x,P.y)>=30?intrOf(P.x,P.y):null;if(!r||sail)return null;const sr=SHOP_ROOMS.find(s=>s.room===r&&s.inn);if(!sr)return null;
   const b=r.props.find(p=>p.id==='notices'&&x>=p.ax&&x<p.ax+p.w&&(y===p.ay||y===p.ay+1));return b?sr:null}
-function openBoard(sr){const jobs=JOBS.filter(j=>j.at===sr.id||j.at==='any');
-  if(!jobs.length){toast('Notice board');return say('The notice board is empty for now. Check back soon.')}
-  menu('Notice board',[...jobs.map(j=>j.title+' ('+j.reward+')'),'Close'],o=>{const j=jobs.find(q=>o===q.title+' ('+q.reward+')');if(j)say(j.desc)})}
+function openBoard(sr){openJobBoard(sr.id)}   // the board of parchment notes (js/systems/jobs.js)

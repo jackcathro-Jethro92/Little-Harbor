@@ -8,6 +8,7 @@ function potionDesc(id){const i=ITEMS[id],p=potPow(),a=[];
 function drink(id){const it=ITEMS[id],p=potPow();
   if(it.coat){if(!eq('weapon'))return say('Equip a weapon first, then apply the poison.');
     const c=it.coat+Math.floor(lvl('alchemy')/3);S.coat=Math.min(20,S.coat+c);say('Your '+eq('weapon').n.toLowerCase()+' is coated. Poison x'+S.coat+'.')}
+  else if(it.boost){S.boost=S.boost||{hp:0,sta:0};S.boost.hp+=it.boost.hp||0;S.boost.sta+=it.boost.sta||0;S.hp=maxHp();S.sta=maxSta();say('You drank the '+it.n.toLowerCase()+'. Your most health is now '+maxHp()+' and your most stamina '+maxSta()+'!');toast('+'+it.boost.hp+' max HP  +'+it.boost.sta+' max STA',2800)}
   else if(it.speed){S.buff=Math.max(S.buff,Date.now())+Math.round(it.speed*p)*1000;say('You feel light on your feet! Moving faster.')}
   else{if(it.hp&&!it.sta&&S.hp>=maxHp())return say("You're already at full health.");if(it.sta&&!it.hp&&S.sta>=maxSta())return say("You're already fully rested.");
     const h=Math.round((it.hp||0)*p),st=Math.round((it.sta||0)*p),h0=S.hp,s0=S.sta;S.hp=Math.min(maxHp(),S.hp+h);S.sta=Math.min(maxSta(),S.sta+st);showGain(h0,s0);

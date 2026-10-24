@@ -26,6 +26,11 @@ const CREATURES={
    const ma=p.part('#c84a5a');p.fill(ma,haOr(haEl(28,24,12,14),haPoly([[18,12],[28,0],[38,12]]),haPoly([[16,10],[9,16],[18,20]]),haPoly([[40,10],[47,16],[38,20]])));
    const ey=p.part('#f2d84a');p.fill(ey,haEl(28,28,5.2,5.2));const pu=p.part('#1a1018',{flat:1});p.fill(pu,haEl(28,28,1.4,4.2));p.dot(26,26,'#ffffff');
    [[22,16],[33,14],[24,22],[34,22],[28,10]].forEach(([x,y])=>{p.dot(x,y,'#7a2030');p.dot(x+1,y,'#e8788a')});for(let y=40;y<58;y+=4){p.dot(18,y,'#f0b0b8');p.dot(38,y-2,'#f0b0b8')}}},
+ nest:{w:64,h:44,paint(p){const m=p.part('#6b4423');p.fill(m,haOr(haEl(32,30,28,13),haEl(32,20,18,12)));const top=p.part('#8a5a2e');p.fill(top,haEl(30,15,12,6));
+   const h=p.part('#1a1008',{flat:1});[[20,28,4,3],[38,22,5,3.4],[44,33,4,2.6],[28,36,3.4,2.2]].forEach(([x,y,a,b])=>p.fill(h,haEl(x,y,a,b)));
+   const sh=p.part('#e8d8b0');[[12,38],[52,36],[33,9],[48,26]].forEach(([x,y])=>p.fill(sh,haEl(x,y,2.2,1.4)));
+   const c1=p.part('#d8582a'),c2=p.part('#8a2a1a');for(let i=0;i<6;i++){p.fill(i%2?c2:c1,haEl(40+i*3.2,20-i*2.2,2.4,2.2))}p.rect(58,6,2,2,'#f2e04a');
+   for(let i=0;i<5;i++){p.fill(i%2?c2:c1,haEl(18-i*2.8,26+i*2.6,2.2,2))}p.rect(5,38,2,2,'#f2e04a')}},
  dragon:{w:64,h:44,paint(p){const st='#7a7470',lg=p.part(st);[[22,28,18,40],[30,29,29,40],[42,28,44,40],[50,27,53,39]].forEach(([a,b,c,d])=>p.fill(lg,haOr(haTaper(a,b,c,d,3.4,2.4),haEl(c-1,d+.5,3.2,1.8))));
    const tl=p.part(st);p.fill(tl,haOr(haTaper(52,24,63,13,5,1),haTaper(48,22,55,22,5,5)));
    const bd=p.part(st);p.fill(bd,haOr(haEl(36,23,17,8),haTaper(22,22,13,17,6.5,5)));const hd=p.part('#8a8480');p.fill(hd,haOr(haEl(11,17,7.5,5.6),haPoly([[3,15],[10,13],[10,20],[2,19]])));

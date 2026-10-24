@@ -15,6 +15,7 @@ function startEnemyBattle(e){if(BATTLE||SCENE||!e.alive)return false;
     })}
 // a creature that has been beaten: it falls (and returns later if its row says so), and a group that is all beaten fires its triggers. The rewards are given by the battle.
 function enemyDefeated(e){const ty=ENEMY_TYPES[e.t];e.alive=false;e.resp=ty.respawn||0;e.pois=0;if(ty.die)say(ty.die);ui();
+  if(e.encI!==undefined&&typeof encDown==='function'){const d=encDown(e.group);if(!d.includes(e.encI))d.push(e.encI);save()}   // (a beaten foe of an encounter stays beaten after a reload)
   if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive)){enemyBeaten(e.group);if(typeof encounterGroupBeaten==='function')encounterGroupBeaten(e.group)}}
 // screens a creature may ambush you over (you were distracted): the map, bag, skills, shops and so on. Title menu, letters and the look editor are not on the list.
 let AMBUSH_NOTE=false; // set when a creature ambushes you over an open screen; the battle opens with a notice

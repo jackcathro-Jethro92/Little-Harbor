@@ -20,7 +20,7 @@ function encSpot(e,f){let x=f.at[0],y=f.at[1];if(e.near){x+=P.x;y+=P.y}
   if(!WK.includes(at(x,y))||npcAt(x,y)||(P.x===x&&P.y===y)||(enemyAt(x,y))){const s=nearestTile(x,y,(a,b)=>WK.includes(at(a,b))&&!npcAt(a,b)&&!(P.x===a&&P.y===b)&&!enemyAt(a,b));if(s){x=s[0];y=s[1]}}return[x,y]}
 function encSpawn(e){const down=encDown(e.id);
   e.foes.forEach((f,i)=>{if(down.includes(i))return;const[x,y]=encSpot(e,f);
-    if(e.mode==='realtime')spawnEnemy(f.type,x,y,{group:e.id});
+    if(e.mode==='realtime')spawnEnemy(f.type,x,y,{group:e.id,encI:i});
     else{const t=FOES[f.foe];NPC.push({...t.look,n:t.n,x,y,hx:x,hy:y,f:f.f||'d',fixed:1,enc:{id:e.id,i}})}})}
 function encClear(e){for(let i=NPC.length-1;i>=0;i--)if(NPC[i].enc&&NPC[i].enc.id===e.id)NPC.splice(i,1);dropEnemies(e.id)}
 // make the world match the flags: a started, unfinished encounter has its foes standing; otherwise none
@@ -63,7 +63,7 @@ SCSTEP.trek=([n,path,per],c)=>{n.busy=1;let k=0,last=[n.x,n.y];
   const stepOnce=()=>{if(k>=path.length)return false;const p=path[k++];n.f=faceToward(n,p);n.x=p[0];n.y=p[1];return true},end=()=>{n.f=faceToward(n,[P.x,P.y])};
   if(c.fast){while(stepOnce());end();return c.go()}
   const t=setInterval(()=>{if(!stepOnce()){clearInterval(t);end();c.go()}},per);c.hold(()=>{clearInterval(t);while(stepOnce());end()})};
-function encNotice(n,path){const L=Object.values(DLG.pirate_spot.nodes),txt=L[(n.enc.i+n.x)%L.length].text;
+function encNotice(n,path){const er=encRow(n.enc.id),L=Object.values((er&&DLG[er.spot]||DLG.pirate_spot).nodes),txt=L[(n.enc.i+n.x)%L.length].text;
   runScene([{alert:[n,700]},{trek:[n,path,190]},{wait:150},{line:[n.n,txt]}],()=>{n.alertUntil=0;encFight(n)})}
 function encSightTick(){if(!ENC_SIGHT||SCENE||BATTLE||sail||dlgActive()||document.querySelector('.open')||(typeof trgRunning!=='undefined'&&trgRunning))return;
   const now=performance.now(),z=zoneOf(P.x,P.y);
