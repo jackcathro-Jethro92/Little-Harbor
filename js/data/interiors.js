@@ -72,3 +72,53 @@ const HAVEN_DECOR=[
  {n:'Entrance hall',c:1,r:2,props:[['wmap',0,-1],['painting',6,-1],['grandclock',0,0],['treepot',5,0],['runner',3,0],['runner',4,0],['runner',3,3],['runner',4,3],['runner',3,6],['runner',4,6],
    ['lamp',0,2],['lamp',7,2],['bench',0,6],['bench',6,6],['plant',0,8],['coatrack',2,8],['luggage',6,8]]},
  {n:'Storage room',c:2,r:2,props:[['barrel',0,0],['barrel',1,0],['cask',2,0],['sacks',4,0],['sack',6,0],['barrow',0,2],['tallshelf',0,7],['logs',2,8],['barrel',4,8],['keg',5,8]]}];
+// ---------- the houses people live in (js/systems/homerooms.js) ----------
+// Each home is a small room built like a shop room (buildRoom in js/systems/shoprooms.js): rows 0-2 are the back wall (windows, paintings and tall shelves stand there), the floor is below, and the door is in the bottom row.
+// HOME_DESIGNS: one design per home, furnished for whoever lives there. Props are [id, x, y, mirror, quarter turns], as in SHOP_DESIGNS.
+const HOME_DESIGNS={
+ // the Mountain Town: log and stone walls, a fire against the cold
+ h_bergit:{rw:8,rh:9,floor:'wood',wall:'log',light:'day',props:[['window',1,1],['painting',5,1],['bs_red',0,3],['nightstand',1,3],['fireplace',5,3],['rug',2,5],['rocker',5,5],['cat',3,6],['table',0,6],['plant',7,7],['door',4,8]]},
+ h_halvard:{rw:8,rh:9,floor:'dark',wall:'stone',light:'dusk',props:[['swin',1,1],['lantern',4,1],['swin',6,1],['bs_green',0,3],['chest',1,3],['tallshelf',5,3],['coal',2,4],['barrel',7,7],['table',1,6],['stool',3,6],['sacks',5,7],['door',4,8]]},
+ h_ingrid:{rw:8,rh:9,floor:'wood',wall:'log',light:'day',props:[['window',1,1],['shield',4,1],['swords',5,1],['bd_blue',0,3],['nightstand',2,3],['armor',7,3],['rug',2,5],['table',5,5],['chair',4,5],['chair',7,5,1],['bookshelf',0,6],['door',4,8]]},
+ h_rolf:{rw:8,rh:9,floor:'stone',wall:'stone',light:'dusk',props:[['window',1,1],['painting',6,1],['bs_white',0,3],['chest',1,3],['bust',4,3],['bust',6,3],['chopblock',5,5],['desk',0,6],['stool',2,6],['sconce',7,1],['door',4,8]]},
+ h_sigrun:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'dusk',props:[['window',1,1],['pots',4,1],['bd_red',0,3],['nightstand',2,3],['stove',4,3],['cauldron',6,3],['icebox',7,3],['table',1,6],['chair',0,6],['chair',3,6,1],['rug',4,6],['door',4,8]]},
+ h_tormund:{rw:8,rh:9,floor:'dark',wall:'log',light:'warm',props:[['swin',1,1],['clock',3,1],['boar',6,1],['bs_blue',0,3],['nightstand',1,3],['fireplace',5,3],['armchair',3,5],['armchair',7,5],['rug',4,5],['logs',0,6],['lamp',7,6],['door',4,8]]},
+ h_solveig:{rw:8,rh:9,floor:'light',wall:'log',light:'day',props:[['window',1,1],['spools',5,1],['bs_green',0,3],['nightstand',1,3],['treadle',4,3],['bolts',6,3],['rug',2,5],['clothes',5,6],['rocker',2,6],['plant',0,7],['door',4,8]]},
+ h_leif:{rw:8,rh:9,floor:'wood',wall:'log',light:'day',props:[['window',1,1],['banner',4,0],['shield',6,1],['bunk',0,3],['chest',1,3],['dummy',6,3],['weights',7,6],['rug',2,5],['table',0,6],['stool',2,6],['door',4,8]]},
+ // the Walled Settlement: plaster, whitewash and brick
+ h_wilf:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'day',props:[['window',1,1],['wmap',5,1],['bd_green',0,3],['nightstand',2,3],['dresser',5,3],['coatrack',7,3],['rug',2,5],['table',5,6],['chair',4,6],['chair',7,6,1],['plant',0,7],['door',4,8]]},
+ h_edda:{rw:8,rh:9,floor:'tile',wall:'white',light:'day',props:[['window',1,1],['pots',5,1],['bs_white',0,3],['nightstand',1,3],['oven',6,3],['kcounter',3,3],['bread',0,6],['sacks',2,6],['baskets',7,7],['door',4,8]]},
+ h_marek:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'day',props:[['window',1,1],['wheel',4,1],['painting',6,1],['bd_blue',0,3],['nightstand',2,3],['bunk',7,3],['globe',5,3],['table',5,6],['chair',4,6],['rope',0,7],['door',4,8]]},
+ h_sunniva:{rw:8,rh:9,floor:'light',wall:'white',light:'day',props:[['curtains',1,1],['painting',4,1],['curtains',5,1],['canopy',0,3],['nightstand',2,3],['bookshelf',7,3],['rug',2,5],['armchair',4,5],['vase',5,5],['bookstand',6,6],['plant',0,7],['door',4,8]]},
+ h_corin:{rw:8,rh:9,floor:'stone',wall:'brick',light:'day',props:[['window',1,1],['clock',5,1],['bs_red',0,3],['chest',1,3],['ingotrack',4,3],['anvil',6,3],['scale',7,3],['table',1,6],['stool',0,6],['barrel',7,6],['door',4,8]]},
+ h_hesper:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'day',props:[['window',1,1],['garlic',5,1],['garlic',6,1],['bd_green',0,3],['nightstand',2,3],['herbs',5,3],['vegbin',7,3],['rug',2,5],['treepot',7,6],['plant',0,6],['plant',1,6],['door',4,8]]},
+ h_dunstan:{rw:8,rh:9,floor:'wood',wall:'wood',light:'dusk',props:[['swin',1,1],['wmap',4,1],['bs_blue',0,3],['chest',1,3],['safe',7,3],['maptable',4,3],['candle',6,3],['rug',2,5],['armchair',5,6],['lamp',7,6],['door',4,8]]},
+ h_lysa:{rw:8,rh:9,floor:'light',wall:'plaster',light:'day',props:[['window',1,1],['saws',5,1],['bd_white',0,3],['nightstand',2,3],['planks',4,3],['sawhorse',6,5],['rug',2,5],['table',0,6],['chair',2,6],['shavings',6,6],['door',4,8]]},
+ h_osric:{rw:8,rh:9,floor:'wood',wall:'ship',light:'day',props:[['porthole',1,1],['net',4,1],['porthole',7,1],['hammock',0,3],['rods',5,3],['buoy',7,3],['net',0,5],['rope',2,5],['fishmount',5,6],['barrel',0,7],['door',4,8]]},
+ h_maren:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'day',props:[['window',1,1],['painting',5,1],['bs_green',0,3],['nightstand',1,3],['rope',4,3],['rope',5,3],['planks',6,3],['table',5,6],['chair',4,6],['crate',0,7],['door',4,8]]},
+ h_thom:{rw:8,rh:9,floor:'tile',wall:'white',light:'day',props:[['window',1,1],['wmap',5,1],['bd_blue',0,3],['nightstand',2,3],['desk',5,3],['coinbox',7,3],['luggage',5,5],['luggage',6,5],['crate',7,5],['plant',0,7],['door',4,8]]},
+ h_bryn:{rw:8,rh:9,floor:'carpet',wall:'plaster',light:'dusk',props:[['curtains',1,1],['painting',5,1],['bd_red',0,3],['nightstand',2,3],['cradle',4,3],['rocker',5,3],['dresser',6,5],['candle',7,3],['rug',1,5],['cat',3,6],['door',4,8]]},
+ h_alder:{rw:8,rh:9,floor:'wood',wall:'brick',light:'day',props:[['window',1,1],['swords',5,1],['bs_blue',0,3],['chest',1,3],['weapons',4,3],['dummy',7,3],['table',0,6],['stool',2,6],['plant',7,7],['door',4,8]]},
+ h_fenna:{rw:8,rh:9,floor:'dirt',wall:'wood',light:'day',props:[['window',1,1],['clock',5,1],['bs_white',0,3],['nightstand',1,3],['eggs',4,3],['eggs',5,3],['sacks',6,3],['milk',7,5],['table',0,7],['baskets',6,7],['door',4,8]]},
+ h_joss:{rw:8,rh:9,floor:'wood',wall:'plaster',light:'warm',props:[['window',1,1],['pots',5,1],['bd_green',0,3],['nightstand',2,3],['fireplace',5,3],['cauldron',4,4],['longtable',1,6],['bench',1,5],['stool',5,6],['tankards',6,6],['door',4,8]]},
+ // the woodcutters: log cabins with earth floors
+ h_shack1:{rw:7,rh:9,floor:'dirt',wall:'log',light:'dusk',props:[['swin',1,1],['saws',4,1],['cot',0,3],['chest',1,3],['logs',4,3],['chopblock',5,5],['brazier',6,6],['stool',0,6],['barrel',1,6],['door',3,8]]},
+ h_shack2:{rw:7,rh:9,floor:'dirt',wall:'log',light:'dusk',props:[['swin',1,1],['lantern',4,1],['cot',0,3],['nightstand',1,3],['timber',4,3],['barrow',6,6],['table',0,6],['stool',2,6],['sawdust',5,7],['door',3,8]]},
+ h_hale:{rw:8,rh:9,floor:'wood',wall:'log',light:'warm',props:[['swin',1,1],['boar',4,1],['saws',5,1],['bs_red',0,3],['nightstand',1,3],['fireplace',5,3],['logs',3,3],['rug',2,5],['rocker',3,5],['table',0,6],['herbs',5,6],['lamp',7,6],['door',4,8]]},
+ // the farms
+ h_hobb:{rw:8,rh:9,floor:'wood',wall:'wood',light:'day',props:[['window',1,1],['garlic',5,1],['garlic',6,1],['bd_white',0,3],['nightstand',2,3],['oven',5,3],['milk',4,3],['table',0,6],['chair',2,6],['vegbin',6,6],['sacks',6,7],['door',4,8]]},
+ h_maude:{rw:8,rh:9,floor:'light',wall:'plaster',light:'day',props:[['curtains',1,1],['painting',5,1],['bd_red',0,3],['nightstand',2,3],['kcounter',4,3],['eggs',7,3],['table',5,6],['chair',4,6],['chair',7,6,1],['cat',0,6],['door',4,8]]},
+ h_perrin:{rw:8,rh:9,floor:'dirt',wall:'wood',light:'day',props:[['window',1,1],['clock',5,1],['bs_green',0,3],['chest',1,3],['produce',4,3],['barrow',7,3],['sacks',5,5],['table',0,6],['stool',2,6],['barrel',7,6],['door',4,8]]}};
+// HOME_ROOMS: where each home stands (the house's top-left corner on the map, from js/world), who lives there and the line shown when you step in.
+const HOME_ROOMS=[
+ {id:'bergit',house:[18,62],owner:'Bergit',design:'h_bergit'},{id:'halvard',house:[30,62],owner:'Halvard',design:'h_halvard'},{id:'ingrid',house:[18,69],owner:'Ingrid',design:'h_ingrid'},
+ {id:'rolf',house:[32,69],owner:'Rolf',design:'h_rolf'},{id:'sigrun',house:[22,72],owner:'Sigrun',design:'h_sigrun'},{id:'tormund',house:[22,62],owner:'Tormund',design:'h_tormund'},
+ {id:'solveig',house:[35,62],owner:'Solveig',design:'h_solveig'},{id:'leif',house:[18,74],owner:'Leif',design:'h_leif'},
+ {id:'wilf',house:[87,203],owner:'Wilf',design:'h_wilf'},{id:'edda',house:[94,203],owner:'Edda',design:'h_edda'},{id:'marek',house:[103,203],owner:'Marek',design:'h_marek'},
+ {id:'sunniva',house:[109,203],owner:'Sunniva',design:'h_sunniva'},{id:'corin',house:[87,212],owner:'Corin',design:'h_corin'},{id:'hesper',house:[109,212],owner:'Hesper',design:'h_hesper'},
+ {id:'dunstan',house:[87,222],owner:'Dunstan',design:'h_dunstan'},{id:'lysa',house:[109,222],owner:'Lysa',design:'h_lysa'},{id:'osric',house:[94,212],owner:'Osric',design:'h_osric'},
+ {id:'maren',house:[103,212],owner:'Maren',design:'h_maren'},{id:'thom',house:[94,222],owner:'Thom',design:'h_thom'},{id:'bryn',house:[103,222],owner:'Bryn',design:'h_bryn'},
+ {id:'alder',house:[87,229],owner:'Alder',design:'h_alder'},{id:'fenna',house:[94,229],owner:'Fenna',design:'h_fenna'},{id:'joss',house:[109,229],owner:'Joss',design:'h_joss'},
+ {id:'shack1',house:[27,152],name:"Woodcutter's shack",design:'h_shack1',msg:'Sawdust, pine resin and a cold stove.'},{id:'shack2',house:[34,158],name:"Woodcutter's shack",design:'h_shack2',msg:'Stacked timber and the smell of the forest.'},
+ {id:'hale',house:[120,265],owner:'Hale',design:'h_hale',msg:"A warm fire and the smell of pine. Hale's cottage."},
+ {id:'hobb',house:[119,206],owner:'Farmer Hobb',design:'h_hobb'},{id:'maude',house:[119,228],owner:'Maude',design:'h_maude'},{id:'perrin',house:[92,188],owner:'Perrin',design:'h_perrin'}];
