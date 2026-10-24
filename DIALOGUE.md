@@ -2,7 +2,7 @@
 
 Made by `tools/make_lists.py` and checked by the tests, so it is always up to date. **Original** means the line is word for word in the first game file Jack uploaded (7 October 2026). **Jack's** means Jack wrote it and listed it in `JACKS_LINES.txt`. **Placeholder** means it was written while building and is only filler: replace it with your own words whenever you like. No line has been changed or removed because of this list.
 
-**Totals (people's lines): 27 original, 0 Jack's, 119 placeholder.**
+**Totals (people's lines): 27 original, 0 Jack's, 135 placeholder.**
 
 ### Astrid (Astrid's Apothecary)
 - *placeholder:* Potions to heal, poisons to harm. Mind which is which.
@@ -169,13 +169,45 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *original:* I forage here for the alchemists. Dead ends hide the best finds.
 - *original:* Tall grass hides hornets. Do not say I did not warn you.
 
+### Astra (The Frosty Tankard)
+- *placeholder:* Ragna keeps the notice board. Have a look.
+- *placeholder:* I came up the mountain for the gems.
+
+### Bjarke (The Frosty Tankard)
+- *placeholder:* One more song and I will go home. Maybe.
+- *placeholder:* Mind the steps on your way out.
+
+### Gunnar (The Frosty Tankard)
+- *placeholder:* Cold outside, warm inside. That is a tavern.
+- *placeholder:* The arena crowd comes here after a bout.
+
+### Hilde (The Frosty Tankard)
+- *placeholder:* The guild fighters drink here. Loudly.
+- *placeholder:* Have you tried the honey mead?
+
 ### Innkeeper Ragna (The Frosty Tankard)
 - *placeholder:* Rooms are 100 gold a night. Clean sheets, I promise.
 - *placeholder:* Mind the stairs after a few mugs.
 
+### Greta (The Salty Anchor)
+- *placeholder:* Check the notice board. Folk pin jobs up there.
+- *placeholder:* I trade cloth up and down the coast.
+
 ### Innkeeper Hobb (The Salty Anchor)
 - *placeholder:* Rooms are 100 gold a night. Clean sheets, I promise.
 - *placeholder:* The stew is on the house. Well, not really.
+
+### Nell (The Salty Anchor)
+- *placeholder:* Shh, I am listening for gossip.
+- *placeholder:* The stew here is better than mine. Do not tell anyone.
+
+### Tobias (The Salty Anchor)
+- *placeholder:* Hobb pours a fair pint.
+- *placeholder:* I heard the pirates are bolder this year.
+
+### Wendel (The Salty Anchor)
+- *placeholder:* Pull up a stool. The ale is warm and so is the fire.
+- *placeholder:* I sailed every sea once. Now I sail this stool.
 
 ### Aiko (Village)
 - *original:* I keep meaning to learn to fish.

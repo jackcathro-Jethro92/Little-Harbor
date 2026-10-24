@@ -77,6 +77,14 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Little Wick | Gladiators' Arena (Mountain Town) | Villager |
 | Mad Moll | Gladiators' Arena (Mountain Town) | Villager |
 | Cheerful Ned | Gladiators' Arena (Mountain Town) | Villager |
+| Wendel | The Salty Anchor | Villager |
+| Greta | The Salty Anchor | Villager |
+| Tobias | The Salty Anchor | Villager |
+| Nell | The Salty Anchor | Villager |
+| Gunnar | The Frosty Tankard | Villager |
+| Astra | The Frosty Tankard | Villager |
+| Bjarke | The Frosty Tankard | Villager |
+| Hilde | The Frosty Tankard | Villager |
 | Old Stranger | Temple of the Sea | Keeper of the Sea temple |
 | Villager | Village | Villager |
 | Bjorn the Elder | Village | Village elder |
