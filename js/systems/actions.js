@@ -9,6 +9,7 @@ function act(){
   if(zoneOf(P.x,P.y)>=11&&shipUse(at(x,y)))return;
   if(zoneOf(P.x,P.y)===1&&at(x,y)===175)return openCrate(x,y);   // a storage crate in the Haven house
   if(zoneOf(P.x,P.y)===1&&at(x,y)===176)return openMannequin(x,y);   // a mannequin in its wardrobe (js/ui/mannequin.js)
+  {const bd=boardAt(x,y);if(bd)return openBoard(bd)}   // a tavern's notice board (js/systems/taverns.js)
   if(useGate(x,y))return;
   if(at(x,y)===23||at(x,y)===144||at(x,y)===145||at(x,y)===169){const z=zoneOf(P.x,P.y);if(z===1)return exitHome();if(z>=3)return exitHall(x,y)}
   if(AR.on&&AR.x===x&&AR.y===y)return swingFoe();

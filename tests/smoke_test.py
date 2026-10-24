@@ -186,6 +186,12 @@ def check(b, url):
       const[ox,oy]=h.out;sail=false;P.x=P.rx=ox;P.y=P.ry=oy;P.f='u';act();if(!(P.x===fx&&P.y===fy&&zoneOf(P.x,P.y)===r.z))bad.push(h.id+' in');P.f='d';act();if(!(P.x===ox&&P.y===oy))bad.push(h.id+' out');
       document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));if(dlgActive())dlgEnd()});return [HOME_LIST.length,bad]})()""")
     assert homes[0] >= 29 and homes[1] == [], homes
+    # the taverns: four regulars inside each, a notice board on the back wall that opens (empty until jobs are added), and tables and barrels outside that stand in the way
+    tav = ev("""(()=>{const out={};['inn_settlement','inn_mountain'].forEach(k=>{const r=SHOP_ROOMS.find(s=>s.id===k).room,b=r.props.find(p=>p.id==='notices');
+      const regs=NPC.filter(n=>n.regular===k&&zoneOf(n.x,n.y)===r.z&&!INTBLK[n.y*MW+n.x]).length;sail=false;visitRoom(r);P.x=P.rx=b.ax+1;P.y=P.ry=b.ay+2;P.f='u';say('');act();
+      out[k]=[regs,/notice board/i.test($('msg').textContent)]});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||!walkable(p.x,p.y));
+      P.x=P.rx=103;P.y=P.ry=218;draw();P.x=P.rx=23;P.y=P.ry=68;draw();return out})()""")
+    assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "yard": True}, tav
     assert ev("(()=>{const r=SHOP_ROOMS.find(q=>q.id==='barber').room,tb=r.props.find(p=>p.id==='counter4'),rug=r.props.find(p=>p.flat);return !walkable(tb.ax,tb.ay)&&!!rug&&walkable(rug.ax,rug.ay)&&r.props.some(p=>!p.flat&&INTBLK[p.ay*MW+p.ax]===1)})()"), "counters and furniture are in the way, but rugs are not"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));SCENE=null;BATTLE=null;sail=false;P.x=P.rx=91;P.y=P.ry=217;P.f='u';act()")
     assert ev("zoneOf(P.x,P.y)>=30&&intrOf(P.x,P.y).key==='shop_apothecary'&&P.x===intrOf(P.x,P.y).dx&&P.y===intrOf(P.x,P.y).y1-1"), "facing the shop's door and pressing Use walks you into its room"
