@@ -36,7 +36,7 @@ const NB0=BL.length,clr=(x0,y0,x1,y1)=>rect(x0,y0,x1,y1,(x,y)=>{const t=at(x,y);
 function walled(x0,y0,x1,y1,gx,houses){clr(x0-1,y0-1,x1+1,y1+1);rect(x0,y0,x1,y1,(x,y)=>setT(x,y,(x===x0||x===x1||y===y0||y===y1)?12:1));
   rect(gx,y0+1,gx,y1,(x,y)=>setT(x,y,6));setT(gx+1,y1,6);setT(gx,y1,6);houses.forEach(([hx,hy,roof])=>BL.push({x:hx,y:hy,w:3,roof}))}
 walled(15,59,39,78,26,[[18,62,'slate'],[30,62,'thatch'],[18,69,'thatch'],[32,69,'red'],[22,72,'slate']]);        // Mountain Town, about halfway between the Temple to the Mountains and the forest
-walled(84,200,115,234,100,[[87,203,'red'],[94,203,'thatch'],[103,203,'slate'],[109,203,'thatch'],[87,212,'thatch'],[109,212,'red'],[87,222,'slate'],[109,222,'thatch']]); // Walled Settlement, south end of the mainland
+walled(84,200,115,234,100,[]); // Walled Settlement, south end of the mainland (its homes, lanes and square are laid out in js/world/settlement.js)
 setT(100,234,12);setT(101,234,12);rect(85,217,114,218,(x,y)=>setT(x,y,6)); // closed south wall, one main street
 [[84,216],[84,217],[84,218],[115,216],[115,217],[115,218]].forEach(([x,y])=>setT(x,y,6));[[84,215],[84,219],[115,215],[115,219]].forEach(([x,y])=>setT(x,y,45)); // west and east gates
 
