@@ -188,10 +188,10 @@ def check(b, url):
     assert homes[0] >= 29 and homes[1] == [], homes
     # the taverns: four regulars inside each, a notice board on the back wall that opens (empty until jobs are added), and tables and barrels outside that stand in the way
     tav = ev("""(()=>{const out={};['inn_settlement','inn_mountain'].forEach(k=>{const r=SHOP_ROOMS.find(s=>s.id===k).room,b=r.props.find(p=>p.id==='notices');
-      const regs=NPC.filter(n=>n.regular===k&&zoneOf(n.x,n.y)===r.z&&!INTBLK[n.y*MW+n.x]).length;sail=false;visitRoom(r);P.x=P.rx=b.ax+1;P.y=P.ry=b.ay+2;P.f='u';say('');act();
+      const regs=NPC.filter(n=>n.regular===k&&zoneOf(n.x,n.y)===r.z&&!INTBLK[n.y*MW+n.x]).length;sail=false;visitRoom(r);const seen=new Set([P.x+','+P.y]),q=[[P.x,P.y]];while(q.length){const[x,y]=q.shift();for(const[a,c]of[[1,0],[-1,0],[0,1],[0,-1]]){const k2=(x+a)+','+(y+c);if(!seen.has(k2)&&walkable(x+a,y+c)){seen.add(k2);q.push([x+a,y+c])}}}const bar=r.props.find(p=>p.id==='bar');let miss=0;for(let y=bar.ay+2;y<r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(walkable(x,y)&&!seen.has(x+','+y))miss++;out[k+'_walk']=seen.has((b.ax+1)+','+(b.ay+2))&&miss===0;P.x=P.rx=b.ax+1;P.y=P.ry=b.ay+2;P.f='u';say('');act();
       out[k]=[regs,/notice board/i.test($('msg').textContent)]});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||!walkable(p.x,p.y));
       P.x=P.rx=103;P.y=P.ry=218;draw();P.x=P.rx=23;P.y=P.ry=68;draw();return out})()""")
-    assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "yard": True}, tav
+    assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "inn_settlement_walk": True, "inn_mountain_walk": True, "yard": True}, tav   # (you can walk from the door to the board, and to every free tile in front of the bar: no regular blocks the way)
     # the Walled Settlement's new layout: a well in the square, signposts, fenced front yards, the three new house shapes, every prop on open ground, and a frame drawn all over the town
     town2 = ev("""(()=>{const d=YARD_PROPS.filter(p=>p.at==='settlement'),ids=d.map(p=>p.id),shapes=new Set(BL.filter(b=>b.shape&&b.x>=84&&b.x<=115&&b.y>=200&&b.y<=234).map(b=>b.shape));
       let fence=0;for(let y=201;y<=233;y++)for(let x=85;x<=114;x++)if(at(x,y)===8)fence++;const bad=d.filter(p=>{for(let j=0;j<p.h;j++)for(let k=0;k<p.w;k++){const t=at(p.x+k,p.y+j);if(t!==1&&!(t===6&&(p.id==='well'||p.id==='bench')))return true}return false}).map(p=>p.id+' '+p.x+','+p.y);
