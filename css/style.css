@@ -191,6 +191,8 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 .hit{animation:btHit .3s}
 
 #cine{position:absolute;inset:0;pointer-events:none;z-index:2}
+#ofilm{display:none;position:absolute;left:2px;top:2px;width:calc(100% - 4px);aspect-ratio:176/208;image-rendering:pixelated;border-radius:4px;z-index:2}   /* the opening cinematic of a new game (js/story/openingfilm.js) */
+#ofilm.on{display:block}
 #cine i{position:absolute;left:0;right:0;height:0;background:#000;transition:height 1.2s ease}
 #cine i:first-child{top:0}#cine i:last-child{bottom:0}
 #cine.on i{height:13%}

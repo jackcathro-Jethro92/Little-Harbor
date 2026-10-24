@@ -736,12 +736,15 @@ def check(b, url):
     assert ev("!flag('festival_on')&&!flag('festival_done')&&FESTIVAL_ON===false"), "no festival before a new game starts"
     ev("window.__home=NPC.map(n=>[n.n,n.x,n.y]);fireTriggers('start')"); pg.wait_for_timeout(1500)
     assert ev("SCENE!==null&&SCENE.cine===true&&flag('festival_on')&&FESTIVAL_ON===true"), "starting a new game plays the festival cinematic with the decorations switched on"
-    assert ev("$('cine').classList.contains('on')&&SCENE_LIGHT!==null&&SCENE_LIGHT<.9&&FESTIVAL_BUILD===0&&P.x===156&&P.y===108"), "film bars slide in, it starts in the dark before sunrise, no decorations yet, and the player is out of sight"
-    ev("(()=>{try{draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "the cinematic frames draw"
+    assert ev("INTRO.playing()&&$('ofilm').classList.contains('on')&&INTRO.SC.length===6"), "Jack's extended opening (six scenes) plays over the game's picture"
+    ev("(()=>{try{INTRO.SC.forEach((sc,i)=>{for(let t=0;t<sc.d;t+=.7)INTRO.drawAt(i,t)});draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "every frame of the cinematic draws"
     ev("$('wrap').click()"); pg.wait_for_timeout(150)   # a tap anywhere skips a cinematic
     assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&!$('cine').classList.contains('on')&&!dlgActive()&&P.x===156&&P.y===126&&S.eq.boat==='rowboat'"), "a tap ends it with the festival done, the decorations up, normal light, the bars gone and the player at the pier with the rowboat"
     assert ev("__home.filter(([n])=>FEST_CROWD.includes(n)||n==='Murl').every(([n,x,y])=>{const q=NPC.find(p=>p.n===n);return Math.abs(q.x-x)+Math.abs(q.y-y)<=2})"), "everyone the cinematic moved is back where they were"
     ev("fireTriggers('start')"); assert ev("SCENE===null"), "the festival plays once"
+    # played to its end without a tap, the cinematic hands over to the game in the same place
+    ev("storyReset();sail=false;P.x=P.rx=150;P.y=P.ry=124;fireTriggers('start')"); pg.wait_for_timeout(300); ev("INTRO.at(5,3.95)"); pg.wait_for_timeout(1800)
+    assert ev("SCENE===null&&!INTRO.playing()&&flag('festival_done')&&P.x===156&&P.y===126"), "the cinematic ends by itself on the pier"
     assert ev("!flag('letter1_read')&&S.story.q===null"), "no letter until the boat"
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_function("GULL!==null", timeout=10000)

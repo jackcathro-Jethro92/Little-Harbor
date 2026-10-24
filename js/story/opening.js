@@ -12,21 +12,12 @@ DLG.fest_c1={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Welcome, friends
 DLG.fest_c2={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Every year we thank the sea for its gifts, and welcome those who will fish its waters.'}}};
 DLG.fest_c3={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] This year our newest fisher joins us. Come forward, friend!'}}};
 DLG.fest_c4={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Every fisher needs a boat. This little rowboat is yours, tied up at the end of the pier. Fair winds!'}}};
-const FEST_CROWD=['Odo','Bram','Mara','Pip','Old Tess','Yuki','Aiko','Taro','Mei','Haru','Nao'];
-// the villagers line both sides of the road between the plaza and the pier, on walkable ground and never on the road itself
-function festCrowdWalks(){const spots=[];for(const x of[154,158])for(let y=124;y>=114;y-=2){const p=nearestTile(x,y,(a,b)=>WK.includes(at(a,b))&&Math.abs(a-155.5)>=1.5&&!spots.some(s=>s[0]===a&&s[1]===b)&&a>=150&&a<=162);if(p)spots.push(p)}
-  return FEST_CROWD.filter(n=>NPC.some(q=>q.n===n)).map((n,i)=>[n,spots[i%spots.length][0],spots[i%spots.length][1],250])}
+const FEST_CROWD=['Odo','Bram','Mara','Pip','Old Tess','Yuki','Aiko','Taro','Mei','Haru','Nao'];   // the villagers who come to the festival (they fill the crowd in the opening cinematic)
+// the opening cinematic itself is Jack's extended draft, drawn on its own picture (js/story/openingfilm.js): dawn and the title, the festival, Murl's speech (fest_c1 to fest_c3), the first boat (fest_c4),
+// fireworks and a seagull on the boat. Afterwards (or after a tap, Skip or Escape) you are on the pier with the decorations up.
 SCENES.festival_opening=[
- {bars:'on'},{build:[0,0,1]},{light:[.78,1.07,44000]},{fade:'out',ms:1},{tp:['You',156,108]},{pan:[156,133,1]},{wait:300},{fade:'in',ms:2400},                       // 0-3 s: a dark, quiet harbor before sunrise
- {pan:[156,127,5200]},                                                                                                                                      // 3-8 s: the camera drifts up to the pier as the sky lightens
- {build:[0,1,5500]},{walks:festCrowdWalks},{crowd:'face'},                                                                                                    // 8-15 s: the village wakes: bunting and lanterns go up, villagers gather
- {pan:[156,122,2600]},{wait:400},                                                                                                                           // 15-18 s: the road lined with people
- {tp:['Murl',156,122]},{walks:[['Murl',156,127,300]]},{face:['Murl','u']},{pan:[156,126,1200]},                                                                                    // 18-21 s: Murl steps onto the pier
- {speak:'fest_c1',ms:3800},{cheer:2400},{wait:2400},{speak:'fest_c2',ms:4600},{cheer:2000},{wait:1800},{speak:'fest_c3',ms:3200},{cheer:3000},{pan:['back',700]}, // 21-36 s: Murl's speech and the cheering
- {walks:[['You',156,125,230]]},{face:['You','d']},                                                                                                          // 36-40 s: the crowd parts and the newest fisher walks to Murl
- {speak:'fest_c4',ms:4200},{toast:'Murl gives you the rowboat!'},{face:['Murl','d']},{wait:500},                                                             // 40-45 s: the rowboat
- {lanterns:8000},{cheer:2500},{wait:3600},                                                                                                                  // 45-49 s: lanterns float out over the water
- {fade:'out',ms:1200},{wait:1300},{light:'reset'},{bars:'off'},{tp:['You',156,126]},{face:['You','d']},{set:'festival_done'},{fade:'in',ms:900},{msg:'Walk down the pier to your boat, face it, and tap Use.'}];
+ {film:'intro'},
+ {fade:'out',ms:1},{light:'reset'},{tp:['You',156,126]},{face:['You','d']},{set:'festival_done'},{fade:'in',ms:900},{msg:'Walk down the pier to your boat, face it, and tap Use.'}];
 SCENES.festival_opening.cine=true;
 LETTERS.q1_letter={from:'A stranger',title:'Please come quick!',text:'Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry!!'};
 TRIGGERS.push(
