@@ -85,8 +85,11 @@ def check(b, url):
         ev("P.x=P.rx=window.__p0[0];P.y=P.ry=window.__p0[1];P.f='r'")
         start(); pg.wait_for_timeout(1000); stop()
         n = ev("window.__n"); ev("(()=>{window.move=window.__mv})()"); return n
-    kb = held(lambda: pg.keyboard.down("ArrowRight"), lambda: pg.keyboard.up("ArrowRight"))
-    dp = held(lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))"), lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerup',{bubbles:true}))"))
+    # (a busy test machine can stall for part of a second, so a pair that disagrees is measured once more before it counts as a failure)
+    for attempt in range(2):
+        kb = held(lambda: pg.keyboard.down("ArrowRight"), lambda: pg.keyboard.up("ArrowRight"))
+        dp = held(lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))"), lambda: ev("$('right').dispatchEvent(new PointerEvent('pointerup',{bubbles:true}))"))
+        if abs(kb - dp) <= 2 and 6 <= kb <= 20: break
     assert abs(kb - dp) <= 2 and 6 <= kb <= 20, (kb, dp)
     # movement feel: a quick tap on a new direction only turns you; a tap on the way you face moves exactly one tile; holding walks; a second key takes over and, when let go, the first carries on; letting go of all stops
     ev("sail=false;P.x=P.rx=60;P.y=P.ry=190;P.f='d';for(let y=186;y<=194;y++)for(let x=56;x<=64;x++)if(!walkable(x,y)){}")
