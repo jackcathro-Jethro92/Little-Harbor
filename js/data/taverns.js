@@ -14,5 +14,5 @@ const TAVERN_REGULARS=[
  {at:'inn_mountain',n:'Hilde',x:7,y:11,f:'l',skin:4,hair:2,shirt:2,jk:3,hc:2,hat:'none',say:['The guild fighters drink here. Loudly.','Have you tried the honey mead?']}];
 // TAVERN_YARDS: tables, stools and barrels outside each tavern, on the map ([prop id from js/render/props.js, x, y]). They stand in the way, like furniture indoors.
 const TAVERN_YARDS={
- inn_settlement:[['crate',101,219],['barrel',101,220],['barrel',105,220],['stool',106,219],['roundtable',107,219],['stool',109,220],['cask',110,219],['stool',111,220]],
+ inn_settlement:[['crate',101,219],['barrel',101,220],['barrel',105,220],['stool',106,219],['table',107,219],['stool',109,219],['cask',110,219],['stool',111,220]],
  inn_mountain:[['barrel',21,69],['crate',21,70],['cask',25,69],['stool',25,70]]};
