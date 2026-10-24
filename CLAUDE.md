@@ -3,10 +3,10 @@
 Read `DESIGN.md` first. It describes everything already built, the data tables, save format, and the roadmap.
 
 ## Project
-- Mobile-first pixel-art browser game. Primary device: **iPhone 14 in Safari** (about 390 x 844). Must also work with keyboard on desktop.
+- Pixel-art browser game. **From 24 October 2026 the game is played and tested only on PC** (the owner's decision): design screens for a desktop browser window with keyboard and mouse first. Older notes below that mention the iPhone describe how it was built before then.
 - The game is plain JavaScript on a 2D canvas, no libraries. `index.html` holds the page markup and loads `css/style.css` and the files under `js/` (see "Code layout" in DESIGN.md). Hosted as static files (GitHub Pages), so no build step is required. Prefer plain ES modules loaded from `index.html` over a bundler.
 - The `js/` files are classic scripts that share one global scope and run in the order listed in `index.html`. Keep that order when adding files, and add every new file there (the smoke test checks this).
-- The owner works mainly from an iPhone and tests by opening the hosted link in Safari. Keep the page fast and the controls thumb-friendly.
+- The owner tests by opening the hosted link in a browser on a PC. Keep the page fast, and make layouts look right in a wide window (things should not stretch to fill a big screen).
 
 ## First job
 Split `index.html` into modules **without changing behaviour**: data tables (items, recipes, skills, shops), world generation, rendering and sprites, game systems (stats, fishing, gathering, crafting, stations, home and garden, combat), and UI screens (bag, skills, map, shops, crafting). Keep the visible game identical. Then add automated tests (see below) and a GitHub Pages deploy.
@@ -19,7 +19,7 @@ Split `index.html` into modules **without changing behaviour**: data tables (ite
 5. Work on a branch per feature, small commits, and describe changes plainly in the pull request. The owner reviews on a phone.
 
 ## Testing
-- Use Playwright (headless Chromium, and WebKit if available since Safari is the target) to load the page with a seeded save in `localStorage`, then drive the real UI by tapping buttons.
+- Use Playwright (headless Chromium, and WebKit if available) to load the page with a seeded save in `localStorage`, then drive the real UI by tapping buttons.
 - Minimum checks for each change: page loads with no `pageerror`, the player can move, the world is connected (sea reaches every island, key routes are walkable), the bag/shop/crafting screens open, and old saves still load.
 - Draw a frame at many map positions to catch rendering errors (`draw()` is global).
 
@@ -36,4 +36,4 @@ Split `index.html` into modules **without changing behaviour**: data tables (ite
 
 ## Style
 - Pixel-art look, FireRed-style menus, Stardew-style skills. Fonts: Pixelify Sans with a monospace fallback.
-- Plain, friendly in-game text. Short messages on a phone-sized screen.
+- Plain, friendly in-game text. Short messages.
