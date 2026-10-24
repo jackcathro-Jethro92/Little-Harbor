@@ -44,6 +44,7 @@ function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.
     else if(dc===0){f(W+2,21,7,10,O);f(W+3,22,5,8,'#8a5a2e');f(W+3,22,5,1,'#a8743f');f(W+3,25,5,1,'#4a3018');f(W+3,28,5,1,'#4a3018')}
     else if(dc===1){f(-8,15,8,1,'#4a3018');for(let z=0;z<3;z++){f(-8+z*3,16,2,4,'#e0762f');q(-8+z*3,16,'#f8a050')}}
     else if(dc===3){f(W+2,23,8,8,O);f(W+3,24,6,6,'#a8743f');f(W+3,24,6,1,'#c9965a');f(W+3,27,6,1,O)}})}
-function houseArt(b,x,y,t){g.drawImage(houseSprite(b),(x|0)-14,(y|0)-14);
+function houseArt(b,x,y,t){g.drawImage(houseSprite(b),(x|0)-14,(y|0)-14);if(b.shape)shapeExtras(b,x,y,t);   // (a shed or a porch: js/render/townhouses.js)
+
   if((HROOF[b.roof]?b.roof:'thatch')==='slate'){const W=b.w*T;   // chimney smoke
     for(let p=0;p<4;p++){const a=.55-p*.12,yy=y-10-p*5-((t/120|0)%5),xx=x+W-11+Math.round(Math.sin(t/500+p)*2)+p;g.fillStyle='rgba(235,235,235,'+a+')';g.beginPath();g.arc(xx+2,yy,2+p*.6,0,7);g.fill()}}}

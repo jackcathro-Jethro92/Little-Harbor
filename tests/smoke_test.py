@@ -192,6 +192,11 @@ def check(b, url):
       out[k]=[regs,/notice board/i.test($('msg').textContent)]});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||!walkable(p.x,p.y));
       P.x=P.rx=103;P.y=P.ry=218;draw();P.x=P.rx=23;P.y=P.ry=68;draw();return out})()""")
     assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "yard": True}, tav
+    # the Walled Settlement's new layout: a well in the square, signposts, fenced front yards, the three new house shapes, every prop on open ground, and a frame drawn all over the town
+    town2 = ev("""(()=>{const d=YARD_PROPS.filter(p=>p.at==='settlement'),ids=d.map(p=>p.id),shapes=new Set(BL.filter(b=>b.shape&&b.x>=84&&b.x<=115&&b.y>=200&&b.y<=234).map(b=>b.shape));
+      let fence=0;for(let y=201;y<=233;y++)for(let x=85;x<=114;x++)if(at(x,y)===8)fence++;const bad=d.filter(p=>{for(let j=0;j<p.h;j++)for(let k=0;k<p.w;k++){const t=at(p.x+k,p.y+j);if(t!==1&&!(t===6&&(p.id==='well'||p.id==='bench')))return true}return false}).map(p=>p.id+' '+p.x+','+p.y);
+      for(let y=202;y<=233;y+=3)for(let x=86;x<=114;x+=4){P.x=P.rx=x;P.y=P.ry=y;draw()}return [ids.includes('well'),ids.filter(i=>i==='signpost').length,fence>=32,[...shapes].sort().join(),bad]})()""")
+    assert town2 == [True, 5, True, "porch,tall,wing", []], town2
     assert ev("(()=>{const r=SHOP_ROOMS.find(q=>q.id==='barber').room,tb=r.props.find(p=>p.id==='counter4'),rug=r.props.find(p=>p.flat);return !walkable(tb.ax,tb.ay)&&!!rug&&walkable(rug.ax,rug.ay)&&r.props.some(p=>!p.flat&&INTBLK[p.ay*MW+p.ax]===1)})()"), "counters and furniture are in the way, but rugs are not"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));SCENE=null;BATTLE=null;sail=false;P.x=P.rx=91;P.y=P.ry=217;P.f='u';act()")
     assert ev("zoneOf(P.x,P.y)>=30&&intrOf(P.x,P.y).key==='shop_apothecary'&&P.x===intrOf(P.x,P.y).dx&&P.y===intrOf(P.x,P.y).y1-1"), "facing the shop's door and pressing Use walks you into its room"
