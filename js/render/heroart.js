@@ -208,13 +208,13 @@ const HA_CACHE=new Map();
 // a person's picture as a canvas (cached): key names it for ART_FILES, spec describes it
 function heroCanvas(key,spec,view,arm){const k=key+'|'+view+'|'+JSON.stringify(spec.col)+'|'+JSON.stringify(arm||{});if(HA_CACHE.has(k))return HA_CACHE.get(k);
   const cv=document.createElement('canvas');cv.width=HA_W;cv.height=HA_H;
-  const file=ART_FILES[key+(view==='b'?'_back':'')];
+  const file=ART_FILES[key.split('|')[0]+(view==='b'?'_back':'')];
   if(file&&file.complete&&file.naturalWidth)cv.getContext('2d').drawImage(file,0,0,HA_W,HA_H);else paintHero(spec,view,arm).render(cv);
   HA_CACHE.set(k,cv);return cv}
 // the player's own picture: their chosen character (HEROES in js/data/heroes.js) in the colours of S.look, wearing what they wear
 function heroSpecFor(h,L){return{...h.art,sex:h.sex,col:{skin:OPT.skin[L.skin],hair:OPT.hair[L.hair],shirt:OPT.shirt[L.shirt],jacket:OPT.jacket[L.jk===undefined?1:L.jk],hat:h.art.hatCol||OPT.hat[L.hc||0],eye:h.art.eye,pants:h.art.pants,boots:h.art.boots}}}
-function heroSpec(){const h=HEROES.find(q=>q.id===S.hero)||HEROES[0];return heroSpecFor(h,S.look||h.look)}
-const playerArt=view=>heroCanvas('hero_'+(S.hero||'f1'),heroSpec(),view||'f',armourLook());
+function heroSpec(){const h=HEROES.find(q=>q.id===S.hero)||HEROES[0];const sp=heroSpecFor(h,S.look||h.look);return typeof dressSpec==='function'?dressSpec(sp,S.look||h.look):sp}   // (dressSpec: the clothes you wear, js/systems/clothes.js)
+const playerArt=view=>heroCanvas('hero_'+(S.hero||'f1')+'|'+(typeof wornKey==='function'?wornKey():''),heroSpec(),view||'f',armourLook());
 // draw a picture onto a canvas, keeping its shape (centred, no blurring)
 function drawArt(cv,art,bg){const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);if(bg){c.fillStyle=bg;c.fillRect(0,0,cv.width,cv.height)}
   const s=Math.min(cv.width/art.width,cv.height/art.height),w=art.width*s,h=art.height*s;c.drawImage(art,(cv.width-w)/2,(cv.height-h)/2,w,h)}

@@ -6,7 +6,7 @@ pv.onclick=()=>{const v=['f','r','b','l'];pvv=v[(v.indexOf(pvv)+1)%4];preview()}
 let lookMode='start',LK=S.look,LK0=null;
 const LDEF={skin:0,hair:0,shirt:0,jk:1,hc:0,hat:'cap',jon:true,pack:true,hstyle:'short'},lkv=(o,k)=>o[k]===undefined?LDEF[k]:o[k];
 const lookCost=()=>lookMode==='start'?0:Object.entries(LOOK_PRICES[lookMode]).reduce((a,[k,p])=>a+(lkv(LK,k)!==lkv(LK0,k)?p:0),0);
-const LFIELDS={start:['skin','hair','shirt','jk','hc','hat','jon','pack','hstyle'],tailor:['shirt','jk','hc','hat','jon','pack'],barber:['hair','hstyle']};
+const LFIELDS={start:['skin','hair','shirt','jk','hc','hat','jon','pack','hstyle'],tailor:['shirt','jk','hc','pack'],barber:['hair','hstyle']};
 function buildSw(){const el=$('sws'),L=LK,F=LFIELDS[lookMode],P=lookMode==='start'?{}:LOOK_PRICES[lookMode];el.innerHTML='';
   const tag=k=>P[k]?' ('+P[k]+'g)':'',changed=()=>{buildSw();preview();if(lookMode==='start')save()};
   [['skin','Skin','skin'],['hair','Hair','hair'],['shirt','Shirt','shirt'],['jacket','Jacket','jk'],['hat','Hat','hc']].filter(r=>F.includes(r[2])).forEach(([k,label,lk])=>{

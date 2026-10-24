@@ -151,7 +151,23 @@ const ITEM_DRAW={
  shipwright(p){const a=p.part('#5a6070');p.fill(a,haOr(haSeg(12,4,12,19,1.2),haAnd(haEl(12,13,8,7),iaNot(haEl(12,13,6,5.6)),(x,y)=>y>14),haAnd(haEl(12,3.6,2.6,2.6),iaNot(haEl(12,3.6,1.1,1.1))),haSeg(8,8,16,8,.9)))},
  home_claim(p){const s=p.part(IA_WOOD.medium);p.fill(s,haSeg(12,8,12,22,1.2));const b=p.part('#e8d8a8');p.fill(b,haPoly([[4,3],[20,3],[20,11],[4,11]]));p.line(6,6,17,6,'#6b4423');p.line(6,8,14,8,'#6b4423')},
  garden_kit(p){const b=p.part(IA_WOOD.medium);p.fill(b,haPoly([[2,13],[22,13],[21,21],[3,21]]));const s=p.part('#5a3a22');p.fill(s,haPoly([[3,13],[21,13],[21,15.6],[3,15.6]]));const l=p.part('#4caf52');p.fill(l,haOr(haSeg(12,13,12,7,.8),haOEl(9,7,-.8,-.6,3,1.5),haOEl(15,6,.8,-.6,3,1.5)))}};
-function paintItem(p,id){const d=ITEM_DRAW[id];
+// clothes from Wynn (js/data/clothes.js): a top, a jacket or coat, or a hat, in the colour it comes in
+function paintClothes(p,w){const col=(w.slot==='top'?OPT.shirt:w.slot==='over'?OPT.jacket:OPT.hat)[w.col],c=p.part(col),a=w.art;
+  if(w.slot==='top'){const long=a==='dress'||a==='tunic',sl=a==='tank'?0:a==='tee'?3:5;p.fill(c,haOr(haPoly([[8,4],[16,4],[17,long?22:19],[7,long?22:19]]),haPoly([[8,4],[8-sl,7+sl*.4],[5-sl*.2,10],[8,9]]),haPoly([[16,4],[16+sl,7+sl*.4],[19+sl*.2,10],[16,9]])));
+    p.rect(10,4,4,2,haRamp(col)[3]);if(a==='stripes')for(let y=8;y<19;y+=3)p.line(8,y,16,y,'#f4f4f0');if(a==='shirt'){p.line(12,6,12,18,haRamp(col)[2]);[8,11,14].forEach(y=>p.dot(12,y,'#f4f4f0'))}if(a==='sweater')for(let y=7;y<19;y+=2)p.line(9,y,15,y,haRamp(col)[1]);if(a==='tunic')p.line(7,14,17,14,'#6b4423');return}
+  if(w.slot==='over'){const len=a==='longcoat'||a==='robe'?22:a==='cloak'?22:a==='vest'||a==='apron'?16:19;
+    if(a==='cloak'){p.fill(c,haOr(haPoly([[12,3],[19,9],[21,22],[3,22],[5,9]]),haEl(12,5,4,3)));p.line(12,7,12,21,haRamp(col)[2]);return}
+    if(a==='apron'){p.fill(c,haOr(haPoly([[8,8],[16,8],[17,20],[7,20]]),haPoly([[9,3],[15,3],[15,8],[9,8]])));p.line(6,9,18,9,'#6b4423');return}
+    const sl=a==='vest'?0:5;p.fill(c,haOr(haPoly([[7,4],[11,4],[11,len],[6,len]]),haPoly([[13,4],[17,4],[18,len],[13,len]]),haPoly([[7,4],[7-sl,8+sl],[4-sl*.2,11],[7,10]]),haPoly([[17,4],[17+sl,8+sl],[20+sl*.2,11],[17,10]])));
+    if(a==='flannel'){for(let y=6;y<len;y+=3)p.line(6,y,18,y,haRamp(col)[3]);for(let x=8;x<18;x+=3)p.line(x,5,x,len-1,haRamp(col)[3])}p.dot(10,9,'#d8b878');p.dot(10,13,'#d8b878');return}
+  const H={cap:()=>{p.fill(c,haAnd(haEl(12,12,7,6),(x,y)=>y<12));p.fill(c,haEl(15,12.5,6,1.6))},straw:()=>{p.fill(c,haEl(12,14,10,3));p.fill(c,haAnd(haEl(12,12,5.5,6),(x,y)=>y<13));p.line(7,12,17,12,'#c8553d')},
+    beanie:()=>{p.fill(c,haAnd(haEl(12,13,7,8),(x,y)=>y<14));p.line(5,13,19,13,haRamp(col)[3]);p.fill(c,haEl(12,4.5,2,2))},scarf:()=>{p.fill(c,haAnd(haEl(12,12,8,7),(x,y)=>y<14));p.fill(c,haPoly([[17,12],[21,17],[18,18],[16,13]]))},
+    bandana:()=>{p.fill(c,haAnd(haEl(12,12,8,5),(x,y)=>y<13));p.fill(c,haPoly([[18,11],[22,13],[20,15]]));[[9,9],[13,8],[15,10]].forEach(([x,y])=>p.dot(x,y,'#f4f4f0'))},
+    hood:()=>{p.fill(c,haAnd(haOr(haEl(12,12,8,9),haPoly([[4,13],[20,13],[21,22],[3,22]])),iaNot(haEl(12,14,4.5,5))))},
+    tricorn:()=>{p.fill(c,haPoly([[3,14],[12,7],[21,14],[12,17]]));p.fill(c,haAnd(haEl(12,11,5,4.5),(x,y)=>y<12));p.line(4,14,12,16,'#d8b878');p.line(12,16,20,14,'#d8b878')},
+    captain:()=>{p.fill(c,haOr(haAnd(haEl(12,11,8,5),(x,y)=>y<12),haPoly([[5,11],[19,11],[18,14],[6,14]])));p.fill(p.part('#2a2a34'),haEl(12,15,7,1.6));p.rect(11,9,2,2,'#e8c050')}};
+  (H[a]||H.cap)()}
+function paintItem(p,id){const d=ITEM_DRAW[id];if(!d&&ITEMS[id]&&ITEMS[id].kind==='clothes'){paintClothes(p,ITEMS[id].wear);return true}
   if(typeof d==='function'){d(p);return true}
   if(Array.isArray(d)){IAF[d[0]](p,typeof d[1]==='function'?{food:d[1]}:d[1]);return true}
   const r=ITEM_ICONS[id];if(r){IAF[r[0]](p,r[1]);return true}

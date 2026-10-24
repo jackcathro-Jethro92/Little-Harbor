@@ -27,7 +27,7 @@ function act(){
     if(n.dlg&&runDialogue(n.dlg))return;
     if(n.inn)return innMenu(n);
     if(n.store==='jeweller'){menu("Lucie's Gold & Gems",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('jeweller','buy');else if(o==='Sell')openTrader('jeweller','sell')});return}
-    if(n.store==='tailor'){menu("Seamstress Wynn's Tailor",['Try on clothes','Buy cloth and leather','Sell cloth and leather','Cancel'],o=>{if(o==='Try on clothes')openLook('tailor');else if(o==='Buy cloth and leather')openTrader('tailor','buy');else if(o==='Sell cloth and leather')openTrader('tailor','sell')});return}
+    if(n.store==='tailor'){menu("Seamstress Wynn's Tailor",['Buy clothes','Dye your clothes','Buy cloth and leather','Sell cloth and leather','Cancel'],o=>{if(o==='Buy clothes')openTrader('clothier','buy');else if(o==='Dye your clothes')openLook('tailor');else if(o==='Buy cloth and leather')openTrader('tailor','buy');else if(o==='Sell cloth and leather')openTrader('tailor','sell')});return}
     if(n.store==='barber'){menu("Barber Fenwick's",['Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook('barber')});return}
     if(n.store==='carpenter'){menu("Carpenter Alder's Workshop",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('carpenter','buy');else if(o==='Sell')openTrader('carpenter','sell')});return}
     if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
