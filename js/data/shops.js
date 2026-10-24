@@ -17,7 +17,8 @@ const CARPENTER=[
 ];
 // Seamstress Wynn in the Walled Settlement: cloth and leather (the look screens are separate, js/ui/look.js)
 const TAILOR=[
- ['Fabric',[['cloth',40],['leather',70]]]
+ ['Fabric',[['cloth',40],['leather',70]]],
+ ['Pelts',[['wolf_pelt',180]]]   // only bought (noBuy): wolves of the grasslands drop them
 ];
 // Lucie's Gold & Gems in the Mountain Town (enchanted jewellery: effects are the `fx` field on each item)
 const JEWELLER=[
@@ -36,7 +37,7 @@ const APOTHECARY=[
 const SHOPS={
  smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Ore, iron bars, blades, tools and armour.',sellTag:'Garrick buys ore, iron, weapons, tools and armour at half price.',none:'Bring ore, iron bars, weapons, tools or armour.',thanks:'A fine choice.',list:SMITH,sell:['Materials','Weapons','Tools','Old tools','Armour'],noBuy:['Old tools']},
  carpenter:{name:"Carpenter Alder's Workshop",who:'Alder',buyTag:'Planks, rope and furniture.',sellTag:'Alder buys planks, rope, furniture, logs and flax fiber at half price.',none:'Bring planks, rope, logs or flax fiber.',thanks:'Good timber, that.',list:CARPENTER,sell:['Timber','Furniture','Raw wood'],noBuy:['Raw wood']},
- tailor:{name:"Wynn's Cloth & Leather",who:'Wynn',buyTag:'Cloth and leather.',sellTag:'Wynn buys cloth and leather at half price.',none:'Wynn only buys cloth and leather.',thanks:'Lovely.',list:TAILOR,sell:['Fabric']},
+ tailor:{name:"Wynn's Cloth & Leather",who:'Wynn',buyTag:'Cloth and leather.',sellTag:'Wynn buys cloth, leather and wolf pelts at half price.',none:'Wynn only buys cloth, leather and wolf pelts.',thanks:'Lovely.',list:TAILOR,sell:['Fabric','Pelts'],noBuy:['Pelts']},
  apothecary:{name:"Astrid's Apothecary",who:'Astrid',buyTag:'Potions to heal and quicken, poisons for your blade, and herbs and mushrooms to brew with.',sellTag:'Astrid buys potions and poisons at half price, and herbs, mushrooms and centipede fangs at a fair price.',none:'Bring potions, poisons, herbs, mushrooms or centipede fangs.',thanks:'Use it wisely.',list:APOTHECARY,sell:['Potions','Poisons','Ingredients','Curios'],noBuy:['Curios'],rate:{Ingredients:1/3,Curios:1/3}},   // `rate`: the share of the list price she pays for a section (default one half): herbs and fangs are sold at three times what she pays
  jeweller:{name:"Lucie's Gold & Gems",who:'Lucie',buyTag:'Enchanted rings and amulets. Wear one ring and one amulet.',sellTag:'Lucie buys jewellery and gold and silver ore at half price.',none:'Lucie buys rings, amulets and gold and silver ore.',thanks:'May it serve you well.',list:JEWELLER,sell:['Rings','Amulets','Ore'],noBuy:['Ore']}
 };

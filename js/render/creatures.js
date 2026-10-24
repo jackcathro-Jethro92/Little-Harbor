@@ -32,3 +32,12 @@ function dragonArt(e,cx,cy,t){const fl=e.f==='r'||e.f==='d'&&(e.x+e.y)%2===0?1:0
   q(1,8,2,2,'#f08a20');q(1,8,1,1,'#fff0a0');q(-2,13,6,1,O);                                                                            // an orange eye, the mouth
   if(hot){q(-4,12,3,2,'#f2a22e');q(-6,12,2,1,'#e8632e')}                                                                              // a glow, a lick of flame
   q(5,9,2,5,O);q(4,10,1,3,D)}
+// the grey wolf of the grasslands (ENEMY_TYPES.wolf): long-legged and lean, head low, tail out; it trots on four legs and flashes white when hit
+function wolfArt(e,cx,cy,t){const fl=e.f==='r'||e.f==='d'&&(e.x+e.y)%2===0?1:0,x0=e.x*T-cx-4,y=e.y*T-cy-2,w=t-e.hitAt<250&&((t/60|0)%2),O='#1e1c1a',B=w?'#fff':'#7d7b78',L=w?'#fff':'#a8a6a2',D=w?'#fff':'#4e4c4a',C=w?'#fff':'#d8d4cc';
+  const q=(a,b,ww,h,c)=>R(fl?x0+24-a-ww:x0+a,y+b,ww,h,c),st=(t/140|0)%2;
+  q(1,15,22,2,'rgba(0,0,0,.25)');
+  [[5,st],[9,1-st],[15,st],[19,1-st]].forEach(([lx,k])=>{q(lx,10,3,6-k,O);q(lx+1,10,1,5-k,D)});                                          // four legs, trotting
+  q(18,5,7,3,O);q(19,4,5,3,B);q(22,3,3,2,L);                                                                                              // the bushy tail
+  q(4,4,16,8,O);q(5,5,14,6,B);q(5,5,14,2,L);q(6,9,10,2,C);                                                                               // the body, pale underneath
+  q(-1,3,8,7,O);q(0,4,6,5,B);q(0,4,6,2,L);q(-3,6,4,3,O);q(-2,7,3,1,B);q(-2,8,3,1,C);q(1,1,2,3,O);q(4,1,2,3,O);q(1,2,1,1,L);q(4,2,1,1,L);    // the head, snout and ears
+  q(1,5,1,1,'#f2c83a');q(-3,6,1,1,O)}

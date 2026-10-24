@@ -23,3 +23,8 @@ function seaAlertMark(cx,cy,t){alertMark({x:P.rx,y:P.ry,alertAt:t,alertUntil:SEA
 // rock floor to its spot, off the dirt path.
 const ROCK_DRAGONS=[[30,50],[14,47],[24,40],[36,33],[18,34]];
 ROCK_DRAGONS.forEach(([x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===48&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy('rock_dragon',s[0],s[1],{group:'rock_dragons'})});
+
+// ---------- wolves (Jack's note): grey wolves roam the grasslands outside the Walled Settlement ----------
+// Only three, each on the nearest grass to its spot, well away from the roads and farms; they are fast and very strong (ENEMY_TYPES.wolf) and come back a while after you beat them.
+const WOLVES=[[62,228],[98,237],[127,237]];
+WOLVES.forEach(([x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===1&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy('wolf',s[0],s[1],{group:'wolves'})});
