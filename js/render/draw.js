@@ -39,6 +39,7 @@ function draw(){
   BL.forEach(b=>{if((b.towergate||b.pagoda)&&zoneOf(b.x,b.y)===zoneOf(P.x,P.y))E.push({y:b.pagoda?b.y+4.9:b.y+.5,f:()=>(b.pagoda?towerPagoda:towerGate)(b,b.x*T-cx,b.y*T-cy,t)})});
   CH.forEach(c=>E.push({y:c.y,f:()=>chick(c,cx,cy,t)}));
   if(zoneOf(P.x,P.y)===0){BL.forEach(b=>{if((b.sign==='tavern'||b.shape==='tall')&&Math.abs(b.x-P.rx)<20&&Math.abs(b.y-P.ry)<20)E.push({y:b.y+1.5,f:()=>(b.sign==='tavern'?tavernArt:tallHouseArt)(b,b.x*T-cx,b.y*T-cy,t)})});   // the taverns rise above their tiles, so you walk behind them (js/render/tavern.js)
+    jobDraw(E,cx,cy,t);   // Halvard's lost axe on the rock slide, while that job is taken (js/systems/jobs.js)
     YARD_PROPS.forEach(p=>{if(Math.abs(p.x-P.rx)<16&&Math.abs(p.y-P.ry)<16)E.push({y:p.ay+p.h-.5,f:()=>drawProp(p,p.ax*T-cx,p.ay*T-cy,(t/250)|0)})})}   // the tables and barrels outside them
   if(ir)ir.props.forEach(p=>{if(!p.flat&&!p.hide)E.push({y:p.ay+p.h-.5,f:()=>drawProp(p,p.ax*T-cx,p.ay*T-cy,tick)})});   // furniture is sorted with the people, so the shopkeeper stands behind the counter
   if(S.isle&&zoneOf(P.x,P.y)===0)E.push({y:S.isle.y+1.9,f:()=>grandHouse(S.isle.x*T-cx,S.isle.y*T-cy,t)});   // the grand house on Haven Isle (js/render/grandhouse.js): sorted with the people so you can walk behind its upper floors

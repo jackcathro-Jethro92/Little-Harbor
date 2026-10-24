@@ -403,6 +403,12 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* `pirate_spot.b` Pirate: [Placeholder] A visitor! This is as far as you go.
 - *placeholder* `pirate_spot.c` Pirate: [Placeholder] You are not getting past me!
 - *placeholder* `pirate_spot.d` Pirate: [Placeholder] The captain said to watch for you. Come on, then!
+- *placeholder* `bandit_spot.a` Bandit: [Placeholder] Oi! This is our camp. Turn around!
+- *placeholder* `bandit_spot.b` Bandit: [Placeholder] Look, lads, a traveller with a full purse!
+- *placeholder* `bandit_spot.c` Bandit: [Placeholder] You picked the wrong camp to wander into.
+- *placeholder* `job_lucie_thanks.a` Lucie: [Placeholder] A hundred of each! You are a marvel. Take this amulet; it mends you as you go.
+- *placeholder* `job_astrid_thanks.a` Astrid: [Placeholder] Everything I asked for! Here is my special draught. Drink it and feel stronger for good.
+- *placeholder* `job_wynn_thanks.a` Seamstress Wynn: [Placeholder] Fifty pelts! My winter collection is saved. Here is your 5000 gold, every coin earned.
 - *placeholder* `fest_c1.a` Murl: [Placeholder] Welcome, friends, to the Little Harbor Sea Festival!
 - *placeholder* `fest_c2.a` Murl: [Placeholder] Every year we thank the sea for its gifts, and welcome those who will fish its waters.
 - *placeholder* `fest_c3.a` Murl: [Placeholder] This year our newest fisher joins us. Come forward, friend!

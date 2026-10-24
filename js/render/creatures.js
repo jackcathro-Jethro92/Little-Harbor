@@ -32,3 +32,8 @@ function dragonArt(e,cx,cy,t){const fl=e.f==='r'||e.f==='d'&&(e.x+e.y)%2===0?1:0
   q(1,8,2,2,'#f08a20');q(1,8,1,1,'#fff0a0');q(-2,13,6,1,O);                                                                            // an orange eye, the mouth
   if(hot){q(-4,12,3,2,'#f2a22e');q(-6,12,2,1,'#e8632e')}                                                                              // a glow, a lick of flame
   q(5,9,2,5,O);q(4,10,1,3,D)}
+// a centipede nest in the Darkwood (ENEMY_TYPES.centipede_nest, a tavern job): a mound of earth and old shells with dark holes, young centipedes wriggling in and out
+function nestArt(e,cx,cy,t){const x=e.x*T-cx-4,y=e.y*T-cy-2,w=t-e.hitAt<250&&((t/60|0)%2),O='#1e140c',E=w?'#fff':'#5a3a22',L=w?'#fff':'#7a5230',D=w?'#fff':'#3a2414';
+  R(x,y+15,24,3,'rgba(0,0,0,.3)');R(x+2,y+6,20,11,O);R(x+5,y+2,14,6,O);R(x+3,y+7,18,9,E);R(x+6,y+3,12,5,E);R(x+7,y+3,8,2,L);R(x+4,y+8,6,2,L);
+  [[7,10],[14,7],[17,12]].forEach(([a,b])=>{R(x+a,y+b,3,2,D);R(x+a,y+b,3,1,'#000')});[[5,14],[12,15],[19,9]].forEach(([a,b])=>R(x+a,y+b,2,1,'#e8d8b0'));
+  for(let k=0;k<2;k++){const ph=(t/180+k*3)%6,a=[[8,9],[15,6]][k];if(ph<3){const dx=Math.round(ph)-1;R(x+a[0]+dx,y+a[1]-1,4,1,'#d8582a');R(x+a[0]+dx,y+a[1]-1,1,1,'#f2e04a')}}}
