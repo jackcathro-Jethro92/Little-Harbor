@@ -20,3 +20,5 @@ const ENEMY_TYPES={
   pattern:[{atk:'bites',hit:[10,14]},{atk:'snaps at your legs',hit:[9,13]},{wind:'crouches low, growling, ready to spring...'},{atk:'leaps at you with its jaws wide',hit:[22,28]}],die:'The wolf limps away into the long grass... it will be back.'},
  spirit:{n:'Spirit',hp:12,dmg:6,hit:[2,5],cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };
+// the wolves come in coats (Jack's reference sheet; colours in WOLF_COL, js/render/wolfart.js): each is the same strong wolf
+ENEMY_TYPES.wolf_white={...ENEMY_TYPES.wolf,n:'White wolf'};ENEMY_TYPES.wolf_pale={...ENEMY_TYPES.wolf,n:'Pale wolf'};ENEMY_TYPES.wolf_black={...ENEMY_TYPES.wolf,n:'Black wolf'};

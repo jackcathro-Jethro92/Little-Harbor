@@ -26,14 +26,6 @@ const CREATURES={
    const ma=p.part('#c84a5a');p.fill(ma,haOr(haEl(28,24,12,14),haPoly([[18,12],[28,0],[38,12]]),haPoly([[16,10],[9,16],[18,20]]),haPoly([[40,10],[47,16],[38,20]])));
    const ey=p.part('#f2d84a');p.fill(ey,haEl(28,28,5.2,5.2));const pu=p.part('#1a1018',{flat:1});p.fill(pu,haEl(28,28,1.4,4.2));p.dot(26,26,'#ffffff');
    [[22,16],[33,14],[24,22],[34,22],[28,10]].forEach(([x,y])=>{p.dot(x,y,'#7a2030');p.dot(x+1,y,'#e8788a')});for(let y=40;y<58;y+=4){p.dot(18,y,'#f0b0b8');p.dot(38,y-2,'#f0b0b8')}}},
- wolf:{w:64,h:48,paint(p){const gr='#7d7b78',lg=p.part(gr);[[22,30,19,44],[28,31,30,44],[46,29,44,43],[52,28,55,42]].forEach(([a,b,c,d])=>p.fill(lg,haOr(haTaper(a,b,c,d,3,2),haEl(c-.5,d+.5,2.6,1.4))));
-   const tl=p.part('#8d8b88');p.fill(tl,haOr(haTaper(52,22,63,30,4.5,2.2),haEl(61,31,3,2.4)));
-   const bd=p.part(gr);p.fill(bd,haOr(haEl(38,26,16,8),haTaper(24,24,16,18,8,6)));const bl=p.part('#d8d4cc');p.fill(bl,haAnd(haEl(36,29,13,5),(x,y)=>y>29));
-   const hd=p.part('#8d8b88');p.fill(hd,haOr(haEl(13,18,7.5,6.2),haPoly([[1,19],[9,15],[10,23],[2,24]]),haPoly([[9,8],[12,1],[15,10]]),haPoly([[15,9],[19,3],[20,12]])));
-   const mo=p.part('#3a1a1a');p.fill(mo,haPoly([[1,22],[9,21.5],[10,25],[3,27]]));const th=p.part('#ffffff',{flat:1});[[2,22],[5,22],[8,22],[3,25],[6,25]].forEach(([x,y],i)=>p.fill(th,haPoly(i<3?[[x,y],[x+1.4,y],[x+.7,y+1.8]]:[[x,y],[x+1.4,y],[x+.7,y-1.8]])));
-   const ru=p.part('#5e5c5a');p.fill(ru,haOr(haEl(26,17,7,4),haEl(20,22,4,6)));
-   p.rect(12,15,2,2,'#f2c83a');p.dot(12,15,'#ffffff');p.rect(1,18,2,2,'#1e1c1a');[[16,11,18,6],[12,9,13,4]].forEach(([a,b,c,d])=>p.line(a,b,c,d,'#d8a8a0'));
-   [[30,21],[36,20],[42,21],[48,23]].forEach(([x,y])=>p.line(x,y,x+3,y-2,'#a8a6a2'))}},
  dragon:{w:64,h:44,paint(p){const st='#7a7470',lg=p.part(st);[[22,28,18,40],[30,29,29,40],[42,28,44,40],[50,27,53,39]].forEach(([a,b,c,d])=>p.fill(lg,haOr(haTaper(a,b,c,d,3.4,2.4),haEl(c-1,d+.5,3.2,1.8))));
    const tl=p.part(st);p.fill(tl,haOr(haTaper(52,24,63,13,5,1),haTaper(48,22,55,22,5,5)));
    const bd=p.part(st);p.fill(bd,haOr(haEl(36,23,17,8),haTaper(22,22,13,17,6.5,5)));const hd=p.part('#8a8480');p.fill(hd,haOr(haEl(11,17,7.5,5.6),haPoly([[3,15],[10,13],[10,20],[2,19]])));
@@ -46,6 +38,7 @@ const ZOMBIE_SPEC={sex:'m',pose:'zombie',hair:'messy',top:'tee',over:null,acc:['
 function creatureArt(art,name){const k=art+'|'+(name||'');if(CR_CACHE.has(k))return CR_CACHE.get(k);let cv=null;const f=CREATURE_FILES[art];
   if(f&&f.complete&&f.naturalWidth){cv=document.createElement('canvas');cv.width=f.naturalWidth;cv.height=f.naturalHeight;cv.getContext('2d').drawImage(f,0,0)}
   else if(art==='zombie')cv=heroCanvas('zombie',ZOMBIE_SPEC,'f');
+  else if(art==='wolf')cv=wolfCanvas(name,0,true,true,false);   // (js/render/wolfart.js: the pixel wolf, doubled)
   else if(CREATURES[art]){const C=CREATURES[art],p=new HAPainter(C.w,C.h);C.paint(p,name);cv=document.createElement('canvas');cv.width=C.w;cv.height=C.h;p.render(cv)}
   CR_CACHE.set(k,cv);return cv}
 // a pirate (or anyone) you fight: their portrait design if they have one, otherwise a pirate built from their battle look; gunners hold a pistol, the rest a cutlass

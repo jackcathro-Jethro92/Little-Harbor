@@ -537,5 +537,5 @@ Jack's answers (22 Oct): use his sketch for the Bag / Vendors menu (sections on 
 
 ## Wolves round the Walled Settlement
 - `ENEMY_TYPES.wolf` (js/data/enemies.js): the grey wolf, rare but very strong (100 health, bites of 10-14, fast, chases from 8 tiles). Its pattern snaps twice, then crouches and leaps for 22-28 (a Block on that turn takes the leap). It comes back a while after it is beaten (respawn 360) and often drops a `wolf_pelt`, which Wynn the tailor buys (TAILOR 'Pelts', bought only).
-- Three wolves (`WOLVES` in js/systems/wildlife.js) on the grass west, south and south-east of the walls, away from the roads and farms. Map sprite `wolfArt` (js/render/creatures.js), battle picture `CREATURES.wolf` (js/render/creatureart.js), pelt icon in js/render/itemart.js.
+- Three wolves (`WOLVES` in js/systems/wildlife.js) on the grass west, south and south-east of the walls, away from the roads and farms. Four coats after Jack's reference sheet (White, Pale, Grey and Black wolf: rows `wolf_white`, `wolf_pale`, `wolf`, `wolf_black` share the stats). One pixel drawing in `js/render/wolfart.js` (`WOLF_FRAME0`, coloured by `WOLF_COL`), used on the map and, doubled with the EPX scaler, in battle, pelt icon in js/render/itemart.js.
 

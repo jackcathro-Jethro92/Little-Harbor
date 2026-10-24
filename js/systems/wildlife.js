@@ -25,6 +25,6 @@ const ROCK_DRAGONS=[[30,50],[14,47],[24,40],[36,33],[18,34]];
 ROCK_DRAGONS.forEach(([x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===48&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy('rock_dragon',s[0],s[1],{group:'rock_dragons'})});
 
 // ---------- wolves (Jack's note): grey wolves roam the grasslands outside the Walled Settlement ----------
-// Only three, each on the nearest grass to its spot, well away from the roads and farms; they are fast and very strong (ENEMY_TYPES.wolf) and come back a while after you beat them.
-const WOLVES=[[62,228],[98,237],[127,237]];
-WOLVES.forEach(([x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===1&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy('wolf',s[0],s[1],{group:'wolves'})});
+// Only three (one in each coat but the pale), each on the nearest grass to its spot, well away from the roads and farms; they are fast and very strong (ENEMY_TYPES.wolf) and come back a while after you beat them.
+const WOLVES=[['wolf_white',62,228],['wolf',98,237],['wolf_black',127,237]];   // a white wolf to the west, a grey one to the south and a black one to the south-east (a pale coat, 'wolf_pale', is ready too)
+WOLVES.forEach(([k,x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===1&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy(k,s[0],s[1],{group:'wolves'})});
