@@ -6,8 +6,8 @@ const EQ_SLOTS=[['helmet','Helmet'],['armour','Armour'],['boots','Boots'],['weap
 let eqPick=null;
 const eqCurrent=sl=>sl==='tool'?(S.eq.tool?S.eq[S.eq.tool]:null):S.eq[sl];
 const eqOwned=sl=>Object.keys(S.bag).filter(id=>count(id)&&ITEMS[id]&&(sl==='tool'?TOOLSLOTS.includes(slotOf(id)):slotOf(id)===sl)).sort((a,b)=>sl==='tool'?TOOLSLOTS.indexOf(slotOf(a))-TOOLSLOTS.indexOf(slotOf(b))||(ITEMS[a].price||0)-(ITEMS[b].price||0):(ITEMS[a].price||0)-(ITEMS[b].price||0));
-function equipItem(id){const sl=slotOf(id);S.eq[sl]=id;if(TOOLSLOTS.includes(sl))S.eq.tool=sl}
-function unequipItem(id){const sl=slotOf(id);if(TOOLSLOTS.includes(sl))S.eq.tool=null;else S.eq[sl]=null}
+function equipItem(id){const sl=slotOf(id);S.eq[sl]=id;if(TOOLSLOTS.includes(sl))S.eq.tool=sl;if(ITEMS[id].kind==='clothes')wearLook(id)}
+function unequipItem(id){const sl=slotOf(id);if(TOOLSLOTS.includes(sl))S.eq.tool=null;else S.eq[sl]=null;if(ITEMS[id].kind==='clothes')takeOffLook(sl)}
 const eqEffect=id=>{const it=ITEMS[id],f=it.fx||{};return it.kind==='weapon'?'Damage '+(it.damage||2):it.kind==='rod'?(it.wait<1?'Bites '+Math.round((1-it.wait)*100)+'% sooner':'A plain starter rod'):it.kind==='tool'?it.desc:f.ward?'Stops '+Math.round(f.ward*100)+'% of damage':f.speed?'Walk faster':it.desc||''};
 function eqPortrait(){drawArt($('eqs-pt'),playerArt('f'),'#8ec0e8')}   // your detailed picture, wearing your armour
 function drawEquip(){

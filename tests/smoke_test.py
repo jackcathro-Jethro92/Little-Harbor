@@ -489,7 +489,7 @@ def check(b, url):
     assert ev("!room('softwood')&&!tryAdd('softwood')&&room('sardine')"), "over the limit you cannot take on a new kind, but a stack with room still grows"
     ev("openBag()"); assert ev("/BAG 22\\/20/.test($('btitle').textContent)&&$('btitle').classList.contains('full')"), "the Bag shows how many slots are used, in red when it is full"
     ev("closeBag();S.bag={};S.eq={tool:'rod',rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1")
-    ev("$('menu').classList.remove('open');mn=null;(()=>{const w=NPC.find(n=>n.n==='Seamstress Wynn');P.x=P.rx=w.x;P.y=P.ry=w.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Try on clothes,Buy cloth and leather,Sell cloth and leather,Cancel'"), "Wynn still lets you try on clothes, and now buys and sells cloth and leather"
+    ev("$('menu').classList.remove('open');mn=null;(()=>{const w=NPC.find(n=>n.n==='Seamstress Wynn');P.x=P.rx=w.x;P.y=P.ry=w.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Buy clothes,Dye your clothes,Buy cloth and leather,Sell cloth and leather,Cancel'"), "Wynn sells clothes, dyes what you wear, and buys and sells cloth and leather"
     ev("$('menu').classList.remove('open');mn=null")
     ev("S.bag={};S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
@@ -1099,6 +1099,17 @@ def check(b, url):
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
     ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
     ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
+    # Wynn's clothes (js/data/clothes.js): bought from her, kept in the Bag (Clothing), worn and taken off there; both pictures follow, and what you wear is saved
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=1000;delete S.bag.sea_coat;delete S.bag.tricorn_hat;openTrader('clothier','buy')")
+    assert ev("CLOTHES.length>=20&&/Wool sweater/.test($('items').textContent)&&/Tricorn hat/.test($('items').textContent)&&CLOTHES.every(c=>!!itemArt(c.id))"), "Wynn sells tops, jackets and hats, each with an icon"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===740"), "buying a sea coat"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.bag.tricorn_hat=1;openBag();bs=SECTIONS.findIndex(q=>q.k==='cloth');bc=cellsOf(bs).findIndex(r=>r.id==='sea_coat');drawBag();bagPick()")
+    assert ev("bpop&&bpop.opts[0]==='Wear'"), "a piece of clothing in the bag can be worn"
+    ev("popChoose()"); assert ev("S.eq.c_over==='sea_coat'&&S.look.jon===true&&S.look.jk===0&&heroSpec().over==='coat'&&isWorn('sea_coat')&&cellsOf(bs).find(r=>r.id==='sea_coat').eq"), "wearing it puts the coat on both pictures"
+    ev("bc=cellsOf(bs).findIndex(r=>r.id==='sea_coat');bagPick();popChoose()"); assert ev("S.eq.c_over==='none'&&S.look.jon===false&&heroSpec().over===null"), "taking it off leaves no jacket"
+    ev("equipItem('tricorn_hat')"); assert ev("heroSpec().acc.filter(a=>HAT_ACC.includes(a)).join()==='tricorn'&&S.look.hat==='cap'&&!!playerArt('f')"), "a hat replaces any hat the character had"
+    assert ev("(()=>{const m=migrate(JSON.parse(JSON.stringify(S)));const old=migrate({...JSON.parse(JSON.stringify(S)),eq:{rod:S.eq.rod,boat:S.eq.boat}});return m.eq.c_over==='none'&&m.eq.c_hat==='tricorn_hat'&&old.eq.c_top===null})()"), "what you wear is saved, and older saves start in their own clothes"
+    ev("closeBag();S.eq.c_top=S.eq.c_over=S.eq.c_hat=null;delete S.bag.sea_coat;delete S.bag.tricorn_hat;S.look.jon=true;S.look.hat='cap';S.gold=420")
     ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
     ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")

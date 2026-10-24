@@ -7,7 +7,7 @@ const SECTIONS=[
  {k:'mat',t:'Materials',c:'#a8742f',list:()=>LIST('material'),none:'No materials yet. Chop trees and mine ore!'},
  {k:'food',t:'Food',c:'#d8a43c',list:()=>[...LIST('food'),...LIST('potion')],none:'No food yet. Cook something at a campfire!'},
  {k:'weap',t:'Weapons',c:'#8a5a5a',list:()=>LIST('weapon'),none:'No weapons.'},
- {k:'cloth',t:'Clothing',c:'#4f7ac0',list:()=>[...LIST('armour'),...LIST('jewel')],none:'No clothing or jewellery yet.'},
+ {k:'cloth',t:'Clothing',c:'#4f7ac0',list:()=>[...LIST('clothes'),...LIST('armour'),...LIST('jewel')],none:'No clothing or jewellery yet. Wynn the tailor sells clothes.'},
  {k:'tool',t:'Tools',c:'#4f9a5a',list:()=>[...LIST('rod'),...LIST('tool')],none:'No tools.'},
  {k:'keep',t:'Keepsakes',c:'#b99a6a',list:()=>LIST('key'),letters:1,none:'No letters or keepsakes yet.'}];
 const SLOTS=[['rod','Rod'],['weapon','Weapon'],['pickaxe','Pickaxe'],['axe','Axe'],['knife','Knife'],['ring','Ring'],['amulet','Amulet'],['helmet','Helmet'],['armour','Armour'],['boots','Boots']];
@@ -50,6 +50,7 @@ function bagPick(){
   const it=ITEMS[r.id];if(it.kind==='key')return;   // key items just sit in the bag: nothing to equip or use
   if(it.kind==='food'||it.kind==='potion'){bpop={opts:[it.kind==='food'?'Eat':it.coat?'Apply to weapon':'Drink','Cancel'],i:0,row:r};return popRender()}
   if(['station','prefab','claim','garden','furniture'].includes(it.kind)){bpop={opts:['Place','Cancel'],i:0,row:r};return popRender()}
+  if(it.kind==='clothes'){bpop={opts:[isWorn(r.id)?'Take off':'Wear','Cancel'],i:0,row:r};return popRender()}   // clothes from Wynn (js/systems/clothes.js)
   if(!['rod','weapon','tool','jewel','armour'].includes(it.kind))return;   // fish, materials and the like: nothing to do
   const sl=slotOf(r.id);
   const on=isWorn(r.id),opts=[];
@@ -59,7 +60,7 @@ function popChoose(){const o=bpop.opts[bpop.i],r=bpop.row,sl=slotOf(r.id);
   if(o==='Eat'){bpop=null;popRender();return eat(r.id)}
   if(o==='Drink'||o==='Apply to weapon'){bpop=null;popRender();return drink(r.id)}
   if(o==='Place'){bpop=null;popRender();closeBag();placing=r.id;return say('Face a clear tile and tap Use to place it. Open the Bag to cancel.')}
-  if(o==='Equip')equipItem(r.id);if(o==='Unequip')unequipItem(r.id);
+  if(o==='Equip'||o==='Wear')equipItem(r.id);if(o==='Unequip'||o==='Take off')unequipItem(r.id);
   bpop=null;popRender();ui();save();drawBag()}
 function openBag(){placing=null;bs=0;bc=0;bpop=null;popRender();drawBag();$('bag').classList.add('open')}
 function closeBag(){bpop=null;popRender();$('bag').classList.remove('open')}
