@@ -38,6 +38,7 @@ const ZOMBIE_SPEC={sex:'m',pose:'zombie',hair:'messy',top:'tee',over:null,acc:['
 function creatureArt(art,name){const k=art+'|'+(name||'');if(CR_CACHE.has(k))return CR_CACHE.get(k);let cv=null;const f=CREATURE_FILES[art];
   if(f&&f.complete&&f.naturalWidth){cv=document.createElement('canvas');cv.width=f.naturalWidth;cv.height=f.naturalHeight;cv.getContext('2d').drawImage(f,0,0)}
   else if(art==='zombie')cv=heroCanvas('zombie',ZOMBIE_SPEC,'f');
+  else if(art==='wolf')cv=wolfCanvas(name,0,true,true,false);   // (js/render/wolfart.js: the pixel wolf, doubled)
   else if(CREATURES[art]){const C=CREATURES[art],p=new HAPainter(C.w,C.h);C.paint(p,name);cv=document.createElement('canvas');cv.width=C.w;cv.height=C.h;p.render(cv)}
   CR_CACHE.set(k,cv);return cv}
 // a pirate (or anyone) you fight: their portrait design if they have one, otherwise a pirate built from their battle look; gunners hold a pistol, the rest a cutlass

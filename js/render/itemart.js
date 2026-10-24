@@ -140,6 +140,7 @@ const ITEM_DRAW={
  fiber(p){const f=p.part('#c8c070',{flat:1});for(let i=0;i<5;i++)p.fill(f,haSeg(5+i*1.4,20,10+i*1.6,3,.7));const t=p.part('#8a5a30');p.fill(t,haPoly([[5,11],[17,11],[17,13.4],[5,13.4]]))},
  cloth(p){const c=p.part('#5a7ac0');p.fill(c,haPoly([[3,8],[19,6],[21,10],[21,18],[5,20],[3,15]]));const f=p.part('#7a9ae0');p.fill(f,haPoly([[3,8],[19,6],[21,10],[5,12]]));p.line(5,15,19,13,haRamp('#5a7ac0')[2])},
  leather(p){const c=p.part('#9a6a3a');p.fill(c,haPoly([[4,6],[9,4],[15,5],[20,4],[21,10],[19,16],[21,20],[13,19],[6,20],[3,16],[5,11]]));p.line(8,9,16,9,haRamp('#9a6a3a')[0]);[[7,14],[12,12],[16,15]].forEach(([x,y])=>p.dot(x,y,haRamp('#9a6a3a')[2]))},
+ wolf_pelt(p){const f=p.part('#8d8b88');p.fill(f,haOr(haEl(12,13,7,6),haPoly([[4,8],[7,5],[8,10]]),haPoly([[20,8],[17,5],[16,10]]),haPoly([[3,17],[7,15],[6,20]]),haPoly([[21,17],[17,15],[18,20]]),haTaper(12,18,12,23,2.4,1)));const b=p.part('#d8d4cc');p.fill(b,haEl(12,14,3.4,3.6));p.line(8,9,11,11,'#5a5854')},
  centipede_fang(p){const f=p.part('#ece0c0');p.fill(f,haOr(haTaper(6,19,12,8,3,1.2),haTaper(12,8,19,4,1.2,.3)));p.line(7,17,11,10,'#ffffff')},
  grandfather_compass(p){const b=p.part('#c8963a');p.fill(b,haOr(haEl(12,13,9,9),haEl(12,3.4,2,1.6)));const f=p.part('#f2ead0',{flat:1});p.fill(f,haEl(12,13,6.6,6.6));p.line(12,13,15,8,'#d83828');p.line(12,13,9,18,'#3a5ab8');p.dot(12,13,'#2a2228')},
  camp_kit(p){const t=p.part('#3a7ab8');p.fill(t,haPoly([[1.5,20.5],[12,3.5],[22.5,20.5]]));const d=p.part('#1e3a5a');p.fill(d,haPoly([[9,20.5],[12,12],[15,20.5]]));p.line(12,4,12,11,'#ffffff')},

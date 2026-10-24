@@ -16,5 +16,9 @@ const ENEMY_TYPES={
  oak_ghost:{n:'Restless spirit',hp:15,dmg:5,hit:[2,5],cd:2,speed:1,chase:6,leash:6,art:'ghost',xp:25,gold:[3,9],drops:[],respawn:240,die:'The restless spirit fades away... until tomorrow.'},   // the ghosts of Oak Island (Quest 3, playtest #3)
  rock_dragon:{n:'Rock dragon',hp:90,dmg:10,hit:[7,10],cd:3,speed:2,chase:5,leash:7,art:'dragon',xp:140,gold:[40,80],drops:[['iron_bar',.4,1]],block:.1,escape:.5,respawn:300,   // a Komodo dragon made of stone in the mountain country (playtest #4): slow, tough, and it breathes fire every third turn after drawing a breath (a Block on that turn takes the blast)
   pattern:[{atk:'rakes with its stony claws',hit:[7,10]},{wind:'draws a deep, rumbling breath, and its throat glows...'},{atk:'breathes a roaring jet of fire',hit:[17,23]}],die:'The rock dragon crumbles into gravel... until tomorrow.'},
+ wolf:{n:'Grey wolf',hp:100,dmg:14,hit:[10,14],cd:3,speed:1,chase:8,leash:9,art:'wolf',xp:200,gold:[30,60],drops:[['wolf_pelt',.7,1]],block:.15,escape:.35,respawn:360,   // the grasslands round the Walled Settlement: only a few, but fast and very strong; it snaps twice, then crouches and leaps (a Block on that turn takes the leap)
+  pattern:[{atk:'bites',hit:[10,14]},{atk:'snaps at your legs',hit:[9,13]},{wind:'crouches low, growling, ready to spring...'},{atk:'leaps at you with its jaws wide',hit:[22,28]}],die:'The wolf limps away into the long grass... it will be back.'},
  spirit:{n:'Spirit',hp:12,dmg:6,hit:[2,5],cd:2,speed:1,chase:7,region:'island',art:'ghost',xp:20,respawn:40,die:'The spirit fades away... for now.'}
 };
+// the wolves come in coats (Jack's reference sheet; colours in WOLF_COL, js/render/wolfart.js): each is the same strong wolf
+ENEMY_TYPES.wolf_white={...ENEMY_TYPES.wolf,n:'White wolf'};ENEMY_TYPES.wolf_pale={...ENEMY_TYPES.wolf,n:'Pale wolf'};ENEMY_TYPES.wolf_black={...ENEMY_TYPES.wolf,n:'Black wolf'};
