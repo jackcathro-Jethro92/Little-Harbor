@@ -39,7 +39,8 @@ def check(b, url):
     pg, errs = load(b, url, SAVE)
     ev = pg.evaluate
     # playtest #3: Oak Island is haunted by four restless spirits standing on grass near the island's middle
-    assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.x,e.y)===1&&Math.hypot(e.x-144,e.y-170)<14)})()"), "four restless spirits haunt Oak Island"
+    # (the spirits wander from the moment the page loads, so this checks the grass tile each one starts from, not where it happens to be standing)
+    assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.hx,e.hy)===1&&Math.hypot(e.hx-144,e.hy-170)<14)})()"), "four restless spirits haunt Oak Island"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#chbtn", "#mapbtn"):
