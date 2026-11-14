@@ -454,6 +454,7 @@ def check(b, url):
     assert ev("(()=>{let f=0;for(let x=26;x<=33;x++){if(at(x,152)===8)f++;if(at(x,160)===8)f++}return f>=14&&at(33,158)!==8&&YARD_PROPS.filter(p=>p.at==='carpenter').length>=6&&YARD_PROPS.some(p=>p.id==='totem')})()"), "Alder's yard is fenced, with an opening towards the road and his carvings inside"
     # playtest #5: recipes need skill levels; the tonic is learned from Astrid; the healing ladder
     assert ev("ITEMS.minor_tonic.hp===15&&ITEMS.healing_potion.hp===30&&ITEMS.greater_healing.hp===60&&ITEMS.elixir_life.hp>=150&&ITEMS.healing_potion.n==='Minor health potion'&&ITEMS.greater_healing.n==='Superior health elixir'&&[['minor_tonic',0],['healing_potion',3],['greater_healing',6],['elixir_life',10]].every(([o,l])=>{const r=RECIPES.find(q=>q.out===o);return r&&(recReq(r).alchemy||0)===l})"), "healing comes in four steps, brewed at Alchemy 0, 3, 6 and 10"
+    assert ev("(()=>{const pw=ids=>ids.reduce((a,i)=>a+FOES[i].hp*(FOES[i].hit[0]+FOES[i].hit[1])/2,0)/ids.length,q=[['pirate_grunt','pirate_gunner'],['earth_grunt','earth_gunner'],['sea_cutthroat','sea_gunner','sea_mate'],['sky_grunt','sky_gunner','sky_bruiser'],['raid_raider','raid_gunner','raid_brute'],['final_raider','final_gunner','final_brute']].map(pw);return q.every((v,i)=>!i||v>q[i-1])&&q[4]/q[3]>1.4&&q[5]/q[4]>1.4})()"), "pirates grow tougher with every quest, more so after At the Top of the World (playtest #5)"
     assert ev("(()=>{const f0=S.flags.recipe_tonic,x0={...S.xp};delete S.flags.recipe_tonic;crSt='alchemy';const hid=!recipesAt().some(r=>r.out==='minor_tonic');setFlag('recipe_tonic');const shown=recipesAt().some(r=>r.out==='minor_tonic');S.xp.alchemy=0;const lock=!recipesAt().find(r=>r.out==='healing_potion')||!reqOk(recipesAt().find(r=>r.out==='healing_potion'));S.xp=x0;if(f0)S.flags.recipe_tonic=f0;return hid&&shown&&lock})()"), "the tonic is hidden until Astrid teaches it, and the minor potion waits for Alchemy 3"
     assert ev("(()=>{const x0={...S.xp},b0={...S.bag},r=RECIPES.find(q=>q.out==='iron_sword'),c=RECIPES.find(q=>q.out==='storage_crate');S.bag.iron_bar=9;S.bag.hardwood_plank=9;S.bag.softwood_plank=9;S.bag.rope=9;S.xp.crafting=LV[4];S.xp.sword=0;const a=!canMake(r);S.xp.sword=LV[3];const b=canMake(r);S.xp.crafting=LV[0];const cr=!canMake(c);S.xp.crafting=LV[1];const cr2=canMake(c)&&c.station==='bench';S.xp=x0;S.bag=b0;return a&&b&&cr&&cr2})()"), "an iron sword needs Crafting 5 and Sword 4; a storage crate needs Crafting 2 at the workbench"
     ev("S.xp.crafting=LV[4];S.xp.sword=0;openCraft('forge');crSel=recipesAt().findIndex(r=>r.out==='iron_sword');drawCraft()"); assert ev("/Skill:/.test($('cr-det').textContent)&&/Sword 0\\/4/.test($('cr-det').textContent)&&/Crafting 5\\/5/.test($('cr-det').textContent)&&$('cr-go').disabled"), "the crafting screen shows the skill levels a recipe needs"
@@ -883,15 +884,16 @@ def check(b, url):
     talk("Hale"); assert ev("flag('has_axe')&&count('woodcutters_axe')===1&&S.eq.axe==='woodcutters_axe'"), "Hale gives the woodcutter's axe"
     talk("Hale"); assert ev("count('woodcutters_axe')===1"), "only one axe"
     # Quest 4 (5.4): the second letter, the pirates at the Earth temple, the key, and the Temple Tower (boots)
-    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with an iron sword and plenty of health
+    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with the Divine Blade and plenty of health (playtest #5 made the late pirates tougher)
         for k in range(n):
-            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("add('iron_sword');S.eq.weapon='iron_sword';S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
-            for _ in range(20):
+            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("if(window.__w===undefined)window.__w=S.eq.weapon;S.eq.weapon='divine_blade';S.boost={...(S.boost||{}),hp:350};S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
+            for _ in range(40):   # (playtest #5: the late pirates are tougher, so a fight takes more turns)
                 if ev("BATTLE===null"): break
                 pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
                 if ev("BATTLE!==null"): ev(ATTACK_JS)
                 pg.wait_for_timeout(30)
             pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
+        if strong: ev("S.boost.hp=0;S.hp=Math.min(S.hp,maxHp());S.eq.weapon=window.__w;delete window.__w")
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});S.hp=50;S.eq.weapon='sword';add('sword');['q3_started','q3_done','axe_waiting','has_axe'].forEach(f=>setFlag(f,1))")
     ev("P.x=P.rx=60;P.y=P.ry=170;P.f='d';fireTriggers('step')"); pg.wait_for_function("SCENE!==null", timeout=10000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=10000)
     assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('I\\'ve just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
@@ -985,7 +987,7 @@ def check(b, url):
     # the safety net: standing in the courtyard with a pirate still left somewhere you walked past, that pirate comes running into sight
     assert ev("(()=>{const F=encFigures('q9_guards'),keep=F.map(q=>[q.x,q.y]),n=F[0],x0=P.x,y0=P.y;F.forEach((q,i)=>{q.x=q.hx=262;q.y=q.hy=40+i%3});sail=false;P.x=283;P.y=34;encRallyAt=0;encRallyTick(performance.now(),0);const ok=seesPlayer(n)&&Math.abs(n.x-283)+Math.abs(n.y-34)>=3;F.forEach((q,i)=>{q.x=q.hx=keep[i][0];q.y=q.hy=keep[i][1]});P.x=x0;P.y=y0;return ok})()"), "a pirate you missed comes to you at the temple door"
     fight_all('q9_guards', 12, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
-    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===320&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
+    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===360&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
     ev("S.hp=9999;S.sta=100;BATTLE.foes[0].turns=0")
     seq = []
     for _ in range(4):
