@@ -84,7 +84,8 @@ const SC=[
    sky('#6aa8e6','#cfe8f0',0,40);R2(0,34,W,6,'#5f8f4a');sea(40,H,t,['#3e8ed0','#245aa2'],'#9ad0f0',null);
    for(let x=0;x<W;x++)P2(x,40+Math.round(Math.sin(x*.3+t*2)),'#e8f6ff');
    pier(0,96,32,'h');for(let i=0;i<8;i++)R2(4+i*16,106,3,10,'#4a2e16');   // (the pier reaches x 128, so Murl stands on its end, not on the water)
-   R2(0,96,W,1,'#c99a5e');bunting(0,86,112,88,t,4);lanternPole(30,80,t,false);lanternPole(100,80,t,false);
+   R2(0,96,128,1,'#c99a5e');   // (the light edge along the top of the pier stops where the pier ends, x 128; it used to run on across the water)
+   bunting(0,86,112,88,t,4);lanternPole(30,80,t,false);lanternPole(100,80,t,false);
    rowboat(120,104,t,t<7.8);sailboat(20,140,t,'#3b82c4');sailboat(140,150,t,'#d9534f');gull(80+Math.sin(t)*30,24,t);
    const pk=ease((t-.4)/3),px=6+pk*86,mv=t>.4&&t<3.4;dude(px,80,ME,'r',mv?[1,0,3,0][Math.floor(t*8)%4]:0);
    dude(112,78,MURL,t<7.8?'l':'f',0);for(let i=0;i<3;i++)dude(6+i*14,80,VILL[i+9],'r',0);
