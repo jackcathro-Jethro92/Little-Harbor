@@ -1258,6 +1258,21 @@ def check(b, url):
     assert ev("[...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a sea creature can be run from"
     ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
     ev("seaAttack('sea_squid')"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Ancient squid'", timeout=5000); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
+    # roaming pirate ships (after playtest #5): rare at first, more and tougher as the story goes on; they chase you, can be outrun by a faster boat, and board you for a fight you cannot run from
+    assert ev("ITEMS.rowboat.sailMs>ITEMS.sloop.sailMs&&ITEMS.sloop.sailMs>ITEMS.schooner.sailMs&&ITEMS.schooner.sailMs>ITEMS.brig.sailMs&&PIRATE_SEAS.every((r,i)=>!i||(r[1]>PIRATE_SEAS[i-1][1]&&r[3]<=PIRATE_SEAS[i-1][3]))&&PIRATE_SEAS[0][3]<ITEMS.rowboat.sailMs&&PIRATE_SEAS[0][3]>ITEMS.sloop.sailMs&&PIRATE_SEAS[PIRATE_SEAS.length-1][3]>ITEMS.brig.sailMs"), "bigger boats are faster; pirate ships grow more common and faster with the story; a sloop outruns the first ones, the brig outruns them all"
+    assert ev("(()=>{const b0=S.eq.boat;S.eq.boat='brig';sail=true;const fast=stepMs();S.eq.boat='rowboat';const slow=stepMs();S.eq.boat=b0;return fast===64&&slow===90})()"), "each boat sails at its own speed"
+    ev("PSHIP_ON=true;PSHIPS.length=0;S.story.done=[];pshipQuiet=1;P.x=P.rx=B.x=__sp[0];P.y=P.ry=B.y=__sp[1];Math.random=()=>0;pshipSeaTick();Math.random=__m")
+    assert ev("PSHIPS.length===1&&PSHIPS[0].tier===4&&Math.hypot(PSHIPS[0].x-P.x,PSHIPS[0].y-P.y)>=9&&at(PSHIPS[0].x,PSHIPS[0].y)===0"), "a pirate sloop can appear out of sight in the open sea early on"
+    ev("PSHIPS.length=0;pshipQuiet=1;P.x=P.rx=B.x=156;P.y=P.ry=B.y=130;Math.random=()=>0;pshipSeaTick();Math.random=__m"); assert ev("PSHIPS.length===0"), "never near the village"
+    ev("P.x=P.rx=B.x=__sp[0];P.y=P.ry=B.y=__sp[1];const s=pshipSpawn(true);s.x=s.rx=P.x+4;s.y=s.ry=P.y;s.ms=40;window.__ps=s")
+    pg.wait_for_function("__ps.state==='chase'", timeout=3000); assert ev("__ps.alertUntil>0&&/pirate ship/i.test($('msg').textContent)"), "a pirate ship that sees you gives chase, with a red ! over it"
+    pg.wait_for_function("BATTLE!==null", timeout=6000)
+    assert ev("BATTLE.row.noRun===1&&BATTLE.foes.length>=2&&BATTLE.foes.length<=3&&BATTLE.foes.every(f=>/Pirate/.test(f.t.n))&&BATTLE.row.field==='sea'&&__ps.boarding===1"), "when it catches you, two or three pirates board and you cannot run"
+    ev("bEnd('won')"); pg.wait_for_function("BATTLE===null", timeout=5000); assert ev("!PSHIPS.includes(__ps)"), "after the fight the ship is gone"
+    ev("const s=pshipSpawn(true);s.x=s.rx=P.x+6;s.y=s.ry=P.y;s.state='chase';s.until=performance.now()+30000;s.next=0;window.__ps=s;P.x=P.rx=B.x=P.x-20")
+    pg.wait_for_timeout(200); assert ev("__ps.state==='roam'&&__ps.calm>performance.now()"), "get far enough ahead and they give up"
+    ev("S.story.done=['q1','q2','q3','q4','q5','q6','q7','q8'];const r=pseaRow();window.__r=r;PSHIPS.length=0;PSHIP_ON=false;S.story.done=[]"); assert ev("__r[5].includes('final_brute')&&__r[2]>=3"), "late in the story they are many and their crews are the toughest"
+    ev("for(let i=0;i<3;i++){const s=pshipSpawn(true);if(s){s.tier=4+i;s.f=['l','u','r'][i]}}try{draw()}catch(e){window.__de=String(e)}PSHIPS.length=0"); assert ev("window.__de===undefined"), "pirate ships draw in every direction"
     ev("sail=false;SEA_ALERT=0;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
     pgd, errd = load(b, url, SAVE); evd = pgd.evaluate   # a fresh page, because the older tests above clear the extra creatures
     assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length===2"), "two rock dragons (playtest #5) stand on the bare rock of the mountain country"
