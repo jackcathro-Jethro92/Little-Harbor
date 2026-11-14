@@ -583,3 +583,6 @@ The notes, Jack's answers and what was built are in `PLAYTEST_PLAN.md` (P78 to P
 - **Boarding:** when it reaches your boat (or you sail into it), the picture shakes and a battle on the sea field starts with two or three pirates, with no Run. The ship is gone afterwards.
 - **Story stages (`PIRATE_SEAS`, by quests done):** chance per tile from 0.08% (start) to 1% (after Quest 8), at most 1 to 4 ships at once, a tile every 86 ms down to 72 ms, a third pirate from never to 85% of the time, and crews from the Quest 1 grunts to the Quest 9 crew.
 - **Boat speed (`sailMs` on each boat):** rowboat 90 ms a tile (as before), sloop 80, schooner 72, brig 64. So the rowboat cannot outrun even the first ships, a sloop outruns the early ones, a schooner most, and the brig all of them. A swiftness potion makes any boat a third faster.
+
+## Boats in the harbours (after playtest #5)
+- `HARBOUR_BOATS` in `js/data/town.js` lists boats moored for show: four round the village pier and four at the Settlement Docks (Murl's rowboat, sloop, schooner and brig in their own colours). `js/systems/harbourboats.js` draws them bobbing and stops your boat and the pirate ships from sailing through their tiles. The tests check both piers can still be reached by boat.
