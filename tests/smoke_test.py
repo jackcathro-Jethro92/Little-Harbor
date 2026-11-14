@@ -360,12 +360,14 @@ def check(b, url):
     assert pg2.evaluate("S.story.q==='q1'&&S.story.step===2&&wasSeen('festival')&&flag('met_stranger')"), "story state survives a reload"
     pg2.evaluate("sail=true;sleep()"); assert pg2.evaluate("S.story.q==='q1'&&flag('met_stranger')&&wasSeen('festival')"), "story state survives sleep"
     pg2.close()
-    # the opening cinematic (N10): plays first on a new visit; the home menu appears over it as the ship sails away (a tap skips to it); it plays only once per visit
+    # the opening cinematic (N10): plays first on a new visit; the home menu appears over it as the ship sails away (the Skip button skips to it); it plays only once per visit
     pi = b.new_page(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True); ierr = []; pi.on("pageerror", lambda e: ierr.append(str(e)))
     pi.goto(url); pi.wait_for_timeout(1200)
     assert pi.evaluate("!!$('intro')&&!$('title').classList.contains('open')"), "the opening scene plays before the title menu"
-    pi.tap("#intro"); pi.wait_for_timeout(300)
-    assert pi.evaluate("$('title').classList.contains('open')&&$('title').classList.contains('over')&&!!$('intro')"), "a tap skips to the home menu, shown over the scene"
+    pi.tap("#intro"); pi.wait_for_timeout(300); assert pi.evaluate("!$('title').classList.contains('open')"), "a tap on the opening scene does not skip it (playtest #5)"
+    pi.keyboard.press("a"); pi.wait_for_timeout(200); assert pi.evaluate("!$('title').classList.contains('open')"), "nor does an ordinary key"
+    pi.tap("#intro-skip"); pi.wait_for_timeout(300)
+    assert pi.evaluate("$('title').classList.contains('open')&&$('title').classList.contains('over')&&!!$('intro')"), "the Skip button skips to the home menu, shown over the scene"
     assert pi.evaluate("[...document.querySelectorAll('#title-body button.tm')].map(b=>b.textContent)") == ["Continue", "New game", "Load game"], "the home menu has Continue, New game and Load game"
     pi.click("#title-body button.tm >> text=Load game"); assert pi.evaluate("$('title-h').textContent==='Load game'&&!!$('intro')"), "Load game opens over the scene"
     pi.click("#title-body button.tm >> text=Back"); pi.click("#title-body button.tm >> text=New game"); pi.wait_for_timeout(900)
@@ -791,8 +793,9 @@ def check(b, url):
     assert ev("SCENE!==null&&SCENE.cine===true&&flag('festival_on')&&FESTIVAL_ON===true"), "starting a new game plays the festival cinematic with the decorations switched on"
     assert ev("INTRO.playing()&&$('ofilm').classList.contains('on')&&INTRO.SC.length===6"), "Jack's extended opening (six scenes) plays over the game's picture"
     ev("(()=>{try{INTRO.SC.forEach((sc,i)=>{for(let t=0;t<sc.d;t+=.7)INTRO.drawAt(i,t)});draw()}catch(e){window.__e=String(e)}})()"); assert ev("window.__e===undefined"), "every frame of the cinematic draws"
-    ev("$('wrap').click()"); pg.wait_for_timeout(150)   # a tap anywhere skips a cinematic
-    assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&!$('cine').classList.contains('on')&&!dlgActive()&&P.x===156&&P.y===126&&S.eq.boat==='rowboat'"), "a tap ends it with the festival done, the decorations up, normal light, the bars gone and the player at the pier with the rowboat"
+    ev("$('c').click();$('wrap').click()"); pg.wait_for_timeout(150); assert ev("SCENE!==null&&INTRO.playing()"), "a click on the picture does not skip a cinematic (playtest #5)"
+    ev("$('scene-skip').click()"); pg.wait_for_timeout(150)   # only the Skip button skips it
+    assert ev("SCENE===null&&flag('festival_done')&&FESTIVAL_ON===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&!$('cine').classList.contains('on')&&!dlgActive()&&P.x===156&&P.y===126&&S.eq.boat==='rowboat'"), "Skip ends it with the festival done, the decorations up, normal light, the bars gone and the player at the pier with the rowboat"
     assert ev("__home.filter(([n])=>FEST_CROWD.includes(n)||n==='Murl').every(([n,x,y])=>{const q=NPC.find(p=>p.n===n);return Math.abs(q.x-x)+Math.abs(q.y-y)<=2})"), "everyone the cinematic moved is back where they were"
     ev("fireTriggers('start')"); assert ev("SCENE===null"), "the festival plays once"
     # played to its end without a tap, the cinematic hands over to the game in the same place

@@ -2,7 +2,7 @@
 // It looks up into a blue sky with white clouds and two sea birds, tilts down to the horizon while the driftwood title (with seaweed hanging off it)
 // rises up out of the sea with a small credit line under it, and a sailing ship, seen from behind, sails forward away from us towards the horizon.
 // As the ship sails into the distance the home menu (Continue, New game, Load game) appears over the scene; the scene keeps playing behind it.
-// Tap (or press any key) to skip straight to the menu. The menu itself is the title menu in js/ui/titlemenu.js, which calls playIntro.close() when the game starts.
+// Playtest #5 (Jack): only the Skip button (or the Escape key) skips straight to the menu; a click or tap on the picture does nothing. The menu itself is the title menu in js/ui/titlemenu.js, which calls playIntro.close() when the game starts.
 // Everything is drawn in code at a low resolution and scaled up, in the game's own pixel style. It has its own canvas, so the game is not touched.
 const INTRO_SEEN='lh-intro';
 const playIntro=(()=>{
@@ -187,7 +187,6 @@ const playIntro=(()=>{
   function frame(now){raf=requestAnimationFrame(frame);
     const t=Math.max(0,(now-t0)/1000),dt=Math.min(.05,Math.max(0,t-last));last=t;
     if(phase==='play'&&t>=LEN)showMenu();
-    if(phase==='play'&&t>3&&hintEl.textContent==='Tap to skip')hintEl.style.opacity=0;
     const cam=Math.round(TILT*ease((t-3.2)/5.3)),hz=HZ+TILT-cam,SHT=H-HZ;
     g.drawImage(sky,0,-cam);
     // the rising sun, half up out of the sea to the right, with a dithered glow around it
@@ -228,7 +227,7 @@ const playIntro=(()=>{
     // letterbox bars while it plays; they slide away when it is ready to start
     const lb=Math.round(H*.075*(1-outE((t-LEN)/.7)));if(lb>0){g.fillStyle='#0b1018';g.fillRect(0,0,W,lb);g.fillRect(0,H-lb,W,lb)}}
 
-  function showMenu(){if(phase!=='play')return;phase='menu';hintEl.style.opacity=0;const cb=onDone;onDone=null;cb&&cb()}
+  function showMenu(){if(phase!=='play')return;phase='menu';hintEl.style.opacity=0;const sk=$('intro-skip');if(sk)sk.hidden=true;const cb=onDone;onDone=null;cb&&cb()}
   function hint(text,blink){hintEl.textContent=text;hintEl.classList.toggle('blink',!!blink);hintEl.style.opacity=1}
   function tap(e){if(e&&e.type==='keydown'){e.preventDefault();e.stopImmediatePropagation()}
     if(phase==='play'){t0=performance.now()-LEN*1000;last=LEN;foam=[];showMenu()}}
@@ -238,11 +237,11 @@ const playIntro=(()=>{
 
   const play=function playIntro(done){onDone=done;phase='play';foam=[];
     try{sessionStorage.setItem(INTRO_SEEN,'1')}catch(e){}
-    el=document.createElement('div');el.id='intro';el.className='open';el.setAttribute('role','button');el.setAttribute('aria-label','Opening scene. Tap to skip.');
-    el.innerHTML='<canvas id="intro-c"></canvas><div id="intro-hint">Tap to skip</div><div id="intro-credit">Created by Jack Cathro with the use of Claude AI</div>';document.body.appendChild(el);
+    el=document.createElement('div');el.id='intro';el.className='open';el.setAttribute('aria-label','Opening scene');
+    el.innerHTML='<canvas id="intro-c"></canvas><div id="intro-hint"></div><button id="intro-skip">Skip</button><div id="intro-credit">Created by Jack Cathro with the use of Claude AI</div>';document.body.appendChild(el);
     cv=el.firstChild;g=cv.getContext('2d');hintEl=$('intro-hint');creditEl=$('intro-credit');setup();
-    el.addEventListener('pointerdown',e=>{e.preventDefault();tap(e)});
-    onKey=e=>{if(phase==='play')tap(e)};addEventListener('keydown',onKey,true);
+    $('intro-skip').addEventListener('click',e=>{e.stopPropagation();tap(e)});
+    onKey=e=>{if(phase==='play'&&e.key==='Escape')tap(e)};addEventListener('keydown',onKey,true);
     onResize=()=>setup();addEventListener('resize',onResize);
     t0=performance.now();last=0;raf=requestAnimationFrame(frame)};
   play.close=finish; // fades the scene out (when the game starts)
