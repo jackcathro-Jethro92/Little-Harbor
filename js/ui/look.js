@@ -42,6 +42,6 @@ function openLook(mode){lookMode=mode||'start';
   buildSw();preview();$('look').classList.add('open')}
 $('lookx').onclick=()=>{$('look').classList.remove('open');$('lookx').style.display='none';say('Come back any time.')};
 $('go').onclick=()=>{
-  if(lookMode==='start'){if(!heroReady())return;const h=HEROES.find(q=>q.id===heroSel);S.hero=h.id;S.look=JSON.parse(JSON.stringify(h.look));S.name=heroName();$('look').classList.remove('open');S.seen=1;ui();save();say('Walk down the pier to your boat, face it, and tap Use.');setTimeout(()=>fireTriggers('start'),250);return}
+  if(lookMode==='start'){if(!heroReady())return;const h=HEROES.find(q=>q.id===heroSel);S.hero=h.id;S.look=JSON.parse(JSON.stringify(h.look));S.name=heroName();$('look').classList.remove('open');S.seen=1;ui();save();say('');setTimeout(()=>fireTriggers('start'),250);return}   // (the opening cinematic gives the 'walk down the pier' hint when it ends, not while it plays)
   const c=lookCost();if(S.gold<c)return;S.gold-=c;S.look=LK;$('look').classList.remove('open');$('lookx').style.display='none';ui();save();
   say(c?(lookMode==='tailor'?'Wynn: Looking sharp!':'Fenwick: Lovely. Very dashing.'):'Nothing changed. No charge.')};

@@ -57,7 +57,7 @@ const SC=[
    sea(118,H,t,[mixc('#1a2a4a','#3478c8',k),mixc('#0a1428','#1f4f8a',k)],mixc('#3a4a7a','#8cc6f0',k),88);
    gull(30+t*14,60-Math.sin(t)*6,t);gull(50+t*12,70-Math.sin(t+1)*5,t+.3);gull(140-t*9,48,t+.6);
    const a=ease((t-2)/2)-ease((t-7)/1);if(a>0){g2.globalAlpha=a;text('LITTLE HARBOR',88,40,20,'#ffe9a8');text("~ a fisher's tale ~",88,64,9,'#ffffff');g2.globalAlpha=1}}},
- {name:'The festival',d:8,f:t=>{const cy=ease(t/6.5)*170;g2.save();g2.translate(0,-cy);
+ {name:'The festival',d:8,f:t=>{const cy=Math.round(ease(t/6.5)*170);g2.save();g2.translate(0,-cy);   // (whole pixels: a part-pixel slide left the picture see-through, and the game's village showed in the sky)
    sky('#5a9ae0','#bfe0f0',0,140);for(let i=0;i<4;i++){const cx=(i*60+t*4)%230-30;R2(cx,20+i*18,30,4,'#f4f8fc');R2(cx+6,17+i*18,16,3,'#f4f8fc')}
    gull(40+t*10,40,t);gull(120-t*8,64,t+.4);
    R2(0,140,W,240,'#71a948');for(let k=0;k<160;k++)P2((k*41)%W,140+(k*29)%120,['#86bb55','#5f9640'][k%2]);
@@ -83,7 +83,8 @@ const SC=[
  {name:'Your first boat',d:10,f:(t,dt,first)=>{   // Murl presents the ribboned rowboat at the end of the pier
    sky('#6aa8e6','#cfe8f0',0,40);R2(0,34,W,6,'#5f8f4a');sea(40,H,t,['#3e8ed0','#245aa2'],'#9ad0f0',null);
    for(let x=0;x<W;x++)P2(x,40+Math.round(Math.sin(x*.3+t*2)),'#e8f6ff');
-   pier(0,96,28,'h');for(let i=0;i<7;i++)R2(4+i*16,106,3,10,'#4a2e16');R2(0,96,W,1,'#c99a5e');bunting(0,86,112,88,t,4);lanternPole(30,80,t,false);lanternPole(100,80,t,false);
+   pier(0,96,32,'h');for(let i=0;i<8;i++)R2(4+i*16,106,3,10,'#4a2e16');   // (the pier reaches x 128, so Murl stands on its end, not on the water)
+   R2(0,96,W,1,'#c99a5e');bunting(0,86,112,88,t,4);lanternPole(30,80,t,false);lanternPole(100,80,t,false);
    rowboat(120,104,t,t<7.8);sailboat(20,140,t,'#3b82c4');sailboat(140,150,t,'#d9534f');gull(80+Math.sin(t)*30,24,t);
    const pk=ease((t-.4)/3),px=6+pk*86,mv=t>.4&&t<3.4;dude(px,80,ME,'r',mv?[1,0,3,0][Math.floor(t*8)%4]:0);
    dude(112,78,MURL,t<7.8?'l':'f',0);for(let i=0;i<3;i++)dude(6+i*14,80,VILL[i+9],'r',0);
@@ -91,7 +92,8 @@ const SC=[
    if(t>3.6&&t<7.6)box('fest_c4')}},
  {name:'Fireworks',d:9,f:(t,dt,first)=>{   // night falls, fireworks over the harbour, and a seagull lands on your new boat
    const k=ease(t/3);sky(mixc('#f0905a','#0c1230',k),mixc('#f8c890','#2a2a5a',k),0,110);if(k>.6)for(let i=0;i<40;i++)P2((i*37)%W,(i*23)%90,i%3?'#cfd8ff':'#ffffff');
-   R2(0,92,W,18,mixc('#3a3a3a','#141820',k));[[4,'thatch'],[44,'red'],[92,'slate'],[132,'thatch']].forEach(([x,r])=>house(x,90,30,r,true));for(let x=10;x<W;x+=32)lanternPole(x,100,t,true);
+   R2(0,92,W,24,mixc('#3a3a3a','#141820',k));   // (the ground reaches the sea at 116: a gap there showed the daytime game through it)
+   [[4,'thatch'],[44,'red'],[92,'slate'],[132,'thatch']].forEach(([x,r])=>house(x,90,30,r,true));for(let x=10;x<W;x+=32)lanternPole(x,100,t,true);
    sea(116,H,t,[mixc('#3a78b8','#10203a',k),mixc('#1f4f8a','#060c1c',k)],mixc('#8cc6f0','#3a4a7a',k),null);pier(64,116,6,'v');rowboat(82,150,t,false);
    [2.4,3.1,3.7,4.6,5.2,6.0,6.6].forEach((s,i)=>{if(t>s&&!first['f'+i]){first['f'+i]=1;const x=30+((i*53)%120),y=24+((i*31)%40);burst(x,y,[['#f2c14e','#ffe9a8'],['#d9534f','#ffb0a0'],['#3b82c4','#a8d8ff'],['#4caf72','#b8f0a0'],['#e88ab0','#ffd6e4']][i%5],70,58,1.8);parts.push({x,y,vx:0,vy:0,c:'#ffffff',l:.25,t:0,gr:0,flash:1})}});
    for(const p of parts)if(!p.gr&&p.y<110){g2.globalAlpha=.25*(1-p.t/p.l);R2(p.x,232-p.y,1,2,p.c);g2.globalAlpha=1}
@@ -101,11 +103,11 @@ const SC=[
 // ---- playing it ----
 function frame(now){if(!cv)return;const dt=Math.min(.05,(now-last)/1000);last=now;lt+=dt;stepParts(dt);
   if(lt>SC[cur].d){if(cur<SC.length-1){cur++;lt=0;parts=[]}else return stop(true)}
-  g2.clearRect(0,0,W,H);SC[cur].f(lt,dt,firsts[cur]);drawParts();
+  R2(0,0,W,H,'#000');SC[cur].f(lt,dt,firsts[cur]);drawParts();   // (each frame starts from solid black, so the game behind never shows through)
   const fin=1-ease(lt/.5),fout=ease((lt-(SC[cur].d-.5))/.5),a=Math.max(fin,fout);if(a>0){g2.globalAlpha=a;R2(0,0,W,H,'#000');g2.globalAlpha=1}
   raf=requestAnimationFrame(frame)}
 function play(done){cv=$('ofilm');g2=cv.getContext('2d');g2.imageSmoothingEnabled=false;cast();cur=0;lt=0;parts=[];firsts=SC.map(()=>({}));onEnd=done;cv.classList.add('on');last=performance.now();raf=requestAnimationFrame(frame)}
 function stop(finished){cancelAnimationFrame(raf);if(cv)cv.classList.remove('on');cv=null;parts=[];const f=onEnd;onEnd=null;if(f&&finished)f()}
-return{play,stop,SC,playing:()=>!!cv,at:(i,t)=>{cur=i;lt=t},drawAt:(i,t)=>{const c=$('ofilm');g2=c.getContext('2d');cast();parts=[];firsts=SC.map(()=>({}));g2.clearRect(0,0,W,H);SC[i].f(t,0,{});drawParts()}}})();
+return{play,stop,SC,playing:()=>!!cv,at:(i,t)=>{cur=i;lt=t},drawAt:(i,t)=>{const c=$('ofilm');g2=c.getContext('2d');cast();parts=[];firsts=SC.map(()=>({}));R2(0,0,W,H,'#000');SC[i].f(t,0,{});drawParts()}}})();
 // the scene step that plays it: {film:'intro'} waits until it ends (or the scene is skipped)
 SCSTEP.film=(id,c)=>{if(c.fast)return c.go();INTRO.play(()=>c.go());c.hold(()=>INTRO.stop(false))};
