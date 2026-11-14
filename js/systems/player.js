@@ -6,5 +6,6 @@ const front=()=>[P.x+D[P.f][0],P.y+D[P.f][1]];
 function move(d){
   if(SCENE||BATTLE||(typeof SEA_ALERT!=='undefined'&&SEA_ALERT>performance.now()))return;if(fs)cancel();
   P.f=d;const[x,y]=front();{const en=!sail&&enemyAt(x,y);if(en){startEnemyBattle(en);return}}
-  if(sail?(at(x,y)===0&&x>=0&&y>=0&&x<MW&&y<WH&&!npcAt(x,y)):walkable(x,y)){P.x=x;P.y=y;if(sail){B.x=x;B.y=y}if(sail){spend(STAM.sail*(1-.06*lvl('sailing')));gainXp('sailing',.25);seaTick()}else sleepBtn();reveal();if(at(P.x,P.y)===47)grassEvent();if(gatePending)applyGates();fireTriggers('step')}
+  if(sail&&typeof pshipAt==='function'){const ps=pshipAt(x,y);if(ps){pshipBoard(ps);return}}   // sailing into a pirate ship (js/systems/seapirates.js)
+  if(sail?(at(x,y)===0&&x>=0&&y>=0&&x<MW&&y<WH&&!npcAt(x,y)):walkable(x,y)){P.x=x;P.y=y;if(sail){B.x=x;B.y=y}if(sail){spend(STAM.sail*(1-.06*lvl('sailing')));gainXp('sailing',.25);seaTick();pshipSeaTick()}else sleepBtn();reveal();if(at(P.x,P.y)===47)grassEvent();if(gatePending)applyGates();fireTriggers('step')}
 }

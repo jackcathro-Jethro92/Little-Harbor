@@ -139,9 +139,10 @@ const ITEMS={
  amulet_healing:{n:'Amulet of Healing',kind:'jewel',slot:'amulet',price:0,gem:'#58d058',fx:{regen:1},desc:'An emerald pendant from Lucie. Your health slowly comes back by itself, no sleep needed. A reward from the Mountain Town notice board.'},
  amulet_ward:{n:'Amulet of Warding',kind:'jewel',slot:'amulet',price:6000,gem:'#c8d8f0',fx:{ward:.2},desc:'An enchanted diamond pendant. You take 20% less damage.'},
  amulet_sage:{n:"Scholar's Amulet",kind:'jewel',slot:'amulet',price:7500,gem:'#9a5ac8',fx:{xp:.1},desc:'An enchanted amethyst pendant. 10% more skill XP.'},
- rowboat:{n:'Rowboat',kind:'boat',price:0,crew:[1,1],desc:'Two oars and a seat. Sails by yourself.'},
- sloop:{n:'Sloop',kind:'boat',price:BOAT_TEST?100:25000,crew:[1,1],store:40,desc:'One mast, a mainsail and a jib. Better odds of rare fish.'},
- schooner:{n:'Schooner',kind:'boat',price:BOAT_TEST?100:40000,crew:[2,3],store:100,desc:'Two masts with fore-and-aft sails. Good odds of rare fish.'},
- brig:{n:'Brig',kind:'boat',price:BOAT_TEST?100:80000,crew:[3,5],store:240,desc:'Two masts of square sails, a black hull and gun ports. The best odds of rare fish.'}
+ // sailMs (playtest #5, the roaming pirates): how long a tile of sailing takes, so the bigger ships are faster and can outrun the pirate ships (rowboat 0.09 s a tile, brig 0.064 s)
+ rowboat:{n:'Rowboat',kind:'boat',sailMs:90,price:0,crew:[1,1],desc:'Two oars and a seat. Sails by yourself.'},
+ sloop:{n:'Sloop',kind:'boat',sailMs:80,price:BOAT_TEST?100:25000,crew:[1,1],store:40,desc:'One mast, a mainsail and a jib. Better odds of rare fish.'},
+ schooner:{n:'Schooner',kind:'boat',sailMs:72,price:BOAT_TEST?100:40000,crew:[2,3],store:100,desc:'Two masts with fore-and-aft sails. Good odds of rare fish.'},
+ brig:{n:'Brig',kind:'boat',sailMs:64,price:BOAT_TEST?100:80000,crew:[3,5],store:240,desc:'Two masts of square sails, a black hull and gun ports. The best odds of rare fish.'}
 };
 const LIST=k=>Object.keys(ITEMS).filter(i=>ITEMS[i].kind===k); // list order = tier order

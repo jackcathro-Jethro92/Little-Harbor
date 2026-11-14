@@ -575,3 +575,11 @@ The notes, Jack's answers and what was built are in `PLAYTEST_PLAN.md` (P78 to P
 - **Healing:** Minor health tonic 15 (Alchemy 0), Minor health potion 30 (3; id `healing_potion`), Superior health elixir 60 (6; id `greater_healing`), Elixir of life, all your health (10). Ids kept for old saves.
 - **Carpenter:** sells the design kit's home furniture (`FURN_KIT`) in Furniture, Beds, Decor and Lights tabs. Chest of drawers 1,250 gold (holds 20), storage crate 875 gold (holds 60).
 - **Balance:** iron sword damage 7.65 (was 9). Pirates grow tougher with every quest and much more after Quest 6: Quest 7 raiders 44-68 health, Quest 9 crew 60-95, Barron 360 (the tests check each quest's pirates are stronger than the last).
+
+## Roaming pirate ships (after playtest #5, `js/systems/seapirates.js`)
+- **The ships:** Murl's sloop, schooner and brig redrawn in red and black with a black skull flag (tiers 4, 5 and 6 of `SHIPSPEC` in `js/render/ships.js`, flag by `shpFlag`). Not saved: a reload clears the sea.
+- **Appearing:** each tile you sail in open water has a small chance of a ship appearing out of sight, 10 to 13 tiles away. Never before the festival is over, within `SEA_SAFE` tiles of the village, in a scene, or in the tests unless `PSHIP_ON` is set.
+- **Chasing:** a ship wanders until you are within `PSHIP.SIGHT` (8) tiles, then shows a red "!" and steers round islands towards you. It gives up when you are `PSHIP.GIVEUP` (16) tiles away or after `PSHIP.CHASE_S` (30) seconds, and then leaves you alone for `PSHIP.CALM_S` (25) seconds. Ships more than 34 tiles away disappear.
+- **Boarding:** when it reaches your boat (or you sail into it), the picture shakes and a battle on the sea field starts with two or three pirates, with no Run. The ship is gone afterwards.
+- **Story stages (`PIRATE_SEAS`, by quests done):** chance per tile from 0.08% (start) to 1% (after Quest 8), at most 1 to 4 ships at once, a tile every 86 ms down to 72 ms, a third pirate from never to 85% of the time, and crews from the Quest 1 grunts to the Quest 9 crew.
+- **Boat speed (`sailMs` on each boat):** rowboat 90 ms a tile (as before), sloop 80, schooner 72, brig 64. So the rowboat cannot outrun even the first ships, a sloop outruns the early ones, a schooner most, and the brig all of them. A swiftness potion makes any boat a third faster.

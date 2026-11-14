@@ -4,7 +4,10 @@ const STEP_MS={walk:160,sail:90},GLIDE={walk:.085,sail:.14},SWIFT_MS={walk:110,s
 const BOOT_MS=135,BOOT_GLIDE=.1,swift=()=>S.buff>Date.now(),boots=()=>!sail&&fx('speed')>0;
 // Out of stamina you move much more slowly (EXH_*); a swiftness potion brings you back to the normal pace, and only sleep, food or a tonic refill the bar.
 const EXH_MS={walk:300,sail:170},EXH_GLIDE={walk:.05,sail:.08},tired=()=>S.sta<=0;
-const stepMs=()=>tired()?(swift()?STEP_MS:EXH_MS)[sail?'sail':'walk']:swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sail?'sail':'walk'],glideAmt=()=>tired()?(swift()?GLIDE:EXH_GLIDE)[sail?'sail':'walk']:swift()?SWIFT_GLIDE[sail?'sail':'walk']:boots()?BOOT_GLIDE:GLIDE[sail?'sail':'walk'];
+// playtest #5: each boat sails at its own speed (`sailMs` in js/data/items.js); a swiftness potion makes any boat a third faster again, and out of stamina any boat is slow
+const sailBase=()=>{const b=ITEMS[S.eq.boat];return(b&&b.sailMs)||STEP_MS.sail},spd=k=>k==='sail'?{ms:sailBase(),gl:GLIDE.sail*STEP_MS.sail/sailBase()}:{ms:STEP_MS.walk,gl:GLIDE.walk};
+const stepMs=()=>{const k=sail?'sail':'walk';if(tired())return swift()?spd(k).ms:EXH_MS[k];if(swift())return k==='sail'?Math.min(SWIFT_MS.sail,Math.round(sailBase()*2/3)):SWIFT_MS.walk;return boots()?BOOT_MS:spd(k).ms},
+  glideAmt=()=>{const k=sail?'sail':'walk';if(tired())return swift()?spd(k).gl:EXH_GLIDE[k];if(swift())return k==='sail'?Math.max(SWIFT_GLIDE.sail,spd(k).gl*1.4):SWIFT_GLIDE.walk;return boots()?BOOT_GLIDE:spd(k).gl};
 // // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
 const MAXHP=50,MAXSTA=100,STAM={walk:0,sail:.04,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};

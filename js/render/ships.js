@@ -6,7 +6,13 @@ const SHIPSPEC=[
  {id:'rowboat',L:20,Hh:5,hull:'#7a4a26',mid:'#a8703a',rail:'#d8a868',stripe:null,dark:'#3a2210'},
  {id:'sloop',L:26,Hh:6,hull:'#24507e',mid:'#3f7ab0',rail:'#e8eef4',stripe:'#f2f6fa',dark:'#10243a',sail:'#f4efe0',shade:'#d4cdb6'},
  {id:'schooner',L:36,Hh:7,hull:'#3a2a20',mid:'#6a4a38',rail:'#d8c8a0',stripe:'#b04a3c',dark:'#1c120c',sail:'#efe6cc',shade:'#cbbd96'},
- {id:'brig',L:46,Hh:9,hull:'#1e1e28',mid:'#34343e',rail:'#8a8a94',stripe:'#d8b040',dark:'#0c0c12',sail:'#f6f2e6',shade:'#cfc9b6'}];
+ {id:'brig',L:46,Hh:9,hull:'#1e1e28',mid:'#34343e',rail:'#8a8a94',stripe:'#d8b040',dark:'#0c0c12',sail:'#f6f2e6',shade:'#cfc9b6'},
+ // the roaming pirate ships (js/systems/seapirates.js): the same three ships as Murl's, in red and black, with a black skull flag (tiers 4, 5 and 6)
+ {id:'sloop',pirate:1,L:26,Hh:6,hull:'#1c1416',mid:'#6e161a',rail:'#2a2224',stripe:'#c8282c',dark:'#0a0608',sail:'#a42024',shade:'#2a1214'},
+ {id:'schooner',pirate:1,L:36,Hh:7,hull:'#1c1416',mid:'#6e161a',rail:'#2a2224',stripe:'#c8282c',dark:'#0a0608',sail:'#2a2426',shade:'#8e1a1e'},
+ {id:'brig',pirate:1,L:46,Hh:9,hull:'#141012',mid:'#5a1216',rail:'#3a3034',stripe:'#c8282c',dark:'#060404',sail:'#a42024',shade:'#2a1214'}];
+// the flag at a masthead: a small coloured pennant, or on a pirate ship a black flag with a white skull and crossbones
+function shpFlag(c,x,y,s,col){if(!s.pirate)return pF(c,x,y,5,2,col);pF(c,x,y-3,9,7,'#0c0c0e');pF(c,x+3,y-2,3,2,'#f0f0ea');pF(c,x+4,y,1,1,'#f0f0ea');pF(c,x+2,y+1,1,1,'#f0f0ea');pF(c,x+6,y+1,1,1,'#f0f0ea');pF(c,x+2,y+2,1,1,'#f0f0ea');pF(c,x+6,y+2,1,1,'#f0f0ea')}
 function shpPoly(c,pts,col){c.fillStyle=col;c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fill()}
 function shpLine(c,x0,y0,x1,y1,col,w){c.strokeStyle=col;c.lineWidth=w||1;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke()}
 function shpHull(c,s){const L=s.L,H=s.Hh;   // side view, rail line at y = 0, bow to the right
@@ -23,26 +29,26 @@ function shpSide(c,s){   // sails first, then the hull over their feet
   if(s.id==='sloop'){const m=-1;
     shpPoly(c,[[m,-27],[m,-3],[-L/2-1,-3]],Wd);shpPoly(c,[[m,-27],[m-3,-9],[m-5,-3],[-L/2-1,-3]],Sh);   // mainsail with a shaded fold
     shpPoly(c,[[m+1.5,-26],[m+1.5,-3],[L/2+9,-4]],Wd);shpPoly(c,[[m+1.5,-26],[m+4,-12],[L/2+9,-4],[m+1.5,-3]],Sh);
-    shpLine(c,m+.5,-29,m+.5,-1,M,2);shpLine(c,m,-3,-L/2-1,-3,M,1);shpLine(c,L/2-2,-1,L/2+9,-4,M,1);pF(c,m-1,-31,5,2,'#d83828');}
+    shpLine(c,m+.5,-29,m+.5,-1,M,2);shpLine(c,m,-3,-L/2-1,-3,M,1);shpLine(c,L/2-2,-1,L/2+9,-4,M,1);shpFlag(c,m-1,-31,s,'#d83828');}
   else if(s.id==='schooner'){const f=7,mm=-8;
     shpPoly(c,[[f+1.5,-27],[f+1.5,-4],[L/2+11,-5]],Wd);shpPoly(c,[[f+1.5,-27],[f+4,-15],[L/2+11,-5],[f+1.5,-4]],Sh);   // big jib
     shpPoly(c,[[f+1.5,-18],[f+1.5,-4],[L/2+4,-5]],Sh);                                                                 // second jib
     shpPoly(c,[[f,-25],[f-11,-21],[f-13,-4],[f,-4]],Wd);shpPoly(c,[[f,-25],[f-5,-23],[f-6,-4],[f,-4]],Sh);              // fore gaff sail
     shpPoly(c,[[mm,-30],[mm-12,-26],[mm-15,-4],[mm,-4]],Wd);shpPoly(c,[[mm,-30],[mm-6,-28],[mm-7,-4],[mm,-4]],Sh);      // main gaff sail
     shpPoly(c,[[f,-32],[f-3,-26],[f+4,-27]],Wd);shpPoly(c,[[mm,-37],[mm-5,-30],[mm+5,-31]],Wd);                        // topsails
-    shpLine(c,f+.5,-33,f+.5,-1,M,2);shpLine(c,mm+.5,-38,mm+.5,-1,M,2);shpLine(c,L/2-3,-1,L/2+11,-5,M,1);pF(c,mm-1,-40,5,2,'#b04a3c');}
+    shpLine(c,f+.5,-33,f+.5,-1,M,2);shpLine(c,mm+.5,-38,mm+.5,-1,M,2);shpLine(c,L/2-3,-1,L/2+11,-5,M,1);shpFlag(c,mm-1,-40,s,'#b04a3c');}
   else if(s.id==='brig'){const f=11,mm=-8,tier=(m,y,w,h,k)=>{shpPoly(c,[[m-w/2+k,y],[m+w/2+k,y],[m+w/2+k+1,y+h],[m-w/2+k-1,y+h]],Wd);shpPoly(c,[[m-w/2+k,y],[m-w/2+k+3,y],[m-w/2+k+2,y+h],[m-w/2+k-1,y+h]],Sh);pF(c,m-w/2+k-1,y+h,w+2,1,'#b8b098')};
     shpPoly(c,[[f+2,-33],[f+2,-5],[L/2+12,-6]],Wd);shpPoly(c,[[f+2,-24],[f+2,-5],[L/2+6,-6]],Sh);shpPoly(c,[[f+2,-40],[f+2,-34],[L/2+6,-8]],Wd);                      // three jibs
     shpPoly(c,[[mm-1,-34],[mm-13,-29],[mm-17,-5],[mm-1,-5]],Wd);shpPoly(c,[[mm-1,-34],[mm-7,-32],[mm-9,-5],[mm-1,-5]],Sh);                                       // spanker
     for(const m of[f,mm]){const top=m===f?-45:-47;tier(m,top+2,11,7,1);tier(m,top+11,15,9,1);tier(m,top+22,19,11,1)}                                              // royal, topsail and course
-    shpLine(c,f+.5,-47,f+.5,-1,M,2);shpLine(c,mm+.5,-49,mm+.5,-1,M,2);shpLine(c,L/2-3,-1,L/2+12,-6,M,1);for(const m of[f,mm])pF(c,m-1,m===f?-48:-50,5,2,'#d83828')}
+    shpLine(c,f+.5,-47,f+.5,-1,M,2);shpLine(c,mm+.5,-49,mm+.5,-1,M,2);shpLine(c,L/2-3,-1,L/2+12,-6,M,1);for(const m of[f,mm])shpFlag(c,m-1,m===f?-48:-50,s,'#d83828')}
   shpHull(c,s)}
 function shpEnd(c,s,away){   // seen from ahead (away=false) or from behind (away=true): the hull is short and the square sails face you
   const B=s.id==='rowboat'?9:s.id==='sloop'?11:s.id==='schooner'?13:17,H=s.Hh;
   const sails=()=>{const Wd=s.sail,Sh=s.shade,M='#5a3a24';
-    if(s.id==='sloop'){shpLine(c,0,-28,0,-1,M,2);pF(c,away?-5:1,-26,4,20,Wd);pF(c,away?-1:-1,-26,1,22,Sh);pF(c,-1,-30,5,2,'#d83828')}
-    else if(s.id==='schooner'){shpLine(c,-4,-32,-4,-1,M,2);shpLine(c,4,-27,4,-1,M,2);pF(c,-7,-30,3,24,Wd);pF(c,5,-25,3,20,Wd);pF(c,away?-2:0,-22,2,18,Sh)}
-    else if(s.id==='brig'){for(const[m,top,sc]of[[-4,-48,.8],[3,-44,1]]){shpLine(c,m,top-2,m,-1,M,2);for(const[yy,w,h]of[[2,8,7],[11,12,9],[22,15,11]]){const ww=Math.round(w*sc);pF(c,m-ww/2|0,top+yy,ww,h,Wd);pF(c,m-ww/2|0,top+yy,ww,2,Sh);pF(c,m-ww/2|0,top+yy+h,ww,1,'#b8b098')}}}};
+    if(s.id==='sloop'){shpLine(c,0,-28,0,-1,M,2);pF(c,away?-5:1,-26,4,20,Wd);pF(c,away?-1:-1,-26,1,22,Sh);shpFlag(c,-1,-30,s,'#d83828')}
+    else if(s.id==='schooner'){shpLine(c,-4,-32,-4,-1,M,2);shpLine(c,4,-27,4,-1,M,2);pF(c,-7,-30,3,24,Wd);pF(c,5,-25,3,20,Wd);pF(c,away?-2:0,-22,2,18,Sh);if(s.pirate)shpFlag(c,-5,-34,s)}
+    else if(s.id==='brig'){for(const[m,top,sc]of[[-4,-48,.8],[3,-44,1]]){shpLine(c,m,top-2,m,-1,M,2);for(const[yy,w,h]of[[2,8,7],[11,12,9],[22,15,11]]){const ww=Math.round(w*sc);pF(c,m-ww/2|0,top+yy,ww,h,Wd);pF(c,m-ww/2|0,top+yy,ww,2,Sh);pF(c,m-ww/2|0,top+yy+h,ww,1,'#b8b098')}}if(s.pirate)shpFlag(c,-5,-51,s)}};
   sails();
   shpPoly(c,[[-B/2-1,0],[B/2+1,0],[B/2-1,H+1],[-B/2+1,H+1]],s.dark);shpPoly(c,[[-B/2,1],[B/2,1],[B/2-2,H],[-B/2+2,H]],s.hull);shpPoly(c,[[-B/2+1,H*.5],[B/2-1,H*.5],[B/2-2,H],[-B/2+2,H]],s.mid);
   c.fillStyle=s.rail;c.fillRect(-B/2-1,-1,B+2,2);if(s.stripe){c.fillStyle=s.stripe;c.fillRect(-B/2+1,H*.35|0,B-2,1)}
