@@ -222,8 +222,8 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #eqs{position:fixed;inset:0;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));background:#6b4423;z-index:6;font-family:'LHDigits','Pixelify Sans',ui-monospace,monospace}
 #eqs-title{text-align:center;color:#f3d9a4;font-size:22px;font-weight:700;letter-spacing:2px}
 #eqs-body{flex:1;overflow-y:auto;background:#f3d9a4;border:5px solid #3d2511;border-radius:8px;padding:12px;color:#4a2f14}
-#eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-areas:'helmet amulet weapon' 'armour pt .' 'boots ring tool';gap:8px;align-items:center}
-#eq-helmet{grid-area:helmet}#eq-amulet{grid-area:amulet}#eq-weapon{grid-area:weapon}#eq-armour{grid-area:armour}#eq-boots{grid-area:boots}#eq-ring{grid-area:ring}#eq-tool{grid-area:tool}
+#eqs-grid{display:grid;grid-template-columns:1fr 112px 1fr;grid-template-areas:'helmet amulet weapon' 'armour pt rod' 'boots ring tool';gap:8px;align-items:center}
+#eq-helmet{grid-area:helmet}#eq-amulet{grid-area:amulet}#eq-weapon{grid-area:weapon}#eq-armour{grid-area:armour}#eq-boots{grid-area:boots}#eq-ring{grid-area:ring}#eq-tool{grid-area:tool}#eq-rod{grid-area:rod}
 #eqs-pt{grid-area:pt;width:100px;height:125px;image-rendering:pixelated;border:4px solid #3d2511;border-radius:8px;background:#8ec0e8;align-self:center}
 .eqslot{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:#e8c98c;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-family:inherit;min-height:84px}
 .eqslot canvas{width:40px;height:40px;image-rendering:pixelated;background:#f6e6bf;border:2px solid #b98e55;border-radius:4px}
@@ -313,3 +313,19 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 #jb-paper .jb-stamp{position:absolute;right:18px;top:34px;transform:rotate(-14deg);border:3px solid #a83a2a;color:#a83a2a;padding:2px 10px;font-size:22px;letter-spacing:.1em;opacity:.8}
 #jb-paper .jb-btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .jb-none{color:#f8ecc8;text-align:center}
+
+/* playtest #5: the Character screen's tabs (Info, Equipment, Skills), and the three screens kept to a comfortable width in a wide window */
+.chtabs{display:flex;gap:6px}.chtabs button{flex:1;background:#c9a46a;color:#4a2f14;border:3px solid #3d2511;border-radius:6px;box-shadow:0 3px 0 #3d2511;font-size:16px;padding:6px}.chtabs button.sel{background:#f3d9a4}
+#ch>*,#eqs>*,#skills>*{width:100%;max-width:560px;align-self:center;box-sizing:border-box}
+/* playtest #5: the storage screen (crates, drawers, racks, ship storage) */
+#stash{position:fixed;inset:0;display:none;flex-direction:column;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));background:#c9965a;z-index:6;color:#383838;font-family:'LHDigits','Pixelify Sans',ui-monospace,monospace}
+#stash.open{display:flex}#stash>*{width:100%;max-width:640px;align-self:center;box-sizing:border-box}
+#sh-top{display:flex;align-items:center;gap:8px;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:6px 10px;font-size:16px}
+#sh-cap{flex:1;height:12px;background:#e0d8b0;border:2px solid #383838;border-radius:4px;overflow:hidden}#sh-cap i{display:block;height:100%;background:#4a9a5a}
+#sh-main{flex:1;display:flex;gap:8px;min-height:0}.sh-col{flex:1;display:flex;flex-direction:column;min-width:0}.sh-col h4{margin:0 0 4px;color:#f8f4dc;font-size:15px;text-shadow:0 2px 0 #3d2511}
+.sh-grid{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));grid-auto-rows:min-content;gap:5px;align-content:start;overflow-y:auto;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:6px}
+.sh-grid .bcell{cursor:pointer}.sh-none{grid-column:1/-1;margin:4px;font-size:13px}
+#sh-desc{display:flex;align-items:center;gap:8px;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:6px;min-height:52px}
+#sh-di{width:40px;height:40px;image-rendering:pixelated;flex:none}#sh-txt{flex:1;font-size:14px}#sh-btns{display:flex;gap:6px;flex-wrap:wrap}#sh-btns button{font-size:14px;padding:5px 8px}
+#sh-close{background:#f8f4dc;color:#383838;border:3px solid #383838;border-radius:6px;box-shadow:0 3px 0 #383838;font-size:18px;padding:8px}
+@media (max-width:480px){#sh-main{flex-direction:column}}

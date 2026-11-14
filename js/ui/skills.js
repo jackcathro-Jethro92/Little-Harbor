@@ -7,5 +7,5 @@ function openSkills(){const el=$('sk-list');el.innerHTML='';
     el.appendChild(d)});
   $('skills').classList.add('open')}
 const closeSkills=()=>$('skills').classList.remove('open');
-$('skbtn').onclick=openSkills;$('sk-back').onclick=closeSkills;
+$('sk-back').onclick=closeSkills;
 addEventListener('keydown',e=>{if($('skills').classList.contains('open')&&['escape','backspace','x'].includes(e.key.toLowerCase())){e.preventDefault();closeSkills()}});

@@ -279,9 +279,9 @@ Every item (about 140) has a detailed icon in the style of Jack's weapon and arm
 | P80 | Remove island numbers from the map | A | **Built**: "Island 3", "Island 4" and "Island 5" are gone from the map and from the quest text |
 | P81 | Writing: replace any AI-written text with Jack's own | Jack | Jack's job. Every placeholder line is listed in `DIALOGUE.md` |
 | P82 | Bring back stamina drain for sailing | A | **Built**: sailing costs a little stamina per tile again (0.04, 6% less per Sailing level); walking stays free |
-| P83 | Equipment, skills and character info in one tab | B |  |
+| P83 | Equipment, skills and character info in one tab | B | **Built**: one **Character** screen with three tabs (Info, Equipment, Skills). The button row is now Bag, Quests, Map, Character; keys C, E and K open it on each tab, and Left/Right switch tabs. Save and Load stay on the Info tab and in the ☰ menu |
 | P84 | Issue with the camp kit sleep mechanic | A | **Built**: the Sleep button only appeared when something else refreshed the screen, so walking up to your tent often left it hidden. It now updates with every step. The tent's menu also has **Sleep**, and the **Z** key sleeps |
-| P85 | Add a Rod tab in Equipment | B |  |
+| P85 | Add a Rod tab in Equipment | B | **Built**: a Rod square of its own. The rod there is always ready to fish with; the Equipped Tool square is now just for the pickaxe, axe or knife. Old saves holding the rod as their tool are moved over |
 | P86 | Chairs in the pub: allow you to walk over them | A | **Built**: chairs and stools in both taverns (inside and out) can be walked over |
 | P87 | Pub notice boards not working early game | A | **Built.** Jack: nothing opened. The board only worked from exactly one tile in front of it; it now also works from the tile either side |
 | P88 | Remove the two empty houses (woodcutter's shacks) outside the Darkwood | A | **Built**: only the carpenter's shack is left |
@@ -289,14 +289,14 @@ Every item (about 140) has a detailed icon in the style of Jack's weapon and arm
 | P90 | Fewer rock dragons and a little less power (fewer matters more) | A | **Built**: two in the mountains instead of five; health 90 to 80, claws 7-10 to 6-9, fire 17-23 to 15-20 (the three on Halvard's job stay) |
 | P91 | Break long conversation text into smaller chunks | A | **Built**: a line over about 110 letters is shown in pages, broken at the ends of sentences; the words are unchanged |
 | P92 | Storage crates made at the workbench at Crafting level 2: chest of drawers holds 20 things, storage crate 60 | C |  |
-| P93 | A screen for storage crates | B |  |
+| P93 | A screen for storage crates | B | **Built**: crates, chests, racks and ship storage open a screen like the Bag: squares of what is stored and of your bag side by side, a bar showing how full it is, and Store 1 / Store all / Take 1 / Take all for the square you tap (tap it again to move one) |
 | P94 | General: is the game clear enough for new players? Needs another play tester | Jack | No change |
 | P95 | All furniture from the design kit sold at the carpenter's | C |  |
 | P96 | Crafting depends on skill level: storage crate at Crafting 2; swords and axes need the Sword or Axe level and the Crafting level; potions too: the Minor health tonic recipe is learned when you first speak to Astrid | C |  |
 | P97 | Healing weaker early: Minor health tonic (level 0), Minor health potion (3), Superior health elixir (6), Elixir of life (10) | C |  |
 | P98 | Every shop except Murl's dearer | A | **Built.** Decided (Jack): 25% more in every shop (Bram, Odo, Garrick, Astrid, Lucie, Wynn, the carpenter, the barber and tailor, tavern rooms). Murl's ships, crew and shipwright station keep their prices; selling back pays as before |
 | P99 | Iron sword 15% weaker | A | **Built**: damage 9 to 7.65 |
-| P100 | Potions on their own tab in the Bag | B |  |
+| P100 | Potions on their own tab in the Bag | B | **Built**: a Potions section between Food and Weapons |
 | P101 | Pirates grow tougher each quest, especially after "At the Top of the World" | D |  |
 | P102 | **Bug:** the pirate boss was missing from "The Final Fight", so the story stopped after Quest 9. Make sure pirates are placed so the story can't be skipped by accident | A | **Built**: two of the twelve pirates stood on a lower ring behind a cliff and never saw you, and Barron only comes when all twelve are beaten. The eight path pirates now stand on the walking route itself. Safety net for every pirate group the story waits for (Quests 1, 4, 6, 9): when you reach the goal with some still standing where you walked past, they come running to you one by one |
 

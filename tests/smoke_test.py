@@ -42,7 +42,7 @@ def check(b, url):
     assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.x,e.y)===1&&Math.hypot(e.x-144,e.y-170)<14)})()"), "four restless spirits haunt Oak Island"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
-    for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
+    for btn in ("#bagbtn", "#chbtn", "#mapbtn"):
         pg.tap(btn); pg.wait_for_timeout(100)
         pg.keyboard.press("Escape")
         ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
@@ -340,10 +340,10 @@ def check(b, url):
               "P.x=P.rx=D.dx+2;P.y=P.ry=D.y0+2;P.f='u';act();r.toStorage=zoneOf(P.x,P.y)===St.z;P.f='d';act();r.backDeck2=zoneOf(P.x,P.y)===D.z;"
               "const bed=(()=>{for(let y=Q.y0;y<=Q.y1;y++)for(let x=Q.x0;x<=Q.x1;x++)if(at(x,y)===129)return[x,y]})();P.x=P.rx=Q.dx;P.y=P.ry=Q.y1-1;"
               "P.x=P.rx=bed[0];P.y=P.ry=bed[1]+1;P.f='u';const d0=S.day;S.hp=5;act();r.slept=S.day===d0+1&&S.hp>5&&zoneOf(P.x,P.y)===Q.z;"
-              "const cr=(()=>{for(let y=St.y0;y<=St.y1;y++)for(let x=St.x0;x<=St.x1;x++)if(at(x,y)===130)return[x,y]})();P.x=P.rx=cr[0];P.y=P.ry=cr[1]+1;P.f='u';S.bag.driftwood_rod=1;S.bag.sardine=30;act();r.storeOpen=$('store').classList.contains('open')&&/storage/.test($('st').textContent);"
-              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[1].click();r.stored=(S.ships.schooner.store.sardine||0)===30&&!S.bag.sardine;"
-              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[0].click();r.took=S.ships.schooner.store.sardine===29&&S.bag.sardine===1;"
-              "S.bag.copper_ore=500;openStorage('schooner');[...document.querySelectorAll('#items .it')].find(x=>/^Copper ore/.test(x.innerText)).querySelectorAll('button')[1].click();r.capacity=Object.values(S.ships.schooner.store).reduce((a,b)=>a+b,0)===ITEMS.schooner.store;"
+              "const cr=(()=>{for(let y=St.y0;y<=St.y1;y++)for(let x=St.x0;x<=St.x1;x++)if(at(x,y)===130)return[x,y]})();P.x=P.rx=cr[0];P.y=P.ry=cr[1]+1;P.f='u';S.bag.driftwood_rod=1;S.bag.sardine=30;act();r.storeOpen=$('stash').classList.contains('open')&&/storage/.test($('sh-title').textContent);"
+              "window.shDo=(side,id,label)=>{SH.sel={side,id};shDraw();[...$('sh-btns').children].find(b=>b.textContent===label).click()};shDo('bag','sardine','Store all');r.stored=(S.ships.schooner.store.sardine||0)===30&&!S.bag.sardine;"
+              "shDo('in','sardine','Take 1');r.took=S.ships.schooner.store.sardine===29&&S.bag.sardine===1;"
+              "S.bag.copper_ore=500;openStorage('schooner');shDo('bag','copper_ore','Store all');r.capacity=Object.values(S.ships.schooner.store).reduce((a,b)=>a+b,0)===ITEMS.schooner.store;"
               "document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));P.x=P.rx=D.dx;P.y=P.ry=D.y1-2;P.f='d';act();r.helm=sail&&P.x===172&&P.y===190&&zoneOf(P.x,P.y)===0;return r})()")
     assert all(flow.values()), flow
     ev("S.eq.boat='rowboat';sail=false;ui()")
@@ -453,8 +453,8 @@ def check(b, url):
     assert ev("!!window.__sp"), "found open ground for the furniture tests"
     ev("S.bag.storage_crate=1;placing='storage_crate';act()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='storage_crate');return !!p&&p.x===P.x&&p.y===P.y+1&&!!p.st&&!walkable(p.x,p.y)&&!S.bag.storage_crate&&!placing})()"), "a storage crate is placed in front of you at camp and blocks the way"
     ev("S.bag.sword=1;S.bag.pickaxe=1;S.bag.carrot=3;S.bag.weapon_rack=1;S.bag.tool_rack=1;S.bag.bed_single=1;S.bag.carpet_large=1;S.bag.chair=1;P.f='l';placing='weapon_rack';act()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return !!p&&p.x===P.x-3&&p.y===P.y&&!walkable(p.x,p.y)&&!walkable(p.x+2,p.y)&&!placedAt(P.x,P.y)})()"), "a three-wide weapon rack reaches away from you, so you are never inside it"
-    ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');openFurn(p)})()"); t = ev("[...document.querySelectorAll('#items .it b')].map(b=>b.textContent)"); assert any(x.startswith("Old Sword") for x in t) and not any(x.startswith("Pickaxe") for x in t) and not any(x.startswith("Carrot") for x in t), ("a weapon rack takes weapons only", t)
-    ev("[...document.querySelectorAll('#items .it')].find(r=>/Old Sword/.test(r.textContent)&&r.querySelector('button')).querySelector('button').click()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return p.st.sword===1&&!S.bag.sword})()"), "a weapon goes onto the rack and out of the bag"
+    ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');openFurn(p)})()"); t = ev("[...document.querySelectorAll('#sh-bag .bcell')].map(b=>ITEMS[b.dataset.id].n)"); assert any(x.startswith("Old Sword") for x in t) and not any(x.startswith("Pickaxe") for x in t) and not any(x.startswith("Carrot") for x in t), ("a weapon rack takes weapons only", t)
+    ev("document.querySelector('#sh-bag .bcell[data-id=sword]').click();document.querySelector('#sh-bag .bcell[data-id=sword]').click()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return p.st.sword===1&&!S.bag.sword})()"), "a weapon goes onto the rack and out of the bag"
     ev("draw(performance.now())"); ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');P.x=P.rx=p.x+1;P.y=P.ry=p.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Open,Move,Pick up,Cancel'"), "facing the rack offers Open, Move and Pick up"
     ev("mn.i=2;menuPick()"); assert ev("S.placed.some(q=>q.id==='weapon_rack')&&!S.bag.weapon_rack"), "a rack with things on it cannot be picked up"
     ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');S.bag.sword=(S.bag.sword||0)+p.st.sword;p.st={};P.f='u';act();mn.i=2;menuPick()})()"); assert ev("!S.placed.some(q=>q.id==='weapon_rack')&&S.bag.weapon_rack===1"), "an empty rack picks up into the bag"
@@ -471,17 +471,17 @@ def check(b, url):
     ev("S.placed=[];S.home=null;S.bag={};document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));mn=null;placing=null")
     # F1: the new Bag (sections on the left, a grid of squares on the right)
     ev("closeBag();S.bag={};S.eq={};S.bag.furnace_x=0;S.bag.sardine=3;S.bag.carrot=2;S.bag.copper_ore=5;S.bag.grilled_sardine=2;S.bag.healing_potion=1;S.bag.sword=1;S.bag.pickaxe=1;S.bag.driftwood_rod=1;S.bag.ring_vigor=1;S.bag.cloth_hood=1;S.bag.storage_crate=1;S.bag.standard_bench=1;S.bag.knife=1;S.eq.weapon='sword';S.eq.ring='ring_vigor';delete S.bag.furnace_x;openBag()")
-    assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Weapons,Clothing,Tools,Keepsakes'"), "the bag has eight sections, in the order Jack drew them"
-    assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(3).includes('healing_potion')&&n(4).join()==='sword'&&n(5).includes('ring_vigor')&&n(5).includes('cloth_hood')&&n(6).includes('pickaxe')&&n(6).includes('knife')&&n(6).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
-    assert ev("document.querySelectorAll('#btabs .btab').length===8&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
-    ev("bs=4;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
+    assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Potions,Weapons,Clothing,Tools,Keepsakes'"), "the bag has nine sections (Potions since playtest #5), in the order Jack drew them"
+    assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(4).includes('healing_potion')&&!n(3).includes('healing_potion')&&n(5).join()==='sword'&&n(6).includes('ring_vigor')&&n(6).includes('cloth_hood')&&n(7).includes('pickaxe')&&n(7).includes('knife')&&n(7).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
+    assert ev("document.querySelectorAll('#btabs .btab').length===9&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
+    ev("bs=5;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
     ev("bs=3;bc=cellsOf(3).findIndex(c=>c.id==='grilled_sardine');drawBag();S.hp=10;bagPick()"); assert ev("bpop&&bpop.opts[0]==='Eat'"), "tapping a food square offers Eat"
     ev("popChoose()"); assert ev("S.hp>10&&S.bag.grilled_sardine===1"), "eating from the new bag works"
-    ev("bs=5;bc=cellsOf(5).findIndex(c=>c.id==='cloth_hood');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Equip'"), "clothing squares offer Equip"
+    ev("bs=6;bc=cellsOf(6).findIndex(c=>c.id==='cloth_hood');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Equip'"), "clothing squares offer Equip"
     ev("popChoose()"); assert ev("S.eq.helmet==='cloth_hood'"), "equipping from the new bag works"
     ev("bs=0;bc=cellsOf(0).findIndex(c=>c.id==='storage_crate');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Place'"), "home items offer Place"
     ev("bpop=null;popRender();bs=2;bc=0;drawBag();bagPick()"); assert ev("!bpop"), "materials have nothing to do"
-    ev("bs=5;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
+    ev("bs=6;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
     ev("closeBag();S.bag={};S.eq={}")
     # F2: the Vendors screen (sections on the left, a grid of squares, the chosen one's buttons below)
     ev("S.gold=5000;S.bag={};S.eq={};openTrader('smith','buy')"); assert ev("$('store').classList.contains('grid')&&[...document.querySelectorAll('#stabs .btab')].map(b=>b.textContent).join()==='Materials,Weapons,Tools,Armour,Objects'"), "Garrick's screen shows his sections down the left"
@@ -491,18 +491,21 @@ def check(b, url):
     ev("document.querySelector('#sswitch button').click()"); assert ev("/^Selling/.test($('sswitch').textContent)&&document.querySelectorAll('#sgrid .bcell').length>=1"), "the bar across the top switches to selling and shows what you can sell"
     ev("$('sbtns').children[0].click()"); assert ev("S.gold===4977&&!count('tin_ore')"), "selling from the grid pays half price"
     ev("openGeneral('buy')"); assert ev("[...document.querySelectorAll('#stabs .btab')].length>=1&&document.querySelectorAll('#sgrid .bcell canvas').length>=3"), "Odo's goods are squares too"
-    ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("!$('store').classList.contains('grid')"), "crates keep their own list screen"
-    ev("$('store').classList.remove('open')")
+    ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("$('stash').classList.contains('open')&&!$('store').classList.contains('open')&&$('sh-num').textContent==='0 / 60'&&!!document.querySelector('#sh-bag .bcell[data-id=sardine] canvas')"), "crates open the storage screen: squares of what you carry and a fill count (playtest #5)"
+    ev("document.querySelector('#sh-bag .bcell[data-id=sardine]').click()"); assert ev("SH.sel.id==='sardine'&&/Store all/.test($('sh-btns').textContent)&&!SH.st.sardine"), "tapping a square chooses it and shows Store 1 and Store all"
+    ev("document.querySelector('#sh-bag .bcell[data-id=sardine]').click()"); assert ev("SH.st.sardine===1&&S.bag.sardine===1&&$('sh-num').textContent==='1 / 60'&&!!document.querySelector('#sh-in .bcell[data-id=sardine]')"), "tapping it again stores one"
+    ev("closeStash()")
+    ev("$('store').classList.remove('open');closeStash()")
     # F3: the Equipment screen (helmet, armour, boots / amulet, you, ring / weapon, equipped tool) and one tool in hand
-    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:'rod',rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bag.pickaxe=1;S.bag.woodcutters_axe=1;S.bag.knife=1;S.bag.iron_pickaxe=1;S.bag.ring_vigor=1;S.bag.amulet_vital=1;S.eq.pickaxe='iron_pickaxe';S.eq.axe='woodcutters_axe';S.eq.knife='knife';S.sta=100;openEquip()")
-    assert ev("EQ_SLOTS.map(q=>q[0]).join()==='helmet,armour,boots,weapon,amulet,ring,tool'&&['helmet','armour','boots','weapon','amulet','ring','tool'].every(k=>$('eq-'+k))&&/Driftwood/.test($('eq-tool').textContent)"), "the equipment screen has the nine boxes of the sketch, the tool box showing the rod in hand"
-    assert ev("(()=>{const r=k=>$('eq-'+k).getBoundingClientRect(),c=$('eqs-pt').getBoundingClientRect();return r('helmet').left<c.left&&r('armour').left<c.left&&r('boots').left<c.left&&r('weapon').left>c.right&&r('tool').left>c.right&&r('amulet').bottom<=c.top+2&&r('ring').top>=c.bottom-2&&r('helmet').top<r('armour').top&&r('armour').top<r('boots').top})()"), "the boxes sit where Jack drew them"
-    ev("eqPick='tool';drawEquip()"); assert ev("[...document.querySelectorAll('#eqs-pick .eqrow')].map(r=>r.querySelector('div').firstChild.textContent).join()==='Driftwood rod,Pickaxe,Iron Pickaxe,Woodcutter\\'s axe,Knife,Put it away'||document.querySelectorAll('#eqs-pick .eqrow').length>=5"), "tapping the tool box lists every tool you own"
-    ev("document.querySelectorAll('#eqs-pick .eqrow')[2].click()"); assert ev("S.eq.tool==='pickaxe'&&S.eq.pickaxe==='iron_pickaxe'&&/Iron/.test($('eq-tool').textContent)"), "choosing a tool puts it in your hand"
-    ev("S.eq.tool='rod';closeEquip();P.x=P.rx=window.__sp?window.__sp[0]:P.x;ENEMIES.forEach(e=>{e.alive=false;e.resp=1e9});M[60*MW+60]=15;P.x=P.rx=60;P.y=P.ry=61;P.f='u';sail=false;gather(60,60,15)"); assert ev("/Equip your iron pickaxe in the Equipment menu first/.test($('msg').textContent)&&M[60*MW+60]===15"), "with the rod in hand, mining says to equip the pickaxe first"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:null,rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bag.pickaxe=1;S.bag.woodcutters_axe=1;S.bag.knife=1;S.bag.iron_pickaxe=1;S.bag.ring_vigor=1;S.bag.amulet_vital=1;S.eq.pickaxe='iron_pickaxe';S.eq.axe='woodcutters_axe';S.eq.knife='knife';S.sta=100;openEquip()")
+    assert ev("EQ_SLOTS.map(q=>q[0]).join()==='helmet,armour,boots,weapon,amulet,ring,rod,tool'&&['helmet','armour','boots','weapon','amulet','ring','rod','tool'].every(k=>$('eq-'+k))&&/Driftwood/.test($('eq-rod').textContent)&&!/Driftwood/.test($('eq-tool').textContent)&&!!eq('rod')"), "the equipment screen has the boxes of the sketch plus the Rod box (playtest #5), and the rod is ready to fish with"
+    assert ev("(()=>{const r=k=>$('eq-'+k).getBoundingClientRect(),c=$('eqs-pt').getBoundingClientRect();return r('helmet').left<c.left&&r('armour').left<c.left&&r('boots').left<c.left&&r('weapon').left>c.right&&r('tool').left>c.right&&r('rod').left>c.right&&r('rod').top>r('weapon').top&&r('rod').top<r('tool').top&&r('amulet').bottom<=c.top+2&&r('ring').top>=c.bottom-2&&r('helmet').top<r('armour').top&&r('armour').top<r('boots').top})()"), "the boxes sit where Jack drew them"
+    ev("eqPick='tool';drawEquip()"); assert ev("[...document.querySelectorAll('#eqs-pick .eqrow')].map(r=>r.querySelector('div').firstChild.textContent).join()==='Pickaxe,Iron pickaxe,Woodcutter\\'s axe,Knife'"), "tapping the tool box lists every hand tool you own (the rod has its own box)"
+    ev("document.querySelectorAll('#eqs-pick .eqrow')[1].click()"); assert ev("S.eq.tool==='pickaxe'&&S.eq.pickaxe==='iron_pickaxe'&&/Iron/.test($('eq-tool').textContent)"), "choosing a tool puts it in your hand"
+    ev("S.eq.tool=null;closeEquip();P.x=P.rx=window.__sp?window.__sp[0]:P.x;ENEMIES.forEach(e=>{e.alive=false;e.resp=1e9});M[60*MW+60]=15;P.x=P.rx=60;P.y=P.ry=61;P.f='u';sail=false;gather(60,60,15)"); assert ev("/Equip your iron pickaxe in the Equipment menu first/.test($('msg').textContent)&&M[60*MW+60]===15"), "with empty hands, mining says to equip the pickaxe first"
     ev("S.eq.tool='pickaxe';S.sta=100;gather(60,60,15)"); assert ev("/Clink|gathered/.test($('msg').textContent)"), "with the pickaxe in hand it works"
     ev("S.eq.tool='axe';S.sta=100;M[60*MW+60]=15;gather(60,60,15)"); assert ev("/Equip your iron pickaxe/.test($('msg').textContent)"), "the axe in hand cannot mine"
-    ev("S.eq.tool=null;S.eq.tool='knife';openBag();bs=6;bc=0;drawBag()"); assert ev("cellsOf(6).filter(c=>c.eq).map(c=>c.id).join()==='knife'"), "the Bag marks only the tool in your hand with an E"
+    ev("S.eq.tool=null;S.eq.tool='knife';openBag();bs=7;bc=0;drawBag()"); assert ev("cellsOf(7).filter(c=>c.eq).map(c=>c.id).join()==='driftwood_rod,knife'"), "the Bag marks the tool in your hand and your rod with an E"
     ev("closeBag();S.eq.tool='rod';S.eq={...S.eq};S.bag={};S.eq.weapon=null;S.eq.pickaxe=null;S.eq.axe=null;S.eq.knife=null;S.eq.ring=null;S.eq.amulet=null;S.eq.tool='rod';S.eq.rod='driftwood_rod';S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.eq.weapon='wooden_sword'")
     # F4: carrying space (20 slots, a stack of 99, keys/letters/worn things take none; rewards always arrive)
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:'rod',rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bagId='satchel'")
@@ -551,9 +554,17 @@ def check(b, url):
     assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
     ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
     # the buttons and the Menu screen: Bag, Quests, Skills, Map and Menu in one row; Menu shows the summary with Save game and Load game (no Quests); Quests is its own screen
-    assert ev("[...$('bagbtn').parentElement.children].map(b=>b.textContent).join()==='Bag,Quests,Skills,Map,Menu'&&[...$('ctx').children].map(b=>b.textContent).join()==='Deck,Sleep'"), "the button row is Bag, Quests, Skills, Map, Menu, with Deck and Sleep in their own row"
+    assert ev("[...$('bagbtn').parentElement.children].map(b=>b.textContent).join()==='Bag,Quests,Map,Character'&&[...$('ctx').children].map(b=>b.textContent).join()==='Deck,Sleep'"), "the button row is Bag, Quests, Map, Character (playtest #5), with Deck and Sleep in their own row"
     pg.tap("#chbtn"); pg.wait_for_timeout(200)
-    assert ev("$('ch').classList.contains('open')&&$('ch-title').textContent==='MENU'&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)&&!document.getElementById('ch-quests')"), "Menu opens the summary, without a Quests button"
+    assert ev("$('ch').classList.contains('open')&&$('ch-title').textContent==='CHARACTER'&&[...document.querySelectorAll('#ch .chtabs button')].map(b=>b.textContent).join()==='Info,Equipment,Skills'&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)&&!document.getElementById('ch-quests')"), "Menu opens the summary, without a Quests button"
+    # playtest #5: the Character screen's tabs switch between Info, Equipment and Skills, one at a time; the C, E and K keys open it on the right tab
+    ev("document.querySelector('#ch .chtabs button[data-tab=equip]').click()"); assert ev("$('eqs').classList.contains('open')&&!$('ch').classList.contains('open')&&document.querySelector('#eqs .chtabs button.sel').dataset.tab==='equip'"), "the Equipment tab"
+    ev("document.querySelector('#eqs .chtabs button[data-tab=skills]').click()"); assert ev("$('skills').classList.contains('open')&&!$('eqs').classList.contains('open')&&/Fishing/.test($('sk-list').textContent)"), "the Skills tab"
+    ev("document.querySelector('#skills .chtabs button[data-tab=info]').click()"); assert ev("$('ch').classList.contains('open')&&!$('skills').classList.contains('open')"), "back to Info"
+    ev("closeCharacter()"); pg.keyboard.press("k"); assert ev("$('skills').classList.contains('open')"), "K opens the Skills tab"
+    ev("closeSkills()"); pg.keyboard.press("c"); assert ev("$('ch').classList.contains('open')"), "C opens the Character screen"
+    ev("closeCharacter()"); pg.keyboard.press("e"); assert ev("$('eqs').classList.contains('open')"), "E opens the Equipment tab"
+    ev("closeEquip()"); pg.tap("#chbtn"); pg.wait_for_timeout(100)
     assert ev("(()=>{const d=$('ch-pt').getContext('2d').getImageData(0,0,96,96).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]!==142)n++;return n>200})()"), "the figure is drawn"
     pg.tap("#ch-save"); pg.wait_for_timeout(200)
     assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save game opens the save choices"
@@ -597,8 +608,8 @@ def check(b, url):
     ev("move('u')"); assert ev("P.y===33+OY"), "no walking while the letter is open"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
     assert ev("sendLetter('t_letter')===false"), "a letter you have is not sent twice"
-    ev("openBag();bs=7;bc=0;drawBag()"); assert ev("SECTIONS[bs].t==='Keepsakes'&&cellsOf(bs).some(c=>c.label==='A plea')&&/A plea/.test($('btxt').textContent+[...document.querySelectorAll('.bcell')].map(c=>c.title).join())"), "the bag has a Keepsakes section with it"
-    ev("bc=cellsOf(7).findIndex(c=>c.label==='A plea');drawBag();bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
+    ev("openBag();bs=8;bc=0;drawBag()"); assert ev("SECTIONS[bs].t==='Keepsakes'&&cellsOf(bs).some(c=>c.label==='A plea')&&/A plea/.test($('btxt').textContent+[...document.querySelectorAll('.bcell')].map(c=>c.title).join())"), "the bag has a Keepsakes section with it"
+    ev("bc=cellsOf(8).findIndex(c=>c.label==='A plea');drawBag();bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
     ev("closeLetter();closeBag()")
     ev("sendLetter('t_l2')"); pg.wait_for_timeout(300); ev("skipScene()"); assert ev("SCENE===null&&GULL===null&&hasLetter('t_l2')&&!$('letter').classList.contains('open')"), "Skip keeps the letter without showing it"
     ev("S.letters=S.letters.filter(i=>i!=='t_letter');save()"); ev("(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); ev("skipScene()")
@@ -807,7 +818,7 @@ def check(b, url):
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
     assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
-    ev("openBag();bs=7;bc=cellsOf(7).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
+    ev("openBag();bs=8;bc=cellsOf(8).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
     ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
     ev("sail=true;B.x=156;B.y=130;P.x=P.rx=156;P.y=P.ry=130;move('l');move('r')"); assert ev("SCENE===null&&sail===true&&at(B.x,B.y)===0"), "sailing around the village does not start the villager's scene or put the boat on land"
     ev("sail=false;P.x=P.rx=156;P.y=P.ry=129;move('u')"); assert ev("SCENE===null"), "one step on land is not enough"
@@ -1015,10 +1026,10 @@ def check(b, url):
     ev("S.day=5;P.x=P.rx=305;P.y=P.ry=272;P.f='d';sleep()"); assert ev("S.day===6"), "you can sleep anywhere inside the house"
     # working storage: a crate keeps what you put in it, each crate is its own store, equipped things and keys stay with you
     ev("S.bag.sardine=7;S.bag.earth_key=1;S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;S.crates={};openCrate(312,288)")
-    assert ev("/Storage crate/.test($('st').textContent)&&!/Earth Key/.test($('items').textContent)&&!/Wooden sword/.test($('items').textContent)&&/Sardine x7/.test($('items').textContent)"), "the crate screen lists what you can store (not keys, not what you wear)"
-    ev("[...[...document.querySelectorAll('#items .it')].find(r=>/Sardine/.test(r.textContent)).querySelectorAll('button')].find(b=>b.textContent==='Store all').click()"); assert ev("count('sardine')===0&&S.crates['312,288'].sardine===7&&Object.keys(crateStore(313,288)).length===0"), "storing moves the whole stack into that crate only"
-    ev("[...[...document.querySelectorAll('#items .it')].find(r=>/Sardine/.test(r.textContent)).querySelectorAll('button')].find(b=>b.textContent==='Take 1').click()"); assert ev("count('sardine')===1&&S.crates['312,288'].sardine===6"), "and you can take things back out"
-    ev("$('store').classList.remove('open');S.crates={}")
+    assert ev("/Storage crate/.test($('sh-title').textContent)&&!document.querySelector('#sh-bag .bcell[data-id=earth_key]')&&!document.querySelector('#sh-bag .bcell[data-id=wooden_sword]')&&document.querySelector('#sh-bag .bcell[data-id=sardine]').textContent==='7'"), "the crate screen lists what you can store (not keys, not what you wear)"
+    ev("SH.sel={side:'bag',id:'sardine'};shDraw();[...$('sh-btns').children].find(b=>b.textContent==='Store all').click()"); assert ev("count('sardine')===0&&S.crates['312,288'].sardine===7&&Object.keys(crateStore(313,288)).length===0"), "storing moves the whole stack into that crate only"
+    ev("SH.sel={side:'in',id:'sardine'};shDraw();[...$('sh-btns').children].find(b=>b.textContent==='Take 1').click()"); assert ev("count('sardine')===1&&S.crates['312,288'].sardine===6"), "and you can take things back out"
+    ev("closeStash();S.crates={}")
     # mannequins keep armour sets
     ev("S.mann={};S.bag.cloth_hood=1;S.bag.leather_jerkin=1;S.eq.helmet=null;S.eq.armour=null;S.eq.boots=null;mannDress(0)"); assert ev("$('menu').classList.contains('open')&&/Cloth hood/.test($('menu-o').textContent)&&/Leather jerkin/.test($('menu-o').textContent)"), "a mannequin can be dressed from your bag"
     ev("mn.i=mn.opts.findIndex(o=>/Cloth hood/.test(o));menuPick()"); assert ev("S.mann[0].helmet==='cloth_hood'&&count('cloth_hood')===0"), "the piece moves onto the mannequin (it leaves your bag)"

@@ -2,7 +2,8 @@
 // Opens from the Bag's Equipment button, the Menu screen, or the E key. Tap a square to see what you own for it, then tap an item to wear it (or Take off). What you wear is drawn on your character everywhere (`playerLook` in
 // js/render/sprites.js). Armour pieces add up their `fx.ward` (the share of damage they stop; Amulet of Warding counts too). The Equipped Tool box holds ONE tool at a time (S.eq.tool names its slot: rod, pickaxe, axe or knife): you have to
 // put the tool you need in your hand here before you can use it (fish, chop, mine, cut). S.eq.rod / pickaxe / axe / knife still remember which version of each you prefer (the best one you bought), so choosing a pickaxe brings that one.
-const EQ_SLOTS=[['helmet','Helmet'],['armour','Armour'],['boots','Boots'],['weapon','Weapon'],['amulet','Amulet'],['ring','Ring'],['tool','Equipped Tool']];
+// playtest #5: a Rod square of its own. The rod you put there is always ready to fish with; the Equipped Tool box is for the pickaxe, axe or knife.
+const EQ_SLOTS=[['helmet','Helmet'],['armour','Armour'],['boots','Boots'],['weapon','Weapon'],['amulet','Amulet'],['ring','Ring'],['rod','Rod'],['tool','Equipped Tool']];
 let eqPick=null;
 const eqCurrent=sl=>sl==='tool'?(S.eq.tool?S.eq[S.eq.tool]:null):S.eq[sl];
 const eqOwned=sl=>Object.keys(S.bag).filter(id=>count(id)&&ITEMS[id]&&(sl==='tool'?TOOLSLOTS.includes(slotOf(id)):slotOf(id)===sl)).sort((a,b)=>sl==='tool'?TOOLSLOTS.indexOf(slotOf(a))-TOOLSLOTS.indexOf(slotOf(b))||(ITEMS[a].price||0)-(ITEMS[b].price||0):(ITEMS[a].price||0)-(ITEMS[b].price||0));
@@ -22,7 +23,7 @@ function drawEquip(){
   const row=(label,sub,right,on,fn)=>{const d=document.createElement('div');d.className='eqrow'+(on?' on':'');d.innerHTML='<div>'+label+'<small>'+sub+'</small></div><em>'+right+'</em>';d.onclick=fn;pk.appendChild(d)};
   owned.forEach(id=>row(ITEMS[id].n,eqEffect(id),isWorn(id)||(sl!=='tool'&&S.eq[sl]===id)?(sl==='tool'?'In hand':'Worn'):(sl==='tool'?'Hold':'Wear'),isWorn(id)||(sl!=='tool'&&S.eq[sl]===id),()=>{equipItem(id);ui();save();drawEquip()}));
   if(cur)row(sl==='tool'?'Put it away':'Take off',sl==='tool'?'Empty hands':'Put it back in your bag','',false,()=>{if(sl==='tool')S.eq.tool=null;else S.eq[sl]=null;ui();save();drawEquip()});
-  if(!owned.length&&!cur){const d=document.createElement('div');d.className='eqrow';d.textContent=sl==='weapon'?'You have no weapon.':sl==='tool'?'You have no tools. Bram sells them.':sl==='ring'||sl==='amulet'?'You have no '+name.toLowerCase()+' yet. Lucie sells them in the Mountain Town.':'You have no '+name.toLowerCase()+' yet. Garrick sells armour in the Walled Settlement.';pk.appendChild(d)}}
+  if(!owned.length&&!cur){const d=document.createElement('div');d.className='eqrow';d.textContent=sl==='weapon'?'You have no weapon.':sl==='tool'?'You have no tools. Bram sells them.':sl==='rod'?'You have no rod. Bram sells them.':sl==='ring'||sl==='amulet'?'You have no '+name.toLowerCase()+' yet. Lucie sells them in the Mountain Town.':'You have no '+name.toLowerCase()+' yet. Garrick sells armour in the Walled Settlement.';pk.appendChild(d)}}
 function openEquip(){if(BATTLE||SCENE)return;eqPick=null;drawEquip();['bag','ch','skills','qs'].forEach(i=>$(i).classList.remove('open'));$('eqs').classList.add('open')}
 const closeEquip=()=>{eqPick=null;$('eqs').classList.remove('open')};
 EQ_SLOTS.forEach(([sl])=>{$('eq-'+sl).onclick=()=>{eqPick=eqPick===sl?null:sl;drawEquip()}});
