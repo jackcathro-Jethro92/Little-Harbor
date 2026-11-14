@@ -244,7 +244,7 @@ def check(b, url):
     ev("S.gold=1000;S.bag.healing_potion=0;P.x=P.rx=91;P.y=P.ry=218;P.f='u';act();document.querySelectorAll('#menu button,#menu .opt').forEach(()=>{});openTrader('apothecary','buy')")
     assert ev("/Minor health tonic/.test($('items').textContent)&&/Minor health potion/.test($('items').textContent)&&/Superior health elixir/.test($('items').textContent)&&/Poison vial/.test($('items').textContent)&&/Swiftness/.test($('items').textContent)"), "apothecary stock"
     ev("[...document.querySelectorAll('#items .it')].find(r=>/^Minor health potion/.test(r.textContent)).querySelector('button').click()")
-    assert ev("[S.gold,S.bag.healing_potion]") == [925, 1], "buying a minor health potion costs 75 (60 and the playtest #5 shop prices)"
+    assert ev("[S.gold,S.bag.healing_potion]") == [812, 1], "buying a minor health potion costs 188 (60 and the playtest #5 shop prices)"
     ev("openTrader('apothecary','sell')"); assert ev("/Minor health potion x1/.test($('items').textContent)"), "she buys potions back"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # ore: only in the mountain country (x<100, y<100), few of them, gold and silver rare, every outcrop reachable on foot from the Mountain Town's north gate; gold is mined, regrows slowly and is sold (not bought) at Garrick's
@@ -447,16 +447,16 @@ def check(b, url):
     # G2: the village shops, Lucie's shop and the two taverns
     assert ev("['Odo','Bram','Murl','Lucie'].every(nm=>{const n=NPC.find(q=>q.n===nm);return n&&n.shopRoom&&zoneOf(n.x,n.y)>=30})&&BL.filter(b=>b.sign==='tavern').length===2"), "Odo, Bram, Murl and Lucie keep shop inside, and each town has a tavern"
     assert ev("SHOP_ROOMS.every(s=>at(s.door[0],s.door[1])===5&&WK.includes(at(s.door[0],s.door[1]+1))&&ENTR.some(e=>e.x===s.door[0]&&e.y===s.door[1])&&BL.some(b=>b.x<=s.door[0]&&s.door[0]<b.x+b.w&&b.y+1===s.door[1]))"), "every shop door is the middle of a building's bottom row with the street in front"
-    ev("sail=false;SCENE=null;BATTLE=null;S.gold=250;S.hp=1;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})()")
-    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (125g),Double room (125g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
-    ev("mn.i=1;menuPick()"); assert ev("S.gold===125&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 125 gold and lets you sleep"
+    ev("sail=false;SCENE=null;BATTLE=null;S.gold=438;S.hp=1;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})()")
+    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (313g),Double room (313g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
+    ev("mn.i=1;menuPick()"); assert ev("S.gold===125&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 313 gold and lets you sleep"
     d0 = ev("S.day"); ev("sleep()"); pg.wait_for_timeout(300); assert ev("S.day")==d0+1 and ev("S.hp>=maxHp()"), "sleeping in the rented room starts the next day and restores health"
     ev("(()=>{const r=intrOf(P.x,P.y);P.x=P.rx=r.dx;P.y=P.ry=r.y1-1;P.f='d';act()})()"); assert ev("!inInn()&&zoneOf(P.x,P.y)===SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.z"), "the guest room's door leads back down into the tavern"
     ev("S.gold=50;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})();mn.i=0;menuPick()"); assert ev("S.gold===50&&!inInn()"), "without 100 gold you cannot rent a room"
     ev("$('menu').classList.remove('open');mn=null;S.gold=Math.max(S.gold,5000)")
     # G3: the carpenter's furniture
     t = shop("carpenter", "buy"); assert all(x in t for x in ["Single bed", "Double bed", "Bookcase", "Table", "Chair", "Small carpet", "Large carpet", "Chest of drawers", "Storage crate", "Weapon rack", "Tool rack"]), ("Alder sells all eleven pieces of furniture", t)
-    assert ev("[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',400],['storage_crate',280],['weapon_rack',300],['tool_rack',250]].every(([i,p])=>CARPENTER.find(s=>s[0]==='Furniture')[1].some(r=>r[0]===i&&r[1]===p)&&ITEMS[i].kind==='furniture')&&shopPrice(400)===500&&shopPrice(280)===350&&ITEMS.chest_drawers.furn.store.cap===20&&ITEMS.storage_crate.furn.store.cap===60"), "furniture prices are as agreed (playtest #5: drawers hold 20 for 500 gold, a crate 60 for 350)"
+    assert ev("[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',400],['storage_crate',280],['weapon_rack',300],['tool_rack',250]].every(([i,p])=>CARPENTER.find(s=>s[0]==='Furniture')[1].some(r=>r[0]===i&&r[1]===p)&&ITEMS[i].kind==='furniture')&&shopPrice(400)===1250&&shopPrice(280)===875&&ITEMS.chest_drawers.furn.store.cap===20&&ITEMS.storage_crate.furn.store.cap===60"), "furniture prices are as agreed (playtest #5: drawers hold 20 for 1,250 gold, a crate 60 for 875)"
     assert ev("(()=>{const secs=CARPENTER.map(s=>s[0]).join();const kit=Object.keys(ITEMS).filter(i=>i.startsWith('f_'));return secs==='Timber,Furniture,Beds,Decor,Lights,Raw wood'&&kit.length>=60&&kit.every(i=>PROPS.DEF[ITEMS[i].furn.prop]&&CARPENTER.some(s=>s[1].some(r=>r[0]===i)))&&['f_sofa','f_grandclock','f_bk_gold','f_woodbear','f_totem','f_lamp'].every(i=>ITEMS[i])&&ITEMS.f_wardrobe.furn.store.cap===20&&ITEMS.f_bunk.furn.bed===1})()"), "the carpenter sells the design kit's home furniture, in tabs"
     assert ev("(()=>{let f=0;for(let x=26;x<=33;x++){if(at(x,152)===8)f++;if(at(x,160)===8)f++}return f>=14&&at(33,158)!==8&&YARD_PROPS.filter(p=>p.at==='carpenter').length>=6&&YARD_PROPS.some(p=>p.id==='totem')})()"), "Alder's yard is fenced, with an opening towards the road and his carvings inside"
     # playtest #5: recipes need skill levels; the tonic is learned from Astrid; the healing ladder
@@ -503,10 +503,10 @@ def check(b, url):
     # F2: the Vendors screen (sections on the left, a grid of squares, the chosen one's buttons below)
     ev("S.gold=5000;S.bag={};S.eq={};openTrader('smith','buy')"); assert ev("$('store').classList.contains('grid')&&[...document.querySelectorAll('#stabs .btab')].map(b=>b.textContent).join()==='Materials,Weapons,Tools,Armour,Objects'"), "Garrick's screen shows his sections down the left"
     assert ev("document.querySelectorAll('#sgrid .bcell').length===4&&getComputedStyle($('sgrid')).gridTemplateColumns.split(' ').length===5&&/Copper ore/.test($('stxt').textContent)&&$('sbtns').children.length===1"), "the squares are five across and the first is selected with its Buy button below"
-    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/38g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4962&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
+    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/94g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4906&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
     ev("document.querySelector('#sswitch button').click()"); assert ev("/^Selling/.test($('sswitch').textContent)&&document.querySelectorAll('#sgrid .bcell').length>=1"), "the bar across the top switches to selling and shows what you can sell"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4977&&!count('tin_ore')"), "selling from the grid pays half price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4921&&!count('tin_ore')"), "selling from the grid pays half price"
     ev("openGeneral('buy')"); assert ev("[...document.querySelectorAll('#stabs .btab')].length>=1&&document.querySelectorAll('#sgrid .bcell canvas').length>=3"), "Odo's goods are squares too"
     ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("$('stash').classList.contains('open')&&!$('store').classList.contains('open')&&$('sh-num').textContent==='0 / 60'&&!!document.querySelector('#sh-bag .bcell[data-id=sardine] canvas')"), "crates open the storage screen: squares of what you carry and a fill count (playtest #5)"
     ev("document.querySelector('#sh-bag .bcell[data-id=sardine]').click()"); assert ev("SH.sel.id==='sardine'&&/Store all/.test($('sh-btns').textContent)&&!SH.st.sardine"), "tapping a square chooses it and shows Store 1 and Store all"
@@ -1159,12 +1159,12 @@ def check(b, url):
     assert ev("SCENE===null&&window.__lan===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&FLOAT_START===0&&CHEER_UNTIL===0&&!$('cine').classList.contains('on')&&NPC.find(n=>n.n==='Odo').x===__pos[0][1]&&NPC.find(n=>n.n==='Odo').y===__pos[0][2]&&NPC.find(n=>n.n==='Bram').x===__pos[1][1]"), "when it ends the lanterns, cheering and light are back to normal, the bars slide out and the people are back in place"
     ev("storyReset()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
-    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
-    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[400,3], "tailor charge"
+    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 250g"
+    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[250,3], "tailor charge"
     # Wynn's clothes (js/data/clothes.js): bought from her, kept in the Bag (Clothing), worn and taken off there; both pictures follow, and what you wear is saved
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=1000;delete S.bag.sea_coat;delete S.bag.tricorn_hat;openTrader('clothier','buy')")
     assert ev("CLOTHES.length>=20&&/Wool sweater/.test($('items').textContent)&&/Tricorn hat/.test($('items').textContent)&&CLOTHES.every(c=>!!itemArt(c.id))"), "Wynn sells tops, jackets and hats, each with an icon"
-    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===675"), "buying a sea coat"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===187"), "buying a sea coat"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.bag.tricorn_hat=1;openBag();bs=SECTIONS.findIndex(q=>q.k==='cloth');bc=cellsOf(bs).findIndex(r=>r.id==='sea_coat');drawBag();bagPick()")
     assert ev("bpop&&bpop.opts[0]==='Wear'"), "a piece of clothing in the bag can be worn"
     ev("popChoose()"); assert ev("S.eq.c_over==='sea_coat'&&S.look.jon===true&&S.look.jk===0&&heroSpec().over==='coat'&&isWorn('sea_coat')&&cellsOf(bs).find(r=>r.id==='sea_coat').eq"), "wearing it puts the coat on both pictures"
@@ -1172,7 +1172,7 @@ def check(b, url):
     ev("equipItem('tricorn_hat')"); assert ev("heroSpec().acc.filter(a=>HAT_ACC.includes(a)).join()==='tricorn'&&S.look.hat==='cap'&&!!playerArt('f')"), "a hat replaces any hat the character had"
     assert ev("(()=>{const m=migrate(JSON.parse(JSON.stringify(S)));const old=migrate({...JSON.parse(JSON.stringify(S)),eq:{rod:S.eq.rod,boat:S.eq.boat}});return m.eq.c_over==='none'&&m.eq.c_hat==='tricorn_hat'&&old.eq.c_top===null})()"), "what you wear is saved, and older saves start in their own clothes"
     ev("closeBag();S.eq.c_top=S.eq.c_over=S.eq.c_hat=null;delete S.bag.sea_coat;delete S.bag.tricorn_hat;S.look.jon=true;S.look.hat='cap';S.gold=420")
-    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 125g"
+    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 313g"
     ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
     ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').textContent)"), "smith shop"

@@ -32,7 +32,7 @@ SHOP_ROOMS.forEach(sr=>{const base=SHOP_DESIGNS[sr.design]||INTERIOR_DESIGNS[sr.
 const SEATS=['chair','stool'];
 SHOP_ROOMS.filter(sr=>sr.inn).forEach(sr=>sr.room.props.forEach(p=>{if(!SEATS.includes(p.id))return;p.seat=1;for(let j=0;j<p.h;j++)for(let k=0;k<p.w;k++)INTBLK[(p.ay+j)*MW+p.ax+k]=0}));
 // taverns: the innkeeper rents out rooms (INN_PRICE gold a night). Each guest room is built after all the shops (so no shop's room ever moves); its door leads back down into the tavern
-const INN_PRICE=shopPrice(100);   // (100 gold in the table, 125 with the playtest #5 shop prices)
+const INN_PRICE=shopPrice(100);   // (100 gold in the table, 313 with the playtest #5 shop prices)
 SHOP_ROOMS.filter(sr=>sr.inn).forEach(sr=>{const n=NPC.find(q=>q.n===sr.npc),tav=sr.room;if(!n)return;n.inn=sr.inn.map(([label,design])=>{const key='inn_'+sr.id+'_'+design,g=buildRoom(key,SHOP_DESIGNS[design]||INTERIOR_DESIGNS[design],label+' ('+sr.name+')');g.guest=true;
   HALLS[key]={z:g,id:g.z,msg:'The innkeeper shows you up to your room. Sleep in the bed to rest.',name:label};ENTR.push({x:-1,y:-1,to:key,out:[tav.dx,tav.y1-1],back:'You step back down into the tavern.'});return{label,key}})});
 const inInn=()=>{const r=!sail&&zoneOf(P.x,P.y)>=30?intrOf(P.x,P.y):null;return!!(r&&r.guest)};

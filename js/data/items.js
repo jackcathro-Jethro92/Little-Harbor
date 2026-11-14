@@ -48,7 +48,7 @@ const ITEMS={
  chair:{n:'Chair',kind:'furniture',price:60,furn:{prop:'chair'},desc:'A plain wooden chair.'},
  carpet_small:{n:'Small carpet',kind:'furniture',price:80,furn:{prop:'runner'},desc:'A long narrow carpet. You can walk over it.'},
  carpet_large:{n:'Large carpet',kind:'furniture',price:200,furn:{prop:'rug'},desc:'A big woven rug. You can walk over it.'},
- // (playtest #5, Jack: the chest of drawers holds 20 things for 500 gold, the storage crate 60 things for 350 gold; the table prices are set so the shop's 25% brings them to exactly that. Both can also be made at a workbench at Crafting 2)
+ // (playtest #5, Jack: the chest of drawers holds 20 things for 500 gold, the storage crate 60 things for 350 gold, at the first price rise; with the second (2.5 times) they are 1,250 and 875 gold. Both can also be made at a workbench at Crafting 2)
  chest_drawers:{n:'Chest of drawers',kind:'furniture',price:400,furn:{prop:'dresser',store:{cap:20,title:'Chest of drawers'}},desc:'Keeps up to 20 things.'},
  storage_crate:{n:'Storage crate',kind:'furniture',price:280,furn:{prop:'crate',store:{cap:60,title:'Storage crate'}},desc:'Keeps up to 60 things.'},
  weapon_rack:{n:'Weapon rack',kind:'furniture',price:300,furn:{prop:'weapons',store:{cap:20,only:'weapon',title:'Weapon rack'}},desc:'Holds up to 20 weapons, shown on the rack.'},
