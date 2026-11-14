@@ -287,7 +287,8 @@ body.scene .row,body.scene .pad,body.scene #menubtn{pointer-events:none;opacity:
 .hp-card canvas{width:100%;aspect-ratio:2/3;image-rendering:pixelated;display:block;border-radius:4px}
 .hp-card.sel{outline:4px solid #d83828;outline-offset:1px;background:#fff1c9}
 #hp-namel{display:flex;flex-direction:column;gap:4px;font-weight:700;width:100%;font-size:16px}
-#hp-name{font:inherit;font-size:18px;padding:10px;border:3px solid var(--ink);border-radius:6px;background:#fffbe8;color:var(--ink)}
+#hp-name{font:inherit;font-size:18px;padding:10px;border:3px solid var(--ink);border-radius:6px;background:#fffbe8;color:#000;caret-color:#000}
+#hp-name::placeholder{color:#6b6b6b}   /* playtest #5: the typed name is black on the pale box in light and dark mode */
 #hp-note{font-size:14px;min-height:18px}
 #go:disabled{opacity:.5}
 
