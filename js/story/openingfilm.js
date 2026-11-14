@@ -2,7 +2,7 @@
 // Six scenes, about a minute, drawn on their own picture (#ofilm, laid over the game's screen at the same 176 x 208 size): 1 dawn over the sea and the title; 2 the camera drops from the sky onto the
 // decorated village; 3 the ceremony: Murl's speech on the stage (his lines fest_c1, fest_c2, fest_c3 in js/story/opening.js) and the newest fisher walks up through the crowd; 4 the first boat: Murl presents
 // the ribboned rowboat at the pier (fest_c4); 5 night falls, fireworks over the harbour, and a seagull lands on your new boat; 6 the title again. The people are the real ones: your own character, Murl
-// and the villagers in FEST_CROWD, in their own colours. The scene step {film:'intro'} plays it (js/story/opening.js uses it at the start of a new game); a tap, Skip or Escape ends it early.
+// and the villagers in FEST_CROWD, in their own colours. The scene step {film:'intro'} plays it (js/story/opening.js uses it at the start of a new game); Skip or Escape ends it early.
 const INTRO=(()=>{
 const W=176,H=208;let cv=null,g2=null,cur=0,lt=0,last=0,raf=0,parts=[],firsts=[],onEnd=null;
 const R2=(x,y,w,h,c)=>{g2.fillStyle=c;g2.fillRect(Math.round(x),Math.round(y),w,h)},P2=(x,y,c)=>R2(x,y,1,1,c);

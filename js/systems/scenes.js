@@ -41,12 +41,12 @@ function scNext(){const s=SCENE;if(!s)return;if(s.i>=s.steps.length)return scEnd
     const t=setTimeout(go,st.shake);hold(()=>{clearTimeout(t);clearInterval(s.shakeT);c.style.transform=''})}
   else if(Object.keys(st).some(q=>SCSTEP[q])){const k=Object.keys(st).find(q=>SCSTEP[q]);SCSTEP[k](st[k],{go,hold,fast,s,st})}
   else{const k=Object.keys(st).find(q=>TACT[q]);if(k)TACT[k](st[k]);go()}}
-// (a scene array with .cine=true is a cinematic, js/systems/cinema.js: film bars, tap anywhere to skip, and everyone is put back where they were at the end)
+// (a scene array with .cine=true is a cinematic, js/systems/cinema.js: film bars, Skip button or Escape to skip, and everyone is put back where they were at the end)
 function runScene(id,onEnd){const steps=Array.isArray(id)?id:SCENES[id];if(!steps||SCENE)return false;cancel();releaseAll();if(dlgActive())dlgEnd();
   SCENE={id:Array.isArray(id)?'(list)':id,steps,i:0,fast:false,hold:null,onEnd,shakeT:null,cine:!!steps.cine,snap:steps.cine?NPC.map(n=>[n,n.x,n.y,n.f]):null};document.body.classList.add('scene');scNext();return true}
 function skipScene(){const s=SCENE;if(!s||s.fast)return;s.fast=true;if(s.hold){s.hold.finish()}else scNext()}
 $('scene-skip').onclick=skipScene;
 addEventListener('keydown',e=>{if(!SCENE||dlgActive()||$('letter').classList.contains('open'))return;e.stopImmediatePropagation();e.preventDefault();if(e.key==='Escape')skipScene()},true);   // (while a box is open, js/ui/dialogue.js handles Space, Enter and Escape itself)
 
-// a tap anywhere on the picture skips a cinematic (the Skip button and Escape work in every scene)
-$('wrap').addEventListener('click',e=>{if(SCENE&&SCENE.cine){e.stopPropagation();e.preventDefault();skipScene()}},true);
+// playtest #5 (Jack): a click or tap on the picture never skips a cinematic; only the Skip button (or Escape) does. Clicks on the picture during one are swallowed, but the speech box and the Skip button still get theirs
+$('wrap').addEventListener('click',e=>{if(SCENE&&SCENE.cine&&!e.target.closest('#dlg,#scene-skip')){e.stopPropagation();e.preventDefault()}},true);

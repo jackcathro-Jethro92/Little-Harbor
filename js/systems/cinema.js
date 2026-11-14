@@ -1,5 +1,5 @@
 // ---------- cinematics (roadmap 2.12, used first by the sea festival): film bars, a time of day that moves, effects that run in the background, crowds that walk together, and speech that closes by itself ----------
-// A cinematic is a scene (js/systems/scenes.js) whose array has `.cine=true`: it gets black film bars, a tap anywhere skips it, and when it ends or is skipped everyone it moved is put back where they were. These extra
+// A cinematic is a scene (js/systems/scenes.js) whose array has `.cine=true`: it gets black film bars, only the Skip button (or Escape) skips it, and when it ends or is skipped everyone it moved is put back where they were. These extra
 // steps work in any scene. The ones marked (background) start something and go straight on to the next step, so use {wait:ms} to give them time.
 //   {bars:'on'|'off'}                     slide the film bars in or out
 //   {light:[from,to,ms]}  (background)    move the time of day from one number to another (0 to 1 is a whole day: .78 night, .93 dawn, 1.07 morning); {light:'reset'} goes back to the real time
