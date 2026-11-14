@@ -47,7 +47,7 @@ function draw(){
   AN.forEach(a=>E.push({y:a.y,f:()=>critter(a,cx,cy,t)}));
   S.placed.forEach(p=>E.push({y:isFurn(p)?(furnFp(p.id).flat?p.y-9:p.y+furnFp(p.id).h-.5):p.y,f:()=>obj(p,cx,cy,t)}));
   ENEMIES.forEach(e=>{if(e.alive&&zoneOf(e.x,e.y)===zoneOf(P.x,P.y))E.push({y:e.y,f:()=>enemyDraw(e,cx,cy,t)})});
-  pshipDraw(E,cx,cy,t);   // the roaming pirate ships (js/systems/seapirates.js)
+  pshipDraw(E,cx,cy,t);harbourBoatsDraw(E,cx,cy,t);   // (and the boats moored in the harbours, js/systems/harbourboats.js)   // the roaming pirate ships (js/systems/seapirates.js)
   E.push({y:P.ry+.1,f:()=>{
     const mv=Math.abs(P.x-P.rx)+Math.abs(P.y-P.ry)>.04,fi=fs&&sail,sx=P.rx*T-cx,sy=P.ry*T-cy;
         if(!shipHidesPlayer())CharacterSprite.draw(g,sx,sy+(sail?-6+bob:-3),{...playerLook(),view:fi?(P.f==='l'?'l':'r'):vw(P.f),frame:(mv&&!sail)?[1,0,3,0][(t/90|0)%4]:0,fishing:!!fi,bite:fs===2,t,noLine:true,noShadow:sail});

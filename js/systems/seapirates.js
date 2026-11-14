@@ -19,7 +19,7 @@ const questsDone=()=>((S.story&&S.story.done)||[]).filter(q=>/^q\d+$/.test(q)).l
 const pseaRow=()=>PIRATE_SEAS.filter(r=>questsDone()>=r[0]).pop();
 let PSHIPS=[],PSHIP_ON=!window.__NO_SIGHT,pshipQuiet=PSHIP.GAP;
 const pshipAt=(x,y)=>PSHIPS.find(s=>s.x===x&&s.y===y&&!s.boarding);
-const pshipWater=(x,y)=>x>=0&&y>=0&&x<MW&&y<WH&&at(x,y)===0&&!pshipAt(x,y);
+const pshipWater=(x,y)=>x>=0&&y>=0&&x<MW&&y<WH&&at(x,y)===0&&!pshipAt(x,y)&&!harbourBoatAt(x,y);
 // a ship appears somewhere you cannot see, in open water
 function pshipSpawn(near){const r=pseaRow();
   for(let k=0;k<40;k++){const a=Math.random()*Math.PI*2,d=near?4+Math.random()*2:10+Math.random()*3,x=Math.round(P.x+Math.cos(a)*d),y=Math.round(P.y+Math.sin(a)*d);
