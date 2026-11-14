@@ -1,3 +1,5 @@
+// Playtest #5 (Jack): every shop charges 25% more than the prices in these tables, except Murl's boatyard (ships, crew and the shipwright station). Selling back still uses the table prices.
+const SHOP_MARKUP=1.25,shopPrice=p=>Math.round(p*SHOP_MARKUP);
 // ---------- shop stock (data table: add rows, not code) ----------
 // Garrick's Forge in the Walled Settlement. [section, [[item id, price], ...]]. Shop goods were moved round in playtest #4 (P58): Garrick keeps ore, iron bars, weapons, tools and armour; rope and planks went to the carpenter,
 // cloth and leather to the tailor, and gold and silver ore to the goldsmith. He now also buys unwanted weapons and tools back (P57). He buys at half price everything in his sell list.

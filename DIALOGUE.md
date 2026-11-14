@@ -100,7 +100,7 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* The warden knows every face. Do not cause trouble.
 
 ### Warden Brann (Mountain Town)
-- *placeholder:* The north gate. The path up the mountain leads to the Temple to the Mountains.
+- *placeholder:* The north gate. The path up the mountain leads to the Earth Temple.
 - *placeholder:* Good boots for the climb, friend.
 
 ### Warden Orrin (Mountain Town)
@@ -145,16 +145,10 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Fire Spirit (Settlement Docks)
 - *placeholder:* [Placeholder] The flame burns steadily now. Thank you.
 
-### Mysterious Girl (Temple Tower)
-- *placeholder:* [Placeholder] The keys are safe with the old man now.
-
-### Old Stranger (Temple of the Sea)
-- *placeholder:* [Placeholder] Thank you again, friend.
-
-### Captain Barron (Temple to the Sky)
+### Captain Barron (Sky Temple)
 - *placeholder:* [Placeholder] Out of my way, little dog.
 
-### Mysterious Boy (Temple to the Sky)
+### Mysterious Boy (Sky Temple)
 - *placeholder:* [Placeholder] Please get my key back.
 
 ### Hale (The Darkwood)
@@ -208,6 +202,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 ### Wendel (The Salty Anchor)
 - *placeholder:* Pull up a stool. The ale is warm and so is the fire.
 - *placeholder:* I sailed every sea once. Now I sail this stool.
+
+### Mysterious Girl (Tower Temple)
+- *placeholder:* [Placeholder] The keys are safe with the old man now.
 
 ### Aiko (Village)
 - *original:* I keep meaning to learn to fish.
@@ -379,6 +376,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder:* Welcome to the settlement. Mind the cobbles.
 - *placeholder:* The walls keep the wolves out, mostly.
 
+### Old Stranger (Water Temple)
+- *placeholder:* [Placeholder] Thank you again, friend.
+
 ### Seamstress Wynn (Wynn's Tailor)
 - *placeholder:* Clothes make the fisher.
 
@@ -431,9 +431,9 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *Jack's* `q4_grunt2.a` Pirate grunt 2: Just quit your jabbering and keep looking!
 - *Jack's* `q4_dynamite.a` Pirate grunt 2: Fine, I guess it’s dynamite then, isn’t it!
 - *Jack's* `q4_girl1.a` Mysterious Girl: Congratulations and thank you.
-- *Jack's* `q4_girl2.a` Mysterious Girl: It unlocks the chamber, along with the other keys from the Air, Water, Earth and Fire temples. It sounds like the pirates already have the Fire key, which means they will probably try to get the others. They have to be stopped. Collect all four keys and take them to our friend at the temple tower, where they will be safe.
-- *Jack's* `q4_old1.a` Old Stranger: Oh Good work! I will keep this safe with the water temple key. I presume you might want to know what's going on here. Well I figured out that the pirate plans to use the keys to raise the seas. They want to drown the world. This is an ancient power. Each temple represents both life and destruction. Each Key opens its opposite. See, that is why they attacked the water temple first. But we stopped them just in time. I think they have figured this out though and will no doubt be heading back to the water temple and finish what they started
-- *Jack's* `q4_old2.a` Old Stranger: By collecting all four keys and inserting all four keys into the water temple they would flood this world and rule the ocean as kings. We can't let this happen and I don't think it is by accident that we have met. You, I believe, can stop these pirates and save your home. Take these boots. They will make you swift on your feet. Go back to the sea temple and see if you can get the key from the chamber inside. Then bring it back to me and here I will keep them safe.
+- *Jack's* `q4_girl2.a` Mysterious Girl: It unlocks the chamber, along with the other keys from the Air, Water, Earth and Fire temples. It sounds like the pirates already have the Fire key, which means they will probably try to get the others. They have to be stopped. Collect all four keys and take them to our friend at the Tower Temple, where they will be safe.
+- *Jack's* `q4_old1.a` Old Stranger: Oh Good work! I will keep this safe with the Water Temple key. I presume you might want to know what's going on here. Well I figured out that the pirate plans to use the keys to raise the seas. They want to drown the world. This is an ancient power. Each temple represents both life and destruction. Each Key opens its opposite. See, that is why they attacked the Water Temple first. But we stopped them just in time. I think they have figured this out though and will no doubt be heading back to the Water Temple and finish what they started
+- *Jack's* `q4_old2.a` Old Stranger: By collecting all four keys and inserting all four keys into the Water Temple they would flood this world and rule the ocean as kings. We can't let this happen and I don't think it is by accident that we have met. You, I believe, can stop these pirates and save your home. Take these boots. They will make you swift on your feet. Go back to the Water Temple and see if you can get the key from the chamber inside. Then bring it back to me and here I will keep them safe.
 - *placeholder* `q5_pirate.a` Pirate grunt: [Placeholder] Run! The captain will hear of this! Leave the rest, we have what we came for!
 - *Jack's* `q5_girl.a` Mysterious Girl: I'm glad I caught you. I've brought you something to help in your quest! Take this with you.
 - *Jack's* `q6_barron1.a` Captain Barron: Who is this little dog that blocks my way! Prepare yourself for your end!
@@ -443,8 +443,8 @@ Made by `tools/make_lists.py` and checked by the tests, so it is always up to da
 - *placeholder* `raid_closed_Bram.a` Bram: [Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.
 - *placeholder* `raid_closed_Murl.a` Murl: [Placeholder] Sorry, fisher, we are shut! Pirates are attacking the village! Come back when it is safe.
 - *Jack's* `q7_flee.a` Pirate grunt: Let’s get out of here! The boss will be finished at the tower! Meet up back at the base and we will finish this!
-- *Jack's* `q8_old1.a` Old Stranger: I knew you would make it here. Those pirates might be strong but there is much they don't understand. But we need to tell you who we are, so you understand. We have not told you who we are. Because we are not people as you know. I am the spirit of the sea. And my brother and sister here are the spirits of the Earth and the Air. Our sister of fire is still trying her best to protect the fire temple. But I fear she won't hold much longer against the forces trying to destroy this world. Unfortunately we underestimated those forces and they have taken our keys. We have only one path left. To ask you to help us to save this world.
-- *Jack's* `q8_old2.a` Old Stranger: We didn't choose you by accident. We have been watching you since the night of your birth. But I always hoped I was wrong about you and you would simply live a life in peace. I was not wrong though. I have known for a long time that you are here to save this land. Not just a human but the spirit of Void. The fifth element is little understood but I knew you were its representative the day you were born. Your mother knew this so we have watched over you for all these years. Now the time has come that your destiny will unfold. Go to the fire temple. Save our sister… your sister. And us. Your brothers and sisters…
+- *Jack's* `q8_old1.a` Old Stranger: I knew you would make it here. Those pirates might be strong but there is much they don't understand. But we need to tell you who we are, so you understand. We have not told you who we are. Because we are not people as you know. I am the spirit of the sea. And my brother and sister here are the spirits of the Earth and the Air. Our sister of fire is still trying her best to protect the Fire Temple. But I fear she won't hold much longer against the forces trying to destroy this world. Unfortunately we underestimated those forces and they have taken our keys. We have only one path left. To ask you to help us to save this world.
+- *Jack's* `q8_old2.a` Old Stranger: We didn't choose you by accident. We have been watching you since the night of your birth. But I always hoped I was wrong about you and you would simply live a life in peace. I was not wrong though. I have known for a long time that you are here to save this land. Not just a human but the spirit of Void. The fifth element is little understood but I knew you were its representative the day you were born. Your mother knew this so we have watched over you for all these years. Now the time has come that your destiny will unfold. Go to the Fire Temple. Save our sister… your sister. And us. Your brothers and sisters…
 - *Jack's* `q8_old3.a` Old Stranger: Take this. This sword will aid you and help you to take your place as our defender and the defender of the world. Go now. You know what to do. We know you will not fail.
 - *Jack's* `q9_barron1.a` Captain Barron: You! The dog! Every step my warriors have been talking about some little beast that won't stop hounding us. Well this is it for you. We won't be having a third battle. Prepare yourself this time you will die. Let's go!
 - *Jack's* `q9_barron2.a` Captain Barron: I was wrong! You're greater than I… I don't know how this is possible.. Unless… Of course. I was a fool, you are the fifth aren't you. I should have read the legends more closely. It seems so obvious now. Let my lads go will you. I give you my word that we won't come back.

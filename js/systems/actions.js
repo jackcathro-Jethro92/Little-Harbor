@@ -62,7 +62,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn(),inB=atBed();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN&&!inB)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn(),inB=atBed();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN&&!inB)return say(campOf()?'Stand next to your tent to sleep, or sleep on the boat or at home.':'You can sleep on the boat, at home, in a tavern room or by your tent.');cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inN?'You sleep soundly at the tavern.':inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inB?'You sleep soundly in your bed.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

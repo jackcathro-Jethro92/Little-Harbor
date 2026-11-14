@@ -5,9 +5,9 @@
 // Switches: q1_stranger_out / q1_stranger_gone (the stranger's scene), q1_done, has_compass, pirate_base_known, pirates_called (the pirates take the island at the next sleep), q1_villager_here / q1_villager_gone.
 // Places are world tile coordinates. The pirates stand in the courtyard (encounter q1_pirates), fought one by one on the battle screen.
 QUESTS.push({id:'q1',name:'A Stranger\u2019s Letter, Part 1',
- steps:['[Placeholder] A stranger has sent a letter asking for help. Sail to the northern water temple.','[Placeholder] Pirates are attacking the temple. Defeat them.','[Placeholder] Find the stranger.'],
+ steps:['[Placeholder] A stranger has sent a letter asking for help. Sail to the northern Water Temple.','[Placeholder] Pirates are attacking the temple. Defeat them.','[Placeholder] Find the stranger.'],
  goals:[[283,40],[283,34],[283,33]]});
-NPC.push({n:'Old Stranger',x:283,y:32,hx:283,hy:32,f:'d',skin:0,hair:3,shirt:5,jk:3,hat:'none',hstyle:'bald',pack:false,fixed:1,say:['[Placeholder] Thank you again, friend.'],bio:{age:null,job:'Keeper of the Sea temple',backstory:null,likes:[],q:null}});
+NPC.push({n:'Old Stranger',x:283,y:32,hx:283,hy:32,f:'d',skin:0,hair:3,shirt:5,jk:3,hat:'none',hstyle:'bald',pack:false,fixed:1,say:['[Placeholder] Thank you again, friend.'],bio:{age:null,job:'Keeper of the Water Temple',backstory:null,likes:[],q:null}});
 NPC.push({n:'Villager',x:156,y:121,hx:156,hy:121,f:'d',skin:2,hair:4,shirt:3,pack:false,fixed:1,say:['[Placeholder] Mind how you go out there.'],bio:{age:null,job:'Villager',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.push(
  {npc:'Old Stranger',if:{flag:'q1_stranger_gone'},hide:1},
@@ -16,7 +16,7 @@ STORY_PEOPLE.push(
  {npc:'Villager',if:{flag:'q1_villager_gone'},hide:1},
  {npc:'Villager',if:{flag:'q1_villager_here'},at:[156,121],f:'d'},
  {npc:'Villager',hide:1});
-ENCOUNTERS.push({id:'q1_pirates',mode:'battle',foes:[{foe:'pirate_grunt',at:[283,41]},{foe:'pirate_grunt',at:[283,39]},{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});   // two on the boardwalk path to the temple, three in the courtyard
+ENCOUNTERS.push({id:'q1_pirates',mode:'battle',rally:[278,31,288,37],foes:[{foe:'pirate_grunt',at:[283,41]},{foe:'pirate_grunt',at:[283,39]},{foe:'pirate_grunt',at:[280,36]},{foe:'pirate_gunner',at:[286,36]},{foe:'pirate_grunt',at:[283,34]}]});   // two on the boardwalk path to the temple, three in the courtyard
 DLG.q1_pirate={start:'a',nodes:{a:{who:'Pirate grunt',text:"This isn't over! You'll see! Just wait till the rest of us get here! Then you'll wish you had never messed with The Fleet!"}}};   // JACK
 DLG.q1_stranger={start:'a',nodes:{
  a:{who:'Old Stranger',text:'[Placeholder] ...Is it safe? Have they gone?',next:'b'},

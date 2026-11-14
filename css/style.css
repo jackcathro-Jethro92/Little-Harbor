@@ -37,7 +37,7 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #dlg.open{display:flex}
 #dlg-pt{display:none;width:72px;height:64px;align-self:flex-start;image-rendering:pixelated;border:2px solid var(--ink);border-radius:5px;flex:none}
 #dlg-main{flex:1;min-width:0;position:relative}
-#dlg-who{font-size:12px;font-weight:700;background:var(--ink);color:var(--panel);border-radius:4px;padding:0 6px;margin-bottom:3px}
+#dlg-who{display:inline-block;font-size:12px;font-weight:700;background:#fff;color:#000;border:1px solid #000;border-radius:4px;padding:0 6px;margin-bottom:3px}
 #dlg-txt{font-size:13px;line-height:1.25;min-height:32px;word-wrap:break-word}
 #dlg-ch{display:flex;flex-direction:column;gap:3px;margin-top:4px}
 #dlg-ch button{font-size:12px;padding:3px 6px;text-align:left;box-shadow:0 2px 0 var(--ink)}

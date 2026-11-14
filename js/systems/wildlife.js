@@ -21,7 +21,7 @@ function seaAlertMark(cx,cy,t){alertMark({x:P.rx,y:P.ry,alertAt:t,alertUntil:SEA
 // ---------- the rock dragons (P73): the mountain country north of the forest, between the Mountain Town and the Temple to the Mountains ----------
 // Slow Komodo dragons made of stone (ENEMY_TYPES.rock_dragon): they chase you a few tiles, fight with claws and a fire breath that follows a wind-up, and come back the next day. Each is put on the nearest bare
 // rock floor to its spot, off the dirt path.
-const ROCK_DRAGONS=[[30,50],[14,47],[24,40],[36,33],[18,34]];
+const ROCK_DRAGONS=[[30,50],[24,40]];   // playtest #5: two (there were five)
 ROCK_DRAGONS.forEach(([x,y])=>{const s=nearestTile(x,y,(a,b)=>at(a,b)===48&&!npcAt(a,b)&&!enemyAt(a,b));if(s)spawnEnemy('rock_dragon',s[0],s[1],{group:'rock_dragons'})});
 
 // ---------- wolves (Jack's note): grey wolves roam the grasslands outside the Walled Settlement ----------

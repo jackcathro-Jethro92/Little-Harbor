@@ -143,7 +143,7 @@ def check(b, url):
     ev("applyPirates(true);for(const[x,y]of[[70,28],[87,25],[94,25],[88,30]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()};applyPirates(false)")
     # the Temple Tower's island: the old islet is gone, the stone dock in the north joins the gravel path, which runs south to the clearing (walkable all the way), lanterns line it every four tiles, pines block
     tow = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],ok=new Set(WK);let by=0;for(let y=224;y>150;y--)if(at(212,y)===105)by=y;const s=new Set([by*MW+212]),q=[by*MW+212];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(!s.has(j)&&ok.has(M[j])){s.add(j);q.push(j)}}}"
-            "return {beach:by>0&&by<=175&&at(212,by-1)===0,clearing:s.has(194*MW+212)&&s.has(194*MW+205)&&s.has(194*MW+219),noPlaceholder:!BL.some(b=>b.tower),lanterns:TOWER_LAN.length>=6&&TOWER_LAN.every(l=>at(l.x,l.y)===7),pines:at(190,196)===102||[...Array(200)].some((_,k)=>at(190+k%20,190+(k/20|0))===102),pineBlocks:!WK.includes(102),clearOfPines:!(()=>{for(let y=195;y<=208;y++)for(let x=203;x<=221;x++)if(at(x,y)===102)return true;return false})(),belowZones:LAND.some(l=>l[0]==='Temple Tower'&&l[2]<224)}})()")
+            "return {beach:by>0&&by<=175&&at(212,by-1)===0,clearing:s.has(194*MW+212)&&s.has(194*MW+205)&&s.has(194*MW+219),noPlaceholder:!BL.some(b=>b.tower),lanterns:TOWER_LAN.length>=6&&TOWER_LAN.every(l=>at(l.x,l.y)===7),pines:at(190,196)===102||[...Array(200)].some((_,k)=>at(190+k%20,190+(k/20|0))===102),pineBlocks:!WK.includes(102),clearOfPines:!(()=>{for(let y=195;y<=208;y++)for(let x=203;x<=221;x++)if(at(x,y)===102)return true;return false})(),belowZones:LAND.some(l=>l[0]==='Tower Temple'&&l[2]<224)}})()")
     assert all(tow.values()), tow
     ev("for(const[x,y]of[[212,174],[212,185],[212,194],[205,200],[198,196],[212,210]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
     # the Temple Tower: from the dock the gate, courtyard and both sides of the pagoda are walkable, the pagoda blocks, its south door leads into the shrine room and the shrine room door leads back out
@@ -162,9 +162,9 @@ def check(b, url):
     ev("for(const[x,y]of[[236,113],[236,104],[230,108],[242,110]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
     ev("applySky(false)")
     assert ev("(()=>{let k=0;for(let y=96;y<=128;y++)for(let x=218;x<=254;x++)if(at(x,y)!==window.__a[k++])return false;return !BL.some(b=>b.skydmg)})()"), "undamaged temple restored exactly"
-    # N3: the woodcutters' cottage moved from (39,158) to (34,158); the dirt road from the Walled Settlement to the Darkwood's south gate runs unbroken and the cottage door is reachable
+    # N3 / playtest #5: only the carpenter's shack (30,156) stands, the two empty shacks are gone; the dirt road from the Walled Settlement to the Darkwood's south gate runs unbroken and the cottage door is reachable
     cot = ev("(()=>{const W=new Set(WK),s=new Set([160*MW+37]),q=[[37,160]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=(y+b)*MW+x+a;if(!s.has(i)&&W.has(at(x+a,y+b))){s.add(i);q.push([x+a,y+b])}}}"
-            "return {moved:BL.some(b=>b.x===34&&b.y===158)&&!BL.some(b=>b.x===39&&b.y===158),door:s.has(160*MW+35),road:[40,41,42].every(x=>s.has(158*MW+x)||at(x,158)===6),gate:s.has(150*MW+36)}})()")
+            "return {moved:!BL.some(b=>(b.x===34||b.x===27||b.x===39)&&(b.y===158||b.y===152))&&BL.some(b=>b.x===30&&b.y===156)&&!ENTR.some(e=>e.to==='home_shack1'||e.to==='home_shack2'),door:s.has(160*MW+35),road:[40,41,42].every(x=>s.has(158*MW+x)||at(x,158)===6),gate:s.has(150*MW+36)}})()")
     assert all(cot.values()), cot
     # NAMES.md and DIALOGUE.md must match the game: if a character or a line was added (or JACKS_LINES.txt changed) without running  python3 tools/make_lists.py  this fails
     sys.path.insert(0, os.path.join(ROOT, "tools")); import make_lists
@@ -179,8 +179,8 @@ def check(b, url):
     assert ev("INTR.length===Object.keys(INTERIOR_DESIGNS).length+SHOP_ROOMS.length+SHOP_ROOMS.reduce((a,s)=>a+(s.inn?s.inn.length:0),0)+HOME_ROOMS.length&&INTR.every(r=>at(r.dx,r.y1)===23&&zoneOf(r.dx,r.y1-1)===r.z&&r.z>=30)"), "every design is built as a room with a door in its bottom row"
     assert ev("SHOP_ROOMS.every(s=>{const n=NPC.find(q=>q.n===s.npc);return n&&n.shopRoom===s.id&&zoneOf(n.x,n.y)===s.room.z&&!INTBLK[n.y*MW+n.x]&&n.f==='d'})&&SHOP_ROOMS.length===11"), "all eleven shopkeepers stand inside their rooms"
     assert ev("SHOP_ROOMS.every(s=>{const r=s.room,tb=r.props.find(p=>p.id===s.table),seen=new Set([r.dx+','+(r.y1-1)]),q=[[r.dx,r.y1-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const k=(x+a)+','+(y+b);if(!seen.has(k)&&walkable(x+a,y+b)&&zoneOf(x+a,y+b)===r.z){seen.add(k);q.push([x+a,y+b])}}}return seen.has((tb.ax+(tb.w>>1))+','+(tb.ay+tb.h))})"), "from the door you can walk to the front of every shop's counter"
-    # the houses people live in: every villager's home (and the woodcutters' shacks and Hale's cottage) can be walked into from the street and back out, and every free tile of floor inside can be reached from the door
-    homes = ev("""(()=>{const bad=[];HOME_LIST.forEach(h=>{const r=h.room,d=HOME_DESIGNS[h.design];if(r.props.length!==d.props.length||d.props.some(q=>!PROPS.DEF[q[0]]))bad.push(h.id+' props');
+    # the houses people live in: every villager's home (and Hale's cottage; the two empty shacks are gone since playtest #5) can be walked into from the street and back out, and every free tile of floor inside can be reached from the door
+    homes = ev("""(()=>{const bad=[];HOME_LIST.filter(h=>!h.gone).forEach(h=>{const r=h.room,d=HOME_DESIGNS[h.design];if(r.props.length!==d.props.length||d.props.some(q=>!PROPS.DEF[q[0]]))bad.push(h.id+' props');
       const fx=r.dx,fy=r.y1-1,seen=new Set([fx+','+fy]),q=[[fx,fy]];while(q.length){const[x,y]=q.shift();for(const[a,c]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+c,k=nx+','+ny;if(seen.has(k)||nx<r.x0||nx>r.x1||ny<r.y0+3||ny>r.y1-1||INTBLK[ny*MW+nx]||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}
       let free=0;for(let y=r.y0+3;y<r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(!INTBLK[y*MW+x])free++;if(free!==seen.size)bad.push(h.id+' cut off');
       const[ox,oy]=h.out;sail=false;P.x=P.rx=ox;P.y=P.ry=oy;P.f='u';act();if(!(P.x===fx&&P.y===fy&&zoneOf(P.x,P.y)===r.z))bad.push(h.id+' in');P.f='d';act();if(!(P.x===ox&&P.y===oy))bad.push(h.id+' out');
@@ -189,9 +189,18 @@ def check(b, url):
     # the taverns: four regulars inside each, a notice board on the back wall that opens (empty until jobs are added), and tables and barrels outside that stand in the way
     tav = ev("""(()=>{const out={};['inn_settlement','inn_mountain'].forEach(k=>{const r=SHOP_ROOMS.find(s=>s.id===k).room,b=r.props.find(p=>p.id==='notices');
       const regs=NPC.filter(n=>n.regular===k&&zoneOf(n.x,n.y)===r.z&&!INTBLK[n.y*MW+n.x]).length;sail=false;visitRoom(r);const seen=new Set([P.x+','+P.y]),q=[[P.x,P.y]];while(q.length){const[x,y]=q.shift();for(const[a,c]of[[1,0],[-1,0],[0,1],[0,-1]]){const k2=(x+a)+','+(y+c);if(!seen.has(k2)&&walkable(x+a,y+c)){seen.add(k2);q.push([x+a,y+c])}}}const bar=r.props.find(p=>p.id==='bar');let miss=0;for(let y=bar.ay+2;y<r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(walkable(x,y)&&!seen.has(x+','+y))miss++;out[k+'_walk']=seen.has((b.ax+1)+','+(b.ay+2))&&miss===0;P.x=P.rx=b.ax+1;P.y=P.ry=b.ay+2;P.f='u';say('');act();
-      out[k]=[regs,$('jobboard').classList.contains('open')&&document.querySelectorAll('.jb-note').length===3];closeJobBoard()});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||!walkable(p.x,p.y));
+      out[k]=[regs,$('jobboard').classList.contains('open')&&document.querySelectorAll('.jb-note').length===3];closeJobBoard()});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||(p.seat?walkable(p.x,p.y):!walkable(p.x,p.y)))&&SHOP_ROOMS.filter(s=>s.inn).every(s=>s.room.props.filter(p=>SEATS.includes(p.id)).every(p=>!INTBLK[p.ay*MW+p.ax]));
       P.x=P.rx=103;P.y=P.ry=218;draw();P.x=P.rx=23;P.y=P.ry=68;draw();return out})()""")
     assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "inn_settlement_walk": True, "inn_mountain_walk": True, "yard": True}, tav   # (you can walk from the door to the board, and to every free tile in front of the bar: no regular blocks the way)
+    # playtest #5, batch A: the notice board also reads from the tile beside it; temple names match everywhere; no island numbers on the map; long lines come in pages; the Sleep button follows you to your tent
+    assert ev("(()=>{const sr=SHOP_ROOMS.find(s=>s.id==='inn_settlement'),r=sr.room,b=r.props.find(p=>p.id==='notices'),x0=P.x,y0=P.y;P.x=b.ax+b.w;P.y=b.ay+2;const ok=[b.ax-1,b.ax,b.ax+b.w-1,b.ax+b.w].every(x=>boardAt(x,b.ay+1)===sr);P.x=x0;P.y=y0;return ok})()"), "the notice board can be read from either side of it too"
+    assert ev("['Water Temple','Fire Temple','Earth Temple','Sky Temple','Tower Temple'].every(n=>LAND.some(l=>l[0]===n))&&!LAND.some(l=>/Island \\d|Temple (of|to) /.test(l[0]))"), "the map uses the short temple names and has no island numbers"
+    assert ev("!Object.values(DLG).some(d=>Object.values(d.nodes).some(n=>/[Tt]emple (of|to) the|[Ss]ea [Tt]emple|[Aa]ir [Tt]emple|[Tt]emple [Tt]ower/.test(n.text||'')))&&!QUESTS.some(q=>q.steps.some(t=>/[Tt]emple (of|to) |Island \\d/.test(t)))"), "story text and quest steps use the same temple names, without island numbers"
+    assert ev("(()=>{const t='One two three. '.repeat(20),p=dlgPages(t);return p.length>1&&p.every(x=>x.length<=DLG_PAGE)&&p.join(' ')===t.trim()&&dlgPages('Short.').length===1})()"), "long lines are split into pages without changing the words"
+    assert ev("(()=>{dlgSay('Tester','Aaa aaa. '.repeat(30));const pages=[];for(let k=0;k<20&&dlgActive();k++){dlgAdvance();pages.push($('dlg-txt').textContent);dlgAdvance()}return !dlgActive()&&pages.length>2})()"), "tapping goes through every page and then closes"
+    assert ev("getComputedStyle($('dlg-who')).color==='rgb(0, 0, 0)'"), "the speaker's name is black"
+    assert ev("(()=>{const keep=JSON.stringify(S.placed),x0=P.x,y0=P.y,s0=sail;sail=false;S.placed=[{id:'camp_kit',x:150,y:122,big:1}];P.x=150;P.y=118;sleepBtn();const far=$('sleep').style.visibility;P.y=124;P.f='d';move('d');P.y=124;sleepBtn();const near=$('sleep').style.visibility;S.placed=JSON.parse(keep);P.x=x0;P.y=y0;sail=s0;ui();return far==='hidden'&&near==='visible'})()"), "the Sleep button shows as soon as you stand by your tent"
+    assert ev("(()=>{const sr=SHOP_ROOMS.find(s=>s.id==='inn_settlement');return sr.room.props.filter(p=>p.id==='chair'||p.id==='stool').length>=4&&sr.room.props.filter(p=>p.seat).every(p=>!INTBLK[p.ay*MW+p.ax])})()"), "the tavern's chairs and stools can be walked over"
     # tavern jobs (js/systems/jobs.js): taken at the board; deliveries paid by the person, the rest at the board; each runs its own encounter
     ev("S.jobs={};S.gold=0;closeJobBoard();ENEMIES.forEach(e=>{e.cd=1e9})")
     ev("openJobBoard('inn_mountain');[...document.querySelectorAll('.jb-note')][0].click()")
@@ -229,7 +238,7 @@ def check(b, url):
     ev("S.gold=1000;S.bag.healing_potion=0;P.x=P.rx=91;P.y=P.ry=218;P.f='u';act();document.querySelectorAll('#menu button,#menu .opt').forEach(()=>{});openTrader('apothecary','buy')")
     assert ev("/Healing potion/.test($('items').textContent)&&/Poison vial/.test($('items').textContent)&&/Swiftness/.test($('items').textContent)"), "apothecary stock"
     ev("[...document.querySelectorAll('#items .it')].find(r=>/^Healing potion/.test(r.textContent)).querySelector('button').click()")
-    assert ev("[S.gold,S.bag.healing_potion]") == [940, 1], "buying a healing potion costs 60"
+    assert ev("[S.gold,S.bag.healing_potion]") == [925, 1], "buying a healing potion costs 75 (60 and the playtest #5 shop prices)"
     ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').textContent)"), "she buys potions back"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # ore: only in the mountain country (x<100, y<100), few of them, gold and silver rare, every outcrop reachable on foot from the Mountain Town's north gate; gold is mined, regrows slowly and is sold (not bought) at Garrick's
@@ -431,8 +440,8 @@ def check(b, url):
     assert ev("['Odo','Bram','Murl','Lucie'].every(nm=>{const n=NPC.find(q=>q.n===nm);return n&&n.shopRoom&&zoneOf(n.x,n.y)>=30})&&BL.filter(b=>b.sign==='tavern').length===2"), "Odo, Bram, Murl and Lucie keep shop inside, and each town has a tavern"
     assert ev("SHOP_ROOMS.every(s=>at(s.door[0],s.door[1])===5&&WK.includes(at(s.door[0],s.door[1]+1))&&ENTR.some(e=>e.x===s.door[0]&&e.y===s.door[1])&&BL.some(b=>b.x<=s.door[0]&&s.door[0]<b.x+b.w&&b.y+1===s.door[1]))"), "every shop door is the middle of a building's bottom row with the street in front"
     ev("sail=false;SCENE=null;BATTLE=null;S.gold=250;S.hp=1;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})()")
-    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (100g),Double room (100g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
-    ev("mn.i=1;menuPick()"); assert ev("S.gold===150&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 100 gold and lets you sleep"
+    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (125g),Double room (125g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
+    ev("mn.i=1;menuPick()"); assert ev("S.gold===125&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 125 gold and lets you sleep"
     d0 = ev("S.day"); ev("sleep()"); pg.wait_for_timeout(300); assert ev("S.day")==d0+1 and ev("S.hp>=maxHp()"), "sleeping in the rented room starts the next day and restores health"
     ev("(()=>{const r=intrOf(P.x,P.y);P.x=P.rx=r.dx;P.y=P.ry=r.y1-1;P.f='d';act()})()"); assert ev("!inInn()&&zoneOf(P.x,P.y)===SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.z"), "the guest room's door leads back down into the tavern"
     ev("S.gold=50;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})();mn.i=0;menuPick()"); assert ev("S.gold===50&&!inInn()"), "without 100 gold you cannot rent a room"
@@ -477,10 +486,10 @@ def check(b, url):
     # F2: the Vendors screen (sections on the left, a grid of squares, the chosen one's buttons below)
     ev("S.gold=5000;S.bag={};S.eq={};openTrader('smith','buy')"); assert ev("$('store').classList.contains('grid')&&[...document.querySelectorAll('#stabs .btab')].map(b=>b.textContent).join()==='Materials,Weapons,Tools,Armour,Objects'"), "Garrick's screen shows his sections down the left"
     assert ev("document.querySelectorAll('#sgrid .bcell').length===4&&getComputedStyle($('sgrid')).gridTemplateColumns.split(' ').length===5&&/Copper ore/.test($('stxt').textContent)&&$('sbtns').children.length===1"), "the squares are five across and the first is selected with its Buy button below"
-    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/30g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4970&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
+    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/38g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4962&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
     ev("document.querySelector('#sswitch button').click()"); assert ev("/^Selling/.test($('sswitch').textContent)&&document.querySelectorAll('#sgrid .bcell').length>=1"), "the bar across the top switches to selling and shows what you can sell"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4985&&!count('tin_ore')"), "selling from the grid pays half price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4977&&!count('tin_ore')"), "selling from the grid pays half price"
     ev("openGeneral('buy')"); assert ev("[...document.querySelectorAll('#stabs .btab')].length>=1&&document.querySelectorAll('#sgrid .bcell canvas').length>=3"), "Odo's goods are squares too"
     ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("!$('store').classList.contains('grid')"), "crates keep their own list screen"
     ev("$('store').classList.remove('open')")
@@ -690,7 +699,7 @@ def check(b, url):
     ev("BATTLE_BLOCKS=false;BATTLES.t_blk.foes=['pirate_grunt'];BATTLE.foes[0].hp=0;BATTLE.foes[0].alive=false"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
     ev("BATTLE_BLOCKS=false;window.__r=null;startBattle('t_win',()=>{})"); pg.wait_for_timeout(50); ev(ATTACK_JS)
     pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
-    assert ev("STAM.walk===0&&STAM.sail===0"), "walking and sailing cost no stamina"
+    assert ev("STAM.walk===0&&STAM.sail>0"), "walking costs no stamina, sailing does again (playtest #5)"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
     assert ev("BATTLE!==null&&![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
@@ -770,7 +779,7 @@ def check(b, url):
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_function("GULL!==null", timeout=10000)
     assert ev("sail===true&&SCENE!==null&&GULL!==null"), "boarding the boat in the village brings a seagull"
-    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry!!/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
+    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern Water Temple. There is no time to waste! Hurry!!/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000)
     assert ev("SCENE===null&&flag('letter1_read')&&hasLetter('q1_letter')&&S.story.q==='q1'&&/Quest 1|Stranger/.test(QUESTS.find(q=>q.id==='q1').name)"), "the letter is kept and Quest 1 starts"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
@@ -952,7 +961,9 @@ def check(b, url):
     assert ev("flag('storm_on')&&STORM_ON&&BL.filter(b=>b.storm).length>=4&&BL.filter(b=>b.storm).every(b=>at(b.x+1,b.y+1)===101)&&questGoal()[0]===283"), "Quest 8 hands over to Quest 9: a storm breaks and pirate ships moor round the Sea temple's island"
     assert ev("(()=>{const seen=new Set(['200,100']),q=[[200,100]],D4=[[1,0],[-1,0],[0,1],[0,-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of D4){const nx=x+a,ny=y+b,k=nx+','+ny;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||at(nx,ny)!==0)continue;seen.add(k);q.push([nx,ny])}}let landings=0;for(let y=12;y<=60;y++)for(let x=254;x<=312;x++)if(WK.includes(at(x,y))&&[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>seen.has((x+a)+','+(y+b))))landings++;return landings>=5})()"), "the ships leave the Sea temple's island open to the sea (a boat can still land)"
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;SCENE=null;BATTLE=null;sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});P.x=P.rx=283;P.y=P.ry=44;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_land'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const r=encFigures('q9_guards').map(n=>Math.hypot((n.x-283)/24,(n.y-36)/19));return r.some(v=>v>.85)&&r.some(v=>v>.68&&v<.82)&&r.some(v=>v>.5&&v<.64)&&r.some(v=>v<.46&&v>.3)&&r.filter(v=>v<.3).length>=3})()"), "twelve pirates are spread round the spiral path: the beach, both terraces, the rim, the boardwalk and the courtyard"
+    assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const on=new Set(SEA_ROUTE.map(p=>p+''));return SEA_ROUTE.length>60&&SEA_GUARDS.length===8&&SEA_GUARDS.every(f=>on.has(f.at+''))&&encFigures('q9_guards').every(n=>SEA_ROUTE.some(([x,y])=>Math.max(Math.abs(x-n.x),Math.abs(y-n.y))<=3))})()"), "twelve pirates stand on the way up (playtest #5: none off the path behind a cliff, where they never saw you and Barron never came)"
+    # the safety net: standing in the courtyard with a pirate still left somewhere you walked past, that pirate comes running into sight
+    assert ev("(()=>{const F=encFigures('q9_guards'),keep=F.map(q=>[q.x,q.y]),n=F[0],x0=P.x,y0=P.y;F.forEach((q,i)=>{q.x=q.hx=262;q.y=q.hy=40+i%3});sail=false;P.x=283;P.y=34;encRallyAt=0;encRallyTick(performance.now(),0);const ok=seesPlayer(n)&&Math.abs(n.x-283)+Math.abs(n.y-34)>=3;F.forEach((q,i)=>{q.x=q.hx=keep[i][0];q.y=q.hy=keep[i][1]});P.x=x0;P.y=y0;return ok})()"), "a pirate you missed comes to you at the temple door"
     fight_all('q9_guards', 12, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
     assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===320&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
     ev("S.hp=9999;S.sta=100;BATTLE.foes[0].turns=0")
@@ -1118,12 +1129,12 @@ def check(b, url):
     assert ev("SCENE===null&&window.__lan===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&FLOAT_START===0&&CHEER_UNTIL===0&&!$('cine').classList.contains('on')&&NPC.find(n=>n.n==='Odo').x===__pos[0][1]&&NPC.find(n=>n.n==='Odo').y===__pos[0][2]&&NPC.find(n=>n.n==='Bram').x===__pos[1][1]"), "when it ends the lanterns, cheering and light are back to normal, the bars slide out and the people are back in place"
     ev("storyReset()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
-    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
-    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
+    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
+    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[400,3], "tailor charge"
     # Wynn's clothes (js/data/clothes.js): bought from her, kept in the Bag (Clothing), worn and taken off there; both pictures follow, and what you wear is saved
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=1000;delete S.bag.sea_coat;delete S.bag.tricorn_hat;openTrader('clothier','buy')")
     assert ev("CLOTHES.length>=20&&/Wool sweater/.test($('items').textContent)&&/Tricorn hat/.test($('items').textContent)&&CLOTHES.every(c=>!!itemArt(c.id))"), "Wynn sells tops, jackets and hats, each with an icon"
-    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===740"), "buying a sea coat"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===675"), "buying a sea coat"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.bag.tricorn_hat=1;openBag();bs=SECTIONS.findIndex(q=>q.k==='cloth');bc=cellsOf(bs).findIndex(r=>r.id==='sea_coat');drawBag();bagPick()")
     assert ev("bpop&&bpop.opts[0]==='Wear'"), "a piece of clothing in the bag can be worn"
     ev("popChoose()"); assert ev("S.eq.c_over==='sea_coat'&&S.look.jon===true&&S.look.jk===0&&heroSpec().over==='coat'&&isWorn('sea_coat')&&cellsOf(bs).find(r=>r.id==='sea_coat').eq"), "wearing it puts the coat on both pictures"
@@ -1131,7 +1142,7 @@ def check(b, url):
     ev("equipItem('tricorn_hat')"); assert ev("heroSpec().acc.filter(a=>HAT_ACC.includes(a)).join()==='tricorn'&&S.look.hat==='cap'&&!!playerArt('f')"), "a hat replaces any hat the character had"
     assert ev("(()=>{const m=migrate(JSON.parse(JSON.stringify(S)));const old=migrate({...JSON.parse(JSON.stringify(S)),eq:{rod:S.eq.rod,boat:S.eq.boat}});return m.eq.c_over==='none'&&m.eq.c_hat==='tricorn_hat'&&old.eq.c_top===null})()"), "what you wear is saved, and older saves start in their own clothes"
     ev("closeBag();S.eq.c_top=S.eq.c_over=S.eq.c_hat=null;delete S.bag.sea_coat;delete S.bag.tricorn_hat;S.look.jon=true;S.look.hat='cap';S.gold=420")
-    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
+    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 125g"
     ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
     ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').textContent)"), "smith shop"
@@ -1208,7 +1219,7 @@ def check(b, url):
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
     # playtest #4, batch C2: balance (P62, P70), sea creatures (P72) and the rock dragons (P73)
-    assert ev("ITEMS.iron_sword.damage===9&&ITEMS.greatsword.damage===12&&ITEMS.divine_blade.damage===14&&ATTACKS.divine_strike.power===1.8&&FOES.final_raider.hp>=50&&FOES.barron.hp>=300&&FOES.final_raider.hit[0]>=9"), "weapons are weaker and the late pirates hit harder and take more"
+    assert ev("ITEMS.iron_sword.damage===7.65&&ITEMS.greatsword.damage===12&&ITEMS.divine_blade.damage===14&&ATTACKS.divine_strike.power===1.8&&FOES.final_raider.hp>=50&&FOES.barron.hp>=300&&FOES.final_raider.hit[0]>=9"), "weapons are weaker and the late pirates hit harder and take more"
     assert ev("(()=>{const best=ITEMS.divine_blade.damage*(1+.08*6)*ATTACKS.divine_strike.power*1.15;return best<FOES.final_raider.hp&&best<FOES.final_gunner.hp})()"), "Divine Strike no longer finishes a Final Fight pirate in one blow at Sword skill 6"
     ev("sail=true;BATTLE=null;SCENE=null;setFlag('festival_done');window.__sp=(()=>{for(let y=60;y<230;y++)for(let x=250;x<310;x++)if(seaOpen(x,y)&&Math.hypot(x-156,y-113)>95)return[x,y];return null})();P.x=P.rx=B.x=__sp[0];P.y=P.ry=B.y=__sp[1]")
     ev("seaQuiet=1;window.__m=Math.random;Math.random=()=>0;seaTick();Math.random=__m"); assert ev("SEA_ALERT>performance.now()"), "sailing in open sea far from home can bring an attack, with an alert first"
@@ -1219,7 +1230,7 @@ def check(b, url):
     ev("seaAttack('sea_squid')"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Ancient squid'", timeout=5000); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
     ev("sail=false;SEA_ALERT=0;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
     pgd, errd = load(b, url, SAVE); evd = pgd.evaluate   # a fresh page, because the older tests above clear the extra creatures
-    assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length>=3"), "rock dragons stand on the bare rock of the mountain country"
+    assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length===2"), "two rock dragons (playtest #5) stand on the bare rock of the mountain country"
     evd("BATTLE_FAST=true;sail=false;startEnemyBattle(ENEMIES.find(e=>e.t==='rock_dragon'))"); pgd.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Rock dragon'", timeout=5000)
     assert evd("BATTLE.foes[0].t.pattern.length===3&&/fire/.test(BATTLE.foes[0].t.pattern[2].atk)&&BATTLE.foes[0].t.art==='dragon'"), "the dragon winds up and then breathes fire"
     evd("S.hp=500;BATTLE.foes[0].turns=2;bFoes()"); pgd.wait_for_function("BATTLE.fx.includes('firebreath')", timeout=5000); evd("bEnd('ran')"); pgd.wait_for_function("BATTLE===null", timeout=5000)

@@ -50,7 +50,7 @@ SCENES.q7_wave1=[{encounter:'q7_w1'},{wait:300},{msg:'Pirates are landing at the
 SCENES.q7_between1=[{wait:300},{give:{healing_potion:1}},{toast:'A villager gives you a healing potion.'},{msg:'[Placeholder] "Take this! More of them are coming up the road!"'},{encounter:'q7_w2'},{step:2}];
 SCENES.q7_between2=[{wait:300},{give:{healing_potion:1}},{toast:'A villager gives you a healing potion.'},{msg:'[Placeholder] "Take this! The last of them are at the top of the village!"'},{encounter:'q7_w3'},{step:3}];
 SCENES.q7_flee=[{wait:300},{say:'q7_flee'},{toast:'The pirates fled!'},{set:'q7_done'},{set:'tower_raided'},{done:'q7'},{quest:['q8',0]},
- {fade:'out',ms:900},{wait:600},{clear:'village_attack'},{set:'village_burnt'},{wait:400},{fade:'in',ms:1400},{msg:'[Placeholder] The boss will be at the Temple Tower! Sail there at once. The village can be mended in the morning.'}];
+ {fade:'out',ms:900},{wait:600},{clear:'village_attack'},{set:'village_burnt'},{wait:400},{fade:'in',ms:1400},{msg:'[Placeholder] The boss will be at the Tower Temple! Sail there at once. The village can be mended in the morning.'}];
 TRIGGERS.push(
  // the first time the player gets into the boat on the Sky island after Quest 6
  {id:'q7_letter',when:{board:[205,95,280,172]},if:{flag:'q6_done',noflag:'q7_started'},do:[{set:'q7_started'},{set:'village_attack'},{quest:['q7',0]},{letter:'q7_letter'}]},
