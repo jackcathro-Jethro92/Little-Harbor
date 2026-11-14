@@ -14,7 +14,8 @@ const SMITH=[
 // The carpenter near the Darkwood's south gate (playtest #4): planks and rope, and he buys logs and flax fiber (the raw wood and fiber). Furniture comes in batch G.
 const CARPENTER=[
  ['Timber',[['softwood_plank',15],['medium_plank',30],['hardwood_plank',55],['rope',25]]],
- ['Furniture',[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',350],['storage_crate',120],['weapon_rack',300],['tool_rack',250]]],
+ ['Furniture',[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',400],['storage_crate',280],['weapon_rack',300],['tool_rack',250],...FURN_KIT.filter(r=>r[2]==='Furniture').map(r=>['f_'+r[0],r[1]])]],
+ ...['Beds','Decor','Lights'].map(sec=>[sec,FURN_KIT.filter(r=>r[2]===sec).map(r=>['f_'+r[0],r[1]])]),   // (playtest #5: the whole design kit's home furniture, js/data/furniture.js)
  ['Raw wood',[['softwood',16],['medium_wood',30],['hardwood',56],['fiber',8]]]   // only bought (noBuy)
 ];
 // Seamstress Wynn in the Walled Settlement: cloth and leather (the look screens are separate, js/ui/look.js)
@@ -32,7 +33,7 @@ const JEWELLER=[
 ];
 // Astrid's Apothecary in the Walled Settlement: potions and poisons (the same items the player can brew at an alchemy station). She buys them back at half price.
 const APOTHECARY=[
- ['Potions',[['healing_potion',60],['greater_healing',180],['stamina_tonic',50],['greater_stamina',150],['swiftness_potion',220]]],
+ ['Potions',[['minor_tonic',25],['healing_potion',60],['greater_healing',180],['stamina_tonic',50],['greater_stamina',150],['swiftness_potion',220]]],
  ['Poisons',[['poison_vial',120]]],
  ['Ingredients',[['moss',12],['holly',18],['basil',15],['forest_sprig',15],['red_cap',24],['death_cap',42],['blue_cap',36]]],   // herbs and mushrooms: she sells at three times what she pays (rate 1/3 below)
  ['Curios',[['centipede_fang',36]]]   // only bought (noBuy)
@@ -40,7 +41,7 @@ const APOTHECARY=[
 // Every trader the generic shop screen (openTrader in js/ui/shops.js) can show. sell = sections the trader buys back at half price.
 const SHOPS={
  smith:{name:"Garrick's Forge",who:'Garrick',buyTag:'Ore, iron bars, blades, tools and armour.',sellTag:'Garrick buys ore, iron, weapons, tools and armour at half price.',none:'Bring ore, iron bars, weapons, tools or armour.',thanks:'A fine choice.',list:SMITH,sell:['Materials','Weapons','Tools','Old tools','Armour'],noBuy:['Old tools']},
- carpenter:{name:"Carpenter Alder's Workshop",who:'Alder',buyTag:'Planks, rope and furniture.',sellTag:'Alder buys planks, rope, furniture, logs and flax fiber at half price.',none:'Bring planks, rope, logs or flax fiber.',thanks:'Good timber, that.',list:CARPENTER,sell:['Timber','Furniture','Raw wood'],noBuy:['Raw wood']},
+ carpenter:{name:"Carpenter Alder's Workshop",who:'Alder',buyTag:'Planks, rope and furniture.',sellTag:'Alder buys planks, rope, furniture, logs and flax fiber at half price.',none:'Bring planks, rope, logs or flax fiber.',thanks:'Good timber, that.',list:CARPENTER,sell:['Timber','Furniture','Beds','Decor','Lights','Raw wood'],noBuy:['Raw wood']},
  clothier:{name:"Wynn's Clothes",who:'Wynn',buyTag:'Tops, jackets and hats. Wear them from your Bag (Clothing).',sellTag:'Wynn does not buy clothes back.',none:'Wynn does not buy clothes back.',thanks:'That will look lovely on you.',list:CLOTHIER,sell:[]},
  tailor:{name:"Wynn's Cloth & Leather",who:'Wynn',buyTag:'Cloth and leather.',sellTag:'Wynn buys cloth, leather and wolf pelts at half price.',none:'Wynn only buys cloth, leather and wolf pelts.',thanks:'Lovely.',list:TAILOR,sell:['Fabric','Pelts'],noBuy:['Pelts']},
  apothecary:{name:"Astrid's Apothecary",who:'Astrid',buyTag:'Potions to heal and quicken, poisons for your blade, and herbs and mushrooms to brew with.',sellTag:'Astrid buys potions and poisons at half price, and herbs, mushrooms and centipede fangs at a fair price.',none:'Bring potions, poisons, herbs, mushrooms or centipede fangs.',thanks:'Use it wisely.',list:APOTHECARY,sell:['Potions','Poisons','Ingredients','Curios'],noBuy:['Curios'],rate:{Ingredients:1/3,Curios:1/3}},   // `rate`: the share of the list price she pays for a section (default one half): herbs and fangs are sold at three times what she pays

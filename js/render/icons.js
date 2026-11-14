@@ -22,7 +22,7 @@ function icon(id,cv){const C=cv||$('bdi'),x=C.getContext('2d'),r=(a,b,w,h,k)=>{x
     else if(id==='rope'){r(3,4,10,8,'#5a3f1e');r(4,5,8,6,c);r(6,7,4,2,'#5a3f1e');r(4,6,8,1,'#d8b878')}
     else if(id==='iron_bar'){r(2,6,12,5,'#2e2e36');r(3,7,10,3,c);r(3,7,10,1,'#e6edf2')}
     else{r(3,4,10,9,'#2e2e36');r(4,5,8,7,'#8d8f87');r(5,6,3,3,c);r(9,8,3,2,c)}}
-  else if(K==='potion'){const c={healing_potion:'#d83828',greater_healing:'#f06a5a',stamina_tonic:'#4a9ae0',greater_stamina:'#7ac0f4',swiftness_potion:'#f2c14e',poison_vial:'#7a3ac8'}[id];
+  else if(K==='potion'){const c={minor_tonic:'#f08a8a',elixir_life:'#f6e08a',healing_potion:'#d83828',greater_healing:'#f06a5a',stamina_tonic:'#4a9ae0',greater_stamina:'#7ac0f4',swiftness_potion:'#f2c14e',poison_vial:'#7a3ac8'}[id];
     r(6,1,4,3,'#c8b890');r(6,3,4,3,'#2e1f10');r(3,6,10,8,'#2e1f10');r(4,7,8,6,c);r(5,8,1,3,'#fff')}
   else if(K==='forage'){const c=FORC[id];if(/cap$/.test(id)){r(7,8,2,6,'#f0e8d8');r(3,4,10,5,'#2e1f10');r(4,5,8,3,c);r(6,6,1,1,'#fff');r(9,5,1,1,'#fff')}
     else{r(7,3,2,11,'#2e5a2a');r(3,5,5,4,'#2e5a2a');r(4,6,3,2,c);r(9,8,5,4,'#2e5a2a');r(10,9,3,2,c)}}
