@@ -297,7 +297,7 @@ Every item (about 140) has a detailed icon in the style of Jack's weapon and arm
 | P98 | Every shop except Murl's dearer | A | **Built.** Decided (Jack): 25% more in every shop (Bram, Odo, Garrick, Astrid, Lucie, Wynn, the carpenter, the barber and tailor, tavern rooms). Murl's ships, crew and shipwright station keep their prices; selling back pays as before |
 | P99 | Iron sword 15% weaker | A | **Built**: damage 9 to 7.65 |
 | P100 | Potions on their own tab in the Bag | B | **Built**: a Potions section between Food and Weapons |
-| P101 | Pirates grow tougher each quest, especially after "At the Top of the World" | D |  |
+| P101 | Pirates grow tougher each quest, especially after "At the Top of the World" | D | **Built**: each quest's pirates are a little tougher than the last (Earth, Water, Sky), then a big step for "Under Attack" (raiders 44-68 health, hitting 9-14; they used to be weaker than the Sky pirates) and again for "The Final Fight" (60-95 health, hitting 11-16; Barron 360). They give more XP to match. Please say if Quest 7 or 9 now feels too hard |
 | P102 | **Bug:** the pirate boss was missing from "The Final Fight", so the story stopped after Quest 9. Make sure pirates are placed so the story can't be skipped by accident | A | **Built**: two of the twelve pirates stood on a lower ring behind a cliff and never saw you, and Barron only comes when all twelve are beaten. The eight path pirates now stand on the walking route itself. Safety net for every pirate group the story waits for (Quests 1, 4, 6, 9): when you reach the goal with some still standing where you walked past, they come running to you one by one |
 
 ## Jack's answers (playtest #5)
