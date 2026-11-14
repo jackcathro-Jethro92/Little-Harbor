@@ -2,6 +2,10 @@
 // A furniture item is a row of ITEMS with kind:'furniture' and furn:{prop, bed?, store?:{cap, only?, title}}. `prop` names a picture in PROPS.DEF (js/render/props.js), which also gives its size in tiles. It is placed from the Bag like a station
 // (the footprint extends away from you, so you are never inside it), kept in S.placed as {id,x,y} (plus `st`, the {item: count} contents, for storage pieces) and drawn by js/render/objects.js. Carpets lie flat: you walk over them and
 // furniture can stand on them. Everything else is in the way. Storage pieces hold `cap` things and must be empty before you pick them up or move them. A bed lets you sleep beside it at camp (atBed).
+// the design kit's furniture (FURN_KIT in js/data/furniture.js, playtest #5) becomes items here, named after its picture
+FURN_KIT.forEach(([prop,price,sec,x])=>{const d=PROPS.DEF[prop];if(!d)return;const id='f_'+prop;if(ITEMS[id])return;x=x||{};
+  const furn={prop};if(x.bed)furn.bed=1;if(x.store)furn.store={cap:x.store[0],title:x.store[1]};
+  ITEMS[id]={n:d.n,kind:'furniture',price,furn,kit:sec,desc:x.bed?'A bed. At camp you can sleep beside it.':x.store?'Keeps up to '+x.store[0]+' things.':d.z===0?'It lies flat: you can walk over it.':'Furniture for your home or camp.'}});
 const FPC={};
 function furnFp(id){return FPC[id]||(FPC[id]=(()=>{const f=ITEMS[id].furn,[w,h]=propDim(f.prop,0);return{w,h,flat:PROPS.DEF[f.prop].z===0,prop:f.prop}})())}
 const isFurn=p=>!!(ITEMS[p.id]&&ITEMS[p.id].furn);

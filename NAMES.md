@@ -85,13 +85,13 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Astra | The Frosty Tankard | Villager |
 | Bjarke | The Frosty Tankard | Villager |
 | Hilde | The Frosty Tankard | Villager |
-| Old Stranger | Temple of the Sea | Keeper of the Sea temple |
+| Old Stranger | Water Temple | Keeper of the Water Temple |
 | Villager | Village | Villager |
 | Bjorn the Elder | Village | Village elder |
 | Rue | The Darkwood | Sailor |
-| Mysterious Girl | Temple Tower | Spirit of the Earth temple |
-| Captain Barron | Temple to the Sky | Pirate boss |
-| Mysterious Boy | Temple to the Sky | Spirit of the Sky temple |
+| Mysterious Girl | Tower Temple | Spirit of the Earth Temple |
+| Captain Barron | Sky Temple | Pirate boss |
+| Mysterious Boy | Sky Temple | Spirit of the Sky Temple |
 | Fighting villager 1 | Village | Villager |
 | Fighting pirate 1 | Village | Pirate |
 | Fighting villager 2 | Village | Villager |
@@ -102,7 +102,7 @@ Made by `tools/make_lists.py` from the running game, and checked by the tests, s
 | Fighting pirate 4 | Village | Pirate |
 | Fighting villager 5 | Village | Villager |
 | Fighting pirate 5 | Village | Pirate |
-| Fire Spirit | Settlement Docks | Spirit of the Fire temple |
+| Fire Spirit | Settlement Docks | Spirit of the Fire Temple |
 | Miner Dell | Darkwood north gate | Miner |
 | Captain Redd | Pirate camp (Volcano Island) | Pirate |
 | Mags | Pirate camp (Volcano Island) | Pirate |

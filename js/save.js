@@ -1,7 +1,7 @@
 // ---------- save data (versioned) ----------
 const slotOf=id=>{const i=ITEMS[id];return i.kind==='clothes'?'c_'+i.wear.slot:i.kind==='jewel'||i.kind==='armour'?i.slot:i.kind==='tool'?({mine:'pickaxe',chop:'axe',cut:'knife'})[i.use]:i.kind};
 const SAVE_V=4;   // 4: the six characters (batch H1). Jack asked for every older save to be cleared: one is copied to 'little-harbor-v1-backup-before-reset' and a new game starts
-const fresh=()=>({v:SAVE_V,jobs:{},boost:{hp:0,sta:0},look:{skin:0,hair:1,shirt:5,jk:1},day:1,gold:0,seen:0,hp:50,sta:100,xp:{},cut:{},placed:[],gardens:[],claim:null,home:null,coat:0,buff:0,arena:0,pp:{},poison:0,isle:null,crates:{},mann:{},flags:{},story:{q:null,step:0,seen:[]},letters:[],ships:{},bag:{driftwood_rod:1,rowboat:1,wooden_sword:1},bagId:'satchel',hero:null,name:'',eq:{c_top:null,c_over:null,c_hat:null,tool:'rod',rod:LIST('rod')[0],boat:LIST('boat')[0],weapon:'wooden_sword',pickaxe:null,axe:null,knife:null,ring:null,amulet:null,boots:null,armour:null}});
+const fresh=()=>({v:SAVE_V,jobs:{},boost:{hp:0,sta:0},look:{skin:0,hair:1,shirt:5,jk:1},day:1,gold:0,seen:0,hp:50,sta:100,xp:{},cut:{},placed:[],gardens:[],claim:null,home:null,coat:0,buff:0,arena:0,pp:{},poison:0,isle:null,crates:{},mann:{},flags:{},story:{q:null,step:0,seen:[]},letters:[],ships:{},bag:{driftwood_rod:1,rowboat:1,wooden_sword:1},bagId:'satchel',hero:null,name:'',eq:{c_top:null,c_over:null,c_hat:null,tool:null,rod:LIST('rod')[0],boat:LIST('boat')[0],weapon:'wooden_sword',pickaxe:null,axe:null,knife:null,ring:null,amulet:null,boots:null,armour:null}});
 function migrate(o){
   const f=fresh();
   if(o.v>=SAVE_V)return {...f,...o,eq:{...f.eq,...o.eq}};
@@ -16,5 +16,7 @@ let S=fresh();
 try{const raw=localStorage.getItem(KEY),o=JSON.parse(raw||'null');
   if(o&&o.look){if((o.v||1)<4){try{localStorage.setItem(KEY+'-backup-before-reset',raw);localStorage.removeItem(KEY)}catch(e){}}else{if(o.v!==SAVE_V){try{localStorage.setItem(KEY+'-backup-v'+o.v,raw)}catch(e){}}S=migrate(o)}}}catch(e){}
 // the trawler became the schooner (boats redrawn from real ships): carry old saves over
+// playtest #5: the rod has its own Equipment square and is always ready, so the hand-tool box no longer holds it
+if(S.eq&&S.eq.tool==='rod')S.eq.tool=null;
 if(S.bag&&S.bag.trawler){S.bag.schooner=(S.bag.schooner||0)+S.bag.trawler;delete S.bag.trawler}if(S.eq&&S.eq.boat==='trawler')S.eq.boat='schooner';
 const save=()=>{try{S.fog=Array.from(FOG).join('');localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};

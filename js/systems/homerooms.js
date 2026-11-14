@@ -4,5 +4,5 @@
 const HOME_LIST=HOME_ROOMS.map(h=>{const d=HOME_DESIGNS[h.design],key='home_'+h.id,[bx,by]=h.house,name=h.name||h.owner+"'s house",room=buildRoom(key,d,name);room.home=h.id;
   const homes=new Set(NPC.map(n=>n.hx+','+n.hy)),stand=[0,2,1].map(k=>[bx+k,by+2]),out=stand.find(([x,y])=>WK.includes(at(x,y))&&!homes.has(x+','+y))||stand[2];
   HALLS[key]={z:room,id:room.z,msg:h.msg||'You step into '+name+'.',name};
-  [0,1,2].forEach(k=>ENTR.push({x:bx+k,y:by+1,to:key,out,back:'You step back outside.'}));
+  if(!h.gone)[0,1,2].forEach(k=>ENTR.push({x:bx+k,y:by+1,to:key,out,back:'You step back outside.'}));
   return{...h,key,room,out}});

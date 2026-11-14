@@ -119,6 +119,7 @@ const HOME_ROOMS=[
  {id:'dunstan',house:[87,220],owner:'Dunstan',design:'h_dunstan'},{id:'lysa',house:[110,222],owner:'Lysa',design:'h_lysa'},{id:'osric',house:[92,208],owner:'Osric',design:'h_osric'},
  {id:'maren',house:[104,212],owner:'Maren',design:'h_maren'},{id:'thom',house:[92,221],owner:'Thom',design:'h_thom'},{id:'bryn',house:[96,226],owner:'Bryn',design:'h_bryn'},
  {id:'alder',house:[87,227],owner:'Alder',design:'h_alder'},{id:'fenna',house:[91,229],owner:'Fenna',design:'h_fenna'},{id:'joss',house:[109,228],owner:'Joss',design:'h_joss'},
- {id:'shack1',house:[27,152],name:"Woodcutter's shack",design:'h_shack1',msg:'Sawdust, pine resin and a cold stove.'},{id:'shack2',house:[34,158],name:"Woodcutter's shack",design:'h_shack2',msg:'Stacked timber and the smell of the forest.'},
+ // (playtest #5: the two empty shacks were taken down; `gone` keeps their rooms so no later room moves, but there is no door into them)
+ {id:'shack1',gone:1,house:[27,152],name:"Woodcutter's shack",design:'h_shack1',msg:'Sawdust, pine resin and a cold stove.'},{id:'shack2',gone:1,house:[34,158],name:"Woodcutter's shack",design:'h_shack2',msg:'Stacked timber and the smell of the forest.'},
  {id:'hale',house:[120,265],owner:'Hale',design:'h_hale',msg:"A warm fire and the smell of pine. Hale's cottage."},
  {id:'hobb',house:[119,206],owner:'Farmer Hobb',design:'h_hobb'},{id:'maude',house:[119,228],owner:'Maude',design:'h_maude'},{id:'perrin',house:[92,188],owner:'Perrin',design:'h_perrin'}];

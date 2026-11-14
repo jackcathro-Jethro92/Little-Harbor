@@ -1,4 +1,6 @@
 // ---------- recipes (data table: add a row to add a recipe) ----------
+// Skill levels (playtest #5): `req` names the skill levels a recipe needs, e.g. {crafting:2} or {crafting:5,sword:4} (swords need the Sword level as well as Crafting, axes the Axe level). `level` is the older
+// way of writing a Crafting level. `learn` names a flag: the recipe stays hidden until you have learned it (Astrid teaches the Minor health tonic the first time you speak to her).
 const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
  {out:'rope',n:1,needs:{fiber:3},station:'bench',xp:4},
  {out:'softwood_plank',n:2,needs:{softwood:1},station:'bench',xp:3},
@@ -16,6 +18,15 @@ const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
  {out:'chain_hauberk',n:1,needs:{iron_bar:8},level:10,station:'forge',xp:200},
  {out:'chain_boots',n:1,needs:{iron_bar:3},level:10,station:'forge',xp:120},
  {out:'iron_bar',n:1,needs:{bronze_ore:1,copper_ore:1,tin_ore:1},station:'forge',xp:20},
+ // storage (playtest #5): made at the workbench from Crafting level 2
+ {out:'storage_crate',n:1,needs:{softwood_plank:8,rope:2},req:{crafting:2},station:'bench',xp:25},
+ {out:'chest_drawers',n:1,needs:{medium_plank:6,hardwood_plank:2},req:{crafting:2},station:'bench',xp:35},
+ // weapons (playtest #5): forged with both the Crafting level and the weapon's own skill level
+ {out:'sword',n:1,needs:{iron_bar:1,medium_plank:1},req:{crafting:1,sword:1},station:'forge',xp:30},
+ {out:'hand_axe',n:1,needs:{iron_bar:1,hardwood_plank:1},req:{crafting:2,axe:1},station:'forge',xp:35},
+ {out:'bronze_sword',n:1,needs:{bronze_ore:3,copper_ore:1,medium_plank:1},req:{crafting:3,sword:2},station:'forge',xp:50},
+ {out:'iron_sword',n:1,needs:{iron_bar:4,hardwood_plank:1},req:{crafting:5,sword:4},station:'forge',xp:90},
+ {out:'greatsword',n:1,needs:{iron_bar:8,hardwood_plank:2,rope:1},req:{crafting:8,sword:6},station:'forge',xp:160},
  // food: 'fire' = the camp's campfire; 'cooking' = cooking station (which also does fire recipes)
  {out:'grilled_sardine',n:1,needs:{sardine:1},station:'fire',xp:3,skill:'cooking'},
  {out:'grilled_mackerel',n:1,needs:{mackerel:1},station:'fire',xp:5,skill:'cooking'},
@@ -44,8 +55,10 @@ const RECIPES=[ // station: 'bench' or 'forge'; n = amount made
  {out:'schooner',n:1,needs:{medium_plank:24,hardwood_plank:16,rope:16,iron_bar:10},gold:8000,unique:1,station:'shipwright',xp:200},
  {out:'brig',n:1,needs:{medium_plank:40,hardwood_plank:30,rope:30,iron_bar:20},gold:20000,unique:1,station:'shipwright',xp:350},
  // alchemy: herbs and mushrooms into potions
- {out:'healing_potion',n:1,needs:{basil:2,holly:1},station:'alchemy',xp:10,skill:'alchemy'},
- {out:'greater_healing',n:1,needs:{basil:3,holly:2,blue_cap:1},station:'alchemy',xp:24,skill:'alchemy'},
+ {out:'minor_tonic',n:1,needs:{basil:1,holly:1},learn:'recipe_tonic',station:'alchemy',xp:6,skill:'alchemy'},
+ {out:'healing_potion',n:1,needs:{basil:2,holly:1},req:{alchemy:3},station:'alchemy',xp:10,skill:'alchemy'},
+ {out:'greater_healing',n:1,needs:{basil:3,holly:2,blue_cap:1},req:{alchemy:6},station:'alchemy',xp:24,skill:'alchemy'},
+ {out:'elixir_life',n:1,needs:{basil:5,holly:3,blue_cap:2,forest_sprig:2},req:{alchemy:10},station:'alchemy',xp:60,skill:'alchemy'},
  {out:'stamina_tonic',n:1,needs:{forest_sprig:2,moss:1},station:'alchemy',xp:10,skill:'alchemy'},
  {out:'greater_stamina',n:1,needs:{forest_sprig:3,moss:2,red_cap:1},station:'alchemy',xp:24,skill:'alchemy'},
  {out:'swiftness_potion',n:1,needs:{forest_sprig:2,blue_cap:1,basil:1},station:'alchemy',xp:16,skill:'alchemy'},

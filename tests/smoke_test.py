@@ -42,7 +42,7 @@ def check(b, url):
     assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.x,e.y)===1&&Math.hypot(e.x-144,e.y-170)<14)})()"), "four restless spirits haunt Oak Island"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
-    for btn in ("#bagbtn", "#skbtn", "#mapbtn"):
+    for btn in ("#bagbtn", "#chbtn", "#mapbtn"):
         pg.tap(btn); pg.wait_for_timeout(100)
         pg.keyboard.press("Escape")
         ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
@@ -143,7 +143,7 @@ def check(b, url):
     ev("applyPirates(true);for(const[x,y]of[[70,28],[87,25],[94,25],[88,30]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()};applyPirates(false)")
     # the Temple Tower's island: the old islet is gone, the stone dock in the north joins the gravel path, which runs south to the clearing (walkable all the way), lanterns line it every four tiles, pines block
     tow = ev("(()=>{const D4=[[1,0],[-1,0],[0,1],[0,-1]],ok=new Set(WK);let by=0;for(let y=224;y>150;y--)if(at(212,y)===105)by=y;const s=new Set([by*MW+212]),q=[by*MW+212];for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;for(const[a,b]of D4){const j=(y+b)*MW+x+a;if(!s.has(j)&&ok.has(M[j])){s.add(j);q.push(j)}}}"
-            "return {beach:by>0&&by<=175&&at(212,by-1)===0,clearing:s.has(194*MW+212)&&s.has(194*MW+205)&&s.has(194*MW+219),noPlaceholder:!BL.some(b=>b.tower),lanterns:TOWER_LAN.length>=6&&TOWER_LAN.every(l=>at(l.x,l.y)===7),pines:at(190,196)===102||[...Array(200)].some((_,k)=>at(190+k%20,190+(k/20|0))===102),pineBlocks:!WK.includes(102),clearOfPines:!(()=>{for(let y=195;y<=208;y++)for(let x=203;x<=221;x++)if(at(x,y)===102)return true;return false})(),belowZones:LAND.some(l=>l[0]==='Temple Tower'&&l[2]<224)}})()")
+            "return {beach:by>0&&by<=175&&at(212,by-1)===0,clearing:s.has(194*MW+212)&&s.has(194*MW+205)&&s.has(194*MW+219),noPlaceholder:!BL.some(b=>b.tower),lanterns:TOWER_LAN.length>=6&&TOWER_LAN.every(l=>at(l.x,l.y)===7),pines:at(190,196)===102||[...Array(200)].some((_,k)=>at(190+k%20,190+(k/20|0))===102),pineBlocks:!WK.includes(102),clearOfPines:!(()=>{for(let y=195;y<=208;y++)for(let x=203;x<=221;x++)if(at(x,y)===102)return true;return false})(),belowZones:LAND.some(l=>l[0]==='Tower Temple'&&l[2]<224)}})()")
     assert all(tow.values()), tow
     ev("for(const[x,y]of[[212,174],[212,185],[212,194],[205,200],[198,196],[212,210]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
     # the Temple Tower: from the dock the gate, courtyard and both sides of the pagoda are walkable, the pagoda blocks, its south door leads into the shrine room and the shrine room door leads back out
@@ -162,9 +162,9 @@ def check(b, url):
     ev("for(const[x,y]of[[236,113],[236,104],[230,108],[242,110]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;draw()}")
     ev("applySky(false)")
     assert ev("(()=>{let k=0;for(let y=96;y<=128;y++)for(let x=218;x<=254;x++)if(at(x,y)!==window.__a[k++])return false;return !BL.some(b=>b.skydmg)})()"), "undamaged temple restored exactly"
-    # N3: the woodcutters' cottage moved from (39,158) to (34,158); the dirt road from the Walled Settlement to the Darkwood's south gate runs unbroken and the cottage door is reachable
+    # N3 / playtest #5: only the carpenter's shack (30,156) stands, the two empty shacks are gone; the dirt road from the Walled Settlement to the Darkwood's south gate runs unbroken and the cottage door is reachable
     cot = ev("(()=>{const W=new Set(WK),s=new Set([160*MW+37]),q=[[37,160]];for(let h=0;h<q.length;h++){const[x,y]=q[h];for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const i=(y+b)*MW+x+a;if(!s.has(i)&&W.has(at(x+a,y+b))){s.add(i);q.push([x+a,y+b])}}}"
-            "return {moved:BL.some(b=>b.x===34&&b.y===158)&&!BL.some(b=>b.x===39&&b.y===158),door:s.has(160*MW+35),road:[40,41,42].every(x=>s.has(158*MW+x)||at(x,158)===6),gate:s.has(150*MW+36)}})()")
+            "return {moved:!BL.some(b=>(b.x===34||b.x===27||b.x===39)&&(b.y===158||b.y===152))&&BL.some(b=>b.x===30&&b.y===156)&&!ENTR.some(e=>e.to==='home_shack1'||e.to==='home_shack2'),door:s.has(160*MW+35),road:[40,41,42].every(x=>s.has(158*MW+x)||at(x,158)===6),gate:s.has(150*MW+36)}})()")
     assert all(cot.values()), cot
     # NAMES.md and DIALOGUE.md must match the game: if a character or a line was added (or JACKS_LINES.txt changed) without running  python3 tools/make_lists.py  this fails
     sys.path.insert(0, os.path.join(ROOT, "tools")); import make_lists
@@ -179,8 +179,8 @@ def check(b, url):
     assert ev("INTR.length===Object.keys(INTERIOR_DESIGNS).length+SHOP_ROOMS.length+SHOP_ROOMS.reduce((a,s)=>a+(s.inn?s.inn.length:0),0)+HOME_ROOMS.length&&INTR.every(r=>at(r.dx,r.y1)===23&&zoneOf(r.dx,r.y1-1)===r.z&&r.z>=30)"), "every design is built as a room with a door in its bottom row"
     assert ev("SHOP_ROOMS.every(s=>{const n=NPC.find(q=>q.n===s.npc);return n&&n.shopRoom===s.id&&zoneOf(n.x,n.y)===s.room.z&&!INTBLK[n.y*MW+n.x]&&n.f==='d'})&&SHOP_ROOMS.length===11"), "all eleven shopkeepers stand inside their rooms"
     assert ev("SHOP_ROOMS.every(s=>{const r=s.room,tb=r.props.find(p=>p.id===s.table),seen=new Set([r.dx+','+(r.y1-1)]),q=[[r.dx,r.y1-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const k=(x+a)+','+(y+b);if(!seen.has(k)&&walkable(x+a,y+b)&&zoneOf(x+a,y+b)===r.z){seen.add(k);q.push([x+a,y+b])}}}return seen.has((tb.ax+(tb.w>>1))+','+(tb.ay+tb.h))})"), "from the door you can walk to the front of every shop's counter"
-    # the houses people live in: every villager's home (and the woodcutters' shacks and Hale's cottage) can be walked into from the street and back out, and every free tile of floor inside can be reached from the door
-    homes = ev("""(()=>{const bad=[];HOME_LIST.forEach(h=>{const r=h.room,d=HOME_DESIGNS[h.design];if(r.props.length!==d.props.length||d.props.some(q=>!PROPS.DEF[q[0]]))bad.push(h.id+' props');
+    # the houses people live in: every villager's home (and Hale's cottage; the two empty shacks are gone since playtest #5) can be walked into from the street and back out, and every free tile of floor inside can be reached from the door
+    homes = ev("""(()=>{const bad=[];HOME_LIST.filter(h=>!h.gone).forEach(h=>{const r=h.room,d=HOME_DESIGNS[h.design];if(r.props.length!==d.props.length||d.props.some(q=>!PROPS.DEF[q[0]]))bad.push(h.id+' props');
       const fx=r.dx,fy=r.y1-1,seen=new Set([fx+','+fy]),q=[[fx,fy]];while(q.length){const[x,y]=q.shift();for(const[a,c]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+c,k=nx+','+ny;if(seen.has(k)||nx<r.x0||nx>r.x1||ny<r.y0+3||ny>r.y1-1||INTBLK[ny*MW+nx]||!WK.includes(at(nx,ny)))continue;seen.add(k);q.push([nx,ny])}}
       let free=0;for(let y=r.y0+3;y<r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(!INTBLK[y*MW+x])free++;if(free!==seen.size)bad.push(h.id+' cut off');
       const[ox,oy]=h.out;sail=false;P.x=P.rx=ox;P.y=P.ry=oy;P.f='u';act();if(!(P.x===fx&&P.y===fy&&zoneOf(P.x,P.y)===r.z))bad.push(h.id+' in');P.f='d';act();if(!(P.x===ox&&P.y===oy))bad.push(h.id+' out');
@@ -189,9 +189,18 @@ def check(b, url):
     # the taverns: four regulars inside each, a notice board on the back wall that opens (empty until jobs are added), and tables and barrels outside that stand in the way
     tav = ev("""(()=>{const out={};['inn_settlement','inn_mountain'].forEach(k=>{const r=SHOP_ROOMS.find(s=>s.id===k).room,b=r.props.find(p=>p.id==='notices');
       const regs=NPC.filter(n=>n.regular===k&&zoneOf(n.x,n.y)===r.z&&!INTBLK[n.y*MW+n.x]).length;sail=false;visitRoom(r);const seen=new Set([P.x+','+P.y]),q=[[P.x,P.y]];while(q.length){const[x,y]=q.shift();for(const[a,c]of[[1,0],[-1,0],[0,1],[0,-1]]){const k2=(x+a)+','+(y+c);if(!seen.has(k2)&&walkable(x+a,y+c)){seen.add(k2);q.push([x+a,y+c])}}}const bar=r.props.find(p=>p.id==='bar');let miss=0;for(let y=bar.ay+2;y<r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(walkable(x,y)&&!seen.has(x+','+y))miss++;out[k+'_walk']=seen.has((b.ax+1)+','+(b.ay+2))&&miss===0;P.x=P.rx=b.ax+1;P.y=P.ry=b.ay+2;P.f='u';say('');act();
-      out[k]=[regs,$('jobboard').classList.contains('open')&&document.querySelectorAll('.jb-note').length===3];closeJobBoard()});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||!walkable(p.x,p.y));
+      out[k]=[regs,$('jobboard').classList.contains('open')&&document.querySelectorAll('.jb-note').length===3];closeJobBoard()});out.yard=YARD_PROPS.length>=8&&YARD_PROPS.every(p=>p.flat||(p.seat?walkable(p.x,p.y):!walkable(p.x,p.y)))&&SHOP_ROOMS.filter(s=>s.inn).every(s=>s.room.props.filter(p=>SEATS.includes(p.id)).every(p=>!INTBLK[p.ay*MW+p.ax]));
       P.x=P.rx=103;P.y=P.ry=218;draw();P.x=P.rx=23;P.y=P.ry=68;draw();return out})()""")
     assert tav == {"inn_settlement": [4, True], "inn_mountain": [4, True], "inn_settlement_walk": True, "inn_mountain_walk": True, "yard": True}, tav   # (you can walk from the door to the board, and to every free tile in front of the bar: no regular blocks the way)
+    # playtest #5, batch A: the notice board also reads from the tile beside it; temple names match everywhere; no island numbers on the map; long lines come in pages; the Sleep button follows you to your tent
+    assert ev("(()=>{const sr=SHOP_ROOMS.find(s=>s.id==='inn_settlement'),r=sr.room,b=r.props.find(p=>p.id==='notices'),x0=P.x,y0=P.y;P.x=b.ax+b.w;P.y=b.ay+2;const ok=[b.ax-1,b.ax,b.ax+b.w-1,b.ax+b.w].every(x=>boardAt(x,b.ay+1)===sr);P.x=x0;P.y=y0;return ok})()"), "the notice board can be read from either side of it too"
+    assert ev("['Water Temple','Fire Temple','Earth Temple','Sky Temple','Tower Temple'].every(n=>LAND.some(l=>l[0]===n))&&!LAND.some(l=>/Island \\d|Temple (of|to) /.test(l[0]))"), "the map uses the short temple names and has no island numbers"
+    assert ev("!Object.values(DLG).some(d=>Object.values(d.nodes).some(n=>/[Tt]emple (of|to) the|[Ss]ea [Tt]emple|[Aa]ir [Tt]emple|[Tt]emple [Tt]ower/.test(n.text||'')))&&!QUESTS.some(q=>q.steps.some(t=>/[Tt]emple (of|to) |Island \\d/.test(t)))"), "story text and quest steps use the same temple names, without island numbers"
+    assert ev("(()=>{const t='One two three. '.repeat(20),p=dlgPages(t);return p.length>1&&p.every(x=>x.length<=DLG_PAGE)&&p.join(' ')===t.trim()&&dlgPages('Short.').length===1})()"), "long lines are split into pages without changing the words"
+    assert ev("(()=>{dlgSay('Tester','Aaa aaa. '.repeat(30));const pages=[];for(let k=0;k<20&&dlgActive();k++){dlgAdvance();pages.push($('dlg-txt').textContent);dlgAdvance()}return !dlgActive()&&pages.length>2})()"), "tapping goes through every page and then closes"
+    assert ev("getComputedStyle($('dlg-who')).color==='rgb(0, 0, 0)'"), "the speaker's name is black"
+    assert ev("(()=>{const keep=JSON.stringify(S.placed),x0=P.x,y0=P.y,s0=sail;sail=false;S.placed=[{id:'camp_kit',x:150,y:122,big:1}];P.x=150;P.y=118;sleepBtn();const far=$('sleep').style.visibility;P.y=124;P.f='d';move('d');P.y=124;sleepBtn();const near=$('sleep').style.visibility;S.placed=JSON.parse(keep);P.x=x0;P.y=y0;sail=s0;ui();return far==='hidden'&&near==='visible'})()"), "the Sleep button shows as soon as you stand by your tent"
+    assert ev("(()=>{const sr=SHOP_ROOMS.find(s=>s.id==='inn_settlement');return sr.room.props.filter(p=>p.id==='chair'||p.id==='stool').length>=4&&sr.room.props.filter(p=>p.seat).every(p=>!INTBLK[p.ay*MW+p.ax])})()"), "the tavern's chairs and stools can be walked over"
     # tavern jobs (js/systems/jobs.js): taken at the board; deliveries paid by the person, the rest at the board; each runs its own encounter
     ev("S.jobs={};S.gold=0;closeJobBoard();ENEMIES.forEach(e=>{e.cd=1e9})")
     ev("openJobBoard('inn_mountain');[...document.querySelectorAll('.jb-note')][0].click()")
@@ -223,14 +232,15 @@ def check(b, url):
     assert ev("(()=>{const r=SHOP_ROOMS.find(q=>q.id==='barber').room,tb=r.props.find(p=>p.id==='counter4'),rug=r.props.find(p=>p.flat);return !walkable(tb.ax,tb.ay)&&!!rug&&walkable(rug.ax,rug.ay)&&r.props.some(p=>!p.flat&&INTBLK[p.ay*MW+p.ax]===1)})()"), "counters and furniture are in the way, but rugs are not"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));SCENE=null;BATTLE=null;sail=false;P.x=P.rx=91;P.y=P.ry=217;P.f='u';act()")
     assert ev("zoneOf(P.x,P.y)>=30&&intrOf(P.x,P.y).key==='shop_apothecary'&&P.x===intrOf(P.x,P.y).dx&&P.y===intrOf(P.x,P.y).y1-1"), "facing the shop's door and pressing Use walks you into its room"
-    ev("(()=>{const a=NPC.find(n=>n.n==='Astrid');P.x=P.rx=a.x;P.y=P.ry=a.y+2;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&/Astrid/.test($('menu-t').textContent)&&mn.opts.join()==='Buy,Sell,Cancel'"), "pressing Use at the counter talks to the shopkeeper behind it"
+    ev("(()=>{const a=NPC.find(n=>n.n==='Astrid');P.x=P.rx=a.x;P.y=P.ry=a.y+2;P.f='u';act()})()"); assert ev("dlgActive()&&flag('recipe_tonic')&&/Minor health tonic/.test($('dlg-txt').textContent+DLG.astrid_tonic.nodes.a.text)"), "the first time you speak to Astrid she teaches you the Minor health tonic (playtest #5)"
+    ev("for(let k=0;k<12&&dlgActive();k++)dlgAdvance()"); assert ev("$('menu').classList.contains('open')&&/Astrid/.test($('menu-t').textContent)&&mn.opts.join()==='Buy,Sell,Cancel'"), "pressing Use at the counter talks to the shopkeeper behind it"
     ev("$('menu').classList.remove('open');mn=null;(()=>{const r=intrOf(P.x,P.y);P.x=P.rx=r.dx;P.y=P.ry=r.y1-1;P.f='d';act()})()"); assert ev("zoneOf(P.x,P.y)===0&&P.x===91&&P.y===217"), "facing the door from inside leads back out to the street"
     assert ev("(()=>{let bad=0;INTR.forEach(r=>{visitRoom(r);try{draw()}catch(e){bad++}});sail=false;P.x=P.rx=91;P.y=P.ry=217;return bad})()") == 0, "every room draws without errors (props, floors, walls and light)"
     ev("S.gold=1000;S.bag.healing_potion=0;P.x=P.rx=91;P.y=P.ry=218;P.f='u';act();document.querySelectorAll('#menu button,#menu .opt').forEach(()=>{});openTrader('apothecary','buy')")
-    assert ev("/Healing potion/.test($('items').textContent)&&/Poison vial/.test($('items').textContent)&&/Swiftness/.test($('items').textContent)"), "apothecary stock"
-    ev("[...document.querySelectorAll('#items .it')].find(r=>/^Healing potion/.test(r.textContent)).querySelector('button').click()")
-    assert ev("[S.gold,S.bag.healing_potion]") == [940, 1], "buying a healing potion costs 60"
-    ev("openTrader('apothecary','sell')"); assert ev("/Healing potion x1/.test($('items').textContent)"), "she buys potions back"
+    assert ev("/Minor health tonic/.test($('items').textContent)&&/Minor health potion/.test($('items').textContent)&&/Superior health elixir/.test($('items').textContent)&&/Poison vial/.test($('items').textContent)&&/Swiftness/.test($('items').textContent)"), "apothecary stock"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>/^Minor health potion/.test(r.textContent)).querySelector('button').click()")
+    assert ev("[S.gold,S.bag.healing_potion]") == [925, 1], "buying a minor health potion costs 75 (60 and the playtest #5 shop prices)"
+    ev("openTrader('apothecary','sell')"); assert ev("/Minor health potion x1/.test($('items').textContent)"), "she buys potions back"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'))")
     # ore: only in the mountain country (x<100, y<100), few of them, gold and silver rare, every outcrop reachable on foot from the Mountain Town's north gate; gold is mined, regrows slowly and is sold (not bought) at Garrick's
     ore = ev("(()=>{const c={},out=[];for(let y=0;y<WH;y++)for(let x=0;x<MW;x++){const t=at(x,y);if(ORE[t]){c[t]=(c[t]||0)+1;if(x>=100||y>=100)out.push([x,y])}}"
@@ -331,10 +341,10 @@ def check(b, url):
               "P.x=P.rx=D.dx+2;P.y=P.ry=D.y0+2;P.f='u';act();r.toStorage=zoneOf(P.x,P.y)===St.z;P.f='d';act();r.backDeck2=zoneOf(P.x,P.y)===D.z;"
               "const bed=(()=>{for(let y=Q.y0;y<=Q.y1;y++)for(let x=Q.x0;x<=Q.x1;x++)if(at(x,y)===129)return[x,y]})();P.x=P.rx=Q.dx;P.y=P.ry=Q.y1-1;"
               "P.x=P.rx=bed[0];P.y=P.ry=bed[1]+1;P.f='u';const d0=S.day;S.hp=5;act();r.slept=S.day===d0+1&&S.hp>5&&zoneOf(P.x,P.y)===Q.z;"
-              "const cr=(()=>{for(let y=St.y0;y<=St.y1;y++)for(let x=St.x0;x<=St.x1;x++)if(at(x,y)===130)return[x,y]})();P.x=P.rx=cr[0];P.y=P.ry=cr[1]+1;P.f='u';S.bag.driftwood_rod=1;S.bag.sardine=30;act();r.storeOpen=$('store').classList.contains('open')&&/storage/.test($('st').textContent);"
-              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[1].click();r.stored=(S.ships.schooner.store.sardine||0)===30&&!S.bag.sardine;"
-              "[...document.querySelectorAll('#items .it')].find(x=>/^Sardine/.test(x.innerText)).querySelectorAll('button')[0].click();r.took=S.ships.schooner.store.sardine===29&&S.bag.sardine===1;"
-              "S.bag.copper_ore=500;openStorage('schooner');[...document.querySelectorAll('#items .it')].find(x=>/^Copper ore/.test(x.innerText)).querySelectorAll('button')[1].click();r.capacity=Object.values(S.ships.schooner.store).reduce((a,b)=>a+b,0)===ITEMS.schooner.store;"
+              "const cr=(()=>{for(let y=St.y0;y<=St.y1;y++)for(let x=St.x0;x<=St.x1;x++)if(at(x,y)===130)return[x,y]})();P.x=P.rx=cr[0];P.y=P.ry=cr[1]+1;P.f='u';S.bag.driftwood_rod=1;S.bag.sardine=30;act();r.storeOpen=$('stash').classList.contains('open')&&/storage/.test($('sh-title').textContent);"
+              "window.shDo=(side,id,label)=>{SH.sel={side,id};shDraw();[...$('sh-btns').children].find(b=>b.textContent===label).click()};shDo('bag','sardine','Store all');r.stored=(S.ships.schooner.store.sardine||0)===30&&!S.bag.sardine;"
+              "shDo('in','sardine','Take 1');r.took=S.ships.schooner.store.sardine===29&&S.bag.sardine===1;"
+              "S.bag.copper_ore=500;openStorage('schooner');shDo('bag','copper_ore','Store all');r.capacity=Object.values(S.ships.schooner.store).reduce((a,b)=>a+b,0)===ITEMS.schooner.store;"
               "document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));P.x=P.rx=D.dx;P.y=P.ry=D.y1-2;P.f='d';act();r.helm=sail&&P.x===172&&P.y===190&&zoneOf(P.x,P.y)===0;return r})()")
     assert all(flow.values()), flow
     ev("S.eq.boat='rowboat';sail=false;ui()")
@@ -421,7 +431,7 @@ def check(b, url):
     t = shop("tailor", "buy"); assert "Cloth" in t and "Leather" in t and "Rope" not in t, ("Wynn sells cloth and leather", t)
     t = shop("tailor", "sell", "S.bag.cloth=2;S.bag.leather=1;S.bag.rope=1"); assert "Cloth x2" in t and "Leather x1" in t and not any(x.startswith("Rope") for x in t), ("and buys them", t)
     t = shop("apothecary", "buy"); assert "Basil" in t and "Moss" in t and "Death cap mushroom" in t and not any("fang" in x for x in t), ("Astrid sells herbs and mushrooms but not centipede fangs", t)
-    t = shop("apothecary", "sell", "S.bag.basil=3;S.bag.centipede_fang=2;S.bag.healing_potion=1;S.bag.carrot=1"); assert "Basil x3" in t and "Centipede fang x2" in t and "Healing potion x1" in t and not any(x.startswith("Carrot") for x in t), ("she buys herbs, fangs and potions, not vegetables", t)
+    t = shop("apothecary", "sell", "S.bag.basil=3;S.bag.centipede_fang=2;S.bag.healing_potion=1;S.bag.carrot=1"); assert "Basil x3" in t and "Centipede fang x2" in t and "Minor health potion x1" in t and not any(x.startswith("Carrot") for x in t), ("she buys herbs, fangs and potions, not vegetables", t)
     assert ev("[...document.querySelectorAll('#items .it')].filter(r=>/Basil|Centipede fang/.test(r.querySelector('b').textContent)).map(r=>r.textContent.match(/Sells for (\\d+)g/)[1]).join()") == "5,12", "she pays what Odo paid for herbs (5 for basil), 12 for a fang, and half price for potions"
     t = shop("jeweller", "sell", "S.bag.silver_ore=1;S.bag.gold_ore=1;S.bag.ring_vigor=1"); assert "Silver ore x1" in t and "Gold ore x1" in t and "Ring of Vigor x1" in t, ("Lucie buys gold and silver ore and jewellery", t)
     ev("S.bag={};S.bag.basil=2;S.bag.sardine=2;S.bag.grilled_sardine=1;S.bag.carrot=1;openGeneral('sell')"); t = ev("[...document.querySelectorAll('#items .it b')].map(b=>b.textContent)"); assert "Sardine x2" in t and "Carrot x1" in t and "Grilled sardine x1" in t and not any(x.startswith("Basil") for x in t), ("Odo buys fish, vegetables and meals, but no longer herbs", t)
@@ -431,21 +441,30 @@ def check(b, url):
     assert ev("['Odo','Bram','Murl','Lucie'].every(nm=>{const n=NPC.find(q=>q.n===nm);return n&&n.shopRoom&&zoneOf(n.x,n.y)>=30})&&BL.filter(b=>b.sign==='tavern').length===2"), "Odo, Bram, Murl and Lucie keep shop inside, and each town has a tavern"
     assert ev("SHOP_ROOMS.every(s=>at(s.door[0],s.door[1])===5&&WK.includes(at(s.door[0],s.door[1]+1))&&ENTR.some(e=>e.x===s.door[0]&&e.y===s.door[1])&&BL.some(b=>b.x<=s.door[0]&&s.door[0]<b.x+b.w&&b.y+1===s.door[1]))"), "every shop door is the middle of a building's bottom row with the street in front"
     ev("sail=false;SCENE=null;BATTLE=null;S.gold=250;S.hp=1;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})()")
-    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (100g),Double room (100g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
-    ev("mn.i=1;menuPick()"); assert ev("S.gold===150&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 100 gold and lets you sleep"
+    assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Single room (125g),Double room (125g),Talk,Cancel'"), "the innkeeper offers rooms across the bar"
+    ev("mn.i=1;menuPick()"); assert ev("S.gold===125&&inInn()&&intrOf(P.x,P.y).guest&&$('sleep').style.visibility==='visible'"), "a room costs 125 gold and lets you sleep"
     d0 = ev("S.day"); ev("sleep()"); pg.wait_for_timeout(300); assert ev("S.day")==d0+1 and ev("S.hp>=maxHp()"), "sleeping in the rented room starts the next day and restores health"
     ev("(()=>{const r=intrOf(P.x,P.y);P.x=P.rx=r.dx;P.y=P.ry=r.y1-1;P.f='d';act()})()"); assert ev("!inInn()&&zoneOf(P.x,P.y)===SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.z"), "the guest room's door leads back down into the tavern"
     ev("S.gold=50;(()=>{const k=NPC.find(n=>n.n==='Innkeeper Hobb'),tb=SHOP_ROOMS.find(q=>q.id==='inn_settlement').room.props.find(p=>p.id==='bar');P.x=P.rx=k.x;P.y=P.ry=tb.ay+tb.h;P.f='u';act()})();mn.i=0;menuPick()"); assert ev("S.gold===50&&!inInn()"), "without 100 gold you cannot rent a room"
     ev("$('menu').classList.remove('open');mn=null;S.gold=Math.max(S.gold,5000)")
     # G3: the carpenter's furniture
     t = shop("carpenter", "buy"); assert all(x in t for x in ["Single bed", "Double bed", "Bookcase", "Table", "Chair", "Small carpet", "Large carpet", "Chest of drawers", "Storage crate", "Weapon rack", "Tool rack"]), ("Alder sells all eleven pieces of furniture", t)
-    assert ev("[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',350],['storage_crate',120],['weapon_rack',300],['tool_rack',250]].every(([i,p])=>CARPENTER.find(s=>s[0]==='Furniture')[1].some(r=>r[0]===i&&r[1]===p)&&ITEMS[i].kind==='furniture')"), "furniture prices are as agreed"
+    assert ev("[['bed_single',300],['bed_double',600],['bookcase',250],['table',150],['chair',60],['carpet_small',80],['carpet_large',200],['chest_drawers',400],['storage_crate',280],['weapon_rack',300],['tool_rack',250]].every(([i,p])=>CARPENTER.find(s=>s[0]==='Furniture')[1].some(r=>r[0]===i&&r[1]===p)&&ITEMS[i].kind==='furniture')&&shopPrice(400)===500&&shopPrice(280)===350&&ITEMS.chest_drawers.furn.store.cap===20&&ITEMS.storage_crate.furn.store.cap===60"), "furniture prices are as agreed (playtest #5: drawers hold 20 for 500 gold, a crate 60 for 350)"
+    assert ev("(()=>{const secs=CARPENTER.map(s=>s[0]).join();const kit=Object.keys(ITEMS).filter(i=>i.startsWith('f_'));return secs==='Timber,Furniture,Beds,Decor,Lights,Raw wood'&&kit.length>=60&&kit.every(i=>PROPS.DEF[ITEMS[i].furn.prop]&&CARPENTER.some(s=>s[1].some(r=>r[0]===i)))&&['f_sofa','f_grandclock','f_bk_gold','f_woodbear','f_totem','f_lamp'].every(i=>ITEMS[i])&&ITEMS.f_wardrobe.furn.store.cap===20&&ITEMS.f_bunk.furn.bed===1})()"), "the carpenter sells the design kit's home furniture, in tabs"
+    assert ev("(()=>{let f=0;for(let x=26;x<=33;x++){if(at(x,152)===8)f++;if(at(x,160)===8)f++}return f>=14&&at(33,158)!==8&&YARD_PROPS.filter(p=>p.at==='carpenter').length>=6&&YARD_PROPS.some(p=>p.id==='totem')})()"), "Alder's yard is fenced, with an opening towards the road and his carvings inside"
+    # playtest #5: recipes need skill levels; the tonic is learned from Astrid; the healing ladder
+    assert ev("ITEMS.minor_tonic.hp===15&&ITEMS.healing_potion.hp===30&&ITEMS.greater_healing.hp===60&&ITEMS.elixir_life.hp>=150&&ITEMS.healing_potion.n==='Minor health potion'&&ITEMS.greater_healing.n==='Superior health elixir'&&[['minor_tonic',0],['healing_potion',3],['greater_healing',6],['elixir_life',10]].every(([o,l])=>{const r=RECIPES.find(q=>q.out===o);return r&&(recReq(r).alchemy||0)===l})"), "healing comes in four steps, brewed at Alchemy 0, 3, 6 and 10"
+    assert ev("(()=>{const pw=ids=>ids.reduce((a,i)=>a+FOES[i].hp*(FOES[i].hit[0]+FOES[i].hit[1])/2,0)/ids.length,q=[['pirate_grunt','pirate_gunner'],['earth_grunt','earth_gunner'],['sea_cutthroat','sea_gunner','sea_mate'],['sky_grunt','sky_gunner','sky_bruiser'],['raid_raider','raid_gunner','raid_brute'],['final_raider','final_gunner','final_brute']].map(pw);return q.every((v,i)=>!i||v>q[i-1])&&q[4]/q[3]>1.4&&q[5]/q[4]>1.4})()"), "pirates grow tougher with every quest, more so after At the Top of the World (playtest #5)"
+    assert ev("(()=>{const f0=S.flags.recipe_tonic,x0={...S.xp};delete S.flags.recipe_tonic;crSt='alchemy';const hid=!recipesAt().some(r=>r.out==='minor_tonic');setFlag('recipe_tonic');const shown=recipesAt().some(r=>r.out==='minor_tonic');S.xp.alchemy=0;const lock=!recipesAt().find(r=>r.out==='healing_potion')||!reqOk(recipesAt().find(r=>r.out==='healing_potion'));S.xp=x0;if(f0)S.flags.recipe_tonic=f0;return hid&&shown&&lock})()"), "the tonic is hidden until Astrid teaches it, and the minor potion waits for Alchemy 3"
+    assert ev("(()=>{const x0={...S.xp},b0={...S.bag},r=RECIPES.find(q=>q.out==='iron_sword'),c=RECIPES.find(q=>q.out==='storage_crate');S.bag.iron_bar=9;S.bag.hardwood_plank=9;S.bag.softwood_plank=9;S.bag.rope=9;S.xp.crafting=LV[4];S.xp.sword=0;const a=!canMake(r);S.xp.sword=LV[3];const b=canMake(r);S.xp.crafting=LV[0];const cr=!canMake(c);S.xp.crafting=LV[1];const cr2=canMake(c)&&c.station==='bench';S.xp=x0;S.bag=b0;return a&&b&&cr&&cr2})()"), "an iron sword needs Crafting 5 and Sword 4; a storage crate needs Crafting 2 at the workbench"
+    ev("S.xp.crafting=LV[4];S.xp.sword=0;openCraft('forge');crSel=recipesAt().findIndex(r=>r.out==='iron_sword');drawCraft()"); assert ev("/Skill:/.test($('cr-det').textContent)&&/Sword 0\\/4/.test($('cr-det').textContent)&&/Crafting 5\\/5/.test($('cr-det').textContent)&&$('cr-go').disabled"), "the crafting screen shows the skill levels a recipe needs"
+    ev("closeCraft();S.xp={}")
     ev("sail=false;SCENE=null;BATTLE=null;document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));mn=null;S.sta=100;S.placed=[];S.bag={};(()=>{let sp=null;for(let y=20;y<WH-12&&!sp;y++)for(let x=10;x<MW-12&&!sp;x++){let ok=true;for(let j=0;j<9&&ok;j++)for(let i=0;i<9&&ok;i++)if(![1,2].includes(at(x+i,y+j))||NPC.some(n=>n.x===x+i&&n.y===y+j)||ENEMIES.some(e=>e.alive&&e.x===x+i&&e.y===y+j))ok=false;if(ok)sp=[x+4,y+4]}window.__sp=sp;P.x=P.rx=sp[0];P.y=P.ry=sp[1];P.f='d';S.placed.push({id:'camp_kit',x:sp[0]+1,y:sp[1]-2,big:1});S.home={x:sp[0]-1,y:sp[1]-3,roof:'thatch'}})()")
     assert ev("!!window.__sp"), "found open ground for the furniture tests"
     ev("S.bag.storage_crate=1;placing='storage_crate';act()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='storage_crate');return !!p&&p.x===P.x&&p.y===P.y+1&&!!p.st&&!walkable(p.x,p.y)&&!S.bag.storage_crate&&!placing})()"), "a storage crate is placed in front of you at camp and blocks the way"
     ev("S.bag.sword=1;S.bag.pickaxe=1;S.bag.carrot=3;S.bag.weapon_rack=1;S.bag.tool_rack=1;S.bag.bed_single=1;S.bag.carpet_large=1;S.bag.chair=1;P.f='l';placing='weapon_rack';act()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return !!p&&p.x===P.x-3&&p.y===P.y&&!walkable(p.x,p.y)&&!walkable(p.x+2,p.y)&&!placedAt(P.x,P.y)})()"), "a three-wide weapon rack reaches away from you, so you are never inside it"
-    ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');openFurn(p)})()"); t = ev("[...document.querySelectorAll('#items .it b')].map(b=>b.textContent)"); assert any(x.startswith("Old Sword") for x in t) and not any(x.startswith("Pickaxe") for x in t) and not any(x.startswith("Carrot") for x in t), ("a weapon rack takes weapons only", t)
-    ev("[...document.querySelectorAll('#items .it')].find(r=>/Old Sword/.test(r.textContent)&&r.querySelector('button')).querySelector('button').click()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return p.st.sword===1&&!S.bag.sword})()"), "a weapon goes onto the rack and out of the bag"
+    ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');openFurn(p)})()"); t = ev("[...document.querySelectorAll('#sh-bag .bcell')].map(b=>ITEMS[b.dataset.id].n)"); assert any(x.startswith("Old Sword") for x in t) and not any(x.startswith("Pickaxe") for x in t) and not any(x.startswith("Carrot") for x in t), ("a weapon rack takes weapons only", t)
+    ev("document.querySelector('#sh-bag .bcell[data-id=sword]').click();document.querySelector('#sh-bag .bcell[data-id=sword]').click()"); assert ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');return p.st.sword===1&&!S.bag.sword})()"), "a weapon goes onto the rack and out of the bag"
     ev("draw(performance.now())"); ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');P.x=P.rx=p.x+1;P.y=P.ry=p.y+1;P.f='u';act()})()"); assert ev("$('menu').classList.contains('open')&&mn.opts.join()==='Open,Move,Pick up,Cancel'"), "facing the rack offers Open, Move and Pick up"
     ev("mn.i=2;menuPick()"); assert ev("S.placed.some(q=>q.id==='weapon_rack')&&!S.bag.weapon_rack"), "a rack with things on it cannot be picked up"
     ev("(()=>{const p=S.placed.find(q=>q.id==='weapon_rack');S.bag.sword=(S.bag.sword||0)+p.st.sword;p.st={};P.f='u';act();mn.i=2;menuPick()})()"); assert ev("!S.placed.some(q=>q.id==='weapon_rack')&&S.bag.weapon_rack===1"), "an empty rack picks up into the bag"
@@ -462,38 +481,41 @@ def check(b, url):
     ev("S.placed=[];S.home=null;S.bag={};document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));mn=null;placing=null")
     # F1: the new Bag (sections on the left, a grid of squares on the right)
     ev("closeBag();S.bag={};S.eq={};S.bag.furnace_x=0;S.bag.sardine=3;S.bag.carrot=2;S.bag.copper_ore=5;S.bag.grilled_sardine=2;S.bag.healing_potion=1;S.bag.sword=1;S.bag.pickaxe=1;S.bag.driftwood_rod=1;S.bag.ring_vigor=1;S.bag.cloth_hood=1;S.bag.storage_crate=1;S.bag.standard_bench=1;S.bag.knife=1;S.eq.weapon='sword';S.eq.ring='ring_vigor';delete S.bag.furnace_x;openBag()")
-    assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Weapons,Clothing,Tools,Keepsakes'"), "the bag has eight sections, in the order Jack drew them"
-    assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(3).includes('healing_potion')&&n(4).join()==='sword'&&n(5).includes('ring_vigor')&&n(5).includes('cloth_hood')&&n(6).includes('pickaxe')&&n(6).includes('knife')&&n(6).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
-    assert ev("document.querySelectorAll('#btabs .btab').length===8&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
-    ev("bs=4;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
+    assert ev("SECTIONS.map(q=>q.t).join()==='Home Items,Ingredients,Materials,Food,Potions,Weapons,Clothing,Tools,Keepsakes'"), "the bag has nine sections (Potions since playtest #5), in the order Jack drew them"
+    assert ev("(()=>{const n=i=>cellsOf(i).map(c=>c.id);return n(0).includes('storage_crate')&&n(0).includes('standard_bench')&&n(1).includes('sardine')&&n(1).includes('carrot')&&n(2).includes('copper_ore')&&n(3).includes('grilled_sardine')&&n(4).includes('healing_potion')&&!n(3).includes('healing_potion')&&n(5).join()==='sword'&&n(6).includes('ring_vigor')&&n(6).includes('cloth_hood')&&n(7).includes('pickaxe')&&n(7).includes('knife')&&n(7).includes('driftwood_rod')})()"), "everything sits in its section (rings in Clothing, tools in Tools, furniture in Home Items)"
+    assert ev("document.querySelectorAll('#btabs .btab').length===9&&document.querySelectorAll('#bgrid .bcell').length===cellsOf(0).length&&getComputedStyle($('bgrid')).gridTemplateColumns.split(' ').length===5"), "the tabs are down the left and the squares are five across"
+    ev("bs=5;bc=0;drawBag()"); assert ev("document.querySelector('#bgrid .bcell .be')!==null&&/Old Sword/.test($('btxt').textContent)"), "an equipped square carries an E and its name shows below"
     ev("bs=3;bc=cellsOf(3).findIndex(c=>c.id==='grilled_sardine');drawBag();S.hp=10;bagPick()"); assert ev("bpop&&bpop.opts[0]==='Eat'"), "tapping a food square offers Eat"
     ev("popChoose()"); assert ev("S.hp>10&&S.bag.grilled_sardine===1"), "eating from the new bag works"
-    ev("bs=5;bc=cellsOf(5).findIndex(c=>c.id==='cloth_hood');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Equip'"), "clothing squares offer Equip"
+    ev("bs=6;bc=cellsOf(6).findIndex(c=>c.id==='cloth_hood');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Equip'"), "clothing squares offer Equip"
     ev("popChoose()"); assert ev("S.eq.helmet==='cloth_hood'"), "equipping from the new bag works"
     ev("bs=0;bc=cellsOf(0).findIndex(c=>c.id==='storage_crate');drawBag();bagPick()"); assert ev("bpop&&bpop.opts[0]==='Place'"), "home items offer Place"
     ev("bpop=null;popRender();bs=2;bc=0;drawBag();bagPick()"); assert ev("!bpop"), "materials have nothing to do"
-    ev("bs=5;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
+    ev("bs=6;bc=0;drawBag();bagGo(1);bagGo(1)"); assert ev("SECTIONS[bs].t==='Keepsakes'&&$('bag').classList.contains('open')"), "the next-section keys wrap round"
     ev("closeBag();S.bag={};S.eq={}")
     # F2: the Vendors screen (sections on the left, a grid of squares, the chosen one's buttons below)
     ev("S.gold=5000;S.bag={};S.eq={};openTrader('smith','buy')"); assert ev("$('store').classList.contains('grid')&&[...document.querySelectorAll('#stabs .btab')].map(b=>b.textContent).join()==='Materials,Weapons,Tools,Armour,Objects'"), "Garrick's screen shows his sections down the left"
     assert ev("document.querySelectorAll('#sgrid .bcell').length===4&&getComputedStyle($('sgrid')).gridTemplateColumns.split(' ').length===5&&/Copper ore/.test($('stxt').textContent)&&$('sbtns').children.length===1"), "the squares are five across and the first is selected with its Buy button below"
-    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/30g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4970&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
+    ev("document.querySelectorAll('#sgrid .bcell')[1].click()"); assert ev("/Tin ore/.test($('stxt').textContent)&&/38g/.test($('sbtns').textContent)"), "tapping a square shows its name and price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4962&&count('tin_ore')===1&&/Tin ore/.test($('stxt').textContent)"), "the button below buys it, and the same square stays selected"
     ev("document.querySelector('#sswitch button').click()"); assert ev("/^Selling/.test($('sswitch').textContent)&&document.querySelectorAll('#sgrid .bcell').length>=1"), "the bar across the top switches to selling and shows what you can sell"
-    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4985&&!count('tin_ore')"), "selling from the grid pays half price"
+    ev("$('sbtns').children[0].click()"); assert ev("S.gold===4977&&!count('tin_ore')"), "selling from the grid pays half price"
     ev("openGeneral('buy')"); assert ev("[...document.querySelectorAll('#stabs .btab')].length>=1&&document.querySelectorAll('#sgrid .bcell canvas').length>=3"), "Odo's goods are squares too"
-    ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("!$('store').classList.contains('grid')"), "crates keep their own list screen"
-    ev("$('store').classList.remove('open')")
+    ev("S.bag.sardine=2;openStash('Test crate',{},60,()=>{},undefined)"); assert ev("$('stash').classList.contains('open')&&!$('store').classList.contains('open')&&$('sh-num').textContent==='0 / 60'&&!!document.querySelector('#sh-bag .bcell[data-id=sardine] canvas')"), "crates open the storage screen: squares of what you carry and a fill count (playtest #5)"
+    ev("document.querySelector('#sh-bag .bcell[data-id=sardine]').click()"); assert ev("SH.sel.id==='sardine'&&/Store all/.test($('sh-btns').textContent)&&!SH.st.sardine"), "tapping a square chooses it and shows Store 1 and Store all"
+    ev("document.querySelector('#sh-bag .bcell[data-id=sardine]').click()"); assert ev("SH.st.sardine===1&&S.bag.sardine===1&&$('sh-num').textContent==='1 / 60'&&!!document.querySelector('#sh-in .bcell[data-id=sardine]')"), "tapping it again stores one"
+    ev("closeStash()")
+    ev("$('store').classList.remove('open');closeStash()")
     # F3: the Equipment screen (helmet, armour, boots / amulet, you, ring / weapon, equipped tool) and one tool in hand
-    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:'rod',rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bag.pickaxe=1;S.bag.woodcutters_axe=1;S.bag.knife=1;S.bag.iron_pickaxe=1;S.bag.ring_vigor=1;S.bag.amulet_vital=1;S.eq.pickaxe='iron_pickaxe';S.eq.axe='woodcutters_axe';S.eq.knife='knife';S.sta=100;openEquip()")
-    assert ev("EQ_SLOTS.map(q=>q[0]).join()==='helmet,armour,boots,weapon,amulet,ring,tool'&&['helmet','armour','boots','weapon','amulet','ring','tool'].every(k=>$('eq-'+k))&&/Driftwood/.test($('eq-tool').textContent)"), "the equipment screen has the nine boxes of the sketch, the tool box showing the rod in hand"
-    assert ev("(()=>{const r=k=>$('eq-'+k).getBoundingClientRect(),c=$('eqs-pt').getBoundingClientRect();return r('helmet').left<c.left&&r('armour').left<c.left&&r('boots').left<c.left&&r('weapon').left>c.right&&r('tool').left>c.right&&r('amulet').bottom<=c.top+2&&r('ring').top>=c.bottom-2&&r('helmet').top<r('armour').top&&r('armour').top<r('boots').top})()"), "the boxes sit where Jack drew them"
-    ev("eqPick='tool';drawEquip()"); assert ev("[...document.querySelectorAll('#eqs-pick .eqrow')].map(r=>r.querySelector('div').firstChild.textContent).join()==='Driftwood rod,Pickaxe,Iron Pickaxe,Woodcutter\\'s axe,Knife,Put it away'||document.querySelectorAll('#eqs-pick .eqrow').length>=5"), "tapping the tool box lists every tool you own"
-    ev("document.querySelectorAll('#eqs-pick .eqrow')[2].click()"); assert ev("S.eq.tool==='pickaxe'&&S.eq.pickaxe==='iron_pickaxe'&&/Iron/.test($('eq-tool').textContent)"), "choosing a tool puts it in your hand"
-    ev("S.eq.tool='rod';closeEquip();P.x=P.rx=window.__sp?window.__sp[0]:P.x;ENEMIES.forEach(e=>{e.alive=false;e.resp=1e9});M[60*MW+60]=15;P.x=P.rx=60;P.y=P.ry=61;P.f='u';sail=false;gather(60,60,15)"); assert ev("/Equip your iron pickaxe in the Equipment menu first/.test($('msg').textContent)&&M[60*MW+60]===15"), "with the rod in hand, mining says to equip the pickaxe first"
+    ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:null,rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bag.pickaxe=1;S.bag.woodcutters_axe=1;S.bag.knife=1;S.bag.iron_pickaxe=1;S.bag.ring_vigor=1;S.bag.amulet_vital=1;S.eq.pickaxe='iron_pickaxe';S.eq.axe='woodcutters_axe';S.eq.knife='knife';S.sta=100;openEquip()")
+    assert ev("EQ_SLOTS.map(q=>q[0]).join()==='helmet,armour,boots,weapon,amulet,ring,rod,tool'&&['helmet','armour','boots','weapon','amulet','ring','rod','tool'].every(k=>$('eq-'+k))&&/Driftwood/.test($('eq-rod').textContent)&&!/Driftwood/.test($('eq-tool').textContent)&&!!eq('rod')"), "the equipment screen has the boxes of the sketch plus the Rod box (playtest #5), and the rod is ready to fish with"
+    assert ev("(()=>{const r=k=>$('eq-'+k).getBoundingClientRect(),c=$('eqs-pt').getBoundingClientRect();return r('helmet').left<c.left&&r('armour').left<c.left&&r('boots').left<c.left&&r('weapon').left>c.right&&r('tool').left>c.right&&r('rod').left>c.right&&r('rod').top>r('weapon').top&&r('rod').top<r('tool').top&&r('amulet').bottom<=c.top+2&&r('ring').top>=c.bottom-2&&r('helmet').top<r('armour').top&&r('armour').top<r('boots').top})()"), "the boxes sit where Jack drew them"
+    ev("eqPick='tool';drawEquip()"); assert ev("[...document.querySelectorAll('#eqs-pick .eqrow')].map(r=>r.querySelector('div').firstChild.textContent).join()==='Pickaxe,Iron pickaxe,Woodcutter\\'s axe,Knife'"), "tapping the tool box lists every hand tool you own (the rod has its own box)"
+    ev("document.querySelectorAll('#eqs-pick .eqrow')[1].click()"); assert ev("S.eq.tool==='pickaxe'&&S.eq.pickaxe==='iron_pickaxe'&&/Iron/.test($('eq-tool').textContent)"), "choosing a tool puts it in your hand"
+    ev("S.eq.tool=null;closeEquip();P.x=P.rx=window.__sp?window.__sp[0]:P.x;ENEMIES.forEach(e=>{e.alive=false;e.resp=1e9});M[60*MW+60]=15;P.x=P.rx=60;P.y=P.ry=61;P.f='u';sail=false;gather(60,60,15)"); assert ev("/Equip your iron pickaxe in the Equipment menu first/.test($('msg').textContent)&&M[60*MW+60]===15"), "with empty hands, mining says to equip the pickaxe first"
     ev("S.eq.tool='pickaxe';S.sta=100;gather(60,60,15)"); assert ev("/Clink|gathered/.test($('msg').textContent)"), "with the pickaxe in hand it works"
     ev("S.eq.tool='axe';S.sta=100;M[60*MW+60]=15;gather(60,60,15)"); assert ev("/Equip your iron pickaxe/.test($('msg').textContent)"), "the axe in hand cannot mine"
-    ev("S.eq.tool=null;S.eq.tool='knife';openBag();bs=6;bc=0;drawBag()"); assert ev("cellsOf(6).filter(c=>c.eq).map(c=>c.id).join()==='knife'"), "the Bag marks only the tool in your hand with an E"
+    ev("S.eq.tool=null;S.eq.tool='knife';openBag();bs=7;bc=0;drawBag()"); assert ev("cellsOf(7).filter(c=>c.eq).map(c=>c.id).join()==='driftwood_rod,knife'"), "the Bag marks the tool in your hand and your rod with an E"
     ev("closeBag();S.eq.tool='rod';S.eq={...S.eq};S.bag={};S.eq.weapon=null;S.eq.pickaxe=null;S.eq.axe=null;S.eq.knife=null;S.eq.ring=null;S.eq.amulet=null;S.eq.tool='rod';S.eq.rod='driftwood_rod';S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.eq.weapon='wooden_sword'")
     # F4: carrying space (20 slots, a stack of 99, keys/letters/worn things take none; rewards always arrive)
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));sail=false;SCENE=null;BATTLE=null;S.bag={};S.eq={tool:'rod',rod:'driftwood_rod',weapon:'wooden_sword'};S.bag.driftwood_rod=1;S.bag.wooden_sword=1;S.bagId='satchel'")
@@ -542,9 +564,17 @@ def check(b, url):
     assert ev("(()=>{const o=NPC.find(q=>q.n==='Odo');return flag('t_area_done')&&wasSeen('trg:t_area')&&o.x===37&&o.y===22})()"), "flags, seen rows and moved people survive a reload"
     ev("S.gold=0;P.x=P.rx=11;P.y=P.ry=11;fireTriggers('step')"); assert ev("S.gold===0"), "a row already fired does not fire again after a reload"
     # the buttons and the Menu screen: Bag, Quests, Skills, Map and Menu in one row; Menu shows the summary with Save game and Load game (no Quests); Quests is its own screen
-    assert ev("[...$('bagbtn').parentElement.children].map(b=>b.textContent).join()==='Bag,Quests,Skills,Map,Menu'&&[...$('ctx').children].map(b=>b.textContent).join()==='Deck,Sleep'"), "the button row is Bag, Quests, Skills, Map, Menu, with Deck and Sleep in their own row"
+    assert ev("[...$('bagbtn').parentElement.children].map(b=>b.textContent).join()==='Bag,Quests,Map,Character'&&[...$('ctx').children].map(b=>b.textContent).join()==='Deck,Sleep'"), "the button row is Bag, Quests, Map, Character (playtest #5), with Deck and Sleep in their own row"
     pg.tap("#chbtn"); pg.wait_for_timeout(200)
-    assert ev("$('ch').classList.contains('open')&&$('ch-title').textContent==='MENU'&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)&&!document.getElementById('ch-quests')"), "Menu opens the summary, without a Quests button"
+    assert ev("$('ch').classList.contains('open')&&$('ch-title').textContent==='CHARACTER'&&[...document.querySelectorAll('#ch .chtabs button')].map(b=>b.textContent).join()==='Info,Equipment,Skills'&&/Day/.test($('ch-info').textContent)&&/Gold/.test($('ch-info').textContent)&&!document.getElementById('ch-quests')"), "Menu opens the summary, without a Quests button"
+    # playtest #5: the Character screen's tabs switch between Info, Equipment and Skills, one at a time; the C, E and K keys open it on the right tab
+    ev("document.querySelector('#ch .chtabs button[data-tab=equip]').click()"); assert ev("$('eqs').classList.contains('open')&&!$('ch').classList.contains('open')&&document.querySelector('#eqs .chtabs button.sel').dataset.tab==='equip'"), "the Equipment tab"
+    ev("document.querySelector('#eqs .chtabs button[data-tab=skills]').click()"); assert ev("$('skills').classList.contains('open')&&!$('eqs').classList.contains('open')&&/Fishing/.test($('sk-list').textContent)"), "the Skills tab"
+    ev("document.querySelector('#skills .chtabs button[data-tab=info]').click()"); assert ev("$('ch').classList.contains('open')&&!$('skills').classList.contains('open')"), "back to Info"
+    ev("closeCharacter()"); pg.keyboard.press("k"); assert ev("$('skills').classList.contains('open')"), "K opens the Skills tab"
+    ev("closeSkills()"); pg.keyboard.press("c"); assert ev("$('ch').classList.contains('open')"), "C opens the Character screen"
+    ev("closeCharacter()"); pg.keyboard.press("e"); assert ev("$('eqs').classList.contains('open')"), "E opens the Equipment tab"
+    ev("closeEquip()"); pg.tap("#chbtn"); pg.wait_for_timeout(100)
     assert ev("(()=>{const d=$('ch-pt').getContext('2d').getImageData(0,0,96,96).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]!==142)n++;return n>200})()"), "the figure is drawn"
     pg.tap("#ch-save"); pg.wait_for_timeout(200)
     assert ev("!$('ch').classList.contains('open')&&$('title').classList.contains('open')&&$('title-h').textContent==='Save game'"), "Save game opens the save choices"
@@ -588,8 +618,8 @@ def check(b, url):
     ev("move('u')"); assert ev("P.y===33+OY"), "no walking while the letter is open"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000); assert ev("window.__x===1&&SCENE===null&&GULL===null&&S.letters.length===1&&!$('letter').classList.contains('open')"), "closing it sends the gull off and ends the scene"
     assert ev("sendLetter('t_letter')===false"), "a letter you have is not sent twice"
-    ev("openBag();bs=7;bc=0;drawBag()"); assert ev("SECTIONS[bs].t==='Keepsakes'&&cellsOf(bs).some(c=>c.label==='A plea')&&/A plea/.test($('btxt').textContent+[...document.querySelectorAll('.bcell')].map(c=>c.title).join())"), "the bag has a Keepsakes section with it"
-    ev("bc=cellsOf(7).findIndex(c=>c.label==='A plea');drawBag();bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
+    ev("openBag();bs=8;bc=0;drawBag()"); assert ev("SECTIONS[bs].t==='Keepsakes'&&cellsOf(bs).some(c=>c.label==='A plea')&&/A plea/.test($('btxt').textContent+[...document.querySelectorAll('.bcell')].map(c=>c.title).join())"), "the bag has a Keepsakes section with it"
+    ev("bc=cellsOf(8).findIndex(c=>c.label==='A plea');drawBag();bagPick()"); assert ev("$('letter').classList.contains('open')&&$('letter-title').textContent==='A plea'"), "tapping it reads it again"
     ev("closeLetter();closeBag()")
     ev("sendLetter('t_l2')"); pg.wait_for_timeout(300); ev("skipScene()"); assert ev("SCENE===null&&GULL===null&&hasLetter('t_l2')&&!$('letter').classList.contains('open')"), "Skip keeps the letter without showing it"
     ev("S.letters=S.letters.filter(i=>i!=='t_letter');save()"); ev("(()=>{const n=NPC.find(q=>q.n==='Odo');P.x=P.rx=n.x;P.y=P.ry=n.y+1;P.f='u';act()})()"); pg.wait_for_timeout(200); ev("skipScene()")
@@ -690,7 +720,7 @@ def check(b, url):
     ev("BATTLE_BLOCKS=false;BATTLES.t_blk.foes=['pirate_grunt'];BATTLE.foes[0].hp=0;BATTLE.foes[0].alive=false"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
     ev("BATTLE_BLOCKS=false;window.__r=null;startBattle('t_win',()=>{})"); pg.wait_for_timeout(50); ev(ATTACK_JS)
     pg.wait_for_function("BATTLE.fx&&BATTLE.fx.some(q=>/^dmg:-\\d+$/.test(q))&&BATTLE.fx.includes('slash')"); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null")
-    assert ev("STAM.walk===0&&STAM.sail===0"), "walking and sailing cost no stamina"
+    assert ev("STAM.walk===0&&STAM.sail>0"), "walking costs no stamina, sailing does again (playtest #5)"
     ev("sail=false;P.x=P.rx=32+OX;P.y=P.ry=33+OY;S.hp=50;S.eq.weapon=null;window.__r=null;BATTLES.t_boss={foes:['pirate_captain'],noRun:1,win:[{set:'t_bwon'}],escaped:[{set:'t_escaped'}]};startBattle('t_boss',r=>{window.__r=r})"); pg.wait_for_timeout(50)
     assert ev("BATTLE!==null&&![...$('bt-menu').children].some(b=>b.textContent==='Run')"), "a fight with noRun cannot be run from"
     pg.wait_for_function("[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000); ev("BATTLE.foes[0].hp=20"); ev(ATTACK_JS); pg.wait_for_function("BATTLE===null", timeout=5000)
@@ -770,7 +800,7 @@ def check(b, url):
     ev("fireTriggers('day')"); assert ev("!flag('festival_on')&&FESTIVAL_ON===false"), "the morning after, the decorations come down"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); pg.wait_for_function("GULL!==null", timeout=10000)
     assert ev("sail===true&&SCENE!==null&&GULL!==null"), "boarding the boat in the village brings a seagull"
-    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern water temple. There is no time to waste! Hurry!!/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
+    pg.wait_for_function("$('letter').classList.contains('open')", timeout=15000); assert ev("/Please come quick! Strangers are taking over the northern Water Temple. There is no time to waste! Hurry!!/.test($('letter-text').textContent)"), "the stranger's letter opens, in Jack's words"
     pg.tap("#letter-close"); pg.wait_for_function("SCENE===null", timeout=15000)
     assert ev("SCENE===null&&flag('letter1_read')&&hasLetter('q1_letter')&&S.story.q==='q1'&&/Quest 1|Stranger/.test(QUESTS.find(q=>q.id==='q1').name)"), "the letter is kept and Quest 1 starts"
     ev("sail=false;P.x=P.rx=B.x;P.y=P.ry=B.y-1;P.f='d';act()"); assert ev("SCENE===null"), "the letter comes only once"
@@ -798,7 +828,7 @@ def check(b, url):
     ev("sail=false;P.x=P.rx=283;P.y=P.ry=38;QUESTS.push({id:'t_goal',name:'Goal test',steps:['x'],goal:[283,60]});questSet('t_goal',0)"); assert ev("questGoal()[1]===60"), "a quest names its goal for the compass"
     assert ev("(()=>{let bad=0;for(const[x,y]of[[283,38],[283,55],[290,70],[250,40]]){sail=false;P.x=P.rx=x;P.y=P.ry=y;try{draw()}catch(e){bad++}}return bad===0})()"), "the compass arrow draws when the goal is near and when it is far"
     ev("S.bag.grandfather_compass=0;P.x=P.rx=283;P.y=P.ry=38;draw();S.bag.grandfather_compass=1;questSet(null)")
-    ev("openBag();bs=7;bc=cellsOf(7).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
+    ev("openBag();bs=8;bc=cellsOf(8).findIndex(r=>r.id==='grandfather_compass');drawBag();bagPick()"); assert ev("!$('bpop').classList.contains('open')"), "the compass is a key item with nothing to equip"; ev("closeBag()")
     ev("(()=>{const m=dailyEvents();window.__m=m})()"); assert ev("flag('pirates_here')&&NPC.filter(n=>n.pirate).length===10"), "the pirates take Fire Island at the next sleep"
     ev("sail=true;B.x=156;B.y=130;P.x=P.rx=156;P.y=P.ry=130;move('l');move('r')"); assert ev("SCENE===null&&sail===true&&at(B.x,B.y)===0"), "sailing around the village does not start the villager's scene or put the boat on land"
     ev("sail=false;P.x=P.rx=156;P.y=P.ry=129;move('u')"); assert ev("SCENE===null"), "one step on land is not enough"
@@ -854,15 +884,16 @@ def check(b, url):
     talk("Hale"); assert ev("flag('has_axe')&&count('woodcutters_axe')===1&&S.eq.axe==='woodcutters_axe'"), "Hale gives the woodcutter's axe"
     talk("Hale"); assert ev("count('woodcutters_axe')===1"), "only one axe"
     # Quest 4 (5.4): the second letter, the pirates at the Earth temple, the key, and the Temple Tower (boots)
-    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with an iron sword and plenty of health
+    def fight_all(enc, n, strong=False):   # strong: the tougher temple pirates, fought with the Divine Blade and plenty of health (playtest #5 made the late pirates tougher)
         for k in range(n):
-            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("add('iron_sword');S.eq.weapon='iron_sword';S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
-            for _ in range(20):
+            ev(("(()=>{const n=encFigures('%s')[0];P.x=P.rx=n.x;P.y=P.ry=n.y+1;if(!WK.includes(at(P.x,P.y))){P.y=P.ry=n.y-1;P.f='d'}else P.f='u';" % enc)+("if(window.__w===undefined)window.__w=S.eq.weapon;S.eq.weapon='divine_blade';S.boost={...(S.boost||{}),hp:350};S.hp=400;" if strong else "S.hp=50;")+"S.sta=100;act()})()"); pg.wait_for_timeout(100)
+            for _ in range(40):   # (playtest #5: the late pirates are tougher, so a fight takes more turns)
                 if ev("BATTLE===null"): break
                 pg.wait_for_function("BATTLE===null||[...$('bt-menu').children].some(b=>b.textContent==='Attack')", timeout=5000)
                 if ev("BATTLE!==null"): ev(ATTACK_JS)
                 pg.wait_for_timeout(30)
             pg.wait_for_function("BATTLE===null", timeout=5000); pg.wait_for_timeout(50)
+        if strong: ev("S.boost.hp=0;S.hp=Math.min(S.hp,maxHp());S.eq.weapon=window.__w;delete window.__w")
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;storyReset();sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});S.hp=50;S.eq.weapon='sword';add('sword');['q3_started','q3_done','axe_waiting','has_axe'].forEach(f=>setFlag(f,1))")
     ev("P.x=P.rx=60;P.y=P.ry=170;P.f='d';fireTriggers('step')"); pg.wait_for_function("SCENE!==null", timeout=10000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=10000)
     assert ev("hasLetter('q4_letter')&&flag('q4_started')&&S.story.q==='q4'&&S.story.step===0&&LETTERS.q4_letter.text.startsWith('I\\'ve just received word')&&LETTERS.q4_letter.text.endsWith('You must stop them.')"), "the second letter comes the first time you walk on the mainland"
@@ -952,9 +983,11 @@ def check(b, url):
     assert ev("flag('storm_on')&&STORM_ON&&BL.filter(b=>b.storm).length>=4&&BL.filter(b=>b.storm).every(b=>at(b.x+1,b.y+1)===101)&&questGoal()[0]===283"), "Quest 8 hands over to Quest 9: a storm breaks and pirate ships moor round the Sea temple's island"
     assert ev("(()=>{const seen=new Set(['200,100']),q=[[200,100]],D4=[[1,0],[-1,0],[0,1],[0,-1]];while(q.length){const[x,y]=q.shift();for(const[a,b]of D4){const nx=x+a,ny=y+b,k=nx+','+ny;if(nx<0||ny<0||nx>=MW||ny>=WH||seen.has(k)||at(nx,ny)!==0)continue;seen.add(k);q.push([nx,ny])}}let landings=0;for(let y=12;y<=60;y++)for(let x=254;x<=312;x++)if(WK.includes(at(x,y))&&[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>seen.has((x+a)+','+(y+b))))landings++;return landings>=5})()"), "the ships leave the Sea temple's island open to the sea (a boat can still land)"
     ev("BATTLE_FAST=true;BATTLE_BLOCKS=false;SCENE=null;BATTLE=null;sail=false;NPC.forEach(n=>{n.busy=1});ENEMIES.forEach(e=>{e.cd=1e9});P.x=P.rx=283;P.y=P.ry=44;P.f='u';fireTriggers('step')"); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_land'", timeout=6000); ev("skipScene()"); pg.wait_for_function("SCENE===null", timeout=5000)
-    assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const r=encFigures('q9_guards').map(n=>Math.hypot((n.x-283)/24,(n.y-36)/19));return r.some(v=>v>.85)&&r.some(v=>v>.68&&v<.82)&&r.some(v=>v>.5&&v<.64)&&r.some(v=>v<.46&&v>.3)&&r.filter(v=>v<.3).length>=3})()"), "twelve pirates are spread round the spiral path: the beach, both terraces, the rim, the boardwalk and the courtyard"
+    assert ev("S.story.step===1&&encFigures('q9_guards').length===12&&encFigures('q9_guards').every(n=>WK.includes(at(n.x,n.y)))&&(()=>{const on=new Set(SEA_ROUTE.map(p=>p+''));return SEA_ROUTE.length>60&&SEA_GUARDS.length===8&&SEA_GUARDS.every(f=>on.has(f.at+''))&&encFigures('q9_guards').every(n=>SEA_ROUTE.some(([x,y])=>Math.max(Math.abs(x-n.x),Math.abs(y-n.y))<=3))})()"), "twelve pirates stand on the way up (playtest #5: none off the path behind a cliff, where they never saw you and Barron never came)"
+    # the safety net: standing in the courtyard with a pirate still left somewhere you walked past, that pirate comes running into sight
+    assert ev("(()=>{const F=encFigures('q9_guards'),keep=F.map(q=>[q.x,q.y]),n=F[0],x0=P.x,y0=P.y;F.forEach((q,i)=>{q.x=q.hx=262;q.y=q.hy=40+i%3});sail=false;P.x=283;P.y=34;encRallyAt=0;encRallyTick(performance.now(),0);const ok=seesPlayer(n)&&Math.abs(n.x-283)+Math.abs(n.y-34)>=3;F.forEach((q,i)=>{q.x=q.hx=keep[i][0];q.y=q.hy=keep[i][1]});P.x=x0;P.y=y0;return ok})()"), "a pirate you missed comes to you at the temple door"
     fight_all('q9_guards', 12, True); pg.wait_for_function("SCENE!==null&&SCENE.id==='q9_taunt'", timeout=8000); ev("skipScene()"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes&&BATTLE.foes[0].t.n==='Captain Barron'", timeout=8000)
-    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===320&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
+    assert ev("S.story.step===2&&BATTLE.row.noRun===1&&DLG.q9_barron1.nodes.a.text.startsWith('You! The dog!')&&BATTLE.foes[0].t.hp===360&&!BATTLE.foes[0].t.flee"), "Captain Barron starts a battle you cannot run from, and he does not retreat"
     ev("S.hp=9999;S.sta=100;BATTLE.foes[0].turns=0")
     seq = []
     for _ in range(4):
@@ -1004,10 +1037,10 @@ def check(b, url):
     ev("S.day=5;P.x=P.rx=305;P.y=P.ry=272;P.f='d';sleep()"); assert ev("S.day===6"), "you can sleep anywhere inside the house"
     # working storage: a crate keeps what you put in it, each crate is its own store, equipped things and keys stay with you
     ev("S.bag.sardine=7;S.bag.earth_key=1;S.eq.weapon='wooden_sword';S.bag.wooden_sword=1;S.crates={};openCrate(312,288)")
-    assert ev("/Storage crate/.test($('st').textContent)&&!/Earth Key/.test($('items').textContent)&&!/Wooden sword/.test($('items').textContent)&&/Sardine x7/.test($('items').textContent)"), "the crate screen lists what you can store (not keys, not what you wear)"
-    ev("[...[...document.querySelectorAll('#items .it')].find(r=>/Sardine/.test(r.textContent)).querySelectorAll('button')].find(b=>b.textContent==='Store all').click()"); assert ev("count('sardine')===0&&S.crates['312,288'].sardine===7&&Object.keys(crateStore(313,288)).length===0"), "storing moves the whole stack into that crate only"
-    ev("[...[...document.querySelectorAll('#items .it')].find(r=>/Sardine/.test(r.textContent)).querySelectorAll('button')].find(b=>b.textContent==='Take 1').click()"); assert ev("count('sardine')===1&&S.crates['312,288'].sardine===6"), "and you can take things back out"
-    ev("$('store').classList.remove('open');S.crates={}")
+    assert ev("/Storage crate/.test($('sh-title').textContent)&&!document.querySelector('#sh-bag .bcell[data-id=earth_key]')&&!document.querySelector('#sh-bag .bcell[data-id=wooden_sword]')&&document.querySelector('#sh-bag .bcell[data-id=sardine]').textContent==='7'"), "the crate screen lists what you can store (not keys, not what you wear)"
+    ev("SH.sel={side:'bag',id:'sardine'};shDraw();[...$('sh-btns').children].find(b=>b.textContent==='Store all').click()"); assert ev("count('sardine')===0&&S.crates['312,288'].sardine===7&&Object.keys(crateStore(313,288)).length===0"), "storing moves the whole stack into that crate only"
+    ev("SH.sel={side:'in',id:'sardine'};shDraw();[...$('sh-btns').children].find(b=>b.textContent==='Take 1').click()"); assert ev("count('sardine')===1&&S.crates['312,288'].sardine===6"), "and you can take things back out"
+    ev("closeStash();S.crates={}")
     # mannequins keep armour sets
     ev("S.mann={};S.bag.cloth_hood=1;S.bag.leather_jerkin=1;S.eq.helmet=null;S.eq.armour=null;S.eq.boots=null;mannDress(0)"); assert ev("$('menu').classList.contains('open')&&/Cloth hood/.test($('menu-o').textContent)&&/Leather jerkin/.test($('menu-o').textContent)"), "a mannequin can be dressed from your bag"
     ev("mn.i=mn.opts.findIndex(o=>/Cloth hood/.test(o));menuPick()"); assert ev("S.mann[0].helmet==='cloth_hood'&&count('cloth_hood')===0"), "the piece moves onto the mannequin (it leaves your bag)"
@@ -1118,12 +1151,12 @@ def check(b, url):
     assert ev("SCENE===null&&window.__lan===true&&FESTIVAL_BUILD===1&&SCENE_LIGHT===null&&FLOAT_START===0&&CHEER_UNTIL===0&&!$('cine').classList.contains('on')&&NPC.find(n=>n.n==='Odo').x===__pos[0][1]&&NPC.find(n=>n.n==='Odo').y===__pos[0][2]&&NPC.find(n=>n.n==='Bram').x===__pos[1][1]"), "when it ends the lanterns, cheering and light are back to normal, the bars slide out and the people are back in place"
     ev("storyReset()")
     # tailor and barber: the look screen charges only for what you change, and every hair style draws
-    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 80g"
-    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[420,3], "tailor charge"
+    ev("S.gold=500;openLook('tailor');LK.jk=3;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
+    ev("$('go').click()"); assert ev("[S.gold,S.look.jk]")==[400,3], "tailor charge"
     # Wynn's clothes (js/data/clothes.js): bought from her, kept in the Bag (Clothing), worn and taken off there; both pictures follow, and what you wear is saved
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.gold=1000;delete S.bag.sea_coat;delete S.bag.tricorn_hat;openTrader('clothier','buy')")
     assert ev("CLOTHES.length>=20&&/Wool sweater/.test($('items').textContent)&&/Tricorn hat/.test($('items').textContent)&&CLOTHES.every(c=>!!itemArt(c.id))"), "Wynn sells tops, jackets and hats, each with an icon"
-    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===740"), "buying a sea coat"
+    ev("[...document.querySelectorAll('#items .it')].find(r=>r.dataset.id==='sea_coat').querySelector('button').click()"); assert ev("count('sea_coat')===1&&S.gold===675"), "buying a sea coat"
     ev("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));S.bag.tricorn_hat=1;openBag();bs=SECTIONS.findIndex(q=>q.k==='cloth');bc=cellsOf(bs).findIndex(r=>r.id==='sea_coat');drawBag();bagPick()")
     assert ev("bpop&&bpop.opts[0]==='Wear'"), "a piece of clothing in the bag can be worn"
     ev("popChoose()"); assert ev("S.eq.c_over==='sea_coat'&&S.look.jon===true&&S.look.jk===0&&heroSpec().over==='coat'&&isWorn('sea_coat')&&cellsOf(bs).find(r=>r.id==='sea_coat').eq"), "wearing it puts the coat on both pictures"
@@ -1131,7 +1164,7 @@ def check(b, url):
     ev("equipItem('tricorn_hat')"); assert ev("heroSpec().acc.filter(a=>HAT_ACC.includes(a)).join()==='tricorn'&&S.look.hat==='cap'&&!!playerArt('f')"), "a hat replaces any hat the character had"
     assert ev("(()=>{const m=migrate(JSON.parse(JSON.stringify(S)));const old=migrate({...JSON.parse(JSON.stringify(S)),eq:{rod:S.eq.rod,boat:S.eq.boat}});return m.eq.c_over==='none'&&m.eq.c_hat==='tricorn_hat'&&old.eq.c_top===null})()"), "what you wear is saved, and older saves start in their own clothes"
     ev("closeBag();S.eq.c_top=S.eq.c_over=S.eq.c_hat=null;delete S.bag.sea_coat;delete S.bag.tricorn_hat;S.look.jon=true;S.look.hat='cap';S.gold=420")
-    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 100g"
+    ev("openLook('barber');LK.hstyle='long';LK.hair=2;buildSw()"); assert ev("$('go').textContent")=="Pay 125g"
     ev("$('lookx').click()"); assert ev("[S.gold,S.look.hstyle]")==[420,None], "cancelled barber visit costs nothing"
     ev("S.look.jk=1;HSTYLES.forEach(h=>['f','b','r'].forEach(v=>{const c=document.createElement('canvas').getContext('2d');CharacterSprite.draw(c,0,0,{...lo({...S.look,hstyle:h}),view:v,frame:0})}))")
     ev("openSmith('buy')"); assert ev("document.querySelector('#store').classList.contains('open')&&/Iron sword/.test($('items').textContent)"), "smith shop"
@@ -1208,7 +1241,7 @@ def check(b, url):
     ev("dlgAdvance();dlgAdvance()"); pg.wait_for_function("S.gold===150", timeout=8000)   # Dell pays 150 gold once the road is clear
     ev("dlgEnd();trgRunning=false")
     # playtest #4, batch C2: balance (P62, P70), sea creatures (P72) and the rock dragons (P73)
-    assert ev("ITEMS.iron_sword.damage===9&&ITEMS.greatsword.damage===12&&ITEMS.divine_blade.damage===14&&ATTACKS.divine_strike.power===1.8&&FOES.final_raider.hp>=50&&FOES.barron.hp>=300&&FOES.final_raider.hit[0]>=9"), "weapons are weaker and the late pirates hit harder and take more"
+    assert ev("ITEMS.iron_sword.damage===7.65&&ITEMS.greatsword.damage===12&&ITEMS.divine_blade.damage===14&&ATTACKS.divine_strike.power===1.8&&FOES.final_raider.hp>=50&&FOES.barron.hp>=300&&FOES.final_raider.hit[0]>=9"), "weapons are weaker and the late pirates hit harder and take more"
     assert ev("(()=>{const best=ITEMS.divine_blade.damage*(1+.08*6)*ATTACKS.divine_strike.power*1.15;return best<FOES.final_raider.hp&&best<FOES.final_gunner.hp})()"), "Divine Strike no longer finishes a Final Fight pirate in one blow at Sword skill 6"
     ev("sail=true;BATTLE=null;SCENE=null;setFlag('festival_done');window.__sp=(()=>{for(let y=60;y<230;y++)for(let x=250;x<310;x++)if(seaOpen(x,y)&&Math.hypot(x-156,y-113)>95)return[x,y];return null})();P.x=P.rx=B.x=__sp[0];P.y=P.ry=B.y=__sp[1]")
     ev("seaQuiet=1;window.__m=Math.random;Math.random=()=>0;seaTick();Math.random=__m"); assert ev("SEA_ALERT>performance.now()"), "sailing in open sea far from home can bring an attack, with an alert first"
@@ -1219,7 +1252,7 @@ def check(b, url):
     ev("seaAttack('sea_squid')"); pg.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Ancient squid'", timeout=5000); ev("bEnd('ran')"); pg.wait_for_function("BATTLE===null", timeout=5000)
     ev("sail=false;SEA_ALERT=0;P.x=P.rx=32+OX;P.y=P.ry=33+OY")
     pgd, errd = load(b, url, SAVE); evd = pgd.evaluate   # a fresh page, because the older tests above clear the extra creatures
-    assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length>=3"), "rock dragons stand on the bare rock of the mountain country"
+    assert evd("ENEMIES.filter(e=>e.t==='rock_dragon'&&e.alive&&at(e.x,e.y)===48).length===2"), "two rock dragons (playtest #5) stand on the bare rock of the mountain country"
     evd("BATTLE_FAST=true;sail=false;startEnemyBattle(ENEMIES.find(e=>e.t==='rock_dragon'))"); pgd.wait_for_function("BATTLE!==null&&BATTLE.foes[0].t.n==='Rock dragon'", timeout=5000)
     assert evd("BATTLE.foes[0].t.pattern.length===3&&/fire/.test(BATTLE.foes[0].t.pattern[2].atk)&&BATTLE.foes[0].t.art==='dragon'"), "the dragon winds up and then breathes fire"
     evd("S.hp=500;BATTLE.foes[0].turns=2;bFoes()"); pgd.wait_for_function("BATTLE.fx.includes('firebreath')", timeout=5000); evd("bEnd('ran')"); pgd.wait_for_function("BATTLE===null", timeout=5000)

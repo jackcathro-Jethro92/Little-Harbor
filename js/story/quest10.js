@@ -5,7 +5,7 @@
 // the main story is complete (`story_complete`): water has raised an island north of the village (Haven Isle) with a ready house, which becomes your home. The game goes on as free play.
 // Switches: earth_key_returned, sky_key_returned, fire_key_returned, island_risen, q10_done, story_complete. Items: house_key. The spoken lines marked JACK are Jack's own words from STORY_TEXT.md (also in JACKS_LINES.txt).
 QUESTS.push({id:'q10',name:'The Returning of the Keys',
- steps:['[Placeholder] Take the Earth Key to the Temple to the Mountains and the Sky Key to the Temple to the Sky. The Fire temple is last.','[Placeholder] Both keys are home. Take the Fire Key to the Temple of Fire.'],
+ steps:['[Placeholder] Take the Earth Key to the Earth Temple and the Sky Key to the Sky Temple. The Fire Temple is last.','[Placeholder] Both keys are home. Take the Fire Key to the Fire Temple.'],
  goals:[()=>{const e=!flag('earth_key_returned')?[7,28]:null,s=!flag('sky_key_returned')?[236,114]:null;return e&&s?(Math.hypot(P.x-e[0],P.y-e[1])<=Math.hypot(P.x-s[0],P.y-s[1])?e:s):(e||s)},[71,38]]});
 LETTERS.q10_letter={from:'The old man',title:'A home for you',text:"[Placeholder] Dear friend,\n\nThe sea has raised a small island for you, north of the village. The key inside this letter opens the house on it.\n\nThank you for everything.\n\nThe old man"};
 ITEMS.house_key={n:'House key',kind:'key',desc:'The key to your new home on Haven Isle, north of the village.'};
@@ -37,7 +37,7 @@ VARIANTS.push({id:'haven_isle',flag:'island_risen',apply:on=>applyIsle(on)});app
 // the key to the new home: the Haven house becomes a second home beside any cottage, claim or camp you have (nothing of yours is packed away or removed; playtest #4)
 TACT.islandhome=()=>{S.isle={x:ISLE.hx,y:ISLE.hy,roof:'slate',grand:1};haveFixtures();ui();save()};   // the Haven house is a second home: any cottage, claim or camp you have stays exactly as it is (playtest #4). Stations and gardens can go anywhere on the island (onIsle in js/systems/stations.js)
 // ---- where the spirits stand (the girl in the Earth sanctum, the boy on the Sky plateau, the Fire Spirit in her hall) ----
-NPC.push({n:'Fire Spirit',x:PH.dx,y:PH.y0+6,hx:PH.dx,hy:PH.y0+6,f:'d',skin:2,hair:3,shirt:0,jk:0,hat:'none',hstyle:'bun',pack:false,fixed:1,say:['[Placeholder] The flame burns steadily now. Thank you.'],bio:{age:null,job:'Spirit of the Fire temple',backstory:null,likes:[],q:null}});
+NPC.push({n:'Fire Spirit',x:PH.dx,y:PH.y0+6,hx:PH.dx,hy:PH.y0+6,f:'d',skin:2,hair:3,shirt:0,jk:0,hat:'none',hstyle:'bun',pack:false,fixed:1,say:['[Placeholder] The flame burns steadily now. Thank you.'],bio:{age:null,job:'Spirit of the Fire Temple',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.unshift(
  {npc:'Mysterious Girl',if:{flag:'keys_to_return'},at:[257,SZ.y0+6],f:'d',say:['[Placeholder] This temple is always open to you, brother.']},
  {npc:'Mysterious Boy',if:{flag:'keys_to_return'},at:[236,113],f:'d',say:['[Placeholder] The stones are standing again. Thank you.']},
@@ -49,7 +49,7 @@ DLG.q10_fire={start:'a',nodes:{a:{who:'Fire Spirit',text:"So it is true. Our lon
 DLG.q10_fire_wait={start:'a',nodes:{a:{who:'Fire Spirit',text:'[Placeholder] You carry my key, but the others are still waiting for theirs. Take them home first. Mine can wait.'}}};
 SCENES.q10_earth=[{wait:200},{say:'q10_girl'},{take:{earth_key:1}},{set:'earth_key_returned'},{toast:'The Earth spirit seals the Earth Key.'}];
 SCENES.q10_sky=[{wait:200},{say:'q10_boy'},{take:{sky_key:1}},{set:'sky_key_returned'},{toast:'The Sky spirit takes the Sky Key.'},{wait:400},
- {fade:'out',ms:500},{wait:300},{clear:'sky_damaged'},{fade:'in',ms:900},{msg:'The Temple to the Sky stands whole again!'}];
+ {fade:'out',ms:500},{wait:300},{clear:'sky_damaged'},{fade:'in',ms:900},{msg:'The Sky Temple stands whole again!'}];
 SCENES.q10_fire=[{wait:300},{say:'q10_fire'},{take:{fire_key:1}},{set:'fire_key_returned'},{toast:'The Fire spirit seals the Fire Key.'},{wait:400},
  {giveletter:'q10_letter'},{read:'q10_letter'},{give:{house_key:1}},{toast:'You got the key to your new home!'},
  {fade:'out',ms:500},{islandhome:1},{set:'island_risen'},{clear:'village_burnt'},{wait:300},{fade:'in',ms:900},
@@ -58,9 +58,9 @@ SCENES.q10_fire=[{wait:300},{say:'q10_fire'},{take:{fire_key:1}},{set:'fire_key_
 TRIGGERS.push(
  // returning a key: the first of the Earth and Sky keys just goes home; the second also sends you on to the Fire temple
  {id:'q10_earth_a',when:{talk:'Mysterious Girl'},if:{quest:'q10',has:{earth_key:1},noflag:'sky_key_returned'},do:[{scene:'q10_earth'}]},
- {id:'q10_earth_b',when:{talk:'Mysterious Girl'},if:{quest:'q10',has:{earth_key:1},flag:'sky_key_returned'},do:[{scene:'q10_earth'},{step:1},{msg:'[Placeholder] Both keys are home. The Fire temple is last.'}]},
+ {id:'q10_earth_b',when:{talk:'Mysterious Girl'},if:{quest:'q10',has:{earth_key:1},flag:'sky_key_returned'},do:[{scene:'q10_earth'},{step:1},{msg:'[Placeholder] Both keys are home. The Fire Temple is last.'}]},
  {id:'q10_sky_a',when:{talk:'Mysterious Boy'},if:{quest:'q10',has:{sky_key:1},noflag:'earth_key_returned'},do:[{scene:'q10_sky'}]},
- {id:'q10_sky_b',when:{talk:'Mysterious Boy'},if:{quest:'q10',has:{sky_key:1},flag:'earth_key_returned'},do:[{scene:'q10_sky'},{step:1},{msg:'[Placeholder] Both keys are home. The Fire temple is last.'}]},
+ {id:'q10_sky_b',when:{talk:'Mysterious Boy'},if:{quest:'q10',has:{sky_key:1},flag:'earth_key_returned'},do:[{scene:'q10_sky'},{step:1},{msg:'[Placeholder] Both keys are home. The Fire Temple is last.'}]},
  {id:'q10_fire',when:{talk:'Fire Spirit'},if:{quest:'q10',step:1,has:{fire_key:1},noflag:'fire_key_returned'},do:[{scene:'q10_fire'}]},
  {id:'q10_fire_early',when:{talk:'Fire Spirit'},if:{quest:'q10',step:0,has:{fire_key:1}},do:[{say:'q10_fire_wait'}],repeat:1}
 );

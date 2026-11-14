@@ -4,6 +4,15 @@
 // otherwise the speaker's own detailed portrait is used (everyone who speaks has one: js/data/portraits.js). Tap the box, press Use, Space or Enter to go on; Up and Down
 // then Enter choose. Text appears letter by letter (a tap shows it all at once). Existing lines stay word for word; new story lines are placeholders until Jack writes them.
 const DLG={};
+// Long lines are shown in pages (playtest #5): a line longer than DLG_PAGE letters is broken at the ends of sentences (never in the middle of one unless a single sentence is too long, then at a space).
+// The words stay exactly as written; tapping goes to the next page, and any choices show on the last page.
+const DLG_PAGE=110;
+function dlgPages(t){if(!t||t.length<=DLG_PAGE)return[t||''];const parts=t.match(/[^.!?…]+(?:[.!?…]+["'”’)]*|$)\s*/g)||[t],out=[];let cur='';
+  const push=x=>{x=x.trim();if(x)out.push(x)};
+  parts.forEach(sn=>{if((cur+sn).trim().length<=DLG_PAGE){cur+=sn;return}push(cur);cur='';
+    while(sn.trim().length>DLG_PAGE){let k=sn.lastIndexOf(' ',DLG_PAGE);if(k<=0)k=DLG_PAGE;push(sn.slice(0,k));sn=sn.slice(k)}cur=sn});
+  push(cur);return out.length?out:[t]}
+let dlgPg=[],dlgPgI=0;
 let dlgNodes=null,dlgNode=null,dlgDone=null,dlgTimer=null,dlgSel=0,dlgFull='';
 const dlgActive=()=>$('dlg').classList.contains('open');
 function portraitFor(who){const name=who==='You'||who===undefined?'You':who;   // (batch H2) everyone who speaks has a detailed portrait: yours, or theirs from js/data/portraits.js
@@ -15,9 +24,11 @@ function drawPortrait(pt){const cv=$('dlg-pt'),c=cv.getContext('2d');c.imageSmoo
   c.fillStyle='rgba(0,0,0,.18)';c.fillRect(0,cv.height-2,cv.width,2)}
 function dlgShow(node){dlgNode=node;dlgSel=0;clearInterval(dlgTimer);const who=node.who||'',pt=portraitFor(node.portrait||who),box=$('dlg');
   $('dlg-who').textContent=who&&who!=='You'?who:(who==='You'?S.name||'You':'');$('dlg-who').style.display=who?'inline-block':'none';drawPortrait(pt);box.classList.toggle('has-pt',!!pt);
-  $('dlg-ch').innerHTML='';dlgFull=node.text||'';$('dlg-txt').textContent='';$('dlg-arrow').style.visibility='hidden';box.classList.add('open');
+  $('dlg-ch').innerHTML='';dlgPg=dlgPages(node.text||'');dlgPgI=0;dlgType(dlgPg[0])}
+function dlgType(text){clearInterval(dlgTimer);const box=$('dlg');dlgFull=text;$('dlg-txt').textContent='';$('dlg-arrow').style.visibility='hidden';box.classList.add('open');
   let i=0;dlgTimer=setInterval(()=>{i+=2;$('dlg-txt').textContent=dlgFull.slice(0,i);if(i>=dlgFull.length)dlgTyped()},28);if(!dlgFull)dlgTyped()}
 function dlgTyped(){clearInterval(dlgTimer);dlgTimer=null;$('dlg-txt').textContent=dlgFull;const n=dlgNode;
+  if(dlgPgI<dlgPg.length-1){$('dlg-arrow').style.visibility='visible';return}
   if(n.choices&&n.choices.length){const ch=$('dlg-ch');n.choices.forEach((c,k)=>{const b=document.createElement('button');b.textContent=c.t;b.className=k===dlgSel?'sel':'';b.onclick=e=>{e.stopPropagation();dlgChoose(k)};ch.appendChild(b)})}
   else $('dlg-arrow').style.visibility='visible'}
 function dlgChoose(k){const n=dlgNode,c=n.choices[k];if(c.set)setFlag(c.set);if(c.fn)c.fn();dlgGo(c.go)}
@@ -25,6 +36,7 @@ function dlgGo(id){if(id&&dlgNodes&&dlgNodes[id])return dlgShow(dlgNodes[id]);dl
 function dlgEnd(){clearInterval(dlgTimer);dlgTimer=null;$('dlg').classList.remove('open');const f=dlgDone;dlgDone=null;dlgNodes=null;dlgNode=null;if(f)f()}
 function dlgAdvance(){if(!dlgActive())return false;
   if(dlgTimer){dlgTyped();return true}                                                    // still typing: show it all
+  if(dlgPgI<dlgPg.length-1){dlgPgI++;dlgType(dlgPg[dlgPgI]);return true}                  // the next page of a long line
   if(dlgNode.choices&&dlgNode.choices.length){dlgChoose(dlgSel);return true}
   dlgGo(dlgNode.next);return true}
 function runDialogue(id,onEnd){const d=DLG[id];if(!d)return false;cancel();releaseAll();dlgNodes=d.nodes;dlgDone=onEnd||null;dlgShow(d.nodes[d.start]);return true}

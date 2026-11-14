@@ -30,7 +30,7 @@ const mkLook=(n,x,y,f,o)=>NPC.push({n,x,y,hx:x,hy:y,f,fixed:1,pack:false,bio:{ag
 mkLook('Lucie',29,71,'d',{skin:0,hair:4,shirt:2,jk:3,hat:'none',jon:true,store:'jeweller',bio:{age:null,job:'Goldsmith',backstory:null,likes:[],quests:[]},say:['Gold, gems and a little magic.']});
 mkLook('Innkeeper Ragna',23,71,'u',{skin:1,hair:2,shirt:4,jk:3,hat:'none',jon:true,bio:{age:null,job:'Innkeeper',backstory:null,likes:[],quests:[]},say:['Rooms are 100 gold a night. Clean sheets, I promise.','Mind the stairs after a few mugs.']});
 mkLook('Warden Orrin',25,77,'u',{skin:3,hair:0,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['Welcome to the Mountain Town. Keep your blade sheathed in the streets.','The arena is for fighting. The streets are not.']});
-mkLook('Warden Brann',24,60,'r',{skin:2,hair:1,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['The north gate. The path up the mountain leads to the Temple to the Mountains.','Good boots for the climb, friend.']});
+mkLook('Warden Brann',24,60,'r',{skin:2,hair:1,shirt:4,jk:5,hat:'cap',hc:2,jon:true,say:['The north gate. The path up the mountain leads to the Earth Temple.','Good boots for the climb, friend.']});
 mkLook('Miner Gudrun',22,67,'r',{skin:1,hair:3,shirt:1,jk:2,hat:'cap',hc:3,jon:false,fixed:0,say:['Copper again today. Always copper.','Bring me bronze and I will talk your ear off.']});
 mkLook('Old Stig',33,67,'l',{skin:2,hair:5,shirt:3,jk:4,hat:'straw',jon:false,fixed:0,say:['Eighty winters and I still climb these steps.','Back in my day the arena sand was real blood.']});
 // inside the Fighters Guild

@@ -1,6 +1,15 @@
 // ---------- outdoor props for the towns (graphics for TOWN_DECOR in js/data/town.js): a stone well, signposts, flower beds, shade trees, hay bales and a handcart ----------
 // They are ordinary props (PROPS.DEF in js/render/props.js, drawn with the same small rectangle painter) placed on the map instead of in a room; js/systems/towndecor.js sets them out.
 {const O='#2a1b0e',D=PROPS.DEF;
+ // the carpenter's carved wooden sculptures (playtest #5): they stand in his fenced yard, and he sells them too (js/data/furniture.js)
+ D.woodbear={n:'Carved bear',w:1,h:2,c:'Carpenter',d:r=>{r(1,30,14,2,'rgba(0,0,0,.25)');r(2,26,12,5,O);r(3,27,10,3,'#8a5a2e');r(3,10,10,17,O);r(4,11,8,15,'#a8743f');r(6,15,4,1,'#8a5a2e');r(6,19,4,1,'#8a5a2e');r(6,23,4,1,'#8a5a2e');
+   r(2,13,3,8,O);r(11,13,3,8,O);r(3,14,1,6,'#8a5a2e');r(12,14,1,6,'#8a5a2e');r(4,3,8,8,O);r(5,4,6,6,'#a8743f');r(4,1,3,3,O);r(9,1,3,3,O);r(5,2,1,1,'#c9965a');r(10,2,1,1,'#c9965a');r(6,7,4,3,'#c9965a');r(7,7,2,1,O);r(6,5,1,1,O);r(9,5,1,1,O)}};
+ D.woodowl={n:'Carved owl',w:1,h:1,c:'Carpenter',d:r=>{r(2,14,12,2,'rgba(0,0,0,.25)');r(3,11,10,5,O);r(4,12,8,3,'#8a5a2e');r(4,2,8,10,O);r(5,3,6,8,'#a8743f');r(4,1,2,2,O);r(10,1,2,2,O);
+   r(5,4,2,2,'#f2e6c8');r(9,4,2,2,'#f2e6c8');r(6,5,1,1,O);r(9,5,1,1,O);r(7,6,2,2,'#6b4423');r(5,8,1,3,'#8a5a2e');r(10,8,1,3,'#8a5a2e')}};
+ D.totem={n:'Totem pole',w:1,h:2,c:'Carpenter',d:r=>{r(1,30,14,2,'rgba(0,0,0,.25)');r(3,0,10,30,O);r(4,1,8,28,'#a8743f');r(0,3,4,3,O);r(12,3,4,3,O);r(1,4,2,1,'#c9965a');r(13,4,2,1,'#c9965a');
+   r(5,4,2,2,O);r(9,4,2,2,O);r(6,8,4,2,O);r(4,11,8,2,'#d83828');r(5,15,2,2,O);r(9,15,2,2,O);r(7,17,2,4,'#c9965a');r(4,22,8,2,'#3a8f4a');r(5,25,6,1,'#8a5a2e');r(2,28,12,3,O)}};
+ D.woodhorse={n:'Rocking horse',w:1,h:1,c:'Carpenter',d:r=>{r(1,14,14,2,'rgba(0,0,0,.25)');r(1,12,14,3,O);r(2,13,12,1,'#8a5a2e');r(3,9,2,4,O);r(11,9,2,4,O);r(3,6,10,4,O);r(4,7,8,2,'#c9965a');
+   r(10,2,4,6,O);r(11,3,2,4,'#c9965a');r(9,2,2,4,'#6b4423');r(1,6,3,2,'#6b4423');r(12,4,1,1,O)}};
  D.well={n:'Well',w:2,h:2,c:'Town',d:r=>{r(9,0,14,2,O);r(10,0,12,1,'#8a5a2e');r(6,1,3,15,O);r(23,1,3,15,O);r(7,1,1,14,'#8a5a2e');r(24,1,1,14,'#8a5a2e');r(4,0,24,3,O);r(5,1,22,1,'#b0473a');
    r(15,2,2,7,'#6b4423');r(13,8,6,4,O);r(14,9,4,2,'#8a5a2e');r(2,14,28,16,O);r(3,15,26,14,'#8a887e');for(let y=16;y<29;y+=4)for(let x=4+(y%8?0:3);x<28;x+=6){r(x,y,5,3,'#a8a69c');r(x,y,5,1,'#c4c2b8')}
    r(5,13,22,4,O);r(6,14,20,2,'#2a4a6a');r(7,14,6,1,'#6ab4d8');r(3,29,26,2,'rgba(0,0,0,.25)')}};

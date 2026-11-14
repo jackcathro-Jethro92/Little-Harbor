@@ -5,6 +5,7 @@
 //            realtime mode: each one is an enemy (a row of ENEMY_TYPES, js/data/enemies.js) that chases you; beating the whole group finishes the encounter
 //   at       world tile coordinates (or offsets from the player when `near` is set, which the test fights use)      noRun   the fights cannot be run from
 //   start    the flag that starts it (default enc_<id>_on). A trigger or scene starts one with the action {encounter:'id'}, or any story flag can be named here
+//   rally    [x0,y0,x1,y1]: when you stand in this box, pirates of the group you walked past come to you (see encRallyTick), so the story can always go on
 //   win      actions run once when it is done (set a flag, give an item or gold, move a person, change the quest step...)
 // Beaten foes stay beaten (S.story.enc, saved) and the foes still standing come back after a reload, at full health. Losing a fight wakes you on your boat as usual and the foes wait for another try.
 // A foe that escapes (the boss, `flee`) counts as dealt with. Nothing spawns inside a wall or on the player: the nearest free tile is used. Rows named test_* appear in the testing menu (TEST_STORY).
@@ -68,5 +69,15 @@ function encNotice(n,path){const er=encRow(n.enc.id),L=Object.values((er&&DLG[er
 function encSightTick(){if(!ENC_SIGHT||SCENE||BATTLE||sail||dlgActive()||document.querySelector('.open')||(typeof trgRunning!=='undefined'&&trgRunning))return;
   const now=performance.now(),z=zoneOf(P.x,P.y);
   for(const n of NPC){if(!n.enc||n.hidden||(n.coolUntil||0)>now||zoneOf(n.x,n.y)!==z)continue;const e=encRow(n.enc.id);if(!e||e.mode!=='battle'||e.sight===0)continue;
-    if(!seesPlayer(n))continue;const path=encPath(n);if(!path)continue;encNotice(n,path);return}}
+    if(!seesPlayer(n))continue;const path=encPath(n);if(!path)continue;encNotice(n,path);return}
+  encRallyTick(now,z)}
+// the safety net (playtest #5): an encounter row may name a `rally` box [x0,y0,x1,y1] round the place the story goes on from (a temple door, a boss). If you get there while some of its pirates are
+// still standing somewhere you walked past, they come running one at a time: each appears a few tiles from you, in plain sight, and the usual sight rule starts the fight. So a pirate you missed
+// can never stop the boss from coming.
+let encRallyAt=0;
+function encRallyTick(now,z){if(now<encRallyAt)return;
+  for(const e of ENCOUNTERS){if(e.mode!=='battle'||!e.rally||!encOn(e)||flag(encDoneFlag(e)))continue;const[x0,y0,x1,y1]=e.rally;if(P.x<x0||P.x>x1||P.y<y0||P.y>y1)continue;
+    const figs=encFigures(e.id).filter(n=>!n.hidden&&(n.coolUntil||0)<=now);if(!figs.length||figs.some(n=>seesPlayer(n)&&zoneOf(n.x,n.y)===z))continue;
+    const n=figs[0],spot=nearestTile(P.x,P.y,(a,b)=>Math.abs(a-P.x)+Math.abs(b-P.y)>=3&&walkable(a,b)&&seesPlayer({x:a,y:b}));if(!spot)continue;
+    n.x=n.hx=spot[0];n.y=n.hy=spot[1];encRallyAt=now+1500;toast('Another pirate comes running!',1800);return}}
 setInterval(encSightTick,250);

@@ -7,10 +7,10 @@
 // (also in JACKS_LINES.txt). The rest is placeholder.
 // Switches: q6_boom, sky_damaged (the ruined temple, stays until Quest 10), q6_barron_here / q6_barron_gone, enc_q6_pirates_on / enc_q6_pirates_done, q6_boy_here, q6_done. Item: sky_helm (helmet; stops 5% of damage; `haste`: 20% of attacks give another turn).
 QUESTS.push({id:'q6',name:'At the Top of the World',
- steps:['[Placeholder] Climb the path up to the Temple to the Sky on Island 3.','[Placeholder] An explosion! Keep climbing.','[Placeholder] Pirates are all along the path. Fight your way up. The pirate boss will come for you at the top.','[Placeholder] Someone is crying at the temple at the top. Go and see.'],
+ steps:['[Placeholder] Climb the path up to the Sky Temple.','[Placeholder] An explosion! Keep climbing.','[Placeholder] Pirates are all along the path. Fight your way up. The pirate boss will come for you at the top.','[Placeholder] Someone is crying at the temple at the top. Go and see.'],
  goals:[[222,157],[236,127],[236,124],[236,113]]});
 NPC.push({n:'Captain Barron',x:236,y:116,hx:236,hy:116,f:'d',skin:1,hair:4,shirt:0,jk:5,hat:'none',hstyle:'long',pack:false,fixed:1,scale:1.3,armour:{helm:'gold',body:'gold',boots:'gold'},say:['[Placeholder] Out of my way, little dog.'],bio:{age:null,job:'Pirate boss',backstory:null,likes:[],q:null}});
-NPC.push({n:'Mysterious Boy',x:236,y:113,hx:236,hy:113,f:'d',skin:0,hair:2,shirt:5,jk:4,hat:'none',hstyle:'short',pack:false,fixed:1,scale:.85,say:['[Placeholder] Please get my key back.'],bio:{age:null,job:'Spirit of the Sky temple',backstory:null,likes:[],q:null}});
+NPC.push({n:'Mysterious Boy',x:236,y:113,hx:236,hy:113,f:'d',skin:0,hair:2,shirt:5,jk:4,hat:'none',hstyle:'short',pack:false,fixed:1,scale:.85,say:['[Placeholder] Please get my key back.'],bio:{age:null,job:'Spirit of the Sky Temple',backstory:null,likes:[],q:null}});
 STORY_PEOPLE.push(
  {npc:'Captain Barron',if:{flag:'q6_barron_gone'},hide:1},
  {npc:'Captain Barron',if:{flag:'q6_barron_here'},at:[236,116],f:'d'},
@@ -18,7 +18,7 @@ STORY_PEOPLE.push(
  {npc:'Mysterious Boy',if:{flag:'q6_boy_here'},at:[236,113],f:'d'},
  {npc:'Mysterious Boy',hide:1});
 // seven pirates scattered up the dirt path (the route runs along y 148, 142, 136 and 130 and up x 236; the strip is three tiles wide), two on each of the three lower terraces and the last on the final climb
-ENCOUNTERS.push({id:'q6_pirates',mode:'battle',foes:[{foe:'sky_grunt',at:[228,148]},{foe:'sky_gunner',at:[236,148]},{foe:'sky_grunt',at:[236,142]},{foe:'sky_gunner',at:[228,142]},{foe:'sky_grunt',at:[228,136]},{foe:'sky_bruiser',at:[236,136]},{foe:'sky_bruiser',at:[237,130]}]});
+ENCOUNTERS.push({id:'q6_pirates',mode:'battle',rally:[228,124,246,133],foes:[{foe:'sky_grunt',at:[228,148]},{foe:'sky_gunner',at:[236,148]},{foe:'sky_grunt',at:[236,142]},{foe:'sky_gunner',at:[228,142]},{foe:'sky_grunt',at:[228,136]},{foe:'sky_bruiser',at:[236,136]},{foe:'sky_bruiser',at:[237,130]}]});
 DLG.q6_barron1={start:'a',nodes:{a:{who:'Captain Barron',text:"Who is this little dog that blocks my way! Prepare yourself for your end!"}}};   // JACK
 DLG.q6_barron2={start:'a',nodes:{a:{who:'Captain Barron',text:'[Placeholder] What? All my lads beaten by a fisher? Hmph. We will meet again, little dog!'}}};   // (he arrives after the last pirate has fallen)
 DLG.q6_boy1={start:'a',nodes:{a:{who:'Mysterious Boy',text:"Did the old man send you? I tried to stop them. But they blew it up. They have taken my key. Please tell him I'm sorry I couldn't stop them. Here take this. If it's true that the old man said and you are helping us then I want you to have this. Please stop those awful pirates and get my key back."}}};   // JACK

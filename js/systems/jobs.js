@@ -16,6 +16,8 @@ const JOB_SPOTS={};
   {id:'job_bandits',name:'The bandit camp',mode:'battle',start:'job_bandits_on',spot:'bandit_spot',foes:ring.map(([dx,dy],i)=>({foe:i===0?'bandit_chief':i%3===0?'bandit_archer':'bandit',at:[bx+dx,by+dy]}))})}
 DLG.bandit_spot={start:'a',nodes:{a:{who:'Bandit',text:'[Placeholder] Oi! This is our camp. Turn around!'},b:{who:'Bandit',text:'[Placeholder] Look, lads, a traveller with a full purse!'},c:{who:'Bandit',text:'[Placeholder] You picked the wrong camp to wander into.'}}};
 DLG.job_lucie_thanks={start:'a',nodes:{a:{who:'Lucie',text:'[Placeholder] A hundred of each! You are a marvel. Take this amulet; it mends you as you go.'}}};
+// playtest #5: the first time you speak to Astrid she teaches you the Minor health tonic, the first potion you can brew (RECIPES row with learn:'recipe_tonic')
+DLG.astrid_tonic={start:'a',nodes:{a:{who:'Astrid',text:'[Placeholder] A new face! Let me teach you something useful: a Minor health tonic. One basil and one holly at an alchemy station.',next:'b'},b:{who:'Astrid',text:'[Placeholder] Practise, and you will brew stronger potions in time.'}}};
 DLG.job_astrid_thanks={start:'a',nodes:{a:{who:'Astrid',text:'[Placeholder] Everything I asked for! Here is my special draught. Drink it and feel stronger for good.'}}};
 DLG.job_wynn_thanks={start:'a',nodes:{a:{who:'Seamstress Wynn',text:'[Placeholder] Fifty pelts! My winter collection is saved. Here is your 5000 gold, every coin earned.'}}};
 const JOB_THANKS={lucie_gold:'job_lucie_thanks',astrid_materials:'job_astrid_thanks',winter_collection:'job_wynn_thanks'};

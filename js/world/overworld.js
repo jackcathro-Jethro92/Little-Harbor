@@ -40,8 +40,10 @@ walled(84,200,115,234,100,[]); // Walled Settlement, south end of the mainland (
 setT(100,234,12);setT(101,234,12);rect(85,217,114,218,(x,y)=>setT(x,y,6)); // closed south wall, one main street
 [[84,216],[84,217],[84,218],[115,216],[115,217],[115,218]].forEach(([x,y])=>setT(x,y,6));[[84,215],[84,219],[115,215],[115,219]].forEach(([x,y])=>setT(x,y,45)); // west and east gates
 
-clr(26,150,41,158);[[27,152],[30,156],[34,158]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch'}));         // Woodcutters' shacks
+clr(26,150,41,158);[[30,156]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch'}));   // (playtest #5: only the carpenter's shack is left; the two empty ones are gone)         // Woodcutters' shacks
 rect(26,150,41,158,(x,y)=>{if(at(x,y)===1&&hs(x,y*3)%100<10)setT(x,y,14)});
+// playtest #5: the carpenter's yard, fenced in (x 26-33, y 152-160) with the way in on the east side (y 157-159), towards the road; his carvings stand inside (TOWN_DECOR.carpenter)
+rect(27,153,32,159,(x,y)=>{if(at(x,y)!==5)setT(x,y,1)});rect(26,152,33,160,(x,y)=>{if((x===26||x===33||y===152||y===160)&&!(x===33&&y>=157&&y<=159)&&![0,5].includes(at(x,y)))setT(x,y,8)});
 clr(67,24,76,30);BL.push({x:69,y:26,w:5,col:'#c8402a',orb:'#f2a22e'});clr(62,31,80,36);[[64,31,'red'],[75,31,'red'],[68,34,'slate']].forEach(([x,y,roof])=>BL.push({x,y,w:3,roof}));
 [[66,30],[72,30],[78,34],[63,36]].forEach(([x,y])=>setT(x,y,13));                                              // Pirate Island, Temple of Fire
 clr(279,30,288,35);BL.push({x:281,y:32,w:5,col:'#2f7fc4',orb:'#9ad3f0'});                                       // Temple of the Sea
@@ -109,4 +111,4 @@ const TLV=new Uint8Array(MW*MH);
    for(let k=2;k<=7;k++){tr(gx-k,gy,k);tr(gx+k,gy,k)}
    for(let k=4;k<=7;k++){tr(gx-k,gy-dir,k);tr(gx+k,gy-dir,k)}};
  frame(36,149,-1);frame(31,110,1)}
-const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',27,68],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Temple to the Mountains',6,18],["Sailors' Grave Rocks",90,86],['Island 3',244,142],['Island 4',128,78],['Island 5',283,38],['Oak Island',144,170],['Pirate Island',71,32],['Temple of Fire',71,25],['Temple of the Sea',283,35],['Temple to the Sky',244,138],['Temple Tower',212,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',31,110]];
+const LAND=[['Village',OX+32,OY+22],['Mainland',50,185],['Mountain Town',27,68],['Walled Settlement',100,210],['Settlement Docks',DK[0],DK[1]-2],["Woodcutters' Shacks",33,153],['Earth Temple',6,18],["Sailors' Grave Rocks",90,86],['Oak Island',144,170],['Pirate Island',71,32],['Fire Temple',71,25],['Water Temple',283,35],['Sky Temple',244,138],['Tower Temple',212,196],['Spirit Isle',OX+22,OY+44],['Darkwood south gate',36,146],['Darkwood north gate',31,110]];

@@ -32,7 +32,9 @@ function act(){
     if(n.store==='tailor'){menu("Seamstress Wynn's Tailor",['Buy clothes','Dye your clothes','Buy cloth and leather','Sell cloth and leather','Cancel'],o=>{if(o==='Buy clothes')openTrader('clothier','buy');else if(o==='Dye your clothes')openLook('tailor');else if(o==='Buy cloth and leather')openTrader('tailor','buy');else if(o==='Sell cloth and leather')openTrader('tailor','sell')});return}
     if(n.store==='barber'){menu("Barber Fenwick's",['Take a seat','Cancel'],o=>{if(o!=='Cancel')openLook('barber')});return}
     if(n.store==='carpenter'){menu("Carpenter Alder's Workshop",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('carpenter','buy');else if(o==='Sell')openTrader('carpenter','sell')});return}
-    if(n.store==='apothecary'){menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});return}
+    if(n.store==='apothecary'){const shop=()=>menu("Astrid's Apothecary",['Buy','Sell','Cancel'],o=>{if(o==='Buy')openTrader('apothecary','buy');else if(o==='Sell')openTrader('apothecary','sell')});
+      if(!flag('recipe_tonic')){setFlag('recipe_tonic');save();runDialogue('astrid_tonic',()=>{toast('You learned to brew a Minor health tonic!',2800);shop()});return}   // playtest #5: the first talk teaches the starter recipe
+      shop();return}
     if(n.store==='guild')return guildMenu();
     if(n.store==='arena')return arenaMenu();
     if(n.crew){const c=CREW.find(c=>c.id===n.crew);if(c&&flag(c.avail)&&!flag(c.flag)){menu(c.n+': Want me on your crew? It is '+c.price.toLocaleString()+'g.',['Hire '+c.n,'Not now'],o=>{if(o==='Not now')return;if(S.gold<c.price){say(c.n+': Come back when you have '+c.price.toLocaleString()+' gold.');return}S.gold-=c.price;setFlag(c.flag);ui();save();say(c.n+': Aye! I am aboard. Crew: '+crewHave()+'.')});return}if(c&&flag(c.flag)){say(c.n+': Ready when you are, Captain.');return}}
@@ -62,7 +64,7 @@ function act(){
 }
 function sleep(){
   if(SCENE||BATTLE)return;
-  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn(),inB=atBed();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN&&!inB)return;cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
+  const inQ=(shipRoomOf(P.x,P.y)||{}).kind==='quarters';const inT=atTent(),inN=inInn(),inB=atBed();if(!sail&&!inRoom(P.x,P.y)&&!inQ&&!inT&&!inN&&!inB)return say(campOf()?'Stand next to your tent to sleep, or sleep on the boat or at home.':'You can sleep on the boat, at home, in a tavern room or by your tent.');cancel();const f=$('flash');f.style.opacity=.9;S.day++;lightMorning();S.hp=maxHp();S.sta=maxSta();S.poison=0;restAttacks();enemiesMorning();
   Object.keys(S.cut).forEach(i=>{const c=S.cut[i];if(S.day-c.d>=REGROW(c.m)&&P.y*MW+P.x!==+i){M[i]=c.m;delete S.cut[i]}});
   const ev2=dailyEvents();setTimeout(()=>fireTriggers('day'),900);say((inN?'You sleep soundly at the tavern.':inRoom(P.x,P.y)?'You sleep soundly at home.':inT?'You sleep soundly in your tent.':inB?'You sleep soundly in your bed.':inQ?'You sleep soundly in your bunk, rocked by the waves.':'You doze off on the boat.')+' Day '+S.day+' begins.'+(ev2?' '+ev2:''));ui();save();setTimeout(()=>f.style.opacity=0,700);
 }

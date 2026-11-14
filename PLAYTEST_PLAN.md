@@ -268,3 +268,46 @@ Everyone who speaks has a detailed portrait (Jack's choice A): about 50 designed
 
 ## Batch H3 (23 Oct): item icons
 Every item (about 140) has a detailed icon in the style of Jack's weapon and armour sheets. Batch H is complete.
+
+# Playtest #5 (Jack's handwritten notes, played on PC, November 2026)
+
+## The notes
+| Id | Note | Batch | Status |
+| --- | --- | --- | --- |
+| P78 | Name text colour to black | A | **Built**: the speaker's name above every conversation is black on a white label |
+| P79 | Temple names the same on the map and in the story text | A | **Built.** Decided (Jack): the short names everywhere: Water Temple, Fire Temple, Earth Temple, Sky Temple, Tower Temple (map, quest log, letters, conversations and `STORY_TEXT.md`) |
+| P80 | Remove island numbers from the map | A | **Built**: "Island 3", "Island 4" and "Island 5" are gone from the map and from the quest text |
+| P81 | Writing: replace any AI-written text with Jack's own | Jack | Jack's job. Every placeholder line is listed in `DIALOGUE.md` |
+| P82 | Bring back stamina drain for sailing | A | **Built**: sailing costs a little stamina per tile again (0.04, 6% less per Sailing level); walking stays free |
+| P83 | Equipment, skills and character info in one tab | B | **Built**: one **Character** screen with three tabs (Info, Equipment, Skills). The button row is now Bag, Quests, Map, Character; keys C, E and K open it on each tab, and Left/Right switch tabs. Save and Load stay on the Info tab and in the ☰ menu |
+| P84 | Issue with the camp kit sleep mechanic | A | **Built**: the Sleep button only appeared when something else refreshed the screen, so walking up to your tent often left it hidden. It now updates with every step. The tent's menu also has **Sleep**, and the **Z** key sleeps |
+| P85 | Add a Rod tab in Equipment | B | **Built**: a Rod square of its own. The rod there is always ready to fish with; the Equipped Tool square is now just for the pickaxe, axe or knife. Old saves holding the rod as their tool are moved over |
+| P86 | Chairs in the pub: allow you to walk over them | A | **Built**: chairs and stools in both taverns (inside and out) can be walked over |
+| P87 | Pub notice boards not working early game | A | **Built.** Jack: nothing opened. The board only worked from exactly one tile in front of it; it now also works from the tile either side |
+| P88 | Remove the two empty houses (woodcutter's shacks) outside the Darkwood | A | **Built**: only the carpenter's shack is left |
+| P89 | Make the carpenter's house more distinct: a fence, wooden sculptures | C | **Built**: a wooden fence round Alder's yard with the way in facing the road, a totem pole by the gate, and inside a carved bear, a carved owl, a rocking horse, a chopping block and a log stack (the carvings are also for sale) |
+| P90 | Fewer rock dragons and a little less power (fewer matters more) | A | **Built**: two in the mountains instead of five; health 90 to 80, claws 7-10 to 6-9, fire 17-23 to 15-20 (the three on Halvard's job stay) |
+| P91 | Break long conversation text into smaller chunks | A | **Built**: a line over about 110 letters is shown in pages, broken at the ends of sentences; the words are unchanged |
+| P92 | Storage crates made at the workbench at Crafting level 2: chest of drawers holds 20 things, storage crate 60 | C | **Built**: both made at the workbench from Crafting 2 (crate: 8 softwood planks and 2 rope; drawers: 6 medium and 2 hardwood planks). At the carpenter's: drawers 500 gold, crate 350 gold |
+| P93 | A screen for storage crates | B | **Built**: crates, chests, racks and ship storage open a screen like the Bag: squares of what is stored and of your bag side by side, a bar showing how full it is, and Store 1 / Store all / Take 1 / Take all for the square you tap (tap it again to move one) |
+| P94 | General: is the game clear enough for new players? Needs another play tester | Jack | No change |
+| P95 | All furniture from the design kit sold at the carpenter's | C | **Built**: about 70 more pieces in four tabs (Furniture, Beds, Decor, Lights): sofas, desks, wardrobes, every bed, clocks, plants, lamps and more. Every bed lets you sleep at camp; wardrobes, sideboards and chests store things. Workshop fittings (forges, counters, the tailor's and barber's things) are left out; say if you want any of them |
+| P96 | Crafting depends on skill level: storage crate at Crafting 2; swords and axes need the Sword or Axe level and the Crafting level; potions too: the Minor health tonic recipe is learned when you first speak to Astrid | C | **Built**: every recipe can name the skill levels it needs, shown on the crafting screen. Forge weapons: Old Sword (Crafting 1, Sword 1), hand axe (Crafting 2, Axe 1), bronze sword (3, Sword 2), iron sword (5, Sword 4), greatsword (8, Sword 6). The first talk with Astrid teaches the Minor health tonic (placeholder lines) |
+| P97 | Healing weaker early: Minor health tonic (level 0), Minor health potion (3), Superior health elixir (6), Elixir of life (10) | C | **Built**: they heal 15, 30, 60 and all your health (the old Healing potion, 35, is now the Minor health potion; the Greater healing potion, 80, is now the Superior health elixir). Astrid sells the first three; the Elixir of life is only brewed |
+| P98 | Every shop except Murl's dearer | A | **Built.** Decided (Jack): 25% more in every shop (Bram, Odo, Garrick, Astrid, Lucie, Wynn, the carpenter, the barber and tailor, tavern rooms). Murl's ships, crew and shipwright station keep their prices; selling back pays as before |
+| P99 | Iron sword 15% weaker | A | **Built**: damage 9 to 7.65 |
+| P100 | Potions on their own tab in the Bag | B | **Built**: a Potions section between Food and Weapons |
+| P101 | Pirates grow tougher each quest, especially after "At the Top of the World" | D | **Built**: each quest's pirates are a little tougher than the last (Earth, Water, Sky), then a big step for "Under Attack" (raiders 44-68 health, hitting 9-14; they used to be weaker than the Sky pirates) and again for "The Final Fight" (60-95 health, hitting 11-16; Barron 360). They give more XP to match. Please say if Quest 7 or 9 now feels too hard |
+| P102 | **Bug:** the pirate boss was missing from "The Final Fight", so the story stopped after Quest 9. Make sure pirates are placed so the story can't be skipped by accident | A | **Built**: two of the twelve pirates stood on a lower ring behind a cliff and never saw you, and Barron only comes when all twelve are beaten. The eight path pirates now stand on the walking route itself. Safety net for every pirate group the story waits for (Quests 1, 4, 6, 9): when you reach the goal with some still standing where you walked past, they come running to you one by one |
+
+## Jack's answers (playtest #5)
+- Temple names: the short ones (Water, Fire, Earth, Sky, Tower Temple).
+- Prices: every shop except Murl's, 25% more.
+- Notice board: pressing Use did nothing.
+- Storage: chest of drawers holds 20 things and costs 500 gold; storage crate holds 60 things and costs 350 gold.
+
+## Batches
+- **A, quick fixes and the Quest 9 bug:** P78, P79, P80, P82, P84, P86, P87, P88, P90, P91, P98, P99, P102.
+- **B, menus:** P83, P85, P93, P100.
+- **C, crafting and the carpenter:** P89, P92, P95, P96, P97.
+- **D, pirates:** P101.

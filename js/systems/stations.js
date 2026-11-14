@@ -78,6 +78,6 @@ function pickUp(p){
   else{S.placed=S.placed.filter(q=>q!==p);add(p.id);say(ITEMS[p.id].n+' picked up.')}
   ui();save()}
 function useStation(p){if(isFurn(p))return useFurn(p);const it=ITEMS[p.id];
-  if(p.id==='camp_kit')return menu(it.n,['Cook','Pick up camp','Cancel'],o=>{if(o==='Cook')openCraft('fire');else if(o==='Pick up camp')pickUp(p)});
+  if(p.id==='camp_kit')return menu(it.n,['Sleep','Cook','Pick up camp','Cancel'],o=>{if(o==='Sleep')sleep();else if(o==='Cook')openCraft('fire');else if(o==='Pick up camp')pickUp(p)});
   const verb=it.place==='cooking'?'Cook':it.place==='shipwright'?'Build':it.place==='alchemy'?'Brew':'Craft';
   menu(it.n,p.fixed?[verb,'Cancel']:[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then tap Use.')}})}

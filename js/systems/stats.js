@@ -6,7 +6,7 @@ const BOOT_MS=135,BOOT_GLIDE=.1,swift=()=>S.buff>Date.now(),boots=()=>!sail&&fx(
 const EXH_MS={walk:300,sail:170},EXH_GLIDE={walk:.05,sail:.08},tired=()=>S.sta<=0;
 const stepMs=()=>tired()?(swift()?STEP_MS:EXH_MS)[sail?'sail':'walk']:swift()?SWIFT_MS[sail?'sail':'walk']:boots()?BOOT_MS:STEP_MS[sail?'sail':'walk'],glideAmt=()=>tired()?(swift()?GLIDE:EXH_GLIDE)[sail?'sail':'walk']:swift()?SWIFT_GLIDE[sail?'sail':'walk']:boots()?BOOT_GLIDE:GLIDE[sail?'sail':'walk'];
 // // movement: time between steps while a direction is held, and how fast the sprite slides to the next tile (walking is half the boat's speed)
-const MAXHP=50,MAXSTA=100,STAM={walk:0,sail:0,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
+const MAXHP=50,MAXSTA=100,STAM={walk:0,sail:.04,cast:2,swing:5,storm:.5,gather:3,forage:1.5}; // stamina costs; storm is for the weather system later
 const lvl=id=>{const x=S.xp[id]||0;let l=0;while(l<10&&x>=LV[l])l++;return l};
 const fx=k=>['ring','amulet','boots','armour','helmet'].reduce((a,s)=>a+(((ITEMS[S.eq[s]]||{}).fx||{})[k]||0),0); // enchanted jewellery bonuses (ITEMS[..].fx)
 const maxHp=()=>MAXHP+4*lvl('combat')+fx('hp')+((S.boost||{}).hp||0),maxSta=()=>MAXSTA+fx('sta')+((S.boost||{}).sta||0);   // (S.boost: Astrid's vigour draughts, for good)
@@ -16,5 +16,6 @@ function gainXp(id,n){n=Math.round(n*(1+fx('xp'))*100)/100;const k=SKILLS.find(q
     if(WEAPON_MOVES[id]&&!(typeof BATTLE!=='undefined'&&BATTLE)){const nw=WEAPON_MOVES[id].filter(([,r])=>r>b&&r<=a).map(([i])=>ATTACKS[i].n);if(nw.length)setTimeout(()=>toast('New attack learned: '+nw.join(' and ')+'!',3600),1200)}   // (in a battle the battle screen announces it)
 say(k.n+' reached level '+a+'! '+k.perk(a));save()}
   ui()}
-const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),TOOLSLOTS=['rod','pickaxe','axe','knife'],eq=k=>TOOLSLOTS.includes(k)&&S.eq.tool!==k?undefined:ITEMS[S.eq[k]],isWorn=id=>{const sl=slotOf(id);return S.eq[sl]===id&&(!TOOLSLOTS.includes(sl)||S.eq.tool===sl)},tier=k=>LIST(k).indexOf(S.eq[k]);
+const ownTier=k=>Math.max(0,...LIST(k).map((id,i)=>count(id)?i:-1)),TOOLSLOTS=['pickaxe','axe','knife'],   // the tools held in your hand, one at a time (the rod has its own slot since playtest #5)
+  eq=k=>TOOLSLOTS.includes(k)&&S.eq.tool!==k?undefined:ITEMS[S.eq[k]],isWorn=id=>{const sl=slotOf(id);return S.eq[sl]===id&&(!TOOLSLOTS.includes(sl)||S.eq.tool===sl)},tier=k=>LIST(k).indexOf(S.eq[k]);
 function spend(n){n*=1-fx('thrift');const was=S.sta;S.sta=Math.max(0,S.sta-n);if(!S.sta&&was>0)say('You are exhausted and move slowly. Sleep, eat or drink a tonic to recover.');ui()}

@@ -19,7 +19,7 @@ function enemyDefeated(e){const ty=ENEMY_TYPES[e.t];e.alive=false;e.resp=ty.resp
   if(e.group&&!ENEMIES.some(q=>q.group===e.group&&q.alive)){enemyBeaten(e.group);if(typeof encounterGroupBeaten==='function')encounterGroupBeaten(e.group)}}
 // screens a creature may ambush you over (you were distracted): the map, bag, skills, shops and so on. Title menu, letters and the look editor are not on the list.
 let AMBUSH_NOTE=false; // set when a creature ambushes you over an open screen; the battle opens with a notice
-const AMBUSH_OVER=['mapov','ch','qs','store','bag','craft','skills','menu'];
+const AMBUSH_OVER=['mapov','ch','qs','store','bag','craft','skills','eqs','stash','menu'];
 const canBeAmbushed=()=>!BATTLE&&!SCENE&&!sail&&!dlgActive()&&S.hp>0&&![...document.querySelectorAll('.open')].some(el=>!AMBUSH_OVER.includes(el.id))&&!(typeof AR!=='undefined'&&AR.on);
 // one tick (about 0.6 s) for every creature: they wander, chase when you are close, and start a battle when they reach you
 // a tile this creature may walk on (an island creature stays on its island; others stay near home, within `leash` tiles)

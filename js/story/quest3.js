@@ -5,7 +5,7 @@
 // The two long speeches are Jack's own words from STORY_TEXT.md, word for word (also in JACKS_LINES.txt). Everything else is a PLACEHOLDER until he writes his own.
 // Switches: q3_started, q3_got_log, q3_done, axe_waiting, has_axe. Items: ironwood_log (a key item, handed in at the end).
 QUESTS.push({id:'q3',name:"Murl's Quest",
- steps:['[Placeholder] Murl needs a straight, hard log for a ship mast. Sail to Oak Island (Island 6) and find one.','[Placeholder] You have the ironwood log. Take it back to Murl at the boatyard.'],
+ steps:['[Placeholder] Murl needs a straight, hard log for a ship mast. Sail to Oak Island and find one.','[Placeholder] You have the ironwood log. Take it back to Murl at the boatyard.'],
  goals:[[144,170],'Murl']});
 DLG.q3_murl1={start:'a',nodes:{a:{who:'Murl',text:"Old Bjorn sent ya did he? Well I need some help finding some timber. I'm building a mast for my next ship. I need some special wood for this though. Only the straightest strongest wood will do. Go to Oak Island. Look for a hardwood mast tree. Bring me back one of those and I'll make it worth your while"}}};   // JACK
 DLG.q3_murl_wait={start:'a',nodes:{a:{who:'Murl',text:'[Placeholder] Still no mast timber? Look on Oak Island, the one south of here. A straight log of hardwood. You will know it when you see it.'}}};

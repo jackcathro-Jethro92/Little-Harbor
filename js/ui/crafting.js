@@ -1,6 +1,9 @@
 // ---------- crafting screen (the keyboard handler below also drives the pop-up menu) ----------
 let crSt=null,crSel=0;
-const recipesAt=()=>RECIPES.filter(r=>r.station===crSt||(crSt==='cooking'&&r.station==='fire')),canMake=r=>Object.entries(r.needs).every(([id,n])=>count(id)>=n)&&(!r.gold||S.gold>=r.gold)&&!(r.unique&&count(r.out))&&!(r.level&&lvl('crafting')<r.level);
+// the skill levels a recipe needs (playtest #5): `req`, plus the older `level` (a Crafting level); and whether they are met
+const recReq=r=>({...(r.level?{crafting:r.level}:{}),...(r.req||{})}),reqOk=r=>Object.entries(recReq(r)).every(([k,l])=>lvl(k)>=l);
+const skillName=k=>(SKILLS.find(q=>q.id===k)||{n:k}).n;
+const recipesAt=()=>RECIPES.filter(r=>(r.station===crSt||(crSt==='cooking'&&r.station==='fire'))&&(!r.learn||flag(r.learn))),canMake=r=>Object.entries(r.needs).every(([id,n])=>count(id)>=n)&&(!r.gold||S.gold>=r.gold)&&!(r.unique&&count(r.out))&&reqOk(r);
 function openCraft(st){crSt=st;crSel=0;drawCraft();$('craft').classList.add('open')}
 const closeCraft=()=>$('craft').classList.remove('open');
 function drawCraft(){
@@ -8,7 +11,7 @@ function drawCraft(){
   rs.forEach((r,i)=>{const d=document.createElement('div');d.className='crow'+(i===crSel?' cur':'')+(canMake(r)?'':' no');
     d.innerHTML='<span class="bcur">▶</span><span class="bn">'+ITEMS[r.out].n+'</span><span>x'+r.n+'</span>';d.onclick=()=>{crSel=i;drawCraft()};L.appendChild(d)});
   const r=rs[crSel];
-  $('cr-det').innerHTML=r?'<b>'+ITEMS[r.out].n+'</b> x'+r.n+'<br>'+(ITEMS[r.out].desc||foodDesc(r.out))+'<br>Needs: '+Object.entries(r.needs).map(([id,n])=>'<span class="'+(count(id)>=n?'ok':'lack')+'">'+ITEMS[id].n+' '+count(id)+'/'+n+'</span>').join(' &middot; ')+(r.gold?' &middot; <span class="'+(S.gold>=r.gold?'ok':'lack')+'">Gold '+S.gold.toLocaleString()+'/'+r.gold.toLocaleString()+'</span>':'')+(r.unique&&count(r.out)?' &middot; <span class="ok">Already built</span>':'')+(r.level?' &middot; <span class="'+(lvl('crafting')>=r.level?'ok':'lack')+'">Crafting level '+lvl('crafting')+'/'+r.level+'</span>':''):'';
+  $('cr-det').innerHTML=r?'<b>'+ITEMS[r.out].n+'</b> x'+r.n+'<br>'+(ITEMS[r.out].desc||foodDesc(r.out))+'<br>Needs: '+Object.entries(r.needs).map(([id,n])=>'<span class="'+(count(id)>=n?'ok':'lack')+'">'+ITEMS[id].n+' '+count(id)+'/'+n+'</span>').join(' &middot; ')+(r.gold?' &middot; <span class="'+(S.gold>=r.gold?'ok':'lack')+'">Gold '+S.gold.toLocaleString()+'/'+r.gold.toLocaleString()+'</span>':'')+(r.unique&&count(r.out)?' &middot; <span class="ok">Already built</span>':'')+(Object.keys(recReq(r)).length?'<br>Skill: '+Object.entries(recReq(r)).map(([k,l])=>'<span class="'+(lvl(k)>=l?'ok':'lack')+'">'+skillName(k)+' '+lvl(k)+'/'+l+'</span>').join(' &middot; '):''):'';
   $('cr-go').disabled=!(r&&canMake(r))}
 function doCraft(){const r=recipesAt()[crSel];if(!r||!canMake(r))return;
   const keep={...S.bag};
