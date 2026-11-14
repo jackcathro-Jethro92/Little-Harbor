@@ -40,7 +40,7 @@ walled(84,200,115,234,100,[]); // Walled Settlement, south end of the mainland (
 setT(100,234,12);setT(101,234,12);rect(85,217,114,218,(x,y)=>setT(x,y,6)); // closed south wall, one main street
 [[84,216],[84,217],[84,218],[115,216],[115,217],[115,218]].forEach(([x,y])=>setT(x,y,6));[[84,215],[84,219],[115,215],[115,219]].forEach(([x,y])=>setT(x,y,45)); // west and east gates
 
-clr(26,150,41,158);[[30,156]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch'}));   // (playtest #5: only the carpenter's shack is left; the two empty ones are gone)         // Woodcutters' shacks
+clr(26,150,41,158);[[30,156]].forEach(([x,y])=>BL.push({x,y,w:3,roof:'thatch',sign:'carpenter'}));   // (playtest #5: only the carpenter's shack is left; the two empty ones are gone)         // Woodcutters' shacks
 rect(26,150,41,158,(x,y)=>{if(at(x,y)===1&&hs(x,y*3)%100<10)setT(x,y,14)});
 // playtest #5: the carpenter's yard, fenced in (x 26-33, y 152-160) with the way in on the east side (y 157-159), towards the road; his carvings stand inside (TOWN_DECOR.carpenter)
 rect(27,153,32,159,(x,y)=>{if(at(x,y)!==5)setT(x,y,1)});rect(26,152,33,160,(x,y)=>{if((x===26||x===33||y===152||y===160)&&!(x===33&&y>=157&&y<=159)&&![0,5].includes(at(x,y)))setT(x,y,8)});

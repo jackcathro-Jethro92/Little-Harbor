@@ -3,8 +3,33 @@
 // red tiled roof with eaves, signs and one small extra such as a barrel, firewood, a lit window or a crate) and copied each frame; only the chimney smoke on slate roofs moves. Art ported from
 // art/graphics/graphics_upgrade_mockup.js. Where things stand, their size, doors and signs are unchanged. The halls, temples and placeholder buildings keep their own drawing.
 const HROOF={thatch:['#c9a35c','#b08c48','#8a6a32','#e0c07c','#f0d898'],slate:['#5a6c80','#485a6e','#334356','#7c90a6','#a8bccf'],red:['#b0473a','#8e3328','#64221a','#d0685a','#e8907e']};
-const HSIGN={fish:'#2f5f9e',rod:'#6a3f90',boat:'#257a68',smith:'#b8481f',gold:'#c8a02a',tailor:'#a04a8a',barber:'#c8402a',apothecary:'#3a8f4a',tavern:'#8a4a1f'};
-function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.x+','+b.y+k+W+(b.sign||'')+(b.big?'B':'');
+const HSIGN={fish:'#2f5f9e',rod:'#6a3f90',boat:'#257a68',smith:'#b8481f',gold:'#c8a02a',tailor:'#a04a8a',barber:'#c8402a',apothecary:'#3a8f4a',tavern:'#8a4a1f',carpenter:'#8a5a2e'};
+// playtest #5 (Jack): every shop also has a hanging sign on a wooden post at its right side, so players can tell it is a shop. SIGN_ICON draws the picture on the board (9 x 7 pixels from x, y).
+const SIGN_ICON={
+ fish:(f,q,x,y)=>{f(x+1,y+2,5,3,'#3b82c4');f(x+6,y+1,2,5,'#3b82c4');f(x+1,y+3,5,1,'#5aa0e0');q(x+2,y+2,'#fff')},
+ rod:(f,q,x,y)=>{for(let i=0;i<7;i++)q(x+i,y+6-i,'#6b4423');f(x+7,y+1,1,4,'#c8c8c8');q(x+7,y+5,'#d94b3a')},
+ boat:(f,q,x,y)=>{f(x+4,y,1,4,'#4a3018');f(x+5,y+1,3,3,'#f2f2ec');f(x,y+4,9,2,'#7a4a26');f(x+1,y+6,7,1,'#5a3a1e')},
+ smith:(f,q,x,y)=>{f(x,y+2,8,2,'#3a3a44');f(x+2,y+4,4,1,'#3a3a44');f(x+1,y+5,6,2,'#3a3a44');f(x,y+2,8,1,'#5a5a66');q(x+8,y,'#f2a22e');q(x+7,y+1,'#e8632e')},
+ gold:(f,q,x,y)=>{f(x+3,y,3,2,'#d83828');q(x+4,y,'#ff9a8a');f(x+2,y+2,5,1,'#d9a441');f(x+2,y+6,5,1,'#d9a441');f(x+1,y+3,1,3,'#d9a441');f(x+7,y+3,1,3,'#d9a441')},
+ tailor:(f,q,x,y)=>{f(x+1,y+1,6,1,'#c9965a');f(x+2,y+2,4,4,'#a04a8a');f(x+2,y+3,4,1,'#c86ab0');f(x+1,y+6,6,1,'#c9965a');f(x+8,y,1,6,'#b8b8c0');q(x+8,y,'#fff')},
+ barber:(f,q,x,y)=>{f(x+3,y,3,7,'#f2f2ec');for(let i=0;i<7;i++)q(x+3+(i%3),y+i,i%2?'#3b82c4':'#d83828');f(x+2,y,5,1,'#8d8f97');f(x+2,y+6,5,1,'#8d8f97')},
+ apothecary:(f,q,x,y)=>{f(x+4,y,2,1,'#8a5a2e');f(x+4,y+1,2,1,'#c8d8e0');f(x+3,y+2,4,5,'#3a8f4a');q(x+4,y+3,'#8fd8a0');q(x+4,y+4,'#8fd8a0')},
+ tavern:(f,q,x,y)=>{f(x+1,y+1,5,6,'#d9a441');f(x+1,y+1,5,1,'#fff');f(x+1,y,5,1,'#f2f2ec');f(x+6,y+2,2,1,'#d9a441');f(x+7,y+2,1,3,'#d9a441');f(x+6,y+4,2,1,'#d9a441');f(x+2,y+3,1,3,'#b8862e')},
+ carpenter:(f,q,x,y)=>{f(x,y+2,7,3,'#c4c8d0');for(let i=0;i<7;i+=2)q(x+i,y+5,'#9aa0a8');f(x,y+2,7,1,'#e0e4ea');f(x+7,y+1,2,5,'#8a5a2e');q(x+7,y+3,'#5a3a1e')}};
+// Which side the sign stands on: the right, unless the ground there is not clear grass, sand or rock (a path, a road, a fence or its gateway, barrels, another building), then the left.
+// Signs never stand in the way (you can walk past the post), and this keeps them off roads and paths too. The tests check every shop's sign side is clear ground.
+const SIGN_CLEAR=[1,2,48];
+function signClear(b,x){return [b.y,b.y+1].every(y=>SIGN_CLEAR.includes(at(x,y))&&!INTBLK[y*MW+x]&&!BL.some(o=>o!==b&&x>=o.x&&x<o.x+o.w&&y>=o.y-1&&y<=o.y+2))}
+function signSide(b){if(!b.signSide)b.signSide=signClear(b,b.x+b.w)||!signClear(b,b.x-1)?'r':'l';return b.signSide}
+// the post, its arm and the board, drawn in the 14 pixels of room the house picture keeps at its side (mirrored for a sign on the left)
+function hangingSign(f0,q0,W,sign,left){const m=(x,w)=>left?W-x-w:x,f=(x,y,w,h,c)=>f0(m(x,w),y,w,h,c),q=(x,y,c)=>q0(m(x,1),y,c);
+  const O='#24170c',px=W+10,bx=W+1,by=15,nc=HSIGN[sign]||'#7a5230';
+  f(px+2,30,3,2,'rgba(20,30,10,.35)');f(px,8,3,24,O);f(px+1,8,1,23,'#8a5a2e');f(px-1,30,5,2,O);   // the post
+  f(W-1,8,px-W+3,3,O);f(W,9,px-W+1,1,'#a8743f');q(px-1,11,O);q(px-2,12,O);   // the arm and its brace
+  q(bx+1,11,'#4a4a52');q(bx+1,12,'#4a4a52');q(bx+8,11,'#4a4a52');q(bx+8,12,'#4a4a52');   // two short chains
+  f(bx-1,by-2,12,12,O);f(bx,by-1,10,10,'#f4e8c4');f(bx,by-1,10,2,nc);f(bx,by+8,10,1,'#d8c898');
+  (SIGN_ICON[sign]||((f,q,x,y)=>f(x+1,y+3,7,1,'#7a4a26')))(f0,q0,m(bx,10)+1,by+1)}   // (the picture itself is never mirrored)
+function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.x+','+b.y+k+W+(b.sign||'')+(b.sign?signSide(b):'')+(b.big?'B':'');
   return sprite(key,W+28,54,c=>{const ox=14,oy=14,O='#24170c',dc=hs(b.x,b.y)%4,RP=HROOF[k],f=(x,y,w,h,col)=>pF(c,ox+x,oy+y,w,h,col),q=(x,y,col)=>pP(c,ox+x,oy+y,col);
     f(-1,30,W+6,4,'rgba(20,30,10,.35)');f(W,14,4,18,'rgba(20,30,10,.35)');
     f(0,27,W,5,O);for(let i=0;i<W;i+=5){const h=GH(b.x*9+i,b.y);f(i+1,28,4,3,['#9a9890','#a8a69c','#8a887e'][h%3]);q(i+1,28,'#c4c2b8')}
@@ -39,8 +64,10 @@ function houseSprite(b){const W=b.w*T,k=HROOF[b.roof]?b.roof:'thatch',key='h'+b.
       else if(b.sign==='apothecary'){f(sx+8,15,4,1,'#6b4423');f(sx+9,16,2,1,'#c8d8e0');f(sx+7,17,6,1,'#7a3fa0');f(sx+6,18,8,1,'#7a3fa0')}
       else if(b.sign==='tavern'){f(sx+7,15,6,4,'#d9a441');f(sx+7,15,6,1,'#fff');f(sx+13,16,2,2,'#d9a441')}
       else if(b.sign==='gold'){f(sx+6,16,8,2,'#d9a441');f(sx+8,18,4,1,'#d9a441');f(sx+9,15,2,2,'#d83828');f(sx+15,15,2,1,'#fff')}
+      else if(b.sign==='carpenter'){f(sx+4,16,10,2,'#c4c8d0');for(let z=0;z<10;z+=2)q(sx+4+z,18,'#9aa0a8');f(sx+14,15,2,4,'#8a5a2e')}
       else if(b.sign==='smith'){f(sx+5,15,10,2,'#3a3a44');f(sx+8,17,4,1,'#3a3a44');f(sx+6,18,8,1,'#3a3a44');f(sx+15,15,2,1,'#e8632e')}
-      else{f(sx+4,17,12,1,'#7a4a26');f(sx+9,15,1,3,'#6b4423')}}
+      else{f(sx+4,17,12,1,'#7a4a26');f(sx+9,15,1,3,'#6b4423')}
+      hangingSign(f,q,W,b.sign,signSide(b)==='l')}
     else if(dc===0){f(W+2,21,7,10,O);f(W+3,22,5,8,'#8a5a2e');f(W+3,22,5,1,'#a8743f');f(W+3,25,5,1,'#4a3018');f(W+3,28,5,1,'#4a3018')}
     else if(dc===1){f(-8,15,8,1,'#4a3018');for(let z=0;z<3;z++){f(-8+z*3,16,2,4,'#e0762f');q(-8+z*3,16,'#f8a050')}}
     else if(dc===3){f(W+2,23,8,8,O);f(W+3,24,6,6,'#a8743f');f(W+3,24,6,1,'#c9965a');f(W+3,27,6,1,O)}})}
