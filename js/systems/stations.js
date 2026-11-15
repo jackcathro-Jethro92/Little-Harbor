@@ -64,7 +64,7 @@ function placeItem(id){
     S.bag[id]--;if(!S.bag[id])delete S.bag[id];placing=null;
     if(it.kind==='claim'){S.claim={x:pl.x,y:pl.y,w:pl.w,h:pl.h};say('Land claimed! Craft a house kit and place it on your plot.');toast('Land claimed!')}
     else if(it.kind==='garden'){S.gardens.push({x:pl.x,y:pl.y,cells:Array(6).fill(null)});for(let j=0;j<2;j++)for(let i=0;i<3;i++){const k=(pl.y+j)*MW+pl.x+i;if([18,19,20].includes(M[k])){M[k]=1;delete S.cut[k]}}say('Garden set up! Face a plot to plant something.');toast('Garden ready!')}
-    else{S.home={x:pl.x,y:pl.y,roof:it.roof};for(let j=0;j<2;j++)for(let i=0;i<3;i++){const k=(pl.y+j)*MW+pl.x+i;M[k]=5;delete S.cut[k]}say('Your house is built! Face the door and tap Use to go in.');toast('House built!')}
+    else{S.home={x:pl.x,y:pl.y,roof:it.roof};for(let j=0;j<2;j++)for(let i=0;i<3;i++){const k=(pl.y+j)*MW+pl.x+i;M[k]=5;delete S.cut[k]}say('Your house is built! Click the door to go in.');toast('House built!')}
     ui();save();return}
   if(id==='camp_kit'){const pl=campPlan(),why=pl.glob||(pl.tiles.find(q=>q[2])||[])[2];if(why){toast(why,2200);return say(why)}
     S.bag[id]--;if(!S.bag[id])delete S.bag[id];S.placed.push({id,x:pl.x+2,y:pl.y+1,big:1});placing=null;say('Camp set up. Stand close to the tent and tap Sleep to start a new day.');toast('Camp set up!');ui();save();return}
@@ -80,4 +80,4 @@ function pickUp(p){
 function useStation(p){if(isFurn(p))return useFurn(p);const it=ITEMS[p.id];
   if(p.id==='camp_kit')return menu(it.n,['Sleep','Cook','Pick up camp','Cancel'],o=>{if(o==='Sleep')sleep();else if(o==='Cook')openCraft('fire');else if(o==='Pick up camp')pickUp(p)});
   const verb=it.place==='cooking'?'Cook':it.place==='shipwright'?'Build':it.place==='alchemy'?'Brew':'Craft';
-  menu(it.n,p.fixed?[verb,'Cancel']:[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then tap Use.')}})}
+  menu(it.n,p.fixed?[verb,'Cancel']:[verb,'Move','Pick up','Cancel'],o=>{if(o===verb)openCraft(it.place);else if(o==='Pick up')pickUp(p);else if(o==='Move'){S.placed=S.placed.filter(q=>q!==p);add(p.id);placing=p.id;ui();say('Choose a new spot, then click it.')}})}

@@ -29,7 +29,7 @@ SCENES.q8_meeting=[
  {set:'q8_done'},{set:'final_battle_open'},{done:'q8'},{set:'storm_on'},{quest:['q9',0]},
  {msg:'[Placeholder] The Divine Blade is in your hand. Its attack, Divine Strike, is in the Attack list. A storm is rising over the Water Temple: the pirates have gone there!'}];
 TRIGGERS.push(
- {id:'q8_found',when:{zone:10},if:{quest:'q8',step:0},do:[{scene:'q8_found'},{letter:'q8_letter'},{set:'q8_hatch'},{step:1},{msg:'A hatch has opened in the shrine room floor. Face it and tap Use to go down.'}]},
+ {id:'q8_found',when:{zone:10},if:{quest:'q8',step:0},do:[{scene:'q8_found'},{letter:'q8_letter'},{set:'q8_hatch'},{step:1},{msg:'A hatch has opened in the shrine room floor. Click it to go down.'}]},
  {id:'q8_depths',when:{zone:20},if:{quest:'q8',step:1},do:[{step:2},{msg:'Dark halls. Something moans in the dark... Find the door at the far end.'}]},
  {id:'q8_chamber',when:{zone:21},if:{quest:'q8',step:2},do:[{step:3},{scene:'q8_meeting'}]}
 );

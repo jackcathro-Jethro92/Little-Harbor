@@ -1,10 +1,11 @@
 // ---------- one frame: tiles, trees, buildings, entities sorted by y, light, fishing line ----------
+const CAM={x:0,y:0};   // where the camera was on the last frame, in map pixels (js/ui/mouse.js turns a click on the picture into a tile)
 function draw(){
   const t=performance.now();
   const gl=glideAmt();P.rx+=(P.x-P.rx)*gl;P.ry+=(P.y-P.ry)*gl;if(Math.abs(P.x-P.rx)<.02)P.rx=P.x;if(Math.abs(P.y-P.ry)<.02)P.ry=P.y;
   let cx=Math.max(0,Math.min(MW*T-VW,P.rx*T+8-VW/2)),cy=Math.max(0,Math.min((zoneOf(P.x,P.y)?MH:WH)*T-VH,P.ry*T+8-VH/2));
   if(SCENECAM){cx=Math.max(0,Math.min(MW*T-VW,SCENECAM.x*T+8-VW/2));cy=Math.max(0,Math.min((zoneOf(P.x,P.y)?MH:WH)*T-VH,SCENECAM.y*T+8-VH/2))}   // a scene is moving the camera (js/systems/scenes.js)
-  cx|=0;cy|=0;
+  cx|=0;cy|=0;CAM.x=cx;CAM.y=cy;
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0);ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
     if(tx<MW&&ty<MH)tile(tx,ty,tx*T-cx,ty*T-cy,t);
   for(let ty=(cy/T)|0;ty<=((cy+VH)/T|0)+1;ty++)for(let tx=(cx/T)|0;tx<=((cx+VW)/T|0);tx++)
@@ -29,10 +30,10 @@ function draw(){
   if(placing){const k0=ITEMS[placing].kind,cell=(x,y,bad)=>R(x*T-cx+1,y*T-cy+1,T-2,T-2,bad?'rgba(220,70,60,.42)':'rgba(70,130,235,.5)');let m;
     if(k0==='claim'||k0==='prefab'||k0==='garden'||k0==='furniture'||placing==='camp_kit'){const pl=plan(placing);pl.tiles.forEach(([x,y,w])=>cell(x,y,w||pl.glob));
       g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(pl.x*T-cx+1,pl.y*T-cy+1,pl.w*T-2,pl.h*T-2);
-      m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Tap Use to place it.'}
+      m=pl.glob||(pl.tiles.find(q=>q[2])||[])[2]||'It fits! Click to place it.'}
     else{const[fx,fy]=stationSpot(placing),w=placeWhy(placing,fx,fy),fw=WIDE[placing]||1;
       for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=P.x+dx,y=P.y+dy;if(x<0||y<0||x>=MW||y>=MH)continue;cell(x,y,placeWhy(placing,x,y))}
-      g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,fw*T-2,T-2);m=w||'It fits! Tap Use to place it.'}
+      g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(fx*T-cx+1,fy*T-cy+1,fw*T-2,T-2);m=w||'It fits! Click to place it.'}
     if($('msg').textContent!==m)say(m)}
   const E=NPC.filter(n=>!n.hidden&&zoneOf(n.x,n.y)===zoneOf(P.x,P.y)).map(n=>({y:n.y,f:()=>{CharacterSprite.draw(g,n.x*T-cx+fightLunge(n,t),n.y*T-cy-3-hopOf(n,t)-(CHEER_UNTIL>t&&!n.enc?Math.round(Math.abs(Math.sin(t/120+n.x*1.7))*3):0),{...lo({...n,...NL[n.n]}),armour:n.armour,scale:n.scale,view:vw(n.f),frame:0});if(n.alertUntil>t)alertMark(n,cx,cy,t);if(n.work&&!flag(n.workOff))npcSwing(n,cx,cy,t)}}));
   // the Temple Tower's gate (and the Haven Isle garden's) and its pagoda are tall: they are sorted with the people, so you walk behind a roof and under a gate's roof instead of over it (playtest #4)

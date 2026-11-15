@@ -60,7 +60,7 @@ function bagPick(){
 function popChoose(){const o=bpop.opts[bpop.i],r=bpop.row,sl=slotOf(r.id);
   if(o==='Eat'){bpop=null;popRender();return eat(r.id)}
   if(o==='Drink'||o==='Apply to weapon'){bpop=null;popRender();return drink(r.id)}
-  if(o==='Place'){bpop=null;popRender();closeBag();placing=r.id;return say('Face a clear tile and tap Use to place it. Open the Bag to cancel.')}
+  if(o==='Place'){bpop=null;popRender();closeBag();placing=r.id;return say('Click a clear tile next to you to place it. Open the Bag to cancel.')}
   if(o==='Equip'||o==='Wear')equipItem(r.id);if(o==='Unequip'||o==='Take off')unequipItem(r.id);
   bpop=null;popRender();ui();save();drawBag()}
 function openBag(){placing=null;bs=0;bc=0;bpop=null;popRender();drawBag();$('bag').classList.add('open')}

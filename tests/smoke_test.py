@@ -43,7 +43,15 @@ def check(b, url):
     assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.hx,e.hy)===1&&Math.hypot(e.hx-144,e.hy-170)<14)})()"), "four restless spirits haunt Oak Island"
     # after playtest #5: on a PC the picture grows to fill the window's height (same view of the world), with everything still on screen; on a phone it keeps its old size
     pw = b.new_page(viewport={"width": 1920, "height": 1080}); pw.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1"); pw.goto(url); pw.wait_for_timeout(900)
-    assert pw.evaluate("$('c').getBoundingClientRect().width>560&&document.documentElement.scrollHeight<=innerHeight+1&&$('act').getBoundingClientRect().bottom<=innerHeight&&$('bagbtn').getBoundingClientRect().width>100"), "on a large PC window the picture fills the height and the buttons stay in view"
+    assert pw.evaluate("$('c').getBoundingClientRect().width>560&&document.documentElement.scrollHeight<=innerHeight+1&&$('bagbtn').getBoundingClientRect().bottom<=innerHeight&&getComputedStyle(document.querySelector('.pad')).display==='none'&&$('bagbtn').getBoundingClientRect().width>100"), "on a large PC window the picture fills the height and the buttons stay in view"
+    # after playtest #5: clicking a tile next to you does what Use does; a click further away asks you to walk closer
+    pw.evaluate("(()=>{document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));const n=NPC.find(q=>!q.hidden&&zoneOf(q.x,q.y)===0&&q.say&&q.say.length&&!q.enc&&!q.store&&!q.shop&&!q.crew&&walkable(q.x-1,q.y));window.__n=n;n.fixed=1;sail=false;P.x=P.rx=n.x-1;P.y=P.ry=n.y;P.f='u';SCENE=null;draw()})()")
+    pw.evaluate("(()=>{const c=$('c'),r=c.getBoundingClientRect(),px=(x,y)=>[r.left+2+((x*T+8-CAM.x)/VW)*(r.width-4),r.top+2+((y*T+8-CAM.y)/VH)*(r.height-4)];window.__px=px})()")
+    xy = pw.evaluate("__px(__n.x,__n.y)"); pw.mouse.click(xy[0], xy[1]); pw.wait_for_timeout(200)
+    assert pw.evaluate("P.f==='r'&&(dlgActive()||$('menu').classList.contains('open')||document.querySelector('.open')!==null)"), "clicking the person beside you turns you to them and talks to them"
+    pw.evaluate("document.querySelectorAll('.open').forEach(e=>e.classList.remove('open'));if(dlgActive())dlgEnd();draw()")
+    xy = pw.evaluate("__px(P.x+4,P.y+3)"); pw.mouse.click(xy[0], xy[1]); pw.wait_for_timeout(100)
+    assert pw.evaluate("/Walk up next to it/.test($('msg').textContent)&&!dlgActive()"), "a click further away asks you to walk closer"
     pw.close()
     assert ev("$('c').getBoundingClientRect().width<=352"), "on a phone the picture keeps its old size"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)

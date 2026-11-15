@@ -9,4 +9,6 @@ function fitGame(){const root=document.documentElement,wrap=$('wrap');if(!wrap)r
   // a second look: the rows can wrap differently once wider, so take off whatever still spills below the window
   const over=document.documentElement.scrollHeight-innerHeight;if(w>352&&over>0){w=Math.max(352,w-Math.ceil(over*176/208)-1);root.style.setProperty('--gamew',w+'px')}}
 addEventListener('resize',fitGame);addEventListener('load',fitGame);fitGame();setTimeout(fitGame,400);   // (again once the page has finished starting, when the message line and buttons have their final size)
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitGame);   // (the page font changes the heights a little once it has loaded)
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitGame);
+// and whenever the page grows below the window (a font arriving late, a longer message), shrink the picture to fit again
+if(window.ResizeObserver)new ResizeObserver(()=>{if(document.documentElement.scrollHeight>innerHeight+1)fitGame()}).observe(document.body);   // (the page font changes the heights a little once it has loaded)

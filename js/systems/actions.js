@@ -45,7 +45,7 @@ function act(){
   }
   {const an=animalAt(x,y);if(an&&!sail)return ANIMALS[an.k].use?ANIMALS[an.k].use(an):say(ANIMALS[an.k].say)}
   if(!sail){
-    if(B.x===x&&B.y===y){if(!crewOk(S.eq.boat)){say(crewNote(S.eq.boat)+' Hire sailors at Murl\'s boatyard, or switch boats there.');return}P.x=x;P.y=y;sail=true;say('Aboard! Face open water and tap Use to cast.');ui();fireTriggers('board');return}
+    if(B.x===x&&B.y===y){if(!crewOk(S.eq.boat)){say(crewNote(S.eq.boat)+' Hire sailors at Murl\'s boatyard, or switch boats there.');return}P.x=x;P.y=y;sail=true;say('Aboard! Click the water beside your boat to cast.');ui();fireTriggers('board');return}
     if(at(x,y)===55)say('Jagged rocks block the way.');
     else if(at(x,y)===0)say('You need the boat to fish. It is at the end of the pier.');
     return;
@@ -58,7 +58,7 @@ function act(){
     if(slotsUsed()>=bagSlots()&&!fishIds.some(i=>count(i)&&count(i)%STACK))return bagFull();
     if(S.sta<STAM.cast)return say('Too tired to fish. Sleep on the boat to rest.');
     spend(STAM.cast);fs=1;say('Line cast. Wait for the bite...');
-    ft.push(setTimeout(()=>{fs=2;say('Bite! Tap Use now!');
+    ft.push(setTimeout(()=>{fs=2;say('Bite! Click now!');
       ft.push(setTimeout(()=>{fs=0;say('It got away. Cast again.')},1100))},(1500+Math.random()*3000)*eq('rod').wait*(1-.03*lvl('fishing'))*(1-fx('bite'))));
   }
 }
