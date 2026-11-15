@@ -41,6 +41,11 @@ def check(b, url):
     # playtest #3: Oak Island is haunted by four restless spirits standing on grass near the island's middle
     # (the spirits wander from the moment the page loads, so this checks the grass tile each one starts from, not where it happens to be standing)
     assert ev("(()=>{const g=ENEMIES.filter(e=>e.t==='oak_ghost');return g.length===4&&g.every(e=>at(e.hx,e.hy)===1&&Math.hypot(e.hx-144,e.hy-170)<14)})()"), "four restless spirits haunt Oak Island"
+    # after playtest #5: on a PC the picture grows to fill the window's height (same view of the world), with everything still on screen; on a phone it keeps its old size
+    pw = b.new_page(viewport={"width": 1920, "height": 1080}); pw.add_init_script("try{sessionStorage.setItem('lh-started','1')}catch(e){};window.__NO_SIGHT=1"); pw.goto(url); pw.wait_for_timeout(900)
+    assert pw.evaluate("$('c').getBoundingClientRect().width>560&&document.documentElement.scrollHeight<=innerHeight+1&&$('act').getBoundingClientRect().bottom<=innerHeight&&$('bagbtn').getBoundingClientRect().width>100"), "on a large PC window the picture fills the height and the buttons stay in view"
+    pw.close()
+    assert ev("$('c').getBoundingClientRect().width<=352"), "on a phone the picture keeps its old size"
     ev("ENEMIES.forEach(e=>{e.cd=1e9})")   # (the creatures do not ambush the player during the older checks, which teleport about and would otherwise get a battle opened on them; the creature checks set their own waiting time)
     y0 = ev("P.y"); ev("move('u')"); assert ev("P.y") != y0, "player should move"
     for btn in ("#bagbtn", "#chbtn", "#mapbtn"):
