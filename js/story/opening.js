@@ -17,7 +17,7 @@ const FEST_CROWD=['Odo','Bram','Mara','Pip','Old Tess','Yuki','Aiko','Taro','Mei
 // fireworks and a seagull on the boat. Afterwards (or after Skip or Escape) you are on the pier with the decorations up.
 SCENES.festival_opening=[
  {film:'intro'},
- {fade:'out',ms:1},{light:'reset'},{tp:['You',156,126]},{face:['You','d']},{set:'festival_done'},{fade:'in',ms:900},{msg:'Walk down the pier to your boat, face it, and tap Use.'}];
+ {fade:'out',ms:1},{light:'reset'},{tp:['You',156,126]},{face:['You','d']},{set:'festival_done'},{fade:'in',ms:900},{msg:'Walk down the pier to your boat and click it.'}];
 SCENES.festival_opening.cine=true;
 LETTERS.q1_letter={from:'A stranger',title:'Please come quick!',text:'Please come quick! Strangers are taking over the northern Water Temple. There is no time to waste! Hurry!!'};
 TRIGGERS.push(
