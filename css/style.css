@@ -6,18 +6,18 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'LHDigits','Pixelify Sans',ui-monospace,Menlo,monospace;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:7px;padding:8px 12px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.row{display:flex;gap:6px;width:100%;max-width:352px}
+.row{display:flex;gap:6px;width:100%;max-width:var(--gamew,352px)}
 .stat{flex:1;background:var(--panel);border:2px solid var(--ink);border-radius:6px;padding:3px 4px;font-size:14px;text-align:center}
-#wrap{position:relative;width:min(100%,352px,calc(40vh*.846))}
+#wrap{position:relative;width:min(100%,var(--gamew,352px))}   /* after playtest #5: --gamew is set by js/ui/fit.js so the picture fills the window's height on a PC */
 canvas#c{display:block;width:100%;aspect-ratio:176/208;image-rendering:pixelated;border:2px solid var(--ink);border-radius:6px}
 #flash{position:absolute;inset:0;background:#0b1530;opacity:0;pointer-events:none;transition:opacity .6s;border-radius:6px}
-#msg{min-height:34px;font-size:14px;text-align:center;max-width:352px;line-height:1.2}
+#msg{min-height:34px;font-size:14px;text-align:center;max-width:var(--gamew,352px);line-height:1.2}
 button{font:inherit;font-weight:700;color:var(--ink);background:var(--panel);border:2px solid var(--ink);border-radius:6px;box-shadow:0 3px 0 var(--ink);padding:6px 4px;font-size:14px;cursor:pointer}
 button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
 button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 .row button{flex:1}
 #ctx{justify-content:flex-start}#ctx button{flex:0 0 96px}
-.pad{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:352px}
+.pad{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:var(--gamew,352px)}
 .dpad{display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(2,50px);gap:5px}
 .dpad button{padding:0;font-size:19px}
 #up{grid-column:2}#left{grid-row:2}#down{grid-row:2;grid-column:2}#right{grid-row:2;grid-column:3}
@@ -78,7 +78,7 @@ button:focus-visible{outline:3px solid var(--on);outline-offset:2px}
 #bdi{width:48px;height:48px;image-rendering:pixelated;flex:none}
 #bpop{display:none;position:absolute;right:16px;bottom:170px;background:#f8f4dc;border:4px solid #383838;border-radius:8px;padding:4px;min-width:140px}
 #bpop.open{display:block}
-.vit{display:flex;gap:6px;width:100%;max-width:352px}
+.vit{display:flex;gap:6px;width:100%;max-width:var(--gamew,352px)}
 .box{flex:1;background:#f8f4dc;border:3px solid #383838;border-radius:8px;padding:3px 6px;color:#383838;font-size:12px}
 .box .r2{display:flex;align-items:center;gap:5px}
 .tag{background:#383838;color:#f8d030;border-radius:4px;padding:0 4px;font-weight:700;font-size:11px}

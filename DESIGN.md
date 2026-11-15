@@ -586,3 +586,6 @@ The notes, Jack's answers and what was built are in `PLAYTEST_PLAN.md` (P78 to P
 
 ## Boats in the harbours (after playtest #5)
 - `HARBOUR_BOATS` in `js/data/town.js` lists boats moored for show: four round the village pier and four at the Settlement Docks (Murl's rowboat, sloop, schooner and brig in their own colours). `js/systems/harbourboats.js` draws them bobbing and stops your boat and the pirate ships from sailing through their tiles. The tests check both piers can still be reached by boat.
+
+## The picture fills the window (after playtest #5)
+- `js/ui/fit.js` sets `--gamew`, the width of the picture and of the rows of bars and buttons, so the picture (still 176 x 208 game pixels, the same view) is as tall as the browser window allows with everything else below it. It runs at load, after the page starts and on every resize. Windows 480 pixels wide or less (phones) keep the old 352-pixel size.
